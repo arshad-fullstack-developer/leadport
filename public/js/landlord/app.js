@@ -217,7 +217,7 @@ function NXSettingsLandlordLogo() {
 
     //upload logo
     $("#fileupload_landlord_logo").dropzone({
-        url: "/leadport/app-admin/upload-logo?logo_size=" + logo_size,
+        url: "/app-admin/upload-logo?logo_size=" + logo_size,
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

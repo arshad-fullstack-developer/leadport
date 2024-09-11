@@ -10,9 +10,17 @@ $(document).ready(function () {
     if ($("#js-trigger-session-message").length) {
         var session_message = $("#js-trigger-session-message").attr('data-message');
         var message_type = $("#js-trigger-session-message").attr('data-type');
+
+        //show error messages for longer
+        if (message_type == 'success') {
+            var duration = 3000;
+        } else {
+            var duration = 8000;
+        }
+
         NX.notification({
             'type': message_type,
-            'duration': 7000,
+            'duration': duration,
             'message': session_message,
         });
     }
@@ -331,7 +339,7 @@ function NXBootCards() {
         $(document).on('click', '#card-title-editable', function () {
             NX.card_title_edit_original = $(this).html();
             $(this).hide();
-            $(".card-title-input").val(NX.card_title_edit_original);
+            $(".card-title-input").val(NX.card_title_edit_original.trim());
             $("#card-title-edit").show();
         });
         //cancel
@@ -529,6 +537,7 @@ function NXBootCards() {
         /**-------------------------------------------------------------
          * EDITING TASK PRIORITy
          * ------------------------------------------------------------*/
+
         $(document).off('click', '.card-tasks-update-priority-link').on('click', '.card-tasks-update-priority-link', function () {
             //update the buttons parent popover
             $(this).attr('data-form-id', $(this).closest('.popover').attr('id'));
@@ -773,6 +782,13 @@ function NXBootCards() {
          * FILE UPLOAD TOGGLE
          * ------------------------------------------------------------*/
         $(document).off('click', '#js-card-toggle-fileupload').on('click', '#js-card-toggle-fileupload', function () {
+
+            //reset tags
+            var $dropdown = $(".card-attachment-tags");
+            $dropdown.val('');
+            $dropdown.trigger("change");
+
+            //show form
             $(document).find("#card-fileupload-container").toggle();
         });
     }
@@ -816,6 +832,17 @@ function NXBootCards() {
                         //remove the file
                         this.removeFile(file);
                     });
+
+                    // Add sending event to include selected tags
+                    this.on("sending", function (file, xhr, formData) {
+                        var selectedTags = $("#tags").val(); // Get selected values using Select2
+                        if (selectedTags != null) {
+                            selectedTags.forEach(function (tag) {
+                                formData.append("tags[]", tag); // Append each selected tag to formData
+                            });
+                        }
+                    });
+
                 },
                 success: function (file, response) {
                     $("#card-fileupload-container").hide();
@@ -1361,6 +1388,7 @@ function NXHomeAdmin() {
 
 
     //income vs expenses
+
     if ($("#admin-dhasboard-income-vs-expenses").length) {
         var chart = new Chartist.Line('.incomeexpenses', {
             labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -1378,16 +1406,17 @@ function NXHomeAdmin() {
             plugins: [
                 Chartist.plugins.tooltip()
             ],
-
         });
 
         chart.on('draw', function (ctx) {
-            if (ctx.type === 'area') {
+            if (ctx.type === 'point') {
+                // Adding custom attribute to point elements to store value
                 ctx.element.attr({
-                    x1: ctx.x1 + 0.001
+                    'ct:value': ctx.value.y
                 });
             }
         });
+
         chart.on('created', function (ctx) {
             var defs = ctx.svg.elem('defs');
             defs.elem('linearGradient', {
@@ -1403,9 +1432,34 @@ function NXHomeAdmin() {
                 offset: 1,
                 'stop-color': 'rgba(36, 210, 181, 1)'
             });
+
+            // Customizing tooltip position
+            $('.ct-point').on('mouseenter', function () {
+                var $tooltip = $('.chartist-tooltip');
+                var $point = $(this);
+
+                // Check if tooltip and point exist
+                if ($tooltip.length && $point.length) {
+                    var chartOffset = $('.ct-chart').offset();
+                    var x = $point.attr('cx');
+                    var y = $point.attr('cy');
+                    var value = $point.attr('ct:value');
+
+                    $tooltip.css({
+                        left: chartOffset.left + parseInt(x) + 'px',
+                        top: chartOffset.top + parseInt(y) + 'px'
+                    }).html('Value: ' + value).show();
+                }
+            });
+
+            $('.ct-point').on('mouseleave', function () {
+                $('.chartist-tooltip').hide();
+            });
         });
+
         var chart = [chart];
     }
+
 }
 if ($("#js-trigger-home-admin-wrapper").length) {
     NXHomeAdmin();
@@ -1957,6 +2011,14 @@ function NXLeadAttachFiles() {
  * -------------------------------------------------------------------------------------*/
 function NXMilestonesDragDrop() {
 
+    //change task color - update form field
+    $(document).on('change', '.milestone_colors', function () {
+        if (this.checked) {
+            $("#milestone_color").val($(this).val());
+        }
+    });
+
+
     if ($("#js-trigger-milestones-sorting").length) {
         /*----------------------------------------------------------------
          * drag and drop milestone positions
@@ -2429,6 +2491,7 @@ function NXAddEditProject() {
         $("#project_billing_costs_estimate").val('');
 
         //reset all custom fields
+        /*
         $(".a-custom-field").val('');
         $(".a-custom-field").prop('checked', false);
         $(".a-custom-field").html('');
@@ -2437,6 +2500,8 @@ function NXAddEditProject() {
         } catch {
             //nothing
         }
+        */
+       
         //also reset via ajax (to make sure also clear tinym
         nxAjaxUxRequest($("#project_template_selector"));
 
@@ -3171,6 +3236,15 @@ function NXSettingsMilestones() {
  * @description: Add edit
  * -------------------------------------------------------------------------------------*/
 function NXSettingsMilestonesDragDrop() {
+
+
+    //change task color - update form field
+    $(document).on('change', '.milestonecategory_colors', function () {
+        if (this.checked) {
+            $("#milestonecategory_color").val($(this).val());
+        }
+    });
+
     //replace action buttons
     $(".parent-page-actions").html('');
     $("#list-page-actions").prependTo(".parent-page-actions");
@@ -3468,7 +3542,7 @@ function NXSettingsPaypal() {
 
 /**--------------------------------------------------------------------------------------
  * [SETTINGS - BANK]
- * @description: form validation
+ * @description: form validation 
  * -------------------------------------------------------------------------------------*/
 function NXSettingsBank() {
     $("#settingsFormBank").validate({
@@ -3477,7 +3551,7 @@ function NXSettingsBank() {
             settings_bank_status: "required"
         },
         submitHandler: function (form) {
-            nxAjaxUxRequest($("#commonModalSubmitButton"));
+            nxAjaxUxRequest($("#settings-submit-button"));
         }
     });
 }
@@ -3516,7 +3590,7 @@ function NXSettingsEmailGeneral() {
             settings_email_server_type: "required",
         },
         submitHandler: function (form) {
-            nxAjaxUxRequest($("#commonModalSubmitButton"));
+            nxAjaxUxRequest($("#email-general-settings-button"));
         }
     });
 }
@@ -3537,7 +3611,7 @@ function NXSettingsEmailSMTP() {
             settings_email_smtp_encryption: "required",
         },
         submitHandler: function (form) {
-            nxAjaxUxRequest($("#commonModalSubmitButton"));
+            nxAjaxUxRequest($("#email-smtp-settings-button"));
         }
     });
 }
@@ -4296,6 +4370,42 @@ function NXSettingsTaskDragDrop() {
 }
 
 
+/**--------------------------------------------------------------------------------------
+ * [SETTINGS - TASK DRAG & DROP]
+ * @description: drag and drop for leads
+ * -------------------------------------------------------------------------------------*/
+function NXSettingsPriorityDragDrop() {
+
+    //replace action buttons
+    $(".parent-page-actions").html('');
+    $("#list-page-actions").prependTo(".parent-page-actions");
+
+    //drag and drop lead positions
+    var container = document.getElementById('priority-td-container');
+    var stagesDraggable = dragula([container]);
+
+    //make every board dragable area
+    stagesDraggable.on('drag', function (stage) {
+        // add 'is-moving' class to element being dragged
+        stage.classList.add('is-moving');
+    });
+    stagesDraggable.on('dragend', function (stage) {
+        // remove 'is-moving' class from element after dragging has stopped
+        stage.classList.remove('is-moving');
+        // add the 'is-moved' class for 600ms then remove it
+        window.setTimeout(function () {
+            stage.classList.add('is-moved');
+            window.setTimeout(function () {
+                stage.classList.remove('is-moved');
+            }, 600);
+        }, 100);
+
+        //update the list
+        nxAjaxUxRequest($("#task-priorities"));
+
+    });
+}
+
 
 /**--------------------------------------------------------------------------------------
  * [CATEGORy USERS- CREATE AND EDIT]
@@ -4433,7 +4543,7 @@ function NXProposalCreate() {
 
 
 /**--------------------------------------------------------------------------------------
- * [PROPOSALS]
+ * [CONTRACTS]
  * @description: Add edit roles
  * -------------------------------------------------------------------------------------*/
 function NXContractCreate() {
@@ -4780,35 +4890,6 @@ function NXSettingsTicketStatus() {
 
 }
 
-
- $(document).off('click', '#card-task-update-client-button').on('click', '#card-task-update-client-button', function () {
-            //update the buttons parent popover
-            var requestData =  $(this).attr('data-form-id', $(this).closest('.popover').attr('id'));
-            //reset data & add loading class
-            var $card_display_element = $("#task_client_name").val();
-            console.log(requestData[0].dataset.url)
-
-            $(".popover-body").find("#task_client_name").val($card_display_element);
-
-            $('.js-card-settings-button-static').popover('hide');
-            //send request
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: requestData[0].dataset.url,
-                type: "POST",
-                data: {client:$card_display_element} ,
-                success: function (response) {
-                    console.log(response)
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                   console.log(textStatus, errorThrown);
-                }
-            });
-        });
-
 /**--------------------------------------------------------------------------------------
  * [SETTINGS - TASK STATUS]
  * @description: move the actions buttons
@@ -4847,4 +4928,175 @@ function NXSortReportsTables() {
             footer: $(".report-results-table-totals")
         });
     }
+}
+
+/**--------------------------------------------------------------------------------------
+ * [SETTINGS - TASK STATUS]
+ * @description: form aldation for lead status
+ * -------------------------------------------------------------------------------------*/
+function NXSettingsTaskPriority() {
+
+
+    //change task color - update form field
+    $(document).on('change', '.taskpriority_colors', function () {
+        if (this.checked) {
+            $("#taskpriority_color").val($(this).val());
+        }
+    });
+
+
+    //create status - form validation
+    $("#commonModalForm").validate().destroy();
+    $("#commonModalForm").validate({
+        rules: {
+            taskpriority_title: "required"
+        },
+        submitHandler: function (form) {
+            //set selector color
+            $(".taskpriority_colors").each(function () {
+                if (this.checked) {
+                    $("#taskpriority_color").val($(this).val());
+                }
+            });
+            //ajax request
+            nxAjaxUxRequest($("#commonModalSubmitButton"));
+        }
+    });
+}
+
+
+/**--------------------------------------------------------------------------------------
+ * [PROPOSALS]
+ * @description: clone a proposal
+ * -------------------------------------------------------------------------------------*/
+function NXProposalClone() {
+    $("#commonModalForm").validate().destroy();
+    $("#commonModalForm").validate({
+        rules: {
+            doc_title: "required",
+            doc_date_start: "required"
+        },
+        submitHandler: function (form) {
+            nxAjaxUxRequest($("#commonModalSubmitButton"));
+        }
+    });
+}
+
+
+/**--------------------------------------------------------------------------------------
+ * [CONTRACTS]
+ * @description: clone a contract
+ * -------------------------------------------------------------------------------------*/
+function NXContractClone() {
+    $("#commonModalForm").validate().destroy();
+    $("#commonModalForm").validate({
+        rules: {
+            doc_title: "required",
+            doc_date_start: "required"
+        },
+        submitHandler: function (form) {
+            nxAjaxUxRequest($("#commonModalSubmitButton"));
+        }
+    });
+}
+
+
+/**--------------------------------------------------------------------------------------
+ * [UPLOAD MULTIPLE FILES]
+ * @description: upload multiple files
+ * -------------------------------------------------------------------------------------*/
+function NXMultipleFileUpload() {
+    //uplaod files
+    $("#dropzone_upload_multiple_files").dropzone({
+        url: "/fileupload",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        init: function () {
+            this.on("error", function (file, message, xhr) {
+
+                //is there a message from backend [abort() response]
+                if (typeof xhr != 'undefined' && typeof xhr.response != 'undefined') {
+                    var error = $.parseJSON(xhr.response);
+                    if (typeof error === 'object' && typeof error.notification != 'undefined') {
+                        var message = error.notification.value;
+                    } else {
+                        var message = NXLANG.generic_error;
+                    }
+                }
+
+                //system generated errors (e.g. apache)
+                if (typeof xhr != 'undefined' && typeof xhr.statusText != 'undefined') {
+                    //file too large (php.ini settings)
+                    if (xhr.statusText == 'Payload Too Large') {
+                        var message = NXLANG.file_too_big;
+                    }
+                }
+
+                //any other message
+                var message = (typeof message == 'undefined' || message == '' ||
+                    typeof message == 'object') ? NXLANG.generic_error : message;
+
+                //error message
+                NX.notification({
+                    type: 'error',
+                    message: message
+                });
+                //remove the file
+                this.removeFile(file);
+            });
+        },
+        success: function (file, response) {
+            //get the priview box dom elemen
+            var $preview = $(file.previewElement);
+            //create a hidden form field for this file
+            $preview.append('<input type="hidden" name="attachments[' + response.uniqueid +
+                ']"  value="' + response.filename + '">');
+        }
+    });
+}
+
+
+
+/**--------------------------------------------------------------------------------------
+ * [CONTRACTS]
+ * @description: clone a contract
+ * -------------------------------------------------------------------------------------*/
+function NXCannedCreate() {
+
+    nxTinyMCEBasic(400, '.tinymce-textarea-canned');
+
+    $("#commonModalForm").validate().destroy();
+    $("#commonModalForm").validate({
+        rules: {
+            canned_title: "required",
+            canned_message: "required"
+        },
+        submitHandler: function (form) {
+            nxAjaxUxRequest($("#commonModalSubmitButton"));
+        }
+    });
+}
+
+
+/**--------------------------------------------------------------------------------------
+ * [SEARCH]
+ * @description: trigger a search
+ * -------------------------------------------------------------------------------------*/
+NX.dynamicSearch = function (self, e) {
+    nxAjaxUxRequest(self);
+}
+
+/** ----------------------------------------------------------
+ *   [proposals automation] - edit modal
+ * -----------------------------------------------------------*/
+function NXProposalEditAutomation() {
+    $("#commonModalForm").validate().destroy();
+    $("#commonModalForm").validate({
+        rules: {
+        },
+        submitHandler: function (form) {
+            nxAjaxUxRequest($("#commonModalSubmitButton"));
+        }
+    });
 }

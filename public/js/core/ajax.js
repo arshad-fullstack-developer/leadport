@@ -4,12 +4,14 @@
  * writes console.log output
  *------------------------------------------------------------------------*/
 NX.log = function (data1, data2) {
-
-	if (data1 != undefined) {
-		console.log(data1);
-	}
-	if (data2 != undefined) {
-		console.log(data2);
+	//show debug if js debug is enable in .env
+	if (NX.debug_javascript != undefined && NX.debug_javascript == true) {
+		if (data1 != undefined) {
+			console.log(data1);
+		}
+		if (data2 != undefined) {
+			console.log(data2);
+		}
 	}
 };
 
