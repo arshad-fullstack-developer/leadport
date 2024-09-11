@@ -108,7 +108,8 @@
                     </a>
                 </li>
 
-              
+                <!--calendar-->
+                <?php echo $__env->make('landlord.layout.custom-menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                 <!--team-->
                 <li class="sidenav-menu-item <?php echo e($page['mainmenu_team'] ?? ''); ?> menu-tooltip menu-with-tooltip"

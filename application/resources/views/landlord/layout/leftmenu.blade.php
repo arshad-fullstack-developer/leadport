@@ -102,7 +102,8 @@
                     </a>
                 </li>
 
-              
+                <!--calendar-->
+                @include('landlord.layout.custom-menu')
 
                 <!--team-->
                 <li class="sidenav-menu-item {{ $page['mainmenu_team'] ?? '' }} menu-tooltip menu-with-tooltip"
