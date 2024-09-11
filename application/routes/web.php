@@ -1247,3 +1247,10 @@ Route::resource('cs/affiliates/earnings', 'CS_Affiliates\Earnings');
 
 //AFFILATE PROFIT
 Route::get("/cs/affiliate/my/earnings", "CS_Affiliates\Profit@index");
+
+//Google Calendar
+Route::get('auth/redirect', "GoogleController@redirectToGoogle");
+Route::get('callback', "GoogleController@handleGoogleCallback");
+Route::get('eventss', "GoogleController@viewEvents");
+Route::post('events/create', "GoogleController@createEvent");
+Route::post('events/{id}/delete', "GoogleController@deleteEvent");
