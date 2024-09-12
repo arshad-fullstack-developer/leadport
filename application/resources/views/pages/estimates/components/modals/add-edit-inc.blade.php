@@ -75,6 +75,40 @@
                 </div>
             </div>
 
+            <!--CUSTOMER FIELDS [collapsed]-->
+            <div class="hidden" id="new-client-custom-fields">
+                @if(auth()->user()->is_team)
+                <div class="spacer row">
+                    <div class="col-sm-12 col-lg-8">
+                        <span class="title">{{ cleanLang(__('lang.additional_client_details')) }}</span class="title">
+                    </div>
+                    <div class="col-sm-12 col-lg-4">
+                        <div class="switch  text-right">
+                            <label>
+                                <input type="checkbox" name="add_client_option_other" id="add_client_option_other"
+                                    class="js-switch-toggle-hidden-content" data-target="client_custom_fields_collaped">
+                                <span class="lever switch-col-light-blue"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div id="client_custom_fields_collaped" class="hidden">
+
+                    @if(config('app.application_demo_mode'))
+                    <!--DEMO INFO-->
+                    <div class="alert alert-info">
+                        <h5 class="text-info"><i class="sl-icon-info"></i> Demo Info</h5>
+                        These are custom fields. You can change them or <a
+                            href="{{ url('app/settings/customfields/projects') }}">create your own.</a>
+                    </div>
+                    @endif
+                    @php $fields = $client_fields; $class_name_fix = 'clients_'; @endphp
+                    @include('misc.customfields')
+                </div>
+                @endif
+            </div>
+            <!--/#CUSTOMER FIELDS [collapsed]-->
+
             <!--option buttons-->
             <div class="client-selector-links">
                 <a href="javascript:void(0)" class="client-type-selector" data-type="new"
@@ -133,8 +167,10 @@
         <!--automation-->
         @if(config('mode.create') && config('system.settings2_estimates_automation_default_status') == 'enabled')
         <div class="form-group form-group-checkbox row">
-            <label class="col-10 col-form-label text-left">@lang('lang.automation') <span class="align-middle text-info font-16"
-                    data-toggle="tooltip" title="@lang('lang.apply_default_automation_estimates')" data-placement="top"><i class="ti-info-alt"></i></span></label>
+            <label class="col-10 col-form-label text-left">@lang('lang.automation') <span
+                    class="align-middle text-info font-16" data-toggle="tooltip"
+                    title="@lang('lang.apply_default_automation_estimates')" data-placement="top"><i
+                        class="ti-info-alt"></i></span></label>
             <div class="col-2 text-right p-t-5">
                 <input type="checkbox" id="automation" name="automation" class="filled-in chk-col-light-blue"
                     {{ runtimePrechecked(config('system.settings2_estimates_automation_default_status')) }}>

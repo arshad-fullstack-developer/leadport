@@ -1224,7 +1224,6 @@ class Leads extends Controller {
             //apply permissions
             $this->applyAttachmentPermissions($attachment, $lead);
 
-
             /** ----------------------------------------------
              * record event [attachment]
              * ----------------------------------------------*/
@@ -3355,7 +3354,7 @@ class Leads extends Controller {
         }
 
         //get table friendly collection
-        $leads = $this->leadrepo->search($new_lead->lead_id);
+        $leads = $this->leadrepo->search($new_lead->lead_id, ['apply_filters' => false]);
 
         //process for timers
         $this->processLeads($leads);

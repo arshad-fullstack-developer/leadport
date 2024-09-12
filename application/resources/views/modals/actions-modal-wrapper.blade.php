@@ -1,5 +1,5 @@
 <!--modal-->
-<div class="modal actions-modal" role="dialog" aria-labelledby="foo" id="actionsModal" {!! _clean(runtimeAllowCloseModalOptions()) !!}>
+<div class="modal actions-modal" role="dialog" aria-labelledby="foo" id="actionsModal" {!! clean(runtimeAllowCloseModalOptions()) !!}>
     <div class="modal-dialog">
         <form action="" method="post" id="actionsModalForm" class="form-horizontal">
             <div class="modal-content">

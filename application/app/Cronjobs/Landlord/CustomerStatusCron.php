@@ -16,16 +16,17 @@ use Spatie\Multitenancy\Models\Tenant;
 class CustomerStatusCron {
 
     public function __invoke() {
-
-        //[MT] - run config settings for landlord
-        runtimeLandlordCronConfig();
-
+        
         //[MT] - landlord only
         if (env('MT_TPYE')) {
             if (\Spatie\Multitenancy\Models\Tenant::current()) {
                 return;
             }
         }
+
+        
+        //[MT] - run config settings for landlord
+        runtimeLandlordCronConfig();
 
         //update statuses on the landlord DB
         $this->updateStatusesLandlordDB();

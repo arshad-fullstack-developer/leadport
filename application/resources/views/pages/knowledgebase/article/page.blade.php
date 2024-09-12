@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-body">
             <div class="kb-video">
-                {!! _clean($knowledgebase->knowledgebase_embed_code) !!}
+                {!! $knowledgebase->knowledgebase_embed_code !!}
                 <h4 class="card-title p-t-10">{{ $knowledgebase->knowledgebase_title }}</h4>
             </div>
         </div>

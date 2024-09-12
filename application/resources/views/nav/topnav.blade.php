@@ -8,7 +8,7 @@
             @if(request('dashboard_section') == 'settings')
             <!--exist-->
             <div class="sidenav-menu-item exit-panel m-b-17">
-            <a class="waves-effect waves-dark text-info" href="{{url('/home')}}" id="settings-exit-button"
+                <a class="waves-effect waves-dark text-info" href="/home" id="settings-exit-button"
                     aria-expanded="false" target="_self">
                     <i class="sl-icon-logout text-info"></i>
                     <span id="settings-exit-text" class="font-14">{{ str_limit(__('lang.exit_settings'), 20) }}</span>
@@ -17,7 +17,7 @@
             @else
             <!--logo-->
             <div class="sidenav-menu-item logo m-t-0">
-                <a class="navbar-brand" href="{{url('/home')}}">
+                <a class="navbar-brand" href="/home">
                     <img src="{{ runtimeLogoSmall() }}" alt="homepage" class="logo-small" />
                     <img src="{{ runtimeLogoLarge() }}" alt="homepage" class="logo-large" />
                 </a>
@@ -60,14 +60,15 @@
                 @endif
 
                 <!--search-->
+                @if(auth()->user()->is_team)
                 <li class="nav-item top-search-bar">
-                    <div class="top-search-container" id="top-search-container" 
-                    data-toggle="modal" 
-                    data-target="#searchModal">
+                    <div class="top-search-container" id="top-search-container" data-toggle="modal"
+                        data-target="#searchModal">
                         <i class="sl-icon-magnifier"></i>
                         <input type="text" class="form-control" id="top-search-form" placeholder="@lang('lang.search')">
                     </div>
                 </li>
+                @endif
 
 
                 <!--timer-->
@@ -188,13 +189,15 @@
                 </li>
                 @endif
 
-                <!-- my notes -->
+                <!-- calendar -->
+                @if(config('visibility.modules.calendar'))
                 <li class="nav-item">
-                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="{{ url('/notes') }}"
+                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="{{ url('/calendar') }}"
                         aria-expanded="false">
-                        <i class="ti ti-layers"></i>
+                        <i class="ti-calendar"></i>
                     </a>
                 </li>
+                @endif
 
 
                 <!-- messages notification -->
@@ -215,7 +218,7 @@
                 <!-- settings -->
                 @if(auth()->user()->is_admin)
                 <li class="nav-item">
-                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="{{url('/settings')}}" id="32"
+                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="/settings" id="32"
                         aria-expanded="false">
                         <i class="sl-icon-settings"></i>
                     </a>
@@ -489,6 +492,15 @@
                             </li>
                             @endif
 
+                            <!--my notes-->
+                            @if(auth()->user()->is_team)
+                            <li>
+                                <a href="{{ url('/notes') }}">
+                                    <i class="sl-icon-notebook p-r-4"></i>
+                                    {{ cleanLang(__('lang.my_notes')) }}</a>
+                            </li>
+                            @endif
+
                             @if(auth()->user()->is_client_owner)
                             <!--edit company profile-->
                             <li>
@@ -567,7 +579,7 @@
 
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a href="{{url('/logout')}}">
+                                <a href="/logout">
                                     <i class="fa fa-power-off p-r-4"></i> {{ cleanLang(__('lang.logout')) }}</a>
                             </li>
                         </ul>

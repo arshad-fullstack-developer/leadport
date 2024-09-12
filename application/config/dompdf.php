@@ -10,10 +10,17 @@ return array(
     | Set some default values. It is possible to add all defines that can be set
     | in dompdf_config.inc.php. You can also override the entire config file.
     |
-    */
-    'show_warnings' => false,   // Throw an Exception on warnings from dompdf
-    'orientation' => 'portrait',
-    'defines' => array(
+     */
+    'show_warnings' => false, // Throw an Exception on warnings from dompdf
+
+    'public_path' => BASE_DIR . '/public', // Override the public path if needed
+
+    /*
+     * Dejavu Sans font is missing glyphs for converted entities, turn it off if you need to show € and £.
+     */
+    'convert_entities' => true,
+
+    'options' => array(
         /**
          * The location of the DOMPDF font directory
          *
@@ -55,7 +62,7 @@ return array(
          *
          * The directory specified must be writeable by the webserver process.
          * The temporary directory is required to download remote images and when
-         * using the PFDLib back end.
+         * using the PDFLib back end.
          */
         "temp_dir" => sys_get_temp_dir(),
 
@@ -69,9 +76,30 @@ return array(
          * should be an absolute path.
          * This is only checked on command line call by dompdf.php, but not by
          * direct class use like:
-         * $dompdf = new DOMPDF();	$dompdf->load_html($htmldata); $dompdf->render(); $pdfdata = $dompdf->output();
+         * $dompdf = new DOMPDF();  $dompdf->load_html($htmldata); $dompdf->render(); $pdfdata = $dompdf->output();
          */
         "chroot" => BASE_DIR,
+
+        /**
+         * Protocol whitelist
+         *
+         * Protocols and PHP wrappers allowed in URIs, and the validation rules
+         * that determine if a resouce may be loaded. Full support is not guaranteed
+         * for the protocols/wrappers specified
+         * by this array.
+         *
+         * @var array
+         */
+        'allowed_protocols' => [
+            "file://" => ["rules" => []],
+            "http://" => ["rules" => []],
+            "https://" => ["rules" => []],
+        ],
+
+        /**
+         * @var string
+         */
+        'log_output_file' => null,
 
         /**
          * Whether to enable font subsetting or not.
@@ -141,7 +169,16 @@ return array(
          *
          * @see CPDF_Adapter::PAPER_SIZES for valid sizes ('letter', 'legal', 'A4', etc.)
          */
-        "default_paper_size" => "A4",
+        "default_paper_size" => "a4",
+
+        /**
+         * The default paper orientation.
+         *
+         * The orientation of the page (portrait or landscape).
+         *
+         * @var string
+         */
+        'default_paper_orientation' => "portrait",
 
         /**
          * The default font family
@@ -190,6 +227,7 @@ return array(
          * Enable inline PHP
          *
          * If this setting is set to true then DOMPDF will automatically evaluate
+         * inline PHP contained within <script type="text/php"> ... </script> tags.
          *
          * Enabling this for documents you do not trust (e.g. arbitrary remote html
          * pages) is a security risk.  Set this option to false if you wish to process
@@ -203,6 +241,7 @@ return array(
          * Enable inline Javascript
          *
          * If this setting is set to true then DOMPDF will automatically insert
+         * JavaScript code contained within <script type="text/javascript"> ... </script> tags.
          *
          * @var bool
          */
@@ -233,10 +272,12 @@ return array(
         "font_height_ratio" => 1.1,
 
         /**
-         * Use the more-than-experimental HTML5 Lib parser
+         * Use the HTML5 Lib parser
+         *
+         * @deprecated This feature is now always on in dompdf 2.x
+         * @var bool
          */
-        "enable_html5_parser" => false,
+        "enable_html5_parser" => true,
     ),
-
 
 );

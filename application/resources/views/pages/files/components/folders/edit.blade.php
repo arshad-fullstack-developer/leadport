@@ -39,7 +39,7 @@
             data-ajax-type="get" data-button-loading-annimation="yes"
             data-on-start-submit-button="disable">@lang('lang.cancel')</button>
         <button type="submit" id="folders-edit-button-submit"
-            class="btn btn-success btn-xs waves-effect text-left ajax-request"
+            class="btn btn-danger btn-xs waves-effect text-left ajax-request"
             data-url="{{ urlResource('/files/folders/update') }}" data-type="form" data-form-id="folders-edit-view"
             data-ajax-type="post" data-loading-target="folders-body"
             data-on-start-submit-button="disable">@lang('lang.submit')</button>

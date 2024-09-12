@@ -26,7 +26,7 @@
     <label class="col-12 text-left control-label col-form-label">{{ cleanLang(__('lang.description')) }}</label>
     <div class="col-12">
         <textarea class="form-control form-control-sm tinymce-textarea" rows="5" name="kbcategory_description"
-            id="kbcategory_description">{!! $category->kbcategory_description ?? '---' !!}</textarea>
+            id="kbcategory_description">{!! clean($category->kbcategory_description ?? '---') !!}</textarea>
     </div>
 </div>
 

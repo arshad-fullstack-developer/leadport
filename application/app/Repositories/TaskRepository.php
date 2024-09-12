@@ -410,6 +410,7 @@ class TaskRepository {
 
         //data
         $task->task_creatorid = auth()->id();
+        $task->task_uniqueid = str_unique();
         $task->task_projectid = request('task_projectid');
         $task->task_milestoneid = request('task_milestoneid');
         $task->task_clientid = request('task_clientid');
@@ -421,6 +422,7 @@ class TaskRepository {
         $task->task_status = request('task_status');
         $task->task_priority = request('task_priority');
         $task->task_position = $position;
+        $task->task_calendar_timezone = config('system.settings_system_timezone');
 
         //save and return id
         if ($task->save()) {
@@ -511,6 +513,7 @@ class TaskRepository {
 
         //we are copying
         $new_task = $task->replicate();
+        $new_task->task_uniqueid = str_unique();
         $new_task->task_created = now();
         $new_task->task_creatorid = (isset($data['recurring_cron']) && $data['recurring_cron']) ? $task->task_creatorid : auth()->id();
         $new_task->task_title = $data['task_title'];
@@ -524,6 +527,7 @@ class TaskRepository {
         $new_task->task_billable_invoiceid = null;
         $new_task->task_billable_lineitemid = null;
         $new_task->task_milestoneid = $data['task_milestoneid'];
+        $new_task->task_calendar_timezone = config('system.settings_system_timezone');
 
         //cleanup incase parent was a recurring task
         $new_task->task_recurring = 'no';

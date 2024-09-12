@@ -10,7 +10,9 @@
 | this is why its been placed here and not in the apps index.php file
 |
 */
-define('BASE_DIR', realpath(__DIR__ . '/../../'));
+if (!defined('BASE_DIR')) {
+    define('BASE_DIR', realpath(__DIR__ . '/../../'));
+}
 
 /*
 |--------------------------------------------------------------------------

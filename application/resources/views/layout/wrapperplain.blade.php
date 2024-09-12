@@ -30,11 +30,11 @@
 <!--js automations-->
 @include('layout.automationjs')
 <!--[note: no sanitizing required] for this trusted content, which is added by the admin-->
-{!! _clean(config('system.settings_theme_body')) !!}
+{!! config('system.settings_theme_body') !!}
 
 <!--[PRINTING]-->
 @if(config('visibility.page_rendering') == 'print-page')
-<script src="{{ asset('public/js/dynamic/print.js?v=' . config('system.versioning')) }}"></script>
+<script src="public/js/dynamic/print.js?v={{ config('system.versioning') }}"></script>
 @endif
 
 </html>

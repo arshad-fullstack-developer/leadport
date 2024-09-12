@@ -38,10 +38,11 @@ class SubscriptionPayment {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         /**
          *  process the web hoooks. This only processes one subscription at a time (to avoid timeouts)

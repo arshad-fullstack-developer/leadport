@@ -459,6 +459,7 @@ class ProjectRepository {
         $project = new $this->projects;
 
         //data
+        $project->project_uniqueid = str_unique();
         $project->project_title = request('project_title');
         $project->project_clientid = request('project_clientid');
         $project->project_creatorid = auth()->id();
@@ -466,6 +467,7 @@ class ProjectRepository {
         $project->project_categoryid = request('project_categoryid');
         $project->project_date_start = request('project_date_start');
         $project->project_date_due = request('project_date_due');
+        $project->project_calendar_timezone = config('system.settings_system_timezone');
 
         if (auth()->user()->role->role_projects_billing == 2) {
             $project->project_billing_type = (in_array(request('project_billing_type'), ['hourly', 'fixed'])) ? request('project_billing_type') : 'hourly';
@@ -568,10 +570,12 @@ class ProjectRepository {
         $project->project_title = request('project_title');
         $project->project_clientid = 0;
         $project->project_creatorid = auth()->id();
+        $project->project_uniqueid = str_unique();
         $project->project_description = request('project_description');
         $project->project_categoryid = request('project_categoryid');
         $project->project_date_start = null;
         $project->project_type = 'template';
+        $project->project_calendar_timezone = config('system.settings_system_timezone');
 
         $project->project_billing_type = (in_array(request('project_billing_type'), ['hourly', 'fixed'])) ? request('project_billing_type') : 'hourly';
         $project->project_billing_rate = (is_numeric(request('project_billing_rate'))) ? request('project_billing_rate') : 0;

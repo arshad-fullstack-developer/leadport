@@ -814,10 +814,7 @@ class Files extends Controller {
     public function ShowMoveFiles() {
 
         //validate
-        if ($folders = \App\Models\FileFolder::Where('filefolder_projectid', request('fileresource_id'))
-            ->WhereNotIn('filefolder_id', [request('filter_folderid')])
-            ->get()) {
-        }
+        $folders = \App\Models\FileFolder::Where('filefolder_projectid', request('fileresource_id'))->get();
 
         //reponse payload
         $payload = [
@@ -887,16 +884,14 @@ class Files extends Controller {
         //copy files into temp directory
         foreach (request('ids') as $unique_id => $value) {
             if ($value == 'on') {
-                Log::info("foo bar 1");
+
                 if ($file = \App\Models\File::Where('file_uniqueid', $unique_id)->first()) {
-                    Log::info("foo bar 2");
 
                     //file path
                     $file_path = BASE_DIR . "/storage/files/" . $file->file_directory . "/" . $file->file_filename;
 
                     //if the file exists
                     if (file_exists($file_path)) {
-                        Log::info("foo bar 3");
 
                         //get filename and extension
                         $filename = pathinfo($file_path, PATHINFO_FILENAME);
@@ -905,10 +900,8 @@ class Files extends Controller {
                         //check for duplicate file name
                         $target_file_name = $file->file_filename;
                         for ($i = 1; $i < 200; $i++) {
-                            Log::info("foo bar 4");
 
                             if (file_exists(BASE_DIR . "/storage/temp/$temp_directory/$target_file_name")) {
-                                Log::info("foo bar 5");
                                 $target_file_name = $filename . "($i)." . $extension;
                             } else {
                                 break;

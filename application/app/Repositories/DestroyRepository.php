@@ -445,11 +445,93 @@ class DestroyRepository {
             ->update([
                 'project_cover_file_id' => null,
                 'project_cover_directory' => '',
-                'project_cover_filename' => ''
+                'project_cover_filename' => '',
             ]);
 
         //delete file
         $file->delete();
+    }
+
+    /**
+     * destroy any task attachment
+     * @param numeric $attachment_id
+     * @return bool or id of record
+     */
+    public function destroyTaskAttachment($attachment_id) {
+
+        //validate attachment
+        if (!is_numeric($attachment_id)) {
+            Log::error("validation error - invalid params", ['process' => '[destroy][attachment]', config('app.debug_ref'), 'function' => __function__, 'attachment' => basename(__FILE__), 'line' => __line__, 'path' => __attachment__]);
+            return false;
+        }
+
+        //get attachment and validate
+        if (!$attachment = \App\Models\Attachment::Where('attachment_id', $attachment_id)->first()) {
+            Log::error("attachment could not be found", ['process' => '[destroy][attachment]', config('app.debug_ref'), 'function' => __function__, 'attachment' => basename(__FILE__), 'line' => __line__, 'path' => __attachment__]);
+            return false;
+        }
+
+        //is it a task attachment
+        if ($attachment->attachmentresource_type != 'task') {
+            Log::error("attachment is not for a task", ['process' => '[destroy][attachment]', config('app.debug_ref'), 'function' => __function__, 'attachment' => basename(__FILE__), 'line' => __line__, 'path' => __attachment__]);
+            return false;
+        }
+
+        //physically delete directory
+        if ($attachment->attachment_directory != '') {
+            if (Storage::exists("files/$attachment->attachment_directory")) {
+                Storage::deleteDirectory("files/$attachment->attachment_directory");
+            }
+        }
+
+        //remove cover from projects that originally used this image as a cover
+        \App\Models\Task::where('task_id', $attachment->attachmentresource_id)
+            ->update([
+                'task_cover_image' => 'no',
+                'task_cover_image_uniqueid' => '',
+                'task_cover_image_filename' => '',
+            ]);
+
+        //delete attachment
+        $attachment->delete();
+    }
+
+    /**
+     * destroy any attachment
+     * @param numeric $attachment_id
+     * @return bool or id of record
+     */
+    public function destroyAttachment($attachment_id) {
+
+        //validate attachment
+        if (!is_numeric($attachment_id)) {
+            Log::error("validation error - invalid params", ['process' => '[destroy][attachment]', config('app.debug_ref'), 'function' => __function__, 'attachment' => basename(__FILE__), 'line' => __line__, 'path' => __attachment__]);
+            return false;
+        }
+
+        //get attachment and validate
+        if (!$attachment = \App\Models\Attachment::Where('attachment_id', $attachment_id)->first()) {
+            Log::error("attachment could not be found", ['process' => '[destroy][attachment]', config('app.debug_ref'), 'function' => __function__, 'attachment' => basename(__FILE__), 'line' => __line__, 'path' => __attachment__]);
+            return false;
+        }
+
+        //physically delete directory
+        if ($attachment->attachment_directory != '') {
+            if (Storage::exists("files/$attachment->attachment_directory")) {
+                Storage::deleteDirectory("files/$attachment->attachment_directory");
+            }
+        }
+
+        //remove cover from projects that originally used this image as a cover
+        \App\Models\Task::where('task_id', $attachment->attachmentresource_id)
+            ->update([
+                'task_cover_image' => 'no',
+                'task_cover_image_uniqueid' => '',
+                'task_cover_image_filename' => '',
+            ]);
+
+        //delete attachment
+        $attachment->delete();
     }
 
     /**

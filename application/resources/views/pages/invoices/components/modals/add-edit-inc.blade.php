@@ -46,8 +46,8 @@
                     <label
                         class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.project')) }}</label>
                     <div class="col-sm-12 col-lg-9">
-                        <select class="select2-basic form-control form-control-sm dynamic_bill_projectid" data-allow-clear="true"
-                            id="bill_projectid" name="bill_projectid" disabled>
+                        <select class="select2-basic form-control form-control-sm dynamic_bill_projectid"
+                            data-allow-clear="true" id="bill_projectid" name="bill_projectid" disabled>
                         </select>
                     </div>
                 </div>
@@ -88,6 +88,41 @@
                     </div>
                 </div>
             </div>
+
+
+            <!--CUSTOMER FIELDS [collapsed]-->
+            <div class="hidden" id="new-client-custom-fields">
+                @if(auth()->user()->is_team)
+                <div class="spacer row">
+                    <div class="col-sm-12 col-lg-8">
+                        <span class="title">{{ cleanLang(__('lang.additional_client_details')) }}</span class="title">
+                    </div>
+                    <div class="col-sm-12 col-lg-4">
+                        <div class="switch  text-right">
+                            <label>
+                                <input type="checkbox" name="add_client_option_other" id="add_client_option_other"
+                                    class="js-switch-toggle-hidden-content" data-target="client_custom_fields_collaped">
+                                <span class="lever switch-col-light-blue"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div id="client_custom_fields_collaped" class="hidden">
+
+                    @if(config('app.application_demo_mode'))
+                    <!--DEMO INFO-->
+                    <div class="alert alert-info">
+                        <h5 class="text-info"><i class="sl-icon-info"></i> Demo Info</h5>
+                        These are custom fields. You can change them or <a
+                            href="{{ url('app/settings/customfields/projects') }}">create your own.</a>
+                    </div>
+                    @endif
+
+                    @include('misc.customfields')
+                </div>
+                @endif
+            </div>
+            <!--/#CUSTOMER FIELDS [collapsed]-->
 
             <!--option buttons-->
             <div class="client-selector-links">
@@ -162,7 +197,6 @@
         </div>
 
         <div class="line"></div>
-
 
         <!--otions toggle-->
         <div class="spacer row">

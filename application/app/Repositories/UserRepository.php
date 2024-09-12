@@ -274,6 +274,7 @@ class UserRepository {
         $user->role_id = request('role_id');
         $user->creatorid = Auth()->user()->id;
         $user->unique_id = str_unique();
+        $user->timezone = config('system.settings_system_timezone');
 
         //password
         if ($password != '') {
@@ -351,6 +352,7 @@ class UserRepository {
         $user->role_id = 2;
         $user->creatorid = 0;
         $user->account_owner = 'yes';
+        $user->timezone = config('system.settings_system_timezone');
 
         //notification settings
         $user->notifications_new_project = config('settings.default_notifications_client.notifications_new_project');
@@ -399,6 +401,11 @@ class UserRepository {
         $user->social_linkedin = request('social_linkedin');
         $user->social_github = request('social_github');
         $user->social_dribble = request('social_dribble');
+
+        //update timezone
+        if(request()->filled('timezone')){
+            $user->timezone = request('timezone');
+        }
 
         //client user
         if (request()->filled('clientid')) {

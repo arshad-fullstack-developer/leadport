@@ -102,6 +102,7 @@ class ProjectAssignedRepository {
         $query = $this->assigned->newQuery();
         $query->leftJoin('users', 'users.id', '=', 'projects_assigned.projectsassigned_userid');
         $query->where('projectsassigned_projectid', $id);
+        $query->groupBy('users.id');
         $query->orderBy('first_name', 'ASC');
         return $query->get();
     }

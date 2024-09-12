@@ -1,5 +1,18 @@
 <div class="doc-to-by-container">
 
+
+    <!--scheduled for publishing-->
+    @if($document->doc_status == 'draft' && $document->doc_publishing_type == 'scheduled')
+    @if($document->doc_publishing_scheduled_status == 'pending')
+    <div class="alert alert-info m-b-0 m-t-5 m-b-20">@lang('lang.scheduled_publishing_info') :
+        {{ runtimeDate($document->doc_publishing_scheduled_date) }}</div>
+    @endif
+    @if($document->doc_publishing_scheduled_status == 'failed')
+    <div class="alert alert-danger m-b-0 m-t-5 m-b-20">@lang('lang.scheduled_publishing_failed_info') :
+        {{ runtimeDate($document->doc_publishing_scheduled_date) }}</div>
+    @endif
+    @endif
+
     <div class="row">
 
         <!--COMPANY DETAILS-->
@@ -76,7 +89,8 @@
                     @php $key = $field->customfields_name; @endphp
                     @php $customfield = $document[$key] ?? ''; @endphp
                     @if($customfield != '')
-                    <div class="text-muted m-t-3">{{ $field->customfields_title }}: {{ runtimeCustomFieldsFormat($customfield, $field->customfields_datatype) }}</div>
+                    <div class="text-muted m-t-3">{{ $field->customfields_title }}:
+                        {{ runtimeCustomFieldsFormat($customfield, $field->customfields_datatype) }}</div>
                     @endif
                     @endif
                     @endforeach
@@ -98,8 +112,8 @@
                 <!--organisation & address-->
                 <div class="x-title resizetext">
                     @if($document->lead_company_name)
-                    <h4 class="font-weight-500">{{ $document->lead_company_name }}</h4> 
-                    @else 
+                    <h4 class="font-weight-500">{{ $document->lead_company_name }}</h4>
+                    @else
                     <h4 class="font-weight-500">{{ $document->lead_firstname }} {{ $document->lead_lastname }}
                     </h4>
                     @endif

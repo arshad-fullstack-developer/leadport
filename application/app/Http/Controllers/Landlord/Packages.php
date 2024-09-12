@@ -119,12 +119,12 @@ class Packages extends Controller {
         $package->package_module_expense = (request('package_module_expense') == 'on') ? 'yes' : 'no';
         $package->package_module_subscriptions = (request('package_module_subscriptions') == 'on') ? 'yes' : 'no';
         $package->package_module_tickets = (request('package_module_tickets') == 'on') ? 'yes' : 'no';
+        $package->package_module_calendar = (request('package_module_calendar') == 'on') ? 'yes' : 'no';
         $package->package_module_timetracking = (request('package_module_timetracking') == 'on') ? 'yes' : 'no';
         $package->package_module_reminders = (request('package_module_reminders') == 'on') ? 'yes' : 'no';
         $package->package_module_proposals = (request('package_module_proposals') == 'on') ? 'yes' : 'no';
         $package->package_module_contracts = (request('package_module_contracts') == 'on') ? 'yes' : 'no';
         $package->package_module_messages = (request('package_module_messages') == 'on') ? 'yes' : 'no';
-
         //default module
         $package->package_module_projects = 'yes';
         $package->save();
@@ -223,6 +223,7 @@ class Packages extends Controller {
         $package->package_module_expense = (request('package_module_expense') == 'on') ? 'yes' : 'no';
         $package->package_module_subscriptions = (request('package_module_subscriptions') == 'on') ? 'yes' : 'no';
         $package->package_module_tickets = (request('package_module_tickets') == 'on') ? 'yes' : 'no';
+        $package->package_module_calendar = (request('package_module_calendar') == 'on') ? 'yes' : 'no';
         $package->package_module_timetracking = (request('package_module_timetracking') == 'on') ? 'yes' : 'no';
         $package->package_module_reminders = (request('package_module_reminders') == 'on') ? 'yes' : 'no';
         $package->package_module_proposals = (request('package_module_proposals') == 'on') ? 'yes' : 'no';

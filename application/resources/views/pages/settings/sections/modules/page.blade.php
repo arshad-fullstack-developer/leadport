@@ -260,6 +260,21 @@
                     </td>
                 </tr>
 
+                <!--calendar-->
+                <tr>
+                    <td>@lang('lang.calendar')</td>
+                    <td>
+                        <div class="form-group form-group-checkbox m-0 p-0">
+                            <div class="col-2 text-right m-0 p-0">
+                                <input type="checkbox" id="settings_modules_calendar" name="settings_modules_calendar"
+                                    {{ runtimePrechecked($settings->settings_modules_calendar) }}
+                                    class="filled-in chk-col-light-blue">
+                                <label class="m-0 p-0" for="settings_modules_calendar"></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
                 <!--reports-->
                 <tr>
                     <td>@lang('lang.reports')</td>
@@ -290,7 +305,7 @@
 
         <div class="text-right">
             <button type="submit" id="commonModalSubmitButton"
-                class="btn btn-rounded-x btn-success waves-effect text-left ajax-request"
+                class="btn btn-rounded-x btn-danger waves-effect text-left ajax-request"
                 data-url="{{url('/settings/modules') }}" data-loading-target="" data-ajax-type="PUT" data-type="form"
                 data-on-start-submit-button="disable">@lang('lang.save_changes')</button>
         </div>

@@ -40,18 +40,29 @@ class StoreResponse implements Responsable {
 
             //prepend content on top of list or show full table
             if ($count == 1) {
-                $html = view('pages/projects/components/table/table', compact('projects'))->render();
+                $html = view('pages/projects/views/list/table/table', compact('projects'))->render();
                 $jsondata['dom_html'][] = array(
-                    'selector' => '#projects-table-wrapper',
+                    'selector' => '#projects-view-wrapper',
                     'action' => 'replace',
                     'value' => $html);
             } else {
                 //prepend content on top of list
-                $html = view('pages/projects/components/table/ajax', compact('projects'))->render();
-                $jsondata['dom_html'][] = array(
-                    'selector' => '#projects-td-container',
-                    'action' => 'prepend',
-                    'value' => $html);
+                if (auth()->user()->pref_view_projects_layout == 'list') {
+                    $html = view('pages/projects/views/list/table/ajax', compact('projects'))->render();
+                    $jsondata['dom_html'][] = array(
+                        'selector' => '#projects-td-container',
+                        'action' => 'prepend',
+                        'value' => $html);
+                }
+
+                //prepend content on top of list
+                if (auth()->user()->pref_view_projects_layout == 'card') {
+                    $html = view('pages/projects/views/cards/layout/ajax', compact('projects'))->render();
+                    $jsondata['dom_html'][] = array(
+                        'selector' => '#projects-cards-container',
+                        'action' => 'prepend',
+                        'value' => $html);
+                }
             }
 
             //close modal

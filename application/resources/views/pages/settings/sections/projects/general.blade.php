@@ -40,9 +40,22 @@
     </div>
 
 
+    <!--show tasks status changes in event tineline-->
+    <div class="form-group row">
+        <label class="col-4 control-label col-form-label">@lang('lang.show_task_status_changes_in_event_timeline')</label>
+        <div class="col-3">
+            <select class="select2-basic form-control form-control-sm select2-preselected"
+                id="settings_projects_events_show_task_status_change" name="settings_projects_events_show_task_status_change"
+                data-preselected="{{ $settings->settings_projects_events_show_task_status_change ?? ''}}">
+                <option value="yes">@lang('lang.yes')</option>
+                <option value="no">@lang('lang.no')</option>
+            </select>
+        </div>
+    </div>
+
 
     <div class="text-right">
-        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-success waves-effect text-left"
+        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-danger waves-effect text-left"
             data-url="/settings/projects/general" data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
     </div>

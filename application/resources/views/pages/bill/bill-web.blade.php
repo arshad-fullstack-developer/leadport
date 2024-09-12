@@ -12,10 +12,12 @@
         <!--scheduled for publishing-->
         @if($bill->bill_status == 'draft' && $bill->bill_publishing_type == 'scheduled')
         @if($bill->bill_publishing_scheduled_status == 'pending')
-        <div class="alert alert-info m-b-0 m-t-5">@lang('lang.scheduled_publishing_info') : {{ runtimeDate($bill->bill_publishing_scheduled_date) }}</div>
+        <div class="alert alert-info m-b-0 m-t-5">@lang('lang.scheduled_publishing_info') :
+            {{ runtimeDate($bill->bill_publishing_scheduled_date) }}</div>
         @endif
         @if($bill->bill_publishing_scheduled_status == 'failed')
-        <div class="alert alert-danger m-b-0 m-t-5">@lang('lang.scheduled_publishing_failed_info') : {{ runtimeDate($bill->bill_publishing_scheduled_date) }}</div>
+        <div class="alert alert-danger m-b-0 m-t-5">@lang('lang.scheduled_publishing_failed_info') :
+            {{ runtimeDate($bill->bill_publishing_scheduled_date) }}</div>
         @endif
         @endif
 
@@ -100,6 +102,13 @@
                 </div>
             </div>
 
+            <!--project title-->
+            @if(config('system.settings_invoices_show_project_on_invoice') == 'yes' && $bill->project_title != '')
+            <div class="col-12 m-b-10 billing-mode-only-item invoice-project-title">
+                <span class="">@lang('lang.project'):</span> {{ $bill->project_title }}
+            </div>
+            @endif
+
             <!--DATES & AMOUNT DUE-->
             @if($bill->bill_type == 'invoice')
             <div class="col-12 m-b-10 billing-mode-only-item" id="invoice-dates-wrapper">
@@ -177,8 +186,7 @@
                         <button class="buttons-accept-decline btn btn-danger confirm-action-danger"
                             data-confirm-title="{{ cleanLang(__('lang.decline_estimate')) }}"
                             data-confirm-text="{{ cleanLang(__('lang.decline_estimate_confirm')) }}"
-                            data-ajax-type="GET"
-                            data-url="{{ url('/') }}/estimates/{{ $bill->bill_uniqueid }}/decline">
+                            data-ajax-type="GET" data-url="{{ url('/') }}/estimates/{{ $bill->bill_uniqueid }}/decline">
                             {{ cleanLang(__('lang.decline_estimate')) }} </button>
                         <!--accept-->
                         <button class="buttons-accept-decline btn btn-success confirm-action-success"

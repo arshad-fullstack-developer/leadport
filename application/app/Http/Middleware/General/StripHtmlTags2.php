@@ -87,6 +87,7 @@ class StripHtmlTagsX {
             'package_module_subscriptions',
             'package_module_tasks',
             'package_module_tickets',
+            'package_module_calendar',
             'package_module_timetracking',
             'package_name',
             'package_subscription_options',

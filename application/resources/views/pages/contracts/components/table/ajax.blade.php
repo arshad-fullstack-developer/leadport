@@ -73,6 +73,13 @@
     <td class="col_doc_status">
         <span
             class="label {{ runtimeContractStatusColors($contract->doc_status, 'label') }}">{{ runtimeLang($contract->doc_status) }}</span>
+
+        <!--contract is scheduled-->
+        @if($contract->doc_publishing_type == 'scheduled' && $contract->doc_publishing_scheduled_status == 'pending')
+        <span class="label label-icons label-icons-warning" data-toggle="tooltip" data-placement="top"
+            title="@lang('lang.scheduled_publishing_info'): {{ runtimeDate($contract->doc_publishing_scheduled_date) }}"><i
+                class="sl-icon-clock"></i></span>
+        @endif
     </td>
 
 

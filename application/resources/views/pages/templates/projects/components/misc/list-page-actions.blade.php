@@ -18,7 +18,7 @@
         <!--ADD NEW ITEM-->
         @if(config('visibility.list_page_actions_add_button'))
         <button type="button"
-            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
             data-toggle="modal" 
             data-target="#commonModal" 
             data-url="{{ _url('templates/projects/create') }}"

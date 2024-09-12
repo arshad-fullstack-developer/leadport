@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" id="meta-csrf" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -57,14 +57,14 @@
 
 
 
-@if(request('view') == 'preview')
-<link href="{{ config('theme.selected_theme_pdf_css') }}" rel="stylesheet">
-@else
-<link href="{{ BASE_DIR }}/{{ config('theme.selected_theme_pdf_css') }}" rel="stylesheet">
-@endif
+    @if(request('view') == 'preview')
+    <link href="{{ config('theme.selected_theme_pdf_css') }}" rel="stylesheet">
+    @else
+    <link href="{{ BASE_DIR }}/{{ config('theme.selected_theme_pdf_css') }}" rel="stylesheet">
+    @endif
 
-<!--custom CSS file (DB) -->
-{!! customDPFCSS(config('system.settings2_bills_pdf_css')) !!}
+    <!--custom CSS file (DB) -->
+    {!! customDPFCSS(config('system.settings2_bills_pdf_css')) !!}
 
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="public/images/favicon.png">
@@ -299,7 +299,8 @@
                             @php $customfield = $bill[$key] ?? ''; @endphp
                             @if($customfield != '')
                             <div class="x-line">
-                                {{ $field->customfields_title }}: {{ runtimeCustomFieldsFormat($customfield, $field->customfields_datatype) }}
+                                {{ $field->customfields_title }}:
+                                {{ runtimeCustomFieldsFormat($customfield, $field->customfields_datatype) }}
                             </div>
                             @endif
                             @endif
@@ -308,6 +309,21 @@
                     </tr>
                 </tbody>
             </table>
+
+
+            @if(config('system.settings_invoices_show_project_on_invoice') == 'yes' && $bill->project_title !=
+            '')
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="p-t-10">
+                            <strong>@lang('lang.project'):</strong> {{ $bill->project_title }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            @endif
+
             <table class="bill-dates">
                 <tbody>
                     <tr>

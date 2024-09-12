@@ -1,5 +1,5 @@
 <!--modal-->
-<div class="modal" role="dialog" aria-labelledby="timebillingModal" id="timebillingModal" {!! _clean(runtimeAllowCloseModalOptions()) !!}>
+<div class="modal" role="dialog" aria-labelledby="timebillingModal" id="timebillingModal" {!! clean(runtimeAllowCloseModalOptions()) !!}>
     <div class="modal-dialog modal-xl" id="timebillingModalContainer">
         <div class="modal-content">
             <div class="modal-header">

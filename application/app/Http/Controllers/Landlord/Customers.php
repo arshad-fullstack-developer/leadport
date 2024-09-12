@@ -834,6 +834,7 @@ class Customers extends Controller {
                 $settings->settings_modules_expenses = ($tenant->package_module_expense == 'yes') ? 'enabled' : 'disabled';
                 $settings->settings_modules_subscriptions = ($tenant->package_module_subscriptions == 'yes') ? 'enabled' : 'disabled';
                 $settings->settings_modules_tickets = ($tenant->package_module_tickets == 'yes') ? 'enabled' : 'disabled';
+                $settings->settings_modules_calendar = ($tenant->package_module_calendar == 'yes') ? 'enabled' : 'disabled';
                 $settings->settings_modules_timetracking = ($tenant->package_module_timetracking == 'yes') ? 'enabled' : 'disabled';
                 $settings->settings_modules_reminders = ($tenant->package_module_reminders == 'yes') ? 'enabled' : 'disabled';
                 $settings->settings_modules_proposals = ($tenant->package_module_proposals == 'yes') ? 'enabled' : 'disabled';

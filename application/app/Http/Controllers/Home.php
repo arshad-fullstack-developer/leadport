@@ -15,7 +15,7 @@ use App\Repositories\LeadRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\StatsRepository;
 use App\Repositories\TaskRepository;
-
+use Illuminate\Support\Facades\Log;
 class Home extends Controller {
 
     private $page = array();

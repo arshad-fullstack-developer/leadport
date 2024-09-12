@@ -32,7 +32,7 @@
 
     <!--[DYNAMIC INLINE SCRIPT] - Backend Variables to Javascript Variables-->
     <script>
-        NX.admin_home_chart_income = JSON.parse('{!! json_encode(_clean($payload["income"]["monthly"])) !!}', true);
-        NX.admin_home_chart_expenses = JSON.parse('{!! json_encode(_clean($payload["expenses"]["monthly"])) !!}', true);
+        NX.admin_home_chart_income = JSON.parse('{!! json_encode(clean($payload["income"]["monthly"])) !!}', true);
+        NX.admin_home_chart_expenses = JSON.parse('{!! json_encode(clean($payload["expenses"]["monthly"])) !!}', true);
         NX.admin_home_c3_leads_title = "{{ $payload['leads_chart_center_title'] }}";
     </script>

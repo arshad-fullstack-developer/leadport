@@ -67,9 +67,6 @@
 
 
 <!--from email-->
-@if(config('system.settings_type') == 'saas')
-<input type="hidden" name="email_from" value="system_email">
-@else
 <div class="form-group row">
     <label class="col-12 text-left control-label col-form-label required">@lang('lang.from')</label>
     <div class="col-12">
@@ -84,4 +81,3 @@
 
 <!--warning-->
 <div class="alert alert-warning">@lang('lang.email_address_warning')</div>
-@endif

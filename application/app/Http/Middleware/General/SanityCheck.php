@@ -25,8 +25,6 @@ class SanityCheck {
 
         //CHECK IF SETUP COMPLETED - REDIRECT TO SETUP PAGE
         if (env('SETUP_STATUS') != 'COMPLETED') {
-            
-
             if (request()->route()->getName() != 'setup') {
                 //redirect to setup page
                 return redirect()->route('setup');

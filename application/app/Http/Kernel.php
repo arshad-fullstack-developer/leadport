@@ -17,7 +17,6 @@ class Kernel extends HttpKernel {
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\TrustProxies::class,
     ];
 
     /**
@@ -56,7 +55,7 @@ class Kernel extends HttpKernel {
         //[MT]
         'tenant' => [
 
-            // \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+            \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
             //\Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
 
             //system middleware
@@ -86,7 +85,7 @@ class Kernel extends HttpKernel {
             \App\Http\Middleware\Modules\Menus::class,
 
             //[GROWNCRM] strip tags from specified post requests
-            \App\Http\Middleware\General\StripHtmlTags::class,
+            //\App\Http\Middleware\General\StripHtmlTags::class, //June 2024 - This is not used in main Grow CRM? so have removed here
         ],
 
         // [My account] area for the tenant (as set in RouteServiceProvider)

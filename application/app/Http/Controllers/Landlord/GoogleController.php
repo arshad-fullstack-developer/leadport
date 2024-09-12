@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Landlord;
+namespace App\Http\Controllers;
 
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\Controller;
-
 
 class GoogleController extends Controller
 {
@@ -45,7 +43,7 @@ class GoogleController extends Controller
         $token = $this->client->fetchAccessTokenWithAuthCode($code);
         Session::put('google_access_token', $token['access_token']);
 
-        return redirect('app-admin/eventss');
+        return redirect('events');
     }
 
     // View events from the user's calendar
@@ -53,7 +51,7 @@ class GoogleController extends Controller
     {   
         //dd(Session::get('google_access_token'));
         if (!$token = Session::get('google_access_token')) {
-            return redirect('app-admin/auth/redirect');
+            return redirect('auth/redirect');
         }
         //dd($token);
         $this->client->setAccessToken($token);
@@ -71,7 +69,7 @@ class GoogleController extends Controller
             ];
         }
         
-        return view('landlord.calendar.calendar', ['events' => $eventDetails]);
+        return view('pages.calendar.calendar', ['events' => $eventDetails]);
     }
 
     // Create a new event in the user's calendar
@@ -79,7 +77,7 @@ class GoogleController extends Controller
     {
         
         if (!$token = Session::get('google_access_token')) {
-            return redirect('app-admin/auth/redirect');
+            return redirect('auth/redirect');
         }
     
         $this->client->setAccessToken($token);
@@ -92,11 +90,11 @@ class GoogleController extends Controller
                 $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
                 Session::put('google_access_token', $this->client->getAccessToken());
             } else {
-                return redirect('app-admin/auth/redirect');
+                return redirect('auth/redirect');
             }
         }
 
-       //dd($request->all());
+        //dd($request->all());
 
         $start_date = new \DateTime($request->start_date);
         $start_date = $start_date->format(\DateTime::ISO8601);
@@ -104,6 +102,8 @@ class GoogleController extends Controller
         $end_date   = $end_date->format(\DateTime::ISO8601);
 
 
+        //dd($dateTime);
+       // dd($request->start_date);
         $event = new Google_Service_Calendar_Event([
             'summary'      => $request->title,
             'description'  => $request->description,
@@ -120,17 +120,17 @@ class GoogleController extends Controller
         try {
             $this->service->events->insert('primary', $event);
         } catch (Exception $e) {
-            return redirect('app-admin/eventss')->with('error', 'Failed to create event: ' . $e->getMessage());
+            return redirect('events')->with('error', 'Failed to create event: ' . $e->getMessage());
         }
 
-        return redirect('app-admin/eventss');
+        return redirect('events');
     }
 
 
     public function deleteEvent($eventId)
     {
     if (!$token = Session::get('google_access_token')) {
-        return redirect('app-admin/auth/redirect');
+        return redirect('auth/redirect');
     }
 
     $this->client->setAccessToken($token);
@@ -142,7 +142,7 @@ class GoogleController extends Controller
             $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
             Session::put('google_access_token', $this->client->getAccessToken());
         } else {
-            return redirect('app-admin/auth/redirect');
+            return redirect('auth/redirect');
         }
     }
 

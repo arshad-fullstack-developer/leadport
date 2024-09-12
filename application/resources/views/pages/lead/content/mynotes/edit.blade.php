@@ -9,7 +9,7 @@
         <div class="form-group row">
             <div class="col-12">
                 <textarea class="form-control form-control-sm tinymce-textarea" name="lead_mynotes"
-                    id="lead_mynotes">{!! $note->note_description ?? '' !!}</textarea>
+                    id="lead_mynotes">{!! _clean($note->note_description ?? '') !!}</textarea>
             </div>
         </div>
     </div>

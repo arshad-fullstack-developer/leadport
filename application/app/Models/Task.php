@@ -14,13 +14,10 @@ class Task extends Model {
      * @UPDATED_AT string - updated date column
      */
     protected $primaryKey = 'task_id';
-    //protected $dateFormat = 'd.m.y';
+    protected $dateFormat = 'Y-m-d H:i:s';
     protected $guarded = ['task_id'];
     const CREATED_AT = 'task_created';
     const UPDATED_AT = 'task_updated';
-
-
-    protected $with = ['goods'];
 
     /**
      * relatioship business rules:
@@ -88,9 +85,6 @@ class Task extends Model {
         return $this->hasMany('App\Models\Timer', 'timer_taskid', 'task_id');
     }
 
-    public function goods() {
-        return $this->hasMany('App\Models\Goods', 'tsk_id', 'task_id');
-    }
     /**
      * The Users that are assigned to the Task.
      */
@@ -114,14 +108,12 @@ class Task extends Model {
         return $this->hasMany('App\Models\ProjectManager', 'projectsmanager_projectid', 'task_projectid');
     }
 
-    
     /**
      * The assigned users table records
      */
     public function assignedrecords() {
         return $this->hasMany('App\Models\TaskAssigned', 'tasksassigned_taskid', 'task_id');
     }
-
 
     /**
      * relatioship business rules:
@@ -133,26 +125,13 @@ class Task extends Model {
         return $this->morphMany('App\Models\Event', 'eventresource');
     }
 
-    public function setTaskCustomField16Attribute($value)
-    {
-        $this->attributes['task_custom_field_16'] = json_encode($value);
+    /**
+     * relatioship business rules:
+     *         - the Task can have many reminders
+     *         - the reminder belongs to one Task
+     *         - other reminders can belong to other resources
+     */
+    public function reminders() {
+        return $this->morphMany('App\Models\Reminder', 'reminderresource');
     }
-
-    // Accessor to decode the JSON string when retrieving from the database
-    public function getTaskCustomField16Attribute($value)
-    {
-        return json_decode($value, true);
-    }
-
-    public function setTaskCustomField34Attribute($value)
-    {
-        $this->attributes['task_custom_field_34'] = json_encode($value);
-    }
-
-    // Accessor to decode the JSON string when retrieving from the database
-    public function getTaskCustomField34Attribute($value)
-    {
-        return json_decode($value, true);
-    }
-
 }

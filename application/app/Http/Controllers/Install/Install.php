@@ -100,7 +100,7 @@ class Install extends Controller {
         $error['count'] = 0;
 
         //server requirements checks
-        $requirements['php_version'] = version_compare(PHP_VERSION, '7.3.0', ">=") && version_compare(PHP_VERSION, '8.2.0', "<");
+        $requirements['php_version'] = version_compare(PHP_VERSION, '8.2.0', ">=") && version_compare(PHP_VERSION, '8.4.0', "<");
         $requirements['bcmath'] = extension_loaded("bcmath");
         $requirements['mysql'] = extension_loaded("mysqli");
         $requirements['ctype'] = extension_loaded("ctype");

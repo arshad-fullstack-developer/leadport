@@ -46,6 +46,7 @@ class Status {
             'spaces' => 'settings_modules_spaces',
             'messages' => 'settings_modules_messages',
             'reports' => 'settings_modules_reports',
+            'calendar' => 'settings_modules_calendar',
         ];
 
         //set theglobal visibility of each module
@@ -99,6 +100,13 @@ class Status {
                     return (auth()->user()->client->client_settings_modules_tickets == 'enabled') ? true : false;
                     break;
                 }
+            }
+
+            //disable some team only modulkes
+            switch ($module) {
+            case 'settings_modules_calendar':
+                return false;
+                break;
             }
         }
 

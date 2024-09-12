@@ -17,16 +17,19 @@ class RecurringInvoicesCron {
     public function __invoke(
         RecurringInvoiceRepository $recurringrepo
     ) {
-
         //[MT] - tenants only
         if (env('MT_TPYE')) {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
+
+        //boot theme for pdf css
+        middlewareBootTheme();
 
         //log that its run
         //Log::info("Cronjob has started", ['process' => '[RecurringInvoicesCron]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);

@@ -67,7 +67,7 @@
             <div class="form-group row">
                 <label class="col-sm-12 col-lg-3 text-left control-label col-form-label required">{{ cleanLang(__('lang.notes')) }}**</label>
                 <div class="col-sm-12 col-lg-9">
-                    <textarea class="form-control" name="payment_notes" id="payment_notes" rows="5">{!! _clean($payment->payment_notes) !!}</textarea>
+                    <textarea class="form-control" name="payment_notes" id="payment_notes" rows="5">{!! $payment->payment_notes !!}</textarea>
                     <div><small>** {{ cleanLang(__('lang.private')) }} ({{ cleanLang(__('lang.not_visible_to_the_client')) }})</small></div>
                 </div>
             </div>

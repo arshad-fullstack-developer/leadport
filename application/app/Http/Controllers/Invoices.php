@@ -67,6 +67,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\Repositories\CustomFieldsRepository;
 use Image;
 use Intervention\Image\Exception\NotReadableException;
 use Validator;
@@ -123,6 +124,11 @@ class Invoices extends Controller {
      */
     protected $invoicegenerator;
 
+        /**
+     * The custom fields repository
+     */
+    protected $customrepo;
+
     public function __construct(
         InvoiceRepository $invoicerepo,
         TagRepository $tagrepo,
@@ -132,7 +138,8 @@ class Invoices extends Controller {
         EventRepository $eventrepo,
         EventTrackingRepository $trackingrepo,
         EmailerRepository $emailerrepo,
-        InvoiceGeneratorRepository $invoicegenerator
+        InvoiceGeneratorRepository $invoicegenerator,
+        CustomFieldsRepository $customrepo
     ) {
 
         //core controller instantation
@@ -200,6 +207,7 @@ class Invoices extends Controller {
         $this->trackingrepo = $trackingrepo;
         $this->emailerrepo = $emailerrepo;
         $this->invoicegenerator = $invoicegenerator;
+        $this->customrepo = $customrepo;
 
         //global settings for use in urls
         config([
@@ -310,6 +318,7 @@ class Invoices extends Controller {
             'page' => $this->pageSettings('create'),
             'categories' => $categories,
             'tags' => $tags,
+            'fields' => $this->getClientCustomFields(),
         ];
 
         //show the form
@@ -1485,6 +1494,33 @@ class Invoices extends Controller {
         //show the form
         return new UpdateTaxtypeResponse($payload);
 
+    }
+
+    /**
+     * get all custom fields for clients
+     *   - if they are being used in the 'edit' modal form, also get the current data
+     *     from the cliet record. Store this temporarily in '$field->customfields_name'
+     *     this will then be used to prefill data in the custom fields
+     * @param model client model - only when showing the edit modal form
+     * @return collection
+     */
+    public function getClientCustomFields() {
+
+        //set typs
+        request()->merge([
+            'customfields_type' => 'clients',
+            'filter_show_standard_form_status' => 'enabled',
+            'filter_field_status' => 'enabled',
+            'sort_by' => 'customfields_position',
+        ]);
+
+        //show all fields
+        config(['settings.custom_fields_display_limit' => 1000]);
+
+        //get fields
+        $fields = $this->customrepo->search();
+
+        return $fields;
     }
 
     /**

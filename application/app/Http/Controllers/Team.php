@@ -327,6 +327,10 @@ class Team extends Controller {
         //delete project manager
         \App\Models\ProjectManager::Where('projectsmanager_userid', $id)->delete();
 
+        //delete calendar events
+        \App\Models\CalendarEvent::Where('calendar_event_creatorid', $id)->delete();
+
+
         //make account as deleted
         $user->status = 'deleted';
 

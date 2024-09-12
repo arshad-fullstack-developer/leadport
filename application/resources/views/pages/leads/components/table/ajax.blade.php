@@ -15,42 +15,49 @@
 
 
     <!--tableconfig_column_1 [lead_firstname lead_lastname]-->
-    <td class="col_lead_firstname {{ config('table.tableconfig_column_1') }} tableconfig_column_1" id="leads_col_contact_{{ $lead->lead_id }}">
+    <td class="col_lead_firstname {{ config('table.tableconfig_column_1') }} tableconfig_column_1"
+        id="leads_col_contact_{{ $lead->lead_id }}">
         <span title="{{ $lead->full_name }}">
             <a class="show-modal-button reset-card-modal-form js-ajax-ux-request" data-toggle="modal"
-            href="javascript:void(0)" data-target="#cardModal" data-url="{{ urlResource('/leads/'.$lead->lead_id) }}"
-            data-loading-target="main-top-nav-bar" id="table_lead_title_{{ $lead->lead_id }}">
-            <span title="{{ $lead->lead_title }}">{{ str_limit($lead->full_name, 15) }}</span>
+                href="javascript:void(0)" data-target="#cardModal"
+                data-url="{{ urlResource('/leads/'.$lead->lead_id) }}" data-loading-target="main-top-nav-bar"
+                id="table_lead_title_{{ $lead->lead_id }}">
+                <span title="{{ $lead->lead_title }}">{{ str_limit($lead->full_name, 15) }}</span>
         </span>
     </td>
 
 
     <!--tableconfig_column_2 [lead_title]-->
-    <td class="col_lead_title {{ config('table.tableconfig_column_2') }} tableconfig_column_2" id="leads_col_title_{{ $lead->lead_id }}">
+    <td class="col_lead_title {{ config('table.tableconfig_column_2') }} tableconfig_column_2"
+        id="leads_col_title_{{ $lead->lead_id }}">
         <span title="{{ $lead->lead_title }}">
-        <a class="show-modal-button reset-card-modal-form js-ajax-ux-request" data-toggle="modal"
-            href="javascript:void(0)" data-target="#cardModal" data-url="{{ urlResource('/leads/'.$lead->lead_id) }}"
-            data-loading-target="main-top-nav-bar" id="table_lead_title_{{ $lead->lead_id }}">
-            <span title="{{ $lead->lead_title }}">{{ str_limit($lead->lead_title, 20) }}</span></a>
+            <a class="show-modal-button reset-card-modal-form js-ajax-ux-request" data-toggle="modal"
+                href="javascript:void(0)" data-target="#cardModal"
+                data-url="{{ urlResource('/leads/'.$lead->lead_id) }}" data-loading-target="main-top-nav-bar"
+                id="table_lead_title_{{ $lead->lead_id }}">
+                <span title="{{ $lead->lead_title }}">{{ str_limit($lead->lead_title, 20) }}</span></a>
         </span>
     </td>
 
 
     <!--tableconfig_column_3 [lead_created]-->
-    <td class="col_lead_created {{ config('table.tableconfig_column_3') }} tableconfig_column_3" id="leads_col_date_{{ $lead->lead_id }}">
+    <td class="col_lead_created {{ config('table.tableconfig_column_3') }} tableconfig_column_3"
+        id="leads_col_date_{{ $lead->lead_id }}">
         {{ runtimeDate($lead->lead_created) }}
     </td>
 
 
     <!--tableconfig_column_4 [lead_value]-->
-    <td class="col_lead_value {{ config('table.tableconfig_column_4') }} tableconfig_column_4" id="leads_col_value_{{ $lead->lead_id }}">
+    <td class="col_lead_value {{ config('table.tableconfig_column_4') }} tableconfig_column_4"
+        id="leads_col_value_{{ $lead->lead_id }}">
         {{ runtimeMoneyFormat($lead->lead_value) }}
     </td>
 
 
 
     <!--tableconfig_column_6 [lead_assigned]-->
-    <td class="leads_col_assigned {{ config('table.tableconfig_column_6') }} tableconfig_column_6" id="leads_col_assigned_{{ $lead->lead_id }}">
+    <td class="leads_col_assigned {{ config('table.tableconfig_column_6') }} tableconfig_column_6"
+        id="leads_col_assigned_{{ $lead->lead_id }}">
         <!--assigned users-->
         @if(count($lead->assigned ?? []) > 0)
         @foreach($lead->assigned->take(2) as $user)
@@ -71,7 +78,8 @@
 
 
     <!--tableconfig_column_7 [lead_category_name]-->
-    <td class="col_lead_category_name {{ config('table.tableconfig_column_7') }} tableconfig_column_7" id="col_lead_category_name_{{ $lead->lead_id }}">
+    <td class="col_lead_category_name {{ config('table.tableconfig_column_7') }} tableconfig_column_7"
+        id="col_lead_category_name_{{ $lead->lead_id }}">
         <span title="{{ $lead->category_name }}">
             {{ str_limit($lead->category_name ?? '---', 15) }}
         </span>
@@ -80,10 +88,17 @@
 
 
     <!--tableconfig_column_5 [lead_status]-->
-    <td class="col_lead_status {{ config('table.tableconfig_column_5') }} tableconfig_column_5" id="leads_col_stage_{{ $lead->lead_id }}">
+    <td class="col_lead_status {{ config('table.tableconfig_column_5') }} tableconfig_column_5"
+        id="leads_col_stage_{{ $lead->lead_id }}">
         <span class="label {{ bootstrapColors($lead->leadstatus->leadstatus_color ?? '', 'label') }}">
             <!--notes: alternatve lang for lead status will need to be added manally by end user in lang files-->
             {{ runtimeLang($lead->leadstatus->leadstatus_title ?? '') }}</span>
+
+        <!--captured via a webform-->
+        @if($lead->lead_input_source == 'webform')
+        <span class="label label-icons label-icons-default" data-toggle="tooltip" data-placement="top"
+            title="@lang('lang.source_webform')"><i class="sl-icon-cloud-upload"></i></span>
+        @endif
 
         <!--archived-->
         @if($lead->lead_active_state == 'archived' && runtimeArchivingOptions())
@@ -91,27 +106,31 @@
             title="@lang('lang.archived')"><i class="ti-archive"></i></span>
         @endif
     </td>
-    
+
     <!--tableconfig_column_8 [lead_company_name]-->
-    <td class="col_lead_company_name {{ config('table.tableconfig_column_8') }} tableconfig_column_8" id="col_lead_company_name_{{ $lead->lead_id }}">
+    <td class="col_lead_company_name {{ config('table.tableconfig_column_8') }} tableconfig_column_8"
+        id="col_lead_company_name_{{ $lead->lead_id }}">
         <span title="{{ $lead->lead_company_name }}">{{ str_limit($lead->lead_company_name ?? '---', 15) }}</span>
     </td>
 
 
     <!--tableconfig_column_9 [lead_email]-->
-    <td class="col_lead_email {{ config('table.tableconfig_column_9') }} tableconfig_column_9" id="col_lead_email_{{ $lead->lead_id }}">
+    <td class="col_lead_email {{ config('table.tableconfig_column_9') }} tableconfig_column_9"
+        id="col_lead_email_{{ $lead->lead_id }}">
         {{ $lead->lead_email ?? '---' }}
     </td>
 
 
     <!--tableconfig_column_10 [lead_phone]-->
-    <td class="col_lead_phone {{ config('table.tableconfig_column_10') }} tableconfig_column_10" id="col_lead_phone_{{ $lead->lead_id }}">
+    <td class="col_lead_phone {{ config('table.tableconfig_column_10') }} tableconfig_column_10"
+        id="col_lead_phone_{{ $lead->lead_id }}">
         {{ $lead->lead_phone ?? '---' }}
     </td>
 
 
     <!--tableconfig_column_11 [lead_job_position]-->
-    <td class="col_lead_job_position {{ config('table.tableconfig_column_11') }} tableconfig_column_11" id="col_lead_job_position_{{ $lead->lead_id }}">
+    <td class="col_lead_job_position {{ config('table.tableconfig_column_11') }} tableconfig_column_11"
+        id="col_lead_job_position_{{ $lead->lead_id }}">
         <span title="{{ $lead->lead_job_position }}">
             {{ str_limit($lead->lead_job_position ?? '---', 15) }}
         </span>
@@ -119,25 +138,29 @@
 
 
     <!--tableconfig_column_12 [lead_city]-->
-    <td class="col_lead_city {{ config('table.tableconfig_column_12') }} tableconfig_column_12" id="col_lead_city_{{ $lead->lead_id }}">
+    <td class="col_lead_city {{ config('table.tableconfig_column_12') }} tableconfig_column_12"
+        id="col_lead_city_{{ $lead->lead_id }}">
         {{ $lead->lead_city ?? '---' }}
     </td>
 
 
     <!--tableconfig_column_13 [lead_state]-->
-    <td class="col_lead_state {{ config('table.tableconfig_column_13') }} tableconfig_column_13" id="col_lead_state_{{ $lead->lead_id }}">
+    <td class="col_lead_state {{ config('table.tableconfig_column_13') }} tableconfig_column_13"
+        id="col_lead_state_{{ $lead->lead_id }}">
         {{ $lead->lead_state ?? '---' }}
     </td>
 
 
     <!--tableconfig_column_14 [lead_zip]-->
-    <td class="col_lead_zip {{ config('table.tableconfig_column_14') }} tableconfig_column_14" id="col_lead_zip_{{ $lead->lead_id }}">
+    <td class="col_lead_zip {{ config('table.tableconfig_column_14') }} tableconfig_column_14"
+        id="col_lead_zip_{{ $lead->lead_id }}">
         {{ $lead->lead_zip ?? '---' }}
     </td>
 
 
     <!--tableconfig_column_15 [lead_country]-->
-    <td class="col_lead_country {{ config('table.tableconfig_column_15') }} tableconfig_column_15" id="col_lead_country_{{ $lead->lead_id }}">
+    <td class="col_lead_country {{ config('table.tableconfig_column_15') }} tableconfig_column_15"
+        id="col_lead_country_{{ $lead->lead_id }}">
         <span title="{{ $lead->lead_country }}">
             {{ str_limit($lead->lead_country ?? '---', 15) }}
         </span>
@@ -145,13 +168,15 @@
 
 
     <!--tableconfig_column_16 [lead_last_contacted]-->
-    <td class="col_lead_last_contacted {{ config('table.tableconfig_column_16') }} tableconfig_column_16" id="col_lead_last_contacted_{{ $lead->lead_id }}">
+    <td class="col_lead_last_contacted {{ config('table.tableconfig_column_16') }} tableconfig_column_16"
+        id="col_lead_last_contacted_{{ $lead->lead_id }}">
         {{ runtimeDate($lead->lead_last_contacted) }}
     </td>
 
 
     <!--tableconfig_column_17 [lead_converted_by_userid]-->
-    <td class="col_lead_converted_by_userid {{ config('table.tableconfig_column_17') }} tableconfig_column_17" id="col_lead_converted_by_userid_{{ $lead->lead_id }}">
+    <td class="col_lead_converted_by_userid {{ config('table.tableconfig_column_17') }} tableconfig_column_17"
+        id="col_lead_converted_by_userid_{{ $lead->lead_id }}">
         <span title="{{ $lead->converted_by_full_name }}">
             {{ str_limit($lead->converted_by_full_name ?? '---', 15) }}
         </span>
@@ -159,13 +184,15 @@
 
 
     <!--tableconfig_column_18 [lead_converted_date]-->
-    <td class="col_lead_converted_date {{ config('table.tableconfig_column_18') }} tableconfig_column_18" id="lead_converted_date_{{ $lead->lead_id }}">
+    <td class="col_lead_converted_date {{ config('table.tableconfig_column_18') }} tableconfig_column_18"
+        id="lead_converted_date_{{ $lead->lead_id }}">
         {{ runtimeDate($lead->lead_converted_date) }}
     </td>
 
 
     <!--tableconfig_column_19 [lead_source]-->
-    <td class="col_lead_source {{ config('table.tableconfig_column_19') }} tableconfig_column_19" id="col_lead_source_{{ $lead->lead_id }}">
+    <td class="col_lead_source {{ config('table.tableconfig_column_19') }} tableconfig_column_19"
+        id="col_lead_source_{{ $lead->lead_id }}">
         <span title="{{ $lead->lead_source }}">
             {{ str_limit($lead->lead_source ?? '---', 15) }}
         </span>
@@ -206,11 +233,11 @@
             <button type="button" title="{{ cleanLang(__('lang.assigned_users')) }}"
                 class="btn btn-outline-warning btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form data-toggle-action-tooltip"
                 data-toggle="modal" data-target="#commonModal"
-                data-url="{{ urlResource('/leads/'.$lead->lead_id.'/assigned') }}"
-                data-loading-target="commonModalBody" data-modal-title="{{ cleanLang(__('lang.assigned_users')) }}"
-                data-action-url="{{ urlResource('/leads/'.$lead->lead_id.'/assigned') }}"
-                data-action-method="PUT" data-modal-size="modal-sm" data-action-ajax-class="ajax-request"
-                data-action-ajax-class="" data-action-ajax-loading-target="leads-td-container">
+                data-url="{{ urlResource('/leads/'.$lead->lead_id.'/assigned') }}" data-loading-target="commonModalBody"
+                data-modal-title="{{ cleanLang(__('lang.assigned_users')) }}"
+                data-action-url="{{ urlResource('/leads/'.$lead->lead_id.'/assigned') }}" data-action-method="PUT"
+                data-modal-size="modal-sm" data-action-ajax-class="ajax-request" data-action-ajax-class=""
+                data-action-ajax-loading-target="leads-td-container">
                 <i class="sl-icon-people"></i>
             </button>
             @endif

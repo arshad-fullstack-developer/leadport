@@ -18,15 +18,15 @@ class SyncPackagesCron {
 
     public function __invoke() {
 
-        //[MT] - run config settings for landlord
-        runtimeLandlordCronConfig();
-
         //[MT] - landlord only
         if (env('MT_TPYE')) {
             if (\Spatie\Multitenancy\Models\Tenant::current()) {
                 return;
             }
         }
+        
+        //[MT] - run config settings for landlord
+        runtimeLandlordCronConfig();
 
         //log that its run
         Log::info("Cronjob has started - (Syncronise Packages)", ['process' => '[landlord-cronjob][sync-packages-cron]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
@@ -103,6 +103,7 @@ class SyncPackagesCron {
                             'settings_modules_notes' => 'enabled',
                             'settings_modules_subscriptions' => ($package->package_module_subscriptions == 'yes') ? 'enabled' : 'disabled',
                             'settings_modules_tickets' => ($package->package_module_tickets == 'yes') ? 'enabled' : 'disabled',
+                            'settings_modules_calendar' => ($package->package_module_calendar == 'yes') ? 'enabled' : 'disabled',
                             'settings_modules_timetracking' => ($package->package_module_timetracking == 'yes') ? 'enabled' : 'disabled',
                             'settings_modules_reminders' => ($package->package_module_reminders == 'yes') ? 'enabled' : 'disabled',
                             'settings_modules_proposals' => ($package->package_module_proposals == 'yes') ? 'enabled' : 'disabled',

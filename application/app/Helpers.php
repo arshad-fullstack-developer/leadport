@@ -2,10 +2,10 @@
 
 /**
  * Uses php uiniqid
- * @return string a very random unique id
+ * @return string a truely random unique id example: 5ed8a52d8a0b830247500
  */
 function str_unique() {
-    return uniqid('', true);
+    return str_replace('.', '', uniqid('', true));
 }
 
 function random_string($length = 10) {
@@ -811,6 +811,14 @@ function runtimeTime($date = '') {
     }
 
     return '---';
+}
+
+/**
+ * Format time from 00:00:00 to just 00:00 without seconds
+ * @return string
+ */
+function runtimeSimpleTime($time = '') {
+    return substr($time, 0, 5);
 }
 
 /**
@@ -1660,6 +1668,11 @@ function runtimeVisibility($type = 'invoice-recurring-icon', $value = '', $value
 
     //estimate automation icon
     if ($type == 'estimate-automation-icon') {
+        return ($value == 'disabled') ? 'hidden' : '';
+    }
+
+    //proposal automation icon
+    if ($type == 'proposal-automation-icon') {
         return ($value == 'disabled') ? 'hidden' : '';
     }
 }
@@ -3208,18 +3221,16 @@ function runtimePublihItemButtonLang($value = '') {
 
     if ($value == 'instant') {
         return __('lang.publish');
-    }else{
+    } else {
         return __('lang.schedule');
     }
 }
-
-
 
 /**
  * show or hide the 'set cover' link
  * @return string
  */
-function runtimeCoverImageAddButton($value = '', $id ='') {
+function runtimeCoverImageAddButton($value = '', $id = '') {
     if ($value == $id) {
         return 'hidden';
     }
@@ -3229,7 +3240,7 @@ function runtimeCoverImageAddButton($value = '', $id ='') {
  * show or hide the 'remove cover' link
  * @return string
  */
-function runtimeCoverImageRemoveButton($value = '', $id ='') {
+function runtimeCoverImageRemoveButton($value = '', $id = '') {
     if ($value != $id) {
         return 'hidden';
     }
@@ -3257,10 +3268,9 @@ function runtimeCoverImage($image_directory = '', $image_url = '') {
         $url = str_replace(' ', '%20', $url);
         $url = trim($url);
 
-        return 'style="background-image: url('.$url.');"';
+        return 'style="background-image: url(' . $url . ');"';
     }
 }
-
 
 /**
  * set active canned category on menu
@@ -3272,13 +3282,12 @@ function runtimeCannedCategory($value = '') {
     }
 }
 
-
 /**
  * set active search category on menu
  * @return string
  */
 function runtimeSearchCurrentMenu($menu = 'foo', $value = 'bar') {
-   
+
     if ($menu == $value) {
         return 'active';
     }
@@ -3289,11 +3298,136 @@ function runtimeSearchCurrentMenu($menu = 'foo', $value = 'bar') {
  * @return string
  */
 function runtimeSearchDisplyLimit($search_type = '') {
-   
+
     // was the search on the 'group' screen or category screen
     if ($search_type == 'all') {
         return config('system.settings2_search_category_limit');
-    }else{
+    } else {
         return config('system.settings_system_pagination_limits');
+    }
+}
+
+/**
+ * show or hide the sharing dropdown
+ * @return string
+ */
+function calendarSharing($sharing = '') {
+
+    if ($sharing != 'selected-users') {
+        return 'hidden';
+    }
+
+}
+
+/**
+ * various element visibity for proposals automation
+ * @param string $value determining value
+ */
+function proposalAutomationVisibility($value = '') {
+
+    //hide the button
+    if ($value == 'no' || $value == 'disabled') {
+        return 'hidden';
+    }
+    return;
+}
+
+/**
+ * task status name
+ * @param mixed $value the task status (old version of the new version based on an custom status id)
+ */
+function taskStatusName($value = '') {
+
+    //validate
+    if ($value == '') {
+        return '---';
+    }
+
+    //new status names
+    if (is_numeric($value)) {
+        $statuses = config('system.task_custom_statuses');
+        if (is_array($statuses) && array_key_exists($value, $statuses)) {
+            return $statuses[$value];
+        } else {
+            return '---';
+        }
+    }
+
+    //old name
+    return runtimeLang($value);
+}
+
+
+/**
+ * lead status name
+ * @param mixed $value the lead status (old version of the new version based on an custom status id)
+ */
+function leadStatusName($value = '') {
+
+    //validate
+    if ($value == '') {
+        return '---';
+    }
+
+    //new status names
+    if (is_numeric($value)) {
+        $statuses = config('system.lead_custom_statuses');
+        if (is_array($statuses) && array_key_exists($value, $statuses)) {
+            return $statuses[$value];
+        } else {
+            return '---';
+        }
+    }
+
+    //old name
+    return runtimeLang($value);
+}
+
+
+/**
+ * ticket status name
+ * @param mixed $value the ticket status (old version of the new version based on an custom status id)
+ */
+function ticketStatusName($value = '') {
+
+    //validate
+    if ($value == '') {
+        return '---';
+    }
+
+    //new status names
+    if (is_numeric($value)) {
+        $statuses = config('system.ticket_custom_statuses');
+        if (is_array($statuses) && array_key_exists($value, $statuses)) {
+            return $statuses[$value];
+        } else {
+            return '---';
+        }
+    }
+
+    //old name
+    return runtimeLang($value);
+}
+
+/**
+ * disabling all day checkbox for projects and tasks
+ * @param string $resource_type type of calendar resource
+ * @return string css
+ */
+function runtimeDisabledCalenderAllDayCheckbox($resource_type = '') {
+    if ($resource_type == 'project' || $resource_type == 'task') {
+        return 'disabled';
+    }
+}
+
+
+/**
+ * shows a tool tip if the event is a project or task and it can only be set as an all day
+ * @param string $resource_type type of calendar resource
+ * @return string css
+ */
+function runtimeDisabledCalenderAllDayTooltip($resource_type = '') {
+    if ($resource_type == '' || $resource_type == 'calendarevent') {
+        return 'hidden';
     }
 }

@@ -59,6 +59,8 @@ class StripeRepository {
      */
     public function getProducts() {
 
+        Log::info("getting products from stripe -  started", ['process' => '[stripe-get-products]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+
         //get all products
         try {
             $stripe = new \Stripe\StripeClient(config('system.settings_stripe_secret_key'));
@@ -80,6 +82,8 @@ class StripeRepository {
             return false;
         }
 
+        Log::info("getting products from stripe -  completed", ['process' => '[stripe-get-products]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'products' => $products]);
+
         //return array of the products
         return $products;
     }
@@ -90,9 +94,11 @@ class StripeRepository {
      */
     public function getProductsPrices($product_id = '') {
 
+        Log::info("getting product prices from stripe -  started", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+
         //validate
         if ($product_id == '') {
-            Log::error('no product id was specifid', ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error('no product id was specifid', ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         }
 
@@ -101,21 +107,23 @@ class StripeRepository {
             $stripe = new \Stripe\StripeClient(config('system.settings_stripe_secret_key'));
             $prices = $stripe->prices->all(['product' => $product_id]);
         } catch (\Stripe\Exception\AuthenticationException $e) {
-            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         } catch (\Stripe\Exception\ApiConnectionException $e) {
-            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         } catch (Exception $e) {
-            Log::error($e->getMessage(), ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error($e->getMessage(), ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         }
 
         //final check
         if (!is_object($prices)) {
-            Log::error("unable to retrieve your products from stripe", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error("unable to retrieve your products from stripe", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         }
+
+        Log::info("getting product prices from stripe -  completed", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'prices' => $prices]);
 
         //return array of the products
         return $prices;
@@ -130,7 +138,7 @@ class StripeRepository {
 
         //validate
         if ($product_id == '') {
-            Log::error('no product id was specifid', ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error('no product id was specifid', ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         }
 
@@ -139,19 +147,19 @@ class StripeRepository {
             $stripe = new \Stripe\StripeClient(config('system.settings_stripe_secret_key'));
             $product = $stripe->products->retrieve($product_id, []);
         } catch (\Stripe\Exception\AuthenticationException $e) {
-            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         } catch (\Stripe\Exception\ApiConnectionException $e) {
-            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         } catch (Exception $e) {
-            Log::error($e->getMessage(), ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error($e->getMessage(), ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         }
 
         //final check
         if (!is_object($product)) {
-            Log::error("unable to retrieve your products from stripe", ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id'=> $product_id]);
+            Log::error("unable to retrieve your products from stripe", ['process' => '[stripe-get-product]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'product_id' => $product_id]);
             return false;
         }
 
@@ -168,7 +176,7 @@ class StripeRepository {
 
         //validate
         if ($price_id == '') {
-            Log::error('no stripe price_id was specifid', ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id'=> $price_id]);
+            Log::error('no stripe price_id was specifid', ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id' => $price_id]);
             return false;
         }
 
@@ -177,19 +185,19 @@ class StripeRepository {
             $stripe = new \Stripe\StripeClient(config('system.settings_stripe_secret_key'));
             $price = $stripe->prices->retrieve($price_id, []);
         } catch (\Stripe\Exception\AuthenticationException $e) {
-            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id'=> $price_id]);
+            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id' => $price_id]);
             return false;
         } catch (\Stripe\Exception\ApiConnectionException $e) {
-            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id'=> $price_id]);
+            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id' => $price_id]);
             return false;
         } catch (Exception $e) {
-            Log::error($e->getMessage(), ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id'=> $price_id]);
+            Log::error($e->getMessage(), ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id' => $price_id]);
             return false;
         }
 
         //final check
         if (!is_object($price)) {
-            Log::error("unable to retrieve your products from stripe", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id'=> $price_id]);
+            Log::error("unable to retrieve your products from stripe", ['process' => '[stripe-get-products-prices]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'price_id' => $price_id]);
             return false;
         }
 
@@ -206,7 +214,7 @@ class StripeRepository {
 
         //validation
         if ($subscription_stripe_id == '') {
-            Log::error("Stripe Error - a subscription id was not provided", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id'=> $subscription_stripe_id]);
+            Log::error("Stripe Error - a subscription id was not provided", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id' => $subscription_stripe_id]);
             return false;
         }
 
@@ -218,19 +226,19 @@ class StripeRepository {
                 []
             );
         } catch (\Stripe\Exception\AuthenticationException $e) {
-            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id'=> $subscription_stripe_id]);
+            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id' => $subscription_stripe_id]);
             return false;
         } catch (\Stripe\Exception\ApiConnectionException $e) {
-            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id'=> $subscription_stripe_id]);
+            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id' => $subscription_stripe_id]);
             return false;
         } catch (Exception $e) {
-            Log::error($e->getMessage(), ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id'=> $subscription_stripe_id]);
+            Log::error($e->getMessage(), ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id' => $subscription_stripe_id]);
             return false;
         }
 
         //final check
         if (!is_object($subscription)) {
-            Log::error("unable to retrieve the subscription from stripe", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id'=> $subscription_stripe_id]);
+            Log::error("unable to retrieve the subscription from stripe", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_stripe_id' => $subscription_stripe_id]);
             return false;
         }
 
@@ -238,8 +246,7 @@ class StripeRepository {
         return $subscription;
     }
 
-
-        /**
+    /**
      * get a subscription from stripe
      * @param string $subscription_stripe_id the unique stripe id
      * @return mixed error message or true
@@ -248,7 +255,7 @@ class StripeRepository {
 
         //validation
         if ($subscription_stripe_id == '') {
-            Log::error("Stripe Error - a subscription id was not provided", ['process' => '[stripe-cancel-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id'=> $subscription_stripe_id]);
+            Log::error("Stripe Error - a subscription id was not provided", ['process' => '[stripe-cancel-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id' => $subscription_stripe_id]);
             return false;
         }
 
@@ -260,16 +267,16 @@ class StripeRepository {
                 []
             );
         } catch (\Stripe\Exception\AuthenticationException $e) {
-            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id'=> $subscription_stripe_id]);
+            Log::error("Stripe Error - Unable to authenticate with Stripe. Check your API keys", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id' => $subscription_stripe_id]);
             return false;
         } catch (\Stripe\Exception\ApiConnectionException $e) {
-            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id'=> $subscription_stripe_id]);
+            Log::error("Stripe Network Error - Your server was unable to connect to api.stripe.com", ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id' => $subscription_stripe_id]);
             return false;
-        }catch (\Stripe\Exception\InvalidRequestException $e) {
-            Log::error($e->getMessage(), ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id'=> $subscription_stripe_id]);
+        } catch (\Stripe\Exception\InvalidRequestException $e) {
+            Log::error($e->getMessage(), ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id' => $subscription_stripe_id]);
             return false;
-        }catch (Exception $e) {
-            Log::error($e->getMessage(), ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id'=> $subscription_stripe_id]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage(), ['process' => '[stripe-get-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'subscription_id' => $subscription_stripe_id]);
             return false;
         }
 

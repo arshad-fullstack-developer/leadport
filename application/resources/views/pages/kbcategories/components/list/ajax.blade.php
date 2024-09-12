@@ -14,7 +14,7 @@
             <!--title-->
             <h5 class="card-title">{{ $category->kbcategory_title ?? '' }}</h5>
             <!--description-->
-            <div class="card-text">{!! $category->kbcategory_description ?? '---' !!}</div>
+            <div class="card-text">{!! clean($category->kbcategory_description ?? '---') !!}</div>
             <a href="/kb/articles/{{ $category->kbcategory_slug }}" class="btn btn-sm btn-rounded-x btn-outline-info">{{ cleanLang(__('lang.see_articles')) }}</a>
         </div>
     </div>

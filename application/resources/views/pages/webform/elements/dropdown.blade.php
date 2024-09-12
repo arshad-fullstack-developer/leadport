@@ -9,7 +9,7 @@
         <select class="select2-basic {{ $payload['class'] }} select2-preselected" id="{{ $payload['name'] }}"
             placeholder="{{ $payload['placeholder'] }}" name="{{ $payload['name'] }}">
             <option></option>
-            {!! _clean($payload['options']) !!}
+            {!! $payload['options'] !!}
         </select>
     </div>
 </div>

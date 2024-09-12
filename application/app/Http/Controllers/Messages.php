@@ -152,7 +152,6 @@ class Messages extends Controller {
                 'required',
             ],
         ]);
-        
 
         //errors
         if ($validator->fails()) {
@@ -161,7 +160,7 @@ class Messages extends Controller {
             foreach ($errors->all() as $message) {
                 $messages .= "<li>$message</li>";
             }
-            abort(409, $messages);
+            abort(409);
         }
 
         //save message

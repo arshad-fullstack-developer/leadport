@@ -32,10 +32,11 @@ class SubscriptionPushCancellation {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         /**
          *   - Find webhhoks waiting to be completed

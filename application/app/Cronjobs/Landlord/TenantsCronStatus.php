@@ -19,11 +19,10 @@ class TenantsCronStatus {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
 
+        //boot system settings
+        runtimeLandlordCronConfig();
 
         //reset last cron run data (record in landlord db)
         \App\Models\Settings::On('landlord')->where('settings_id', 'default')

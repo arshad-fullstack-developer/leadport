@@ -56,7 +56,7 @@ return [
             'url' => '/storage',
             'visibility' => 'public',
         ],
-
+        //[nextloop] public storage folder
         'public' => [
             'driver' => 'local',
             'root' => BASE_DIR.'/storage',

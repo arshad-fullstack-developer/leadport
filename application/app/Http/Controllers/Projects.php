@@ -290,7 +290,8 @@ class Projects extends Controller {
             'templates' => $templates,
             'categories' => $categories,
             'tags' => $tags,
-            'fields' => $this->getCustomFields(),
+            'project_fields' => $this->getCustomFields(),
+            'client_fields' => $this->getClientCustomFields(),
         ];
 
         //show the form
@@ -676,13 +677,16 @@ class Projects extends Controller {
         $tags = $tags_resource->merge($tags_user);
         $tags = $tags->unique('tag_title');
 
+        //set editing mode
+        config(['response.mode' => 'edit']);
+
         //reponse payload
         $payload = [
             'page' => $this->pageSettings('edit'),
             'project' => $project,
             'categories' => $categories,
             'tags' => $tags,
-            'fields' => $this->getCustomFields($project),
+            'project_fields' => $this->getCustomFields($project),
         ];
 
         //response
@@ -722,20 +726,71 @@ class Projects extends Controller {
         $this->tagrepo->delete('project', $id);
         $this->tagrepo->add('project', $id);
 
-        //currently assigned
-        $currently_assigned = $project->assigned->pluck('id')->toArray();
+        //assigning - only if projects are assigned manually or if they are assigned automcatically but we have now filled in the assigned list
+        if (config('system.settings_projects_permissions_basis') == 'user_roles' || request()->filled('assigned')) {
+            //currently assigned
+            $currently_assigned = $project->assigned->pluck('id')->toArray();
 
-        //add each user
-        $newly_signed_users = [];
-        $assignedrepo->delete($id);
-        if (request()->filled('assigned')) {
-            foreach (request('assigned') as $key => $user_id) {
-                $assigned_users = $assignedrepo->add($id, $user_id);
-                if (!in_array($user_id, $currently_assigned)) {
-                    $newly_signed_users[] = $user_id;
+            //add each user
+            $newly_signed_users = [];
+            $assignedrepo->delete($id);
+            if (request()->filled('assigned')) {
+                foreach (request('assigned') as $key => $user_id) {
+                    $assigned_users = $assignedrepo->add($id, $user_id);
+                    if (!in_array($user_id, $currently_assigned)) {
+                        $newly_signed_users[] = $user_id;
+                    }
+                }
+            }
+
+            /** ----------------------------------------------
+             * record assignment events and send emails
+             * ----------------------------------------------*/
+            foreach ($newly_signed_users as $assigned_user_id) {
+                if ($assigned_user = \App\Models\User::Where('id', $assigned_user_id)->first()) {
+
+                    //record event
+                    $data = [
+                        'event_creatorid' => auth()->id(),
+                        'event_item' => 'assigned',
+                        'event_item_id' => '',
+                        'event_item_lang' => 'event_assigned_user_to_a_project',
+                        'event_item_lang_alt' => 'event_assigned_user_to_a_project_alt',
+                        'event_item_content' => __('lang.assigned'),
+                        'event_item_content2' => $assigned_user_id,
+                        'event_item_content3' => $assigned_user->first_name,
+                        'event_parent_type' => 'project',
+                        'event_parent_id' => $project->project_id,
+                        'event_parent_title' => $project->project_title,
+                        'event_show_item' => 'yes',
+                        'event_clientid' => $project->project_clientid,
+                        'eventresource_type' => 'project',
+                        'eventresource_id' => $project->project_id,
+                        'event_show_in_timeline' => 'no',
+                        'event_client_visibility' => 'no',
+                        'event_notification_category' => 'notifications_new_assignement',
+                    ];
+                    //record event
+                    if ($event_id = $this->eventrepo->create($data)) {
+                        //record notification (skip the user creating this event)
+                        if ($assigned_user_id != auth()->id()) {
+                            $emailusers = $this->trackingrepo->recordEvent($data, [$assigned_user_id], $event_id);
+                        }
+                    }
+
+                    /** ----------------------------------------------
+                     * send email [assignment]
+                     * ----------------------------------------------*/
+                    if ($assigned_user_id != auth()->id()) {
+                        if ($assigned_user->notifications_new_assignement == 'yes_email') {
+                            $mail = new \App\Mail\ProjectAssignment($assigned_user, $data, $project);
+                            $mail->build();
+                        }
+                    }
                 }
             }
         }
+
         //update manager
         $managerrepo->delete($id);
         $managerrepo->add($id);
@@ -744,52 +799,6 @@ class Projects extends Controller {
         $projects = $this->projectrepo->search($id, ['apply_filters' => false]);
         $project = $projects->first();
 
-        /** ----------------------------------------------
-         * record assignment events and send emails
-         * ----------------------------------------------*/
-        foreach ($newly_signed_users as $assigned_user_id) {
-            if ($assigned_user = \App\Models\User::Where('id', $assigned_user_id)->first()) {
-
-                //record event
-                $data = [
-                    'event_creatorid' => auth()->id(),
-                    'event_item' => 'assigned',
-                    'event_item_id' => '',
-                    'event_item_lang' => 'event_assigned_user_to_a_project',
-                    'event_item_lang_alt' => 'event_assigned_user_to_a_project_alt',
-                    'event_item_content' => __('lang.assigned'),
-                    'event_item_content2' => $assigned_user_id,
-                    'event_item_content3' => $assigned_user->first_name,
-                    'event_parent_type' => 'project',
-                    'event_parent_id' => $project->project_id,
-                    'event_parent_title' => $project->project_title,
-                    'event_show_item' => 'yes',
-                    'event_clientid' => $project->project_clientid,
-                    'eventresource_type' => 'project',
-                    'eventresource_id' => $project->project_id,
-                    'event_show_in_timeline' => 'no',
-                    'event_client_visibility' => 'no',
-                    'event_notification_category' => 'notifications_new_assignement',
-                ];
-                //record event
-                if ($event_id = $this->eventrepo->create($data)) {
-                    //record notification (skip the user creating this event)
-                    if ($assigned_user_id != auth()->id()) {
-                        $emailusers = $this->trackingrepo->recordEvent($data, [$assigned_user_id], $event_id);
-                    }
-                }
-
-                /** ----------------------------------------------
-                 * send email [assignment]
-                 * ----------------------------------------------*/
-                if ($assigned_user_id != auth()->id()) {
-                    if ($assigned_user->notifications_new_assignement == 'yes_email') {
-                        $mail = new \App\Mail\ProjectAssignment($assigned_user, $data, $project);
-                        $mail->build();
-                    }
-                }
-            }
-        }
         //apply permissions
         $this->applyPermissions($project);
 
@@ -817,6 +826,40 @@ class Projects extends Controller {
         //set typs
         request()->merge([
             'customfields_type' => 'projects',
+            'filter_show_standard_form_status' => 'enabled',
+            'filter_field_status' => 'enabled',
+            'sort_by' => 'customfields_position',
+        ]);
+
+        //show all fields
+        config(['settings.custom_fields_display_limit' => 1000]);
+
+        //get fields
+        $fields = $this->customrepo->search();
+
+        //when in editing view - get current value that is stored for this custom field
+        if ($obj instanceof \App\Models\Project) {
+            foreach ($fields as $field) {
+                $field->current_value = $obj[$field->customfields_name];
+            }
+        }
+
+        return $fields;
+    }
+
+        /**
+     * get all custom fields for clients
+     *   - if they are being used in the 'edit' modal form, also get the current data
+     *     from the cliet record. Store this temporarily in '$field->customfields_name'
+     *     this will then be used to prefill data in the custom fields
+     * @param model client model - only when showing the edit modal form
+     * @return collection
+     */
+    public function getClientCustomFields($obj = '') {
+
+        //set typs
+        request()->merge([
+            'customfields_type' => 'clients',
             'filter_show_standard_form_status' => 'enabled',
             'filter_field_status' => 'enabled',
             'sort_by' => 'customfields_position',

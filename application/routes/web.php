@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-// dd('shj');
-
 //TESTING [DEV]
 Route::get("test", "Test@index");
 Route::post("test", "Test@index");
@@ -495,6 +491,7 @@ Route::group(['prefix' => 'proposals'], function () {
     Route::get("/{proposal}", "Proposals@show")->where('proposal', '[0-9]+');
     Route::get("/{proposal}/edit", "Proposals@editingProposal")->where('proposal', '[0-9]+');
     Route::get("/{proposal}/publish", "Proposals@publish")->where('proposal', '[0-9]+');
+    Route::post("/{proposal}/publish/scheduled", "Proposals@publishScheduled")->where('proposal', '[0-9]+')->middleware(['proposalsMiddlewareEdit', 'proposalsMiddlewareShow']);
     Route::get("/{proposal}/resend", "Proposals@resendEmail")->where('proposal', '[0-9]+');
     Route::get("/view/{proposal}", "Proposals@showPublic");
     Route::get("/{proposal}/change-status", "Proposals@changeStatus")->where('proposal', '[0-9]+');
@@ -503,6 +500,8 @@ Route::group(['prefix' => 'proposals'], function () {
     Route::get("/{proposal}/decline", "Proposals@declined");
     Route::get("/{proposal}/clone", "Proposals@createClone")->where('project', '[0-9]+');
     Route::post("/{proposal}/clone", "Proposals@storeClone")->where('project', '[0-9]+');
+    Route::get("/{proposal}/edit-automation", "Proposals@editAutomation")->where('estimate', '[0-9]+');
+    Route::post("/{proposal}/edit-automation", "Proposals@updateAutomation")->where('estimate', '[0-9]+');
 });
 
 //CONTRACTS
@@ -515,6 +514,7 @@ Route::group(['prefix' => 'contracts'], function () {
     Route::get("/{contract}", "Contracts@show")->where('contract', '[0-9]+');
     Route::get("/{contract}/edit", "Contracts@editingContract")->where('contract', '[0-9]+');
     Route::get("/{contract}/publish", "Contracts@publish")->where('contract', '[0-9]+');
+    Route::post("/{contract}/publish/scheduled", "Contracts@publishScheduled")->where('contract', '[0-9]+')->middleware(['contractsMiddlewareEdit', 'contractsMiddlewareShow']);
     Route::get("/{contract}/resend", "Contracts@resendEmail")->where('contract', '[0-9]+');
     Route::get("/view/{contract}", "Contracts@showPublic");
     Route::get("/{contract}/change-status", "Contracts@changeStatus")->where('contract', '[0-9]+');
@@ -618,6 +618,13 @@ Route::group(['prefix' => 'kb'], function () {
     Route::any("/article/{slug}", "Knowledgebase@show");
 });
 Route::resource('kb', 'Knowledgebase');
+
+//CALENDAR
+Route::group(['prefix' => 'calendar'], function () {
+    Route::post("/", "Calendar@index");
+});
+Route::resource('calendar', 'Calendar');
+Route::delete("/calendar/files/{id}", "Calendar@deleteFiles");
 
 //SETTINGS - HOME
 Route::group(['prefix' => 'settings'], function () {
@@ -727,6 +734,8 @@ Route::group(['prefix' => 'settings/contracts'], function () {
 Route::group(['prefix' => 'settings/proposals'], function () {
     Route::get("/", "Settings\Proposals@index");
     Route::put("/", "Settings\Proposals@update")->middleware(['demoModeCheck']);
+    Route::get("/automation", "Settings\Proposals@automation");
+    Route::put("/automation", "Settings\Proposals@automationUpdate");
 });
 
 //SETTINGS - EXPENSES
@@ -1247,10 +1256,3 @@ Route::resource('cs/affiliates/earnings', 'CS_Affiliates\Earnings');
 
 //AFFILATE PROFIT
 Route::get("/cs/affiliate/my/earnings", "CS_Affiliates\Profit@index");
-
-//Google Calendar
-Route::get('auth/redirect', "GoogleController@redirectToGoogle");
-Route::get('callback', "GoogleController@handleGoogleCallback");
-Route::get('eventss', "GoogleController@viewEvents");
-Route::post('events/create', "GoogleController@createEvent");
-Route::post('events/{id}/delete', "GoogleController@deleteEvent");

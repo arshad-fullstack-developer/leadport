@@ -5,7 +5,7 @@
 
         <!--COVER IMAGE-->
         @if(config('visibility.card_cover_image'))
-        <div class="grid-card-img-container" {!! getCoverImage($project->project_cover_directory ?? '', $project->project_cover_filename ?? '') !!}>
+        <div class="grid-card-img-container" {!! clean(getCoverImage($project->project_cover_directory ?? '', $project->project_cover_filename ?? '')) !!}>
         </div>
         @endif
 

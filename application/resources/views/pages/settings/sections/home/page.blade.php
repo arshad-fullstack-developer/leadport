@@ -14,7 +14,7 @@
             <div class="sub-message hidden" id="sub-message-small">
                 <h4>{{ cleanLang(__('lang.access_top_menu')) }} <i class="sl-icon-menu text-danger"></i></h2>
             </div>
-            <!--[MT]-->
+            <!--[MULTITENANCY]-->
             @if(config('system.settings_type') == 'standalone')
             <div class="m-t-20">
                 <h4><span class="badge badge-success"> @lang('lang.version') {{ $settings->settings_version }}</span>

@@ -32,6 +32,7 @@ use App\Http\Responses\Estimates\IndexResponse;
 use App\Http\Responses\Estimates\PDFResponse;
 use App\Http\Responses\Estimates\PublishResponse;
 use App\Http\Responses\Estimates\PublishRevisedResponse;
+use App\Http\Responses\Estimates\PublishScheduledResponse;
 use App\Http\Responses\Estimates\ResendResponse;
 use App\Http\Responses\Estimates\SaveResponse;
 use App\Http\Responses\Estimates\ShowPublicResponse;
@@ -41,10 +42,10 @@ use App\Http\Responses\Estimates\StoreResponse;
 use App\Http\Responses\Estimates\UpdateAutomationResponse;
 use App\Http\Responses\Estimates\UpdateResponse;
 use App\Http\Responses\Estimates\UpdateTaxtypeResponse;
-use App\Http\Responses\Estimates\PublishScheduledResponse;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\CloneEstimateRepository;
+use App\Repositories\CustomFieldsRepository;
 use App\Repositories\DestroyRepository;
 use App\Repositories\EmailerRepository;
 use App\Repositories\EstimateAutomationRepository;
@@ -121,6 +122,11 @@ class Estimates extends Controller {
      */
     protected $estimategenerator;
 
+    /**
+     * The custom fields repository
+     */
+    protected $customrepo;
+
     public function __construct(
         EstimateRepository $estimaterepo,
         TagRepository $tagrepo,
@@ -130,7 +136,8 @@ class Estimates extends Controller {
         EventRepository $eventrepo,
         EventTrackingRepository $trackingrepo,
         EmailerRepository $emailerrepo,
-        EstimateGeneratorRepository $estimategenerator
+        EstimateGeneratorRepository $estimategenerator,
+        CustomFieldsRepository $customrepo
     ) {
 
         //parent
@@ -205,6 +212,7 @@ class Estimates extends Controller {
         $this->trackingrepo = $trackingrepo;
         $this->emailerrepo = $emailerrepo;
         $this->estimategenerator = $estimategenerator;
+        $this->customrepo = $customrepo;
 
         //global settings for use in urls
         config([
@@ -270,6 +278,7 @@ class Estimates extends Controller {
         $payload = [
             'page' => $this->pageSettings('create'),
             'categories' => $categories,
+            'client_fields' => $this->getClientCustomFields(),
             'tags' => $tags,
         ];
 
@@ -326,7 +335,7 @@ class Estimates extends Controller {
     }
 
     /**
-     * some notes
+     * apply default automation
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -361,11 +370,11 @@ class Estimates extends Controller {
             ->get();
 
         $assigned = [];
-        foreach ($assigned_users as $user_id) {
+        foreach ($assigned_users as $user) {
             $assigned = new \App\Models\AutomationAssigned();
             $assigned->automationassigned_resource_type = 'estimate';
             $assigned->automationassigned_resource_id = $estimate->bill_estimateid;
-            $assigned->automationassigned_userid = $user_id;
+            $assigned->automationassigned_userid = $user->automationassigned_userid;
             $assigned->save();
         }
 
@@ -577,7 +586,7 @@ class Estimates extends Controller {
         return new PublishResponse($payload);
     }
 
-        /**
+    /**
      * schedule an estimate for publising later
      * @param int $id estimate id
      * @return \Illuminate\Http\Response
@@ -1615,6 +1624,40 @@ class Estimates extends Controller {
         //show the form
         return new UpdateTaxtypeResponse($payload);
 
+    }
+
+    /**
+     * get all custom fields for clients
+     *   - if they are being used in the 'edit' modal form, also get the current data
+     *     from the cliet record. Store this temporarily in '$field->customfields_name'
+     *     this will then be used to prefill data in the custom fields
+     * @param model client model - only when showing the edit modal form
+     * @return collection
+     */
+    public function getClientCustomFields($obj = '') {
+
+        //set typs
+        request()->merge([
+            'customfields_type' => 'clients',
+            'filter_show_standard_form_status' => 'enabled',
+            'filter_field_status' => 'enabled',
+            'sort_by' => 'customfields_position',
+        ]);
+
+        //show all fields
+        config(['settings.custom_fields_display_limit' => 1000]);
+
+        //get fields
+        $fields = $this->customrepo->search();
+
+        //when in editing view - get current value that is stored for this custom field
+        if ($obj instanceof \App\Models\Project) {
+            foreach ($fields as $field) {
+                $field->current_value = $obj[$field->customfields_name];
+            }
+        }
+
+        return $fields;
     }
 
     /**

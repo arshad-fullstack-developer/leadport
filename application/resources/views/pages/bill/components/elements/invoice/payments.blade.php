@@ -9,11 +9,11 @@
                         data-url="{{ urlResource('/payments?action=invoice-payments-modal&paymentresource_type=invoice&paymentresource_id='.$bill->bill_invoiceid) }}"
                         data-loading-target="commonModalBody" data-modal-title="{{ cleanLang(__('lang.payments')) }}"
                         data-modal-size="modal-lg"><span
-                            class="p-l-20">{!! _clean(runtimeMoneyFormatPDF($bill->sum_payments)) !!}</span></a>
+                            class="p-l-20">{!! runtimeMoneyFormatPDF($bill->sum_payments) !!}</span></a>
                 </td>
                 @else
 
-                <td class="x-payments"> <span class="p-l-20">{!! _clean(runtimeMoneyFormatPDF(0.00)) !!}</span> </td>
+                <td class="x-payments"> <span class="p-l-20">{!! runtimeMoneyFormatPDF(0.00) !!}</span> </td>
                 @endif
             </tr>
             <tr>
@@ -21,14 +21,14 @@
                 <td class="x-balance-due"> <span class="x-due-amount-label">
                         @if($bill->invoice_balance > 0)
                         <label class="label label-rounded label-danger"
-                            id="billing-details-amount-due">{!! _clean(runtimeMoneyFormatPDF($bill->invoice_balance)) !!}</label>
+                            id="billing-details-amount-due">{!! runtimeMoneyFormatPDF($bill->invoice_balance) !!}</label>
                         @else
                         <label class="label label-rounded label-success"
-                            id="billing-details-amount-due">{!! _clean(runtimeMoneyFormatPDF($bill->invoice_balance)) !!}</label>
+                            id="billing-details-amount-due">{!! runtimeMoneyFormatPDF($bill->invoice_balance) !!}</label>
                         @endif
                     </span>
                     <!--pdf-->
-                    <span class="x-due-amount-plain hidden">{!! _clean(runtimeMoneyFormatPDF($bill->invoice_balance)) !!}</span>
+                    <span class="x-due-amount-plain hidden">{!! runtimeMoneyFormatPDF($bill->invoice_balance) !!}</span>
                 </td>
             </tr>
         </table>

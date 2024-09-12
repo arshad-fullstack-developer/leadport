@@ -22,10 +22,11 @@ class ReminderCron {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         //log that its run
         //Log::info("Cronjob has started", ['process' => '[reminder-cron]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);

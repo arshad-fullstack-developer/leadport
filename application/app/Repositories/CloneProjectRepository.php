@@ -104,10 +104,12 @@ class CloneProjectRepository {
         $new_project->project_categoryid = $data['project_categoryid'];
 
         //update using some defaults
+        $new_project->project_uniqueid = str_unique();
         $new_project->project_status = 'not_started ';
         $new_project->project_active_state = 'active';
         $new_project->project_visibility = 'visible';
         $new_project->project_creatorid = auth()->id();
+        $new_project->project_calendar_timezone = config('system.settings_system_timezone');
 
         //save
         $new_project->save();
@@ -263,6 +265,7 @@ class CloneProjectRepository {
                     $new_task->task_billable_lineitemid = null;
                     $new_task->task_milestoneid = $mileston_map[$task->task_milestoneid]; //get new milestone id of the cloned milestone
                     $new_task->task_cloning_original_task_id = $task->task_id;
+                    $new_task->task_uniqueid = str_unique();
                     $new_task->save();
 
                     //copy check list

@@ -74,12 +74,15 @@ class LeadAssignment extends Mailable {
         //get common email variables
         $payload = config('mail.data');
 
+        //main admin user
+        $admin = config('system.main_admin_user');
+
         //set template variables
         $payload += [
             'first_name' => $this->user->first_name,
             'last_name' => $this->user->last_name,
-            'assigned_by_first_name' => auth()->user()->first_name,
-            'assigned_by_last_name' => auth()->user()->last_name,
+            'assigned_by_first_name' => (auth()->check()) ? auth()->user()->first_name : $admin->first_name,
+            'assigned_by_last_name' => (auth()->check()) ? auth()->user()->last_name : $admin->last_name,
             'lead_id' => $this->obj->lead_id,
             'lead_title' => $this->obj->lead_title,
             'lead_name' => $this->obj->lead_firstname . ' ' . $this->obj->lead_lastname,

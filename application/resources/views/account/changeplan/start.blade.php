@@ -14,10 +14,10 @@
                 <select class="select2-basic form-control form-control-sm" id="billing_cycle"
                     name="billing_cycle">
                     @if($package->package_amount_monthly != '')
-                    <option value="monthly">{{ runtimeMoneyFormat($package->package_amount_monthly) }} / @lang('lang.month')</option>
+                    <option value="monthly">{{ runtimeMoneyFormatSaaS($package->package_amount_monthly) }} / @lang('lang.month')</option>
                     @endif
                     @if($package->package_amount_yearly != '')
-                    <option value="yearly">{{ runtimeMoneyFormat($package->package_amount_yearly) }} / @lang('lang.year')</option>
+                    <option value="yearly">{{ runtimeMoneyFormatSaaS($package->package_amount_yearly) }} / @lang('lang.year')</option>
                     @endif
                 </select>
             </div>
@@ -27,7 +27,7 @@
             <div class="col-sm-12">
                 <select class="select2-basic form-control form-control-sm" id="project_category"
                     name="project_category">
-                    <option value="free">{{ runtimeMoneyFormat(0) }} - @lang('lang.free')</option>
+                    <option value="free">{{ runtimeMoneyFormatSaaS(0) }} - @lang('lang.free')</option>
                 </select>
             </div>
         </div>

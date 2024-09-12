@@ -107,22 +107,22 @@ class BootSystem {
         $this->settings = $settings;
 
         //set timezone
-        // date_default_timezone_set($settings->settings_system_timezone);
+        date_default_timezone_set($settings->settings_system_timezone);
 
         //currency symbol position setting
-        // if ($settings->settings_system_currency_position == 'left') {
-        //     $settings['currency_symbol_left'] = $settings->settings_system_currency_symbol;
-        //     $settings['currency_symbol_right'] = '';
-        // } else {
-        //     $settings['currency_symbol_right'] = $settings->settings_system_currency_symbol;
-        //     $settings['currency_symbol_left'] = '';
-        // }
+        if ($settings->settings_system_currency_position == 'left') {
+            $settings['currency_symbol_left'] = $settings->settings_system_currency_symbol;
+            $settings['currency_symbol_right'] = '';
+        } else {
+            $settings['currency_symbol_right'] = $settings->settings_system_currency_symbol;
+            $settings['currency_symbol_left'] = '';
+        }
 
         //cronjob path
         $settings['cronjob_path'] = '/usr/local/bin/php ' . BASE_DIR . '/application/artisan schedule:run >> /dev/null 2>&1';
 
         //javascript file versioning to avoid caching when making updates
-        // $settings['versioning'] = $settings->settings_system_javascript_versioning;
+        $settings['versioning'] = $settings->settings_system_javascript_versioning;
 
         //count tenant with pending email settings
         $settings['count_tenant_email_config_status'] = \App\Models\Landlord\Tenant::where('tenant_email_config_status', 'pending')->count();
@@ -142,10 +142,10 @@ class BootSystem {
         ]);
 
         //recaptcha
-        // config([
-        //     'recaptcha.api_site_key' => $settings->settings_captcha_api_site_key,
-        //     'recaptcha.api_secret_key' => $settings->settings_captcha_api_secret_key,
-        // ]);
+        config([
+            'recaptcha.api_site_key' => $settings->settings_captcha_api_site_key,
+            'recaptcha.api_secret_key' => $settings->settings_captcha_api_secret_key,
+        ]);
 
     }
 
@@ -170,14 +170,14 @@ class BootSystem {
         });
 
         //check if default theme exists
-        // if (!in_array($this->settings->settings_theme_name, $directories)) {
-        //     abort(409, __('lang.default_theme_not_found') . ' [' . runtimeThemeName($this->settings->settings_theme_name) . ']');
-        // }
+        if (!in_array($this->settings->settings_theme_name, $directories)) {
+            abort(409, __('lang.default_theme_not_found') . ' [' . runtimeThemeName($this->settings->settings_theme_name) . ']');
+        }
 
         //check if css file exists
-        // if (!is_file(BASE_DIR . '/public/themes/' . $this->settings->settings_theme_name . '/css/style.css')) {
-        //     abort(409, __('lang.selected_theme_is_invalid'));
-        // }
+        if (!is_file(BASE_DIR . '/public/themes/' . $this->settings->settings_theme_name . '/css/style.css')) {
+            abort(409, __('lang.selected_theme_is_invalid'));
+        }
 
         //validate if the folders in the /public/themes/ directory have a style.css file
         $list = [];
@@ -188,14 +188,14 @@ class BootSystem {
         }
 
         //set global data (Frontend Theme)
-        // config([
-        //     'theme.list' => $list,
-        //     'theme.backend.selected_name' => $this->settings->settings_theme_name,
-        //     //main css file
-        //     'theme.backend.selected_theme_css' => 'public/themes/' . $this->settings->settings_theme_name . '/css/style.css?v=' . $this->settings->settings_system_javascript_versioning,
-        //     //saas changes css file
-        //     'theme.backend.selected_theme_saas_css' => 'public/themes/' . $this->settings->settings_theme_name . '/css/saas.css?v=1',
-        // ]);
+        config([
+            'theme.list' => $list,
+            'theme.backend.selected_name' => $this->settings->settings_theme_name,
+            //main css file
+            'theme.backend.selected_theme_css' => 'public/themes/' . $this->settings->settings_theme_name . '/css/style.css?v=' . $this->settings->settings_system_javascript_versioning,
+            //saas changes css file
+            'theme.backend.selected_theme_saas_css' => 'public/themes/' . $this->settings->settings_theme_name . '/css/saas.css?v=1',
+        ]);
 
     }
 

@@ -9,10 +9,10 @@
                 @endif
             </div>
             <div class="x-price-month">
-                {{ runtimeMoneyFormat($package->package_amount_monthly) }}<span>/@lang('lang.month')</span>
+                {{ runtimeMoneyFormatSaaS($package->package_amount_monthly) }}<span>/@lang('lang.month')</span>
             </div>
             <div class="x-price-cycle">
-                {{ runtimeMoneyFormat($package->package_amount_yearly) }}<span>/@lang('lang.year')</span>
+                {{ runtimeMoneyFormatSaaS($package->package_amount_yearly) }}<span>/@lang('lang.year')</span>
             </div>
         </div>
         <div class="price-table-content">
@@ -129,6 +129,16 @@
                 <i class="sl-icon-close text-danger"></i>
                 @endif
                 @lang('lang.tickets')
+            </div>
+
+            <!--package_module_calendar-->
+            <div class="price-row">
+                @if($package->package_module_calendar == 'yes')
+                <i class="sl-icon-check text-success"></i>
+                @else
+                <i class="sl-icon-close text-danger"></i>
+                @endif
+                @lang('lang.calendar')
             </div>
 
             <!--package_module_timetracking-->

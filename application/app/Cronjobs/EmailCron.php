@@ -23,10 +23,11 @@ class EmailCron {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         //delete emails without an email address
         \App\Models\EmailQueue::Where('emailqueue_to', '')->delete();

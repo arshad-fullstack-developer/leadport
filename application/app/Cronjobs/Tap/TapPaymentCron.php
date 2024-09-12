@@ -32,10 +32,11 @@ class TapPaymentCron {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         /**
          *   - Find webhhoks waiting to be completed
@@ -61,7 +62,6 @@ class TapPaymentCron {
                     'webhooks_status' => 'processing',
                     'webhooks_started_at' => now(),
                 ]);
-                Log::info("foo bar", ['payload' => $webhook]);
             }
 
 

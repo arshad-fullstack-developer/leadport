@@ -26,7 +26,7 @@
 
         <!--submit button-->
         <button type="button" id="messaging_submit_button"
-            class="btn btn-success btn-icon-circle messaging_submit_button ajax-request"
+            class="btn btn-danger btn-icon-circle messaging_submit_button ajax-request"
             data-loading-target="chat-messages-container" data-progress-bar="hidden"
             data-url="{{ url('/messages/post/text') }}" data-type="form" data-ajax-type="post"
             data-form-id="messaging_submit_container" data-loading-target="comments-container">

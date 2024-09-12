@@ -6,12 +6,19 @@
 
 <!--comment-->
 @if($event->event_item == 'comment')
-<div class="x-description">{!! _clean($event->event_item_content) !!}</div>
+<div class="x-description">{!! clean($event->event_item_content) !!}</div>
 @endif
 
 <!--status-->
 @if($event->event_item == 'status')
-<div class="x-description"><strong>{{ cleanLang(__('lang.new_status')) }}:</strong> {{ runtimeLang($event->event_item_content) }}
+<div class="x-description"><strong>{{ cleanLang(__('lang.new_status')) }}:</strong>
+        @if($event->event_parent_type == 'task')
+        {{ taskStatusName($event->event_item_content) }}
+        @elseif($event->event_parent_type == 'lead')
+        {{ leadStatusName($event->event_item_content) }}
+        @else
+        {{ runtimeLang($event->event_item_content) }}
+        @endif
 </div>
 @endif
 
@@ -24,19 +31,21 @@
 <!--task-->
 @if($event->event_item == 'task')
 <div class="x-description">
-        <a href="{{ url('/tasks/v/'.$event->event_item_id.'/'.str_slug($event->event_parent_title)) }}">{{ $event->event_item_content }}</a>
+        <a
+                href="{{ url('/tasks/v/'.$event->event_item_id.'/'.str_slug($event->event_parent_title)) }}">{{ $event->event_item_content }}</a>
 </div>
 @endif
 
 <!--tickets-->
 @if($event->event_item == 'ticket')
-<div class="x-description"><a href="{{ url('tickets/'.$event->event_item_id) }}">{!! _clean($event->event_item_content) !!}</a>
+<div class="x-description"><a href="{{ url('tickets/'.$event->event_item_id) }}">{!! clean($event->event_item_content)
+                !!}</a>
 </div>
 @endif
 
 <!--invoice-->
 @if($event->event_item == 'invoice')
-<div class="x-description"><a href="{{ url('invoices/'.$event->event_item_id) }}">{!! _clean($event->event_item_content)
+<div class="x-description"><a href="{{ url('invoices/'.$event->event_item_id) }}">{!! clean($event->event_item_content)
                 !!}</a>
 </div>
 @endif
@@ -44,7 +53,7 @@
 
 <!--estimate-->
 @if($event->event_item == 'estimate')
-<div class="x-description"><a href="{{ url('estimates/'.$event->event_item_id) }}">{!! _clean($event->event_item_content)
+<div class="x-description"><a href="{{ url('estimates/'.$event->event_item_id) }}">{!! clean($event->event_item_content)
                 !!}</a>
 </div>
 @endif
@@ -60,7 +69,7 @@
 <!--subscription-->
 @if($event->event_item == 'subscription')
 <div class="x-description"><a href="{{ url('subscriptions/'.$event->event_item_id) }}">
-        {{ $event->event_item_content }}</a>
+                {{ $event->event_item_content }}</a>
 </div>
 @endif
 

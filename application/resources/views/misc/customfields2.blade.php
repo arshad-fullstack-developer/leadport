@@ -35,7 +35,7 @@
         @if($field->customfields_datatype =='dropdown')
         <select class="select2-basic form-control form-control-sm select2-preselected" id="{{ $field->customfields_name }}"
             name="{{ $field->customfields_name }}" data-preselected="{{ $field->current_value ?? ''}}">
-            {!! _clean(runtimeCustomFieldsJsonLists($field->customfields_datapayload)) !!}
+            {!! runtimeCustomFieldsJsonLists($field->customfields_datapayload) !!}
         </select>
         @endif
 

@@ -26,10 +26,11 @@ class SubscriptionUpdateTransaction {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         /**
          *   - Update the transaction ID of the very first payment done \

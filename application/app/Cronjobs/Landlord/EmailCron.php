@@ -12,14 +12,10 @@
 
 namespace App\Cronjobs\Landlord;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 
 class EmailCron {
 
     public function __invoke() {
-
-        //[MT] - run config settings for landlord
-        runtimeLandlordCronConfig();
 
         //[MT] - landlord only
         if (env('MT_TPYE')) {
@@ -27,6 +23,9 @@ class EmailCron {
                 return;
             }
         }
+
+        //[MT] - run config settings for landlord
+        runtimeLandlordCronConfig();
 
         /**
          * Send emails

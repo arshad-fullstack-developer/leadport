@@ -2,8 +2,6 @@
 
 namespace App\Console;
 
-use App\Http\Middleware\General\BootMail;
-use App\Http\Middleware\General\BootSystem;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Mail;
@@ -51,16 +49,7 @@ class Kernel extends ConsoleKernel {
         $schedule->call(new \App\Cronjobs\Landlord\TenantsPatchingCron)->everyFiveMinutes();
 
 
-        //[LANDLORD][UDPATES]
-
-        // -----------------------------------------------------------[TENANTS CONFIG]-------------------------------------------------------------------
-        if (env('MT_TPYE')) {
-            if (\Spatie\Multitenancy\Models\Tenant::current() != null) {
-                //middlwareBootSystem();
-            }
-        }
-
-
+ 
         // -----------------------------------------------------------[TENANTS]-------------------------------------------------------------------
 
         //send [regular] queued emails
@@ -114,7 +103,7 @@ class Kernel extends ConsoleKernel {
         //Proposals
         $schedule->call(new \App\Cronjobs\ProposalsCron)->everyMinute();
 
-        //Proposals
+        //Cleanup
         $schedule->call(new \App\Cronjobs\Cleanup\OrphanedRecordsCron)->everyMinute();
 
         //tap payments
@@ -122,6 +111,12 @@ class Kernel extends ConsoleKernel {
 
         //scheduled tasks
         $schedule->call(new \App\Cronjobs\ScheduledCron)->everyMinute();
+        
+        //fixes
+        $schedule->call(new \App\Cronjobs\Cleanup\FixesCron)->everyMinute();
+
+        //calendar
+        $schedule->call(new \App\Cronjobs\CalendarReminderCron)->everyMinute();
     }
 
     /**

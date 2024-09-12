@@ -10,21 +10,36 @@
 namespace App\Repositories;
 
 use App\Models\Proposal;
+use App\Repositories\EventRepository;
+use App\Repositories\EventTrackingRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Log;
 
 class ProposalRepository {
 
     /**
-     * The leads repository instance.
+     * The repository instance.
      */
     protected $proposal;
+    protected $eventrepo;
+    protected $trackingrepo;
+    protected $userrepo;
 
     /**
      * Inject dependecies
      */
-    public function __construct(Proposal $proposal) {
+    public function __construct(
+        Proposal $proposal,
+        EventRepository $eventrepo,
+        EventTrackingRepository $trackingrepo,
+        UserRepository $userrepo) {
+
         $this->proposal = $proposal;
+        $this->eventrepo = $eventrepo;
+        $this->trackingrepo = $trackingrepo;
+        $this->userrepo = $userrepo;
     }
 
     /**
@@ -345,4 +360,104 @@ class ProposalRepository {
         return $details;
     }
 
+    /**
+     * publish the resource
+     * @return bool
+     */
+    public function publish($id = '') {
+
+        Log::info("publishing proposal (id: $id) has started", ['process' => '[publish-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'proposal_id' => $id]);
+
+        //validation
+        if(!is_numeric($id)){
+            Log::error("publishing proposal has failed - proposal id is invalid", ['process' => '[publish-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'proposal_id' => $id]);
+            return false;
+        }
+
+        //get the project
+        if (!$document = \App\Models\Proposal::Where('doc_id', $id)->first()) {
+            Log::error("publishing proposal has failed - proposal could not be found", ['process' => '[publish-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'proposal_id' => $id]);
+            return false;
+        }
+
+        //get the proposal estimate
+        if ($estimate = \App\Models\Estimate::Where('bill_proposalid', $id)->Where('bill_estimate_type', 'document')->first()) {
+            $value = $estimate->bill_final_amount;
+        } else {
+            $value = 0;
+        }
+
+        //mark as published
+        $document->doc_status = 'new';
+        $document->doc_date_published = now();
+        $document->doc_date_last_emailed = now();
+        $document->save();
+
+        /** ----------------------------------------------
+         * record event [comment]
+         * ----------------------------------------------*/
+        $data = [
+            'event_creatorid' => (auth()->check()) ? auth()->id() : $document->doc_creatorid,
+            'event_item' => 'proposal',
+            'event_item_id' => $document->doc_id,
+            'event_item_lang' => 'event_created_proposal',
+            'event_item_content' => __('lang.proposal') . ' - ' . runtimeProposalIdFormat($document->doc_id),
+            'event_item_content2' => '',
+            'event_parent_type' => 'proposal',
+            'event_parent_id' => $document->doc_id,
+            'event_parent_title' => $document->doc_title,
+            'event_clientid' => $document->doc_client_id,
+            'event_show_item' => 'yes',
+            'event_show_in_timeline' => 'yes',
+            'eventresource_type' => (is_numeric($document->doc_project_id)) ? 'project' : 'client',
+            'eventresource_id' => (is_numeric($document->doc_project_id)) ? $document->doc_project_id : $document->doc_client_id,
+            'event_notification_category' => 'notifications_billing_activity',
+        ];
+        $event_id = $this->eventrepo->create($data);
+
+        /** ----------------------------------------------
+         * send email - client users - [queued]
+         * ----------------------------------------------*/
+        if ($document->docresource_type == 'client') {
+
+            if ($event_id = $this->eventrepo->create($data)) {
+                //get users (main client)
+                $users = $this->userrepo->getClientUsers($document->doc_client_id, 'owner', 'ids');
+                //record notification
+                $emailusers = $this->trackingrepo->recordEvent($data, $users, $event_id);
+            }
+            if (isset($emailusers) && is_array($emailusers)) {
+                Log::info("foo bar4");
+                $data = [
+                    'user_type' => 'client',
+                    'proposal_value' => $value,
+                ];
+                //send to users
+                if ($users = \App\Models\User::WhereIn('id', $emailusers)->get()) {
+                    foreach ($users as $user) {
+                        $mail = new \App\Mail\ProposalPublish($user, $data, $document);
+                        $mail->build();
+                    }
+                }
+            }
+        }
+
+        /** ----------------------------------------------
+         * send email - lead users - [queued]
+         * ----------------------------------------------*/
+        if ($document->docresource_type == 'lead') {
+            if ($lead = \App\Models\Lead::Where('lead_id', $document->doc_lead_id)->first()) {
+                $data = [
+                    'user_type' => 'lead',
+                    'proposal_value' => $value,
+                ];
+                $mail = new \App\Mail\ProposalPublish($lead, $data, $document);
+                $mail->build();
+            }
+        }
+
+        Log::info("publishing proposal (id: $id) has completed", ['process' => '[publish-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'proposal_id' => $id]);
+
+        return true;
+    }
 }

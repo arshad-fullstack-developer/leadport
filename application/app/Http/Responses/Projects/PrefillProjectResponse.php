@@ -46,6 +46,8 @@ class PrefillProjectResponse implements Responsable {
             'value' => $html,
         ];
 
+        $jsondata['skip_dom_reset'] = true;
+
         //response
         return response()->json($jsondata);
     }

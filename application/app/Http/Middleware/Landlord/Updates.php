@@ -70,10 +70,11 @@ class Updates {
                     //execute the SQL
                     try {
                         //db
-                        DB::unprepared(file_get_contents($filepath));
+                        DB::connection('landlord')->unprepared(file_get_contents($filepath));
 
                         //save record
                         $record = new \App\Models\Landlord\Update();
+                        $record->setConnection('landlord');
                         $record->update_mysql_filename = $filename;
                         $record->save();
 

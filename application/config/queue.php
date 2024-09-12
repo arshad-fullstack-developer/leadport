@@ -78,7 +78,7 @@ return [
     */
 
     'failed' => [
-        'database' => env('LANDLORD_DB_CONNECTION', 'landlord'),
+        'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
 

@@ -493,7 +493,6 @@ class ClientRepository {
         //data
         $client->client_company_name = request('client_company_name');
         $client->client_creatorid = 0;
-        $client->client_created_from_leadid = request('client_created_from_leadid', 0);
 
         //save and return id
         if ($client->save()) {

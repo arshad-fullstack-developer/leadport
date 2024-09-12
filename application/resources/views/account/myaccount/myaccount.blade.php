@@ -223,6 +223,18 @@
                             @endif</td>
                     </tr>
 
+
+                    <!--package_module_calendar-->
+                    <tr>
+                        <td>@lang('lang.calendar')</td>
+                        <td class="text-right p-r-30">
+                            @if($package->package_module_calendar == 'yes')
+                            <i class="sl-icon-check text-success"></i>
+                            @else
+                            <i class="sl-icon-close text-danger"></i>
+                            @endif</td>
+                    </tr>
+
                     <!--package_module_timetracking-->
                     <tr>
                         <td>@lang('lang.time_tracking')</td>

@@ -45,7 +45,7 @@
                 <!--delete button-->
                 @if(auth()->user()->is_admin)
                 <span id="message_delete_button_{{ $message->message_id }}"
-                    class="text-success messages_delete_button hidden x-left-side"
+                    class="text-danger messages_delete_button hidden x-left-side"
                     data-message-id="{{ messageUniqueID($message->message_unique_id) }}" data-progress-bar="hidden"
                     data-ajax-type="DELETE" data-url="{{ url('/messages/'.$message->message_unique_id) }}">
                     <i class="sl-icon-trash"></i>
@@ -94,7 +94,7 @@
             <div class="x-meta">
                 <!--delete button-->
                 <span id="message_delete_button_{{ $message->message_id }}"
-                    class="text-success messages_delete_button hidden x-right-side"
+                    class="text-danger messages_delete_button hidden x-right-side"
                     data-message-id="{{ messageUniqueID($message->message_unique_id) }}" data-progress-bar="hidden"
                     data-ajax-type="DELETE" data-url="{{ url('/messages/'.$message->message_unique_id) }}">
                     <i class="sl-icon-trash"></i>

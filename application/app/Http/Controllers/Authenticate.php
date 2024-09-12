@@ -313,7 +313,6 @@ class Authenticate extends Controller {
      */
     public function signUpAction() {
 
-       
         //check if the feature is enabled
         if (config('system.settings_clients_registration') == 'disabled') {
             abort(409, __('lang.this_feature_is_unavailable'));
@@ -329,7 +328,6 @@ class Authenticate extends Controller {
             'password' => 'required|confirmed|min:6',
             'email' => 'email|required|unique:users,email',
         ], $messages);
-       
 
         //errors
         if ($validator->fails()) {

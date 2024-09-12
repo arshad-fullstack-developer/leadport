@@ -5,7 +5,7 @@
         <!--check-->
         <tr>
             <td class="p-l-15">
-                PHP Supported Version 7.3 | 7.4 |  8.0 | 8.1 - <strong>Your Version <span class="badge-pill badge-info">{{ phpversion() }}</span></strong>
+                PHP Supported Version 8.2 | 8.3 - <strong>Your Version <span class="badge-pill badge-info">{{ phpversion() }}</span></strong>
             </td>
             <td class="x-td-checks">
                 @if($requirements['php_version'])

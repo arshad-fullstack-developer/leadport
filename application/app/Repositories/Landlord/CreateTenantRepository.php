@@ -93,10 +93,12 @@ class CreateTenantRepository {
         \Spatie\Multitenancy\Models\Tenant::forgetCurrent();
 
         //get the customer from landlord db
-        if ($new_customer = \Spatie\Multitenancy\Models\Tenant::Where('tenant_id', $tenant_id)->first()) {
+        if ($new_customer = \Spatie\Multitenancy\Models\Tenant::On('landlord')->Where('tenant_id', $tenant_id)->first()) {
             try {
                 //swicth to this tenants DB
                 $new_customer->makeCurrent();
+
+                $current = \Spatie\Multitenancy\Models\Tenant::current();
 
                 //import the sql file into the tenants database
                 DB::connection('tenant')->unprepared(file_get_contents($sql_file));
@@ -138,6 +140,7 @@ class CreateTenantRepository {
                         'settings_modules_notes' => 'enabled',
                         'settings_modules_subscriptions' => ($package->package_module_subscriptions == 'yes') ? 'enabled' : 'disabled',
                         'settings_modules_tickets' => ($package->package_module_tickets == 'yes') ? 'enabled' : 'disabled',
+                        'settings_modules_calendar' => ($package->package_module_calendar == 'yes') ? 'enabled' : 'disabled',
                         'settings_modules_timetracking' => ($package->package_module_timetracking == 'yes') ? 'enabled' : 'disabled',
                         'settings_modules_reminders' => ($package->package_module_reminders == 'yes') ? 'enabled' : 'disabled',
                         'settings_modules_proposals' => ($package->package_module_proposals == 'yes') ? 'enabled' : 'disabled',

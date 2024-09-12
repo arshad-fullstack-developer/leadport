@@ -19,9 +19,6 @@ class SyncUsersCron {
 
     public function __invoke() {
 
-        //[MT] - run config settings for landlord
-        runtimeLandlordCronConfig();
-
         //[MT] - landlord only
         if (env('MT_TPYE')) {
             if (\Spatie\Multitenancy\Models\Tenant::current()) {
@@ -29,6 +26,9 @@ class SyncUsersCron {
             }
         }
 
+        //[MT] - run config settings for landlord
+        runtimeLandlordCronConfig();
+        
         //log that its run
         Log::info("Cronjob has started - (Sync SaaS Account Users)", ['process' => '[landlord-cronjob][sync-user-cron]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
 

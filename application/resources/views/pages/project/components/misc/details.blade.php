@@ -282,7 +282,7 @@
         <div class="x-each-field m-b-18">
             <div class="panel-label p-b-3">{{ $field->customfields_title }}
             </div>
-            <div class="x-content">{!! _clean(customFieldValue($field->customfields_name, $project,
+            <div class="x-content">{!! clean(customFieldValue($field->customfields_name, $project,
                 $field->customfields_datatype)) !!}</div>
         </div>
         @endif

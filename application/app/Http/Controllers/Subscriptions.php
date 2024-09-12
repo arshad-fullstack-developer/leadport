@@ -29,6 +29,7 @@ use App\Repositories\StripeRepository;
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Validation\Rule;
 // use Validator;
@@ -199,19 +200,32 @@ class Subscriptions extends Controller {
         //default
         $list = [];
 
+        //valid (recurring) prices
+        $count_valid_prices = 0;
+
         //get prices for specified product
         if ($prices = $this->striperepo->getProductsPrices(request('product_id'))) {
             foreach ($prices as $price) {
-
-                $rate = subscriptionFormatMoney(($price->unit_amount / 100), $price->currency);
-                $interval = subscriptionFormatRenewalInterval($price->recurring->interval_count, $price->recurring->interval);
-
-                $list[] = [
-                    'value' => $rate . '/' . $interval,
-                    'id' => $price->id,
-                ];
+                //make sure its a recurring price
+                if (isset($price->recurring) && $price->recurring != null) {
+                    if (isset($price->recurring->interval_count) && isset($price->recurring->interval)) {
+                        $rate = subscriptionFormatMoney(($price->unit_amount / 100), $price->currency);
+                        $interval = subscriptionFormatRenewalInterval($price->recurring->interval_count, $price->recurring->interval);
+                        $list[] = [
+                            'value' => $rate . '/' . $interval,
+                            'id' => $price->id,
+                        ];
+                        $count_valid_prices++;
+                    }
+                }
             }
         }
+
+        //log some debugging info
+        if ($count_valid_prices == 0) {
+            Log::info("the selected stripe product ID (" . request('product_id') . ") does not have any [recurring] prices set", ['process' => '[stripe-subscription]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+        }
+
         //return feed
         return response()->json($list);
     }

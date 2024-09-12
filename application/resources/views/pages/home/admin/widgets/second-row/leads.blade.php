@@ -20,7 +20,7 @@
 
     <!--[DYNAMIC INLINE SCRIPT]  Backend Variables to Javascript Variables-->
     <script>
-        NX.admin_home_c3_leads_data = JSON.parse('{!! _clean($payload["leads_stats"]) !!}', true);
-        NX.admin_home_c3_leads_colors = JSON.parse('{!! _clean($payload["leads_key_colors"]) !!}', true);
+        NX.admin_home_c3_leads_data = JSON.parse('{!! clean($payload["leads_stats"]) !!}', true);
+        NX.admin_home_c3_leads_colors = JSON.parse('{!! clean($payload["leads_key_colors"]) !!}', true);
         NX.admin_home_c3_leads_title = "{{ $payload['leads_chart_center_title'] }}";
     </script>

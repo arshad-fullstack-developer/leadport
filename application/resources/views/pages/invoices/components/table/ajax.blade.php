@@ -59,7 +59,7 @@
         <span class="label {{ runtimeInvoiceStatusColors($invoice->bill_status, 'label') }}">{{
             runtimeLang($invoice->bill_status) }}</span>
 
-        <!--estimate viewed-->
+        <!--invoice is scheduled-->
         @if($invoice->bill_publishing_type == 'scheduled' && $invoice->bill_publishing_scheduled_status == 'pending')
         <span class="label label-icons label-icons-warning" data-toggle="tooltip" data-placement="top"
             title="@lang('lang.scheduled_publishing_info'): {{ runtimeDate($invoice->bill_publishing_scheduled_date) }}"><i class="sl-icon-clock"></i></span>

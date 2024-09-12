@@ -41,9 +41,9 @@ class Dynamic extends Controller {
         $page = $this->pageSettings();
 
         //get url sections
-        $section = str_replace('app/', '', request()->path());
+        $section = str_replace('/app/', '/', request()->path());
 
-        $dynamic_url = str_replace('app/', '', url()->full());
+        $dynamic_url = str_replace('/app/', '/', url()->full());
         $page['dynamic'] = 'yes';
 
         //add param to let us know this is a dynamic url call

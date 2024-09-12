@@ -191,6 +191,11 @@ class FileRepository {
         $file->fileresource_id = $data['fileresource_id'];
         $file->file_visibility_client = (request('file_visibility_client') == 'on') ? 'yes' : 'no';
 
+        //default folder is specified
+        if (isset($data['file_folderid'])) {
+            $file->file_folderid = $data['file_folderid'];
+        }
+
         //save and return id
         if ($file->save()) {
             return $file->file_id;

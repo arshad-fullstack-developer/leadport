@@ -60,7 +60,7 @@
         <div class="form-group m-b-0">
             <div class="col-sm-12 text-center">
                 <p>{{ cleanLang(__('lang.already_have_an_account')) }}
-                    <a href="{{ url('login') }}" class="text-info m-l-5" data-target="login-forms-login">
+                    <a href="login" class="text-info m-l-5" data-target="login-forms-login">
                         <b>{{ cleanLang(__('lang.sign_in')) }}</b>
                     </a>
                 </p>

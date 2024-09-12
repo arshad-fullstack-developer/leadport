@@ -428,8 +428,7 @@ class DatabaseRepository {
 
             //get the json payload
             $response_data = $response->json();
-            
-            dd($response_data);
+
             //check results
             if ($response->successful()) {
                 if (isset($response_data['status']) && $response_data['status'] == 1) {

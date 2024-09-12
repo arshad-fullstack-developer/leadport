@@ -1,4 +1,7 @@
 <head>
+
+    <!--CRM COPYWRIGHT - GROWCRM.IO-->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}" id="meta-csrf" />
@@ -10,63 +13,85 @@
     <base href="{{ url('/') }}" target="_self">
 
     <!--JQUERY & OTHER HEADER JS-->
-    <script src="{{ asset('public/vendor/js/vendor.header.js?v=' . config('system.versioning')) }}"></script>
+    <script src="public/vendor/js/vendor.header.js?v={{ config('system.versioning') }}"></script>
 
     <!--BOOTSTRAP-->
-    <link href="{{ asset('public/vendor/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="public/vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="{{ asset('public/vendor/js/html5shiv/html5shiv.js') }}"></script>
-    <script src="{{ asset('public/vendor/js/respond/respond.min.js') }}"></script>
+    <script src="public/vendor/js/html5shiv/html5shiv.js"></script>
+    <script src="public/vendor/js/respond/respond.min.js"></script>
     <![endif]-->
 
     <!--GOOGLE FONTS-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet"
+        type="text/css">
+
+    <!--GOOGLE ROBOTO-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!--VENDORS CSS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/css/vendor.css?v=' . config('system.versioning')) }}">
+    <link rel="stylesheet" href="/public/vendor/css/vendor.css?v={{ config('system.versioning') }}">
+    <link rel="stylesheet"
+        href="/public/vendor/js/bootstrap-timepicker/bootstrap-timepicker.css?v={{ config('system.versioning') }}">
 
     <!--ICONS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/fonts/growcrm-icons/styles.css?v=' . config('system.versioning')) }}">
+    <link rel="stylesheet" href="public/vendor/fonts/growcrm-icons/styles.css?v={{ config('system.versioning') }}">
+
+    <!--DYNAMIC CSS VARS-->
+    <style>
+        :root {
+            --calendar-type-event-background: {{ config('system.settings2_calendar_events_colour') }};
+            --calendar-type-project-background: {{ config('system.settings2_calendar_projects_colour') }};
+            --calendar-type-task-background: {{ config('system.settings2_calendar_tasks_colour') }};
+            --calendar-fc-daygrid-dot-event-background: {{ config('system.settings2_calendar_events_colour') }};
+            --calendar-fc-daygrid-dot-event-contrast: color-mix(in srgb, var(--calendar-fc-daygrid-dot-event-background) 70%, black);
+        }
+    </style>
 
     <!--THEME STYLE-->
+    <!--use the default theme for all external pages (e.g. proposals, cotracts etc) -->
     @if(config('visibility.external_view_use_default_theme'))
-    <link href="{{ asset('themes/default/css/style.css?v=' . config('system.settings_system_javascript_versioning')) }}" rel="stylesheet">
+    <link href="public/themes/default/css/style.css?v={{ config('system.settings_system_javascript_versioning') }}"
+        rel="stylesheet">
     @else
     @if(auth()->check())
-    <link href="{{ asset('public/themes/' . auth()->user()->pref_theme . '/css/style.css?v=' . config('system.settings_system_javascript_versioning')) }}" rel="stylesheet">
+    <link
+        href="public/themes/{{ auth()->user()->pref_theme }}/css/style.css?v={{ config('system.settings_system_javascript_versioning') }}"
+        rel="stylesheet">
     @else
-    <link href="{{ asset(config('theme.selected_theme_css')) }}" rel="stylesheet">
+    <link href="{{ config('theme.selected_theme_css') }} " rel="stylesheet">
     @endif
     @endif
 
-    <!--USERS CUSTOM CSS FILE-->
-    <link href="{{ asset('public/css/custom.css?v=' . config('system.versioning')) }}" rel="stylesheet">
+    <!--USERS CUSTON CSS FILE-->
+    <link href="public/css/custom.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!--PRINTING CSS-->
-    <link href="{{ asset('public/css/print.css?v=' . config('system.versioning')) }}" rel="stylesheet">
+    <link href="public/css/print.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!-- Favicon icon -->
-    <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('images/favicon/apple-icon-57x57.png') }}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('images/favicon/apple-icon-60x60.png') }}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('images/favicon/apple-icon-72x72.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('images/favicon/apple-icon-76x76.png') }}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('images/favicon/apple-icon-114x114.png') }}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('images/favicon/apple-icon-120x120.png') }}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('images/favicon/apple-icon-144x144.png') }}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('images/favicon/apple-icon-152x152.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicon/apple-icon-180x180.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/favicon/android-icon-192x192.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('public/images/favicon/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('images/favicon/favicon-96x96.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="57x57" href="public/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="public/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="public/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="public/images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="public/images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="public/images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="public/images/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="public/images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="public/images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="public/images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="public/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/images/favicon/favicon-16x16.png">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ asset('images/favicon/ms-icon-144x144.png') }}">
+    <meta name="msapplication-TileImage" content="public/images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+
 
     <!--SET DYNAMIC VARIABLE IN JAVASCRIPT-->
     <script type="text/javascript">
@@ -103,6 +128,7 @@
         NX.notification_error_duration = "{{ config('settings.notification_error_duration') }}";
         NX.notification_success_duration = "{{ config('settings.notification_success_duration') }}";
         NX.session_login_popup = "{{ config('system.settings_system_session_login_popup') }}";
+
 
         //javascript console debug modes
         NX.debug_javascript = "{{ config('app.debug_javascript') }}";
@@ -158,28 +184,28 @@
     </script>
 
     <!--boot js-->
-    <script src="{{ asset('public/js/core/head.js?v=' . config('system.versioning')) }}"></script>
+    <script src="public/js/core/head.js?v={{ config('system.versioning') }}"></script>
 
     <!--stripe payments js-->
-    @if(config('visibility.stripe_js'))
+    @if(@config('visibility.stripe_js'))
     <script src="https://js.stripe.com/v3/"></script>
     @endif
 
     <!--razorpay payments js-->
-    @if(config('visibility.razorpay_js'))
+    @if(@config('visibility.razorpay_js'))
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     @endif
 
     <!--tap payments js-->
-    @if(config('visibility.tap_gateway_js'))
+    @if(@config('visibility.tap_gateway_js'))
     <script type="text/javascript" src="https://goSellJSLib.b-cdn.net/v2.0.0/js/gosell.js"></script>
     @endif
 
-    <!--DYANMIC TRUSTED CONTENT - No sanitizing required for this trusted content (Google reCAPTCHA)-->
-    @if(config('system.settings2_captcha_status') == 'enabled')
+    <!--DYANMIC TRUSTED CONTENT - No sanitizing required] for this trusted content (Google reCAPTCHA)-->
+    @if(@config('system.settings2_captcha_status') == 'enabled')
     {!! htmlScriptTagJsApi([]) !!}
     @endif
 
-    <!--DYANMIC TRUSTED CONTENT - No sanitizing required for this trusted content (Admin Custom HTML & JS header code)-->
+    <!--DYANMIC TRUSTED CONTENT - No sanitizing required] for this trusted content (Admin Custom HTML & JS header code)-->
     {!! config('system.settings_theme_head') !!}
 </head>

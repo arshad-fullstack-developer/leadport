@@ -20,7 +20,7 @@
 
         <!--add new button (link)-->
         @if( config('visibility.list_page_actions_add_button_link'))
-        <a id="fx-page-actions-add-button" type="button" class="btn btn-success btn-add-circle edit-add-modal-button"
+        <a id="fx-page-actions-add-button" type="button" class="btn btn-danger btn-add-circle edit-add-modal-button"
             href="{{ $page['add_button_link_url'] ?? '' }}">
             <i class="ti-plus"></i>
         </a>

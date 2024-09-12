@@ -18,7 +18,7 @@
         @include('pages.documents.elements.doc-details')
 
         <div class="doc-body">
-            {!! _clean($document->doc_body) !!}
+            {!! $document->doc_body !!}
 
 
             <!--signatures - proposal -->

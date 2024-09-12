@@ -15,6 +15,7 @@
 
 namespace App\Cronjobs\Cleanup;
 use App\Repositories\DestroyRepository;
+use DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
@@ -28,15 +29,16 @@ class OrphanedRecordsCron {
 
         $this->destroyrepo = $destroyrepo;
 
-        //[MT] - (check we have a tenant)
+        //[MT] - tenants only
         if (env('MT_TPYE')) {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
 
         //cleanup tasks
         $this->cleanupTasks();
@@ -55,6 +57,9 @@ class OrphanedRecordsCron {
 
         //cleanup invoices
         $this->cleanupEstimates();
+
+        //cleanup duplicate assignment
+        $this->cleanupDuplicateProjectAssignment();
     }
 
     /**
@@ -181,6 +186,24 @@ class OrphanedRecordsCron {
                 ]);
         }
 
+    }
+
+    /**
+     * [bug fix] - June 2024
+     * delete dupliate users being assigned to the same project in the projects_assigned table
+     *
+     */
+    public function cleanupDuplicateProjectAssignment() {
+        DB::statement('
+                    DELETE a
+                    FROM projects_assigned a
+                    INNER JOIN (
+                    SELECT projectsassigned_userid, projectsassigned_projectid, MIN(projectsassigned_id) AS min_id
+                    FROM projects_assigned
+                    GROUP BY projectsassigned_userid, projectsassigned_projectid
+                    ) b ON a.projectsassigned_userid = b.projectsassigned_userid
+                    AND a.projectsassigned_projectid = b.projectsassigned_projectid
+                    AND a.projectsassigned_id <> b.min_id;');
     }
 
 }

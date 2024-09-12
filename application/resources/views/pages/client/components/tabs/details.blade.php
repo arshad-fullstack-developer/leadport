@@ -2,7 +2,7 @@
     <div class="col-sm-12 tinymce-transparent">
         <!--textarea & editor area-->
         <div class="client-description p-0 rich-text-formatting" id="client-description"> {!!
-            _clean($client->client_description) !!}
+            clean($client->client_description) !!}
         </div>
         <!--dynamic description field-->
         <input type="hidden" name="description" id="description" value="">

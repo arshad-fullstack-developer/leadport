@@ -108,6 +108,20 @@
     </div>
 </div>
 
+<!--automation-->
+@if(config('response') == 'create')
+<div class="form-group form-group-checkbox row">
+    <label class="col-10 col-form-label text-left">@lang('lang.automation') <span class="align-middle text-info font-16"
+            data-toggle="tooltip" title="@lang('lang.apply_default_automation_proposals')" data-placement="top"><i
+                class="ti-info-alt"></i></span></label>
+    <div class="col-2 text-right p-t-5">
+        <input type="checkbox" id="automation" name="automation" class="filled-in chk-col-light-blue"
+            {{ runtimePrechecked(config('system.settings2_proposals_automation_default_status')) }}>
+        <label class="p-l-30" for="automation"></label>
+    </div>
+</div>
+@endif
+
 <div class="line m-t-40"></div>
 
 <!--redirect to project-->

@@ -303,6 +303,7 @@ class LeadRepository {
 
         //data
         $lead->lead_creatorid = auth()->id();
+        $lead->lead_uniqueid = str_unique();
         $lead->lead_firstname = request('lead_firstname');
         $lead->lead_lastname = request('lead_lastname');
         $lead->lead_email = request('lead_email');
@@ -490,6 +491,7 @@ class LeadRepository {
         $new_lead = $lead->replicate();
         $new_lead->lead_created = now();
         $new_lead->lead_creatorid = auth()->id();
+        $new_lead->lead_uniqueid = str_unique();
         $new_lead->lead_title = $data['lead_title'];
         $new_lead->lead_firstname = $data['lead_firstname'];
         $new_lead->lead_lastname = $data['lead_lastname'];

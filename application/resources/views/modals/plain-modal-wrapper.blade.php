@@ -1,5 +1,5 @@
 <!--modal-->
-<div class="modal" role="dialog" aria-labelledby="plainModal" id="plainModal" {!! _clean(runtimeAllowCloseModalOptions())
+<div class="modal" role="dialog" aria-labelledby="plainModal" id="plainModal" {!! clean(runtimeAllowCloseModalOptions())
     !!}>
     <div class="modal-dialog" id="plainModalContainer">
         <div class="modal-content">

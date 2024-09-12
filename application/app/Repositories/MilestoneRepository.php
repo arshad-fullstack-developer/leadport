@@ -65,7 +65,7 @@ class MilestoneRepository {
         $milestone = new $this->milestone;
         $milestone->milestone_projectid = $project_id;
         $milestone->milestone_title = 'uncategorised';
-        $milestone->milestone_creatorid = Auth()->user()->id;
+        $milestone->milestone_creatorid = (auth()->check()) ? auth()->user()->id : 0;
         $milestone->milestone_type = 'uncategorised';
         $milestone->milestone_position = $position;
         $milestone->save();

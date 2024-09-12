@@ -134,14 +134,16 @@ class SettingsRepository {
         $settings->settings_projects_default_hourly_rate = request('settings_projects_default_hourly_rate');
         $settings->settings_projects_cover_images = (request('settings_projects_cover_images') == 'enabled') ? 'enabled' : 'disabled';
         $settings->settings_projects_categories_main_menu = (request('settings_projects_categories_main_menu') == 'yes') ? 'yes' : 'no';
+        $settings->settings_projects_events_show_task_status_change = (request('settings_projects_events_show_task_status_change') == 'yes') ? 'yes' : 'no';
+        $settings->save();
 
-        //save
-        if ($settings->save()) {
-            return true;
-        } else {
-            Log::error("record could not be updated - database error", ['process' => '[SettingsRepository]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            return false;
-        }
+        //show tasks status change events in the project timeline
+        \App\Models\Event::where('event_item_lang', 'event_changed_task_status')
+            ->update([
+                'event_show_in_timeline' => $settings->settings_projects_events_show_task_status_change,
+            ]);
+
+        return true;
     }
 
     /**
@@ -235,6 +237,7 @@ class SettingsRepository {
         $settings->settings_invoices_recurring_grace_period = request('settings_invoices_recurring_grace_period');
         $settings->settings_invoices_default_terms_conditions = request('settings_invoices_default_terms_conditions');
         $settings->settings_invoices_show_view_status = (request('settings_invoices_show_view_status') == 'on') ? 'yes' : 'no';
+        $settings->settings_invoices_show_project_on_invoice = (request('settings_invoices_show_project_on_invoice') == 'on') ? 'yes' : 'no';
 
         //save
         if ($settings->save()) {
@@ -717,6 +720,7 @@ class SettingsRepository {
         $settings->settings_modules_contracts = (request('settings_modules_contracts') == 'on') ? 'enabled' : 'disabled';
         $settings->settings_modules_messages = (request('settings_modules_messages') == 'on') ? 'enabled' : 'disabled';
         $settings->settings_modules_reports = (request('settings_modules_reports') == 'on') ? 'enabled' : 'disabled';
+        $settings->settings_modules_calendar = (request('settings_modules_calendar') == 'on') ? 'enabled' : 'disabled';
 
         //$settings->settings_modules_spaces = (request('settings_modules_spaces') == 'on') ? 'enabled' : 'disabled';
 

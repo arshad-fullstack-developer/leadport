@@ -1,105 +1,95 @@
-@extends('layout.wrapper') @section('content')
-<!-- main content -->
-<div class="container-fluid">
-    <!-- page content -->
-    <div class="row">
-        <h1>Calendar Events</h1>
-        <div class="col-12">
-       <!-- Button to Open the Modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#eventModal">
-            Create Event
-            </button>
+<div class="calendar_wrapper" id="calendar_wrapper">
 
-            <!-- The Modal -->
-            <div class="modal" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Create Event</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ url('events/create') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="title">Title:</label>
-                        <input type="text" name="title" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description:</label>
-                        <textarea name="description" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="start_date">Start Date & Time:</label>
-                        <input type="datetime-local" class="form-control" name="start_date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="end_date">End Date & Time:</label>
-                        <input type="datetime-local" class="form-control" name="end_date" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">Create Event</button>
-                    </form>
-                </div>
-                </div>
-            </div>
-            </div>
+    <!--calendar dynamically loaded here-->
 
-        </div>
-        <div class="col-12">
-        <div id='calendar'></div>
-        </div>
-    </div>
 </div>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
+@include('pages.calendar.components.misc.settings')
 
-    let appUrl = '{{ config('app.url') }}';
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+
+<!--set the data payload-->
+<script>
+    //general data from backend
+    NX.calendar_data = @json($data);
+
+    //events payload
+    NX.calendar_events = @json($events);
+
+    //general var
+    NX.calendar_add_url = "{{ url('/calendar/create') }}";
+    NX.calendar_action_url = "{{ url('/calendar') }}";
+    NX.calendar_start_day = "{{ config('system.settings2_calendar_first_day') ?? 1 }}";
+
+    //language
+    NXLANG.calender_settings = "@lang('lang.calendar_settings')";
+    NXLANG.calender_add_event = "@lang('lang.add_event')";
+
+    NXLANG.calender_lang = {
+        code: 'nextloop',
+        buttonText: {
+            today: "@lang('lang.today')",
+            month: "@lang('lang.month')",
+            week: "@lang('lang.week')",
+            day: "@lang('lang.day')",
+            list: "@lang('lang.list')"
         },
-        views: {
-            dayGridMonth: {
-                buttonText: 'Month'
-            },
-            timeGridWeek: {
-                buttonText: 'Week'
-            },
-            timeGridDay: {
-                buttonText: 'Day'
-            }
-        },
-        events: @json($events),
-        eventClick: function(info) {
-            if (confirm('Are you sure you want to delete this event?')) {
-                fetch(`${appUrl}/app-admin/events/${info.event.id}/delete`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        info.event.remove();
-                    } else {
-                        alert('Error deleting event: ' + (data.message || 'Unknown error'));
-                    }
-                });
-            }
-        }
-    });
-    calendar.render();
-});
+        weekText: 'W',
+        allDayText: "@lang('lang.all_day')",
+        moreLinkText: "@lang('lang.more')",
+        noEventsText: "@lang('lang.no_events_to_display')",
+        dayNames: [
+            "@lang('lang.sunday')",
+            "@lang('lang.monday')",
+            "@lang('lang.tuesday')",
+            "@lang('lang.wednesday')",
+            "@lang('lang.thursday')",
+            "@lang('lang.friday')",
+            "@lang('lang.saturday')"
+        ],
+        dayNamesShort: [
+            "@lang('lang.sunday_short')",
+            "@lang('lang.monday_short')",
+            "@lang('lang.tuesday_short')",
+            "@lang('lang.wednesday_short')",
+            "@lang('lang.thursday_short')",
+            "@lang('lang.friday_short')",
+            "@lang('lang.saturday_short')"
+        ],
+        monthNames: [
+            "@lang('lang.january')",
+            "@lang('lang.february')",
+            "@lang('lang.march')",
+            "@lang('lang.april')",
+            "@lang('lang.may')",
+            "@lang('lang.june')",
+            "@lang('lang.july')",
+            "@lang('lang.august')",
+            "@lang('lang.september')",
+            "@lang('lang.october')",
+            "@lang('lang.november')",
+            "@lang('lang.december')"
+        ],
+        monthNamesShort: [
+            "@lang('lang.january_short')",
+            "@lang('lang.february_short')",
+            "@lang('lang.march_short')",
+            "@lang('lang.april_short')",
+            "@lang('lang.may_short')",
+            "@lang('lang.june_short')",
+            "@lang('lang.july_short')",
+            "@lang('lang.august_short')",
+            "@lang('lang.september_short')",
+            "@lang('lang.october_short')",
+            "@lang('lang.november_short')",
+            "@lang('lang.december_short')"
+        ]
+    };
 </script>
 
-<!--main content -->
-@endsection
+<!--trigger element-->
+<span class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form" id="calendar-event-trigger"
+    data-toggle="modal" data-target="#commonModal" data-loading-target="commonModalBody"
+    data-modal-title="" data-action-method="GET" data-action-ajax-class="ajax-request"
+    data-modal-size="modal-lg" data-action-ajax-loading-target="commonModalBody" data-footer-visibility="hidden"
+    data-url-backup="{{ url('/calendar') }}/" data-url="{{ url('/calendar') }}/">
+    <!--dynamic-->
+</span>

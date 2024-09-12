@@ -60,7 +60,17 @@
         </div>
     </div>
 
-    <!--form checkbox item-->
+    <!--show_project_title_on_invoice-->
+    <div class="form-group form-group-checkbox row">
+        <div class="col-12 p-t-5">
+            <input type="checkbox" id="settings_invoices_show_project_on_invoice"
+                name="settings_invoices_show_project_on_invoice" class="filled-in chk-col-light-blue"
+                {{ runtimePrechecked($settings['settings_invoices_show_project_on_invoice'] ?? '') }}>
+            <label for="settings_invoices_show_project_on_invoice">@lang('lang.show_project_title_on_invoice')</label>
+        </div>
+    </div>
+
+    <!--show_if_client_has_opened-->
     <div class="form-group form-group-checkbox row">
         <div class="col-12 p-t-5">
             <input type="checkbox" id="settings_invoices_show_view_status" name="settings_invoices_show_view_status"
@@ -82,7 +92,7 @@
 
     <!--buttons-->
     <div class="text-right">
-        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-success waves-effect text-left"
+        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-danger waves-effect text-left"
             data-url="/settings/invoices" data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
     </div>

@@ -12,7 +12,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {!! _clean($log->log_payload) !!}
+                    {!! $log->log_payload !!}
                 </tbody>
             </table>
         </div>

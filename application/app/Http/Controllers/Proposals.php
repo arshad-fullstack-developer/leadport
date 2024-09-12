@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Proposals\ProposalUpdateAutomation;
 use App\Http\Requests\Proposals\StoreUpdate;
 use App\Http\Responses\Common\ChangeCategoryResponse;
 use App\Http\Responses\Documents\ShowEditResponse;
@@ -19,10 +20,13 @@ use App\Http\Responses\Proposals\ChangeStatusResponse;
 use App\Http\Responses\Proposals\CreateCloneResponse;
 use App\Http\Responses\Proposals\CreateResponse;
 use App\Http\Responses\Proposals\DestroyResponse;
+use App\Http\Responses\Proposals\EditAutomationResponse;
 use App\Http\Responses\Proposals\EmailResponse;
 use App\Http\Responses\Proposals\IndexResponse;
 use App\Http\Responses\Proposals\PublishResponse;
+use App\Http\Responses\Proposals\PublishScheduledResponse;
 use App\Http\Responses\Proposals\StoreResponse;
+use App\Http\Responses\Proposals\UpdateAutomationResponse;
 use App\Models\Category;
 use App\Models\Proposal;
 use App\Repositories\CategoryRepository;
@@ -32,6 +36,7 @@ use App\Repositories\EstimateGeneratorRepository;
 use App\Repositories\EstimateRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
+use App\Repositories\ProposalAutomationRepository;
 use App\Repositories\ProposalRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -79,6 +84,7 @@ class Proposals extends Controller {
             'store',
             'changeCategoryUpdate',
             'changeStatus',
+            'updateAutomation',
         ]);
 
         $this->middleware('proposalsMiddlewareEdit')->only([
@@ -87,6 +93,7 @@ class Proposals extends Controller {
             'resendEmail',
             'publish',
             'changeStatus',
+            'editAutomation',
         ]);
 
         $this->middleware('proposalsMiddlewareCreate')->only([
@@ -237,6 +244,9 @@ class Proposals extends Controller {
             }
         }
 
+        //apply automation
+        $this->applyDefaultAutomation($proposal);
+
         //create an estimate record
         $estimate_id = $this->estimaterepo->createProposalEstimate($proposal->doc_id);
 
@@ -257,6 +267,189 @@ class Proposals extends Controller {
         //process reponse
         return new StoreResponse($payload);
 
+    }
+
+    /**
+     * apply default automation
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function applyDefaultAutomation($proposal) {
+
+        //validation
+        if (request('automation') != 'on') {
+            return;
+        }
+
+        //automation setttings
+        $settings = \App\Models\Settings2::find(1);
+
+        //apply defaults
+        $proposal->proposal_automation_status = $settings->settings2_proposals_automation_default_status;
+        $proposal->proposal_automation_project_title = $proposal->doc_title;
+        $proposal->proposal_automation_create_project = $settings->settings2_proposals_automation_create_project;
+        $proposal->proposal_automation_project_status = $settings->settings2_proposals_automation_project_status;
+        $proposal->proposal_automation_project_email_client = $settings->settings2_proposals_automation_project_email_client;
+        $proposal->proposal_automation_create_invoice = $settings->settings2_proposals_automation_create_invoice;
+        $proposal->proposal_automation_invoice_email_client = $settings->settings2_proposals_automation_invoice_email_client;
+        $proposal->proposal_automation_invoice_due_date = $settings->settings2_proposals_automation_invoice_due_date;
+        $proposal->proposal_automation_create_tasks = $settings->settings2_proposals_automation_create_tasks;
+        $proposal->save();
+
+        //[automation] assigned users
+        $assigned_users = \App\Models\AutomationAssigned::Where('automationassigned_resource_type', 'proposal')
+            ->Where('automationassigned_resource_id', 0)
+            ->get();
+
+        $assigned = [];
+        foreach ($assigned_users as $user) {
+            $assigned = new \App\Models\AutomationAssigned();
+            $assigned->automationassigned_resource_type = 'proposal';
+            $assigned->automationassigned_resource_id = $proposal->doc_id;
+            $assigned->automationassigned_userid = $user->automationassigned_userid;
+            $assigned->save();
+        }
+    }
+
+    /**
+     * Show the form for editing proposal automation
+     * @param int $id proposal  id
+     * @return \Illuminate\Http\Response
+     */
+    public function editAutomation($id) {
+
+        //get the project
+        $proposal = $this->proposalrepo->search($id);
+
+        //not found
+        if (!$proposal = $proposal->first()) {
+            abort(409, __('lang.proposal_not_found'));
+        }
+
+        //use the data already set for this automation
+        if ($proposal->proposal_automation_status == 'enabled') {
+            $automation = [
+                'proposal_automation_default_status' => $proposal->proposal_automation_status,
+                'proposal_automation_create_project' => $proposal->proposal_automation_create_project,
+                'proposal_automation_project_status' => $proposal->proposal_automation_project_status,
+                'proposal_automation_project_title' => ($proposal->proposal_automation_project_title != '') ? $proposal->proposal_automation_project_title : $proposal->doc_title,
+                'proposal_automation_project_email_client' => $proposal->proposal_automation_project_email_client,
+                'proposal_automation_create_invoice' => $proposal->proposal_automation_create_invoice,
+                'proposal_automation_invoice_email_client' => $proposal->proposal_automation_invoice_email_client,
+                'proposal_automation_invoice_due_date' => $proposal->proposal_automation_invoice_due_date,
+                'proposal_automation_create_tasks' => $proposal->proposal_automation_create_tasks,
+            ];
+
+            //[automation] assigned users
+            $assigned_users = \App\Models\AutomationAssigned::Where('automationassigned_resource_type', 'proposal')
+                ->Where('automationassigned_resource_id', $id)
+                ->get();
+
+        }
+
+        //use the default settings data for this automation
+        if ($proposal->proposal_automation_status == 'disabled') {
+
+            $automation = [
+                'proposal_automation_default_status' => 'disabled',
+                'proposal_automation_create_project' => config('system.settings2_proposals_automation_create_project'),
+                'proposal_automation_project_status' => config('system.settings2_proposals_automation_project_status'),
+                'proposal_automation_project_title' => $proposal->doc_title,
+                'proposal_automation_project_email_client' => config('system.settings2_proposals_automation_project_email_client'),
+                'proposal_automation_create_invoice' => config('system.settings2_proposals_automation_create_invoice'),
+                'proposal_automation_invoice_email_client' => config('system.settings2_proposals_automation_invoice_email_client'),
+                'proposal_automation_invoice_due_date' => config('system.settings2_proposals_automation_invoice_due_date'),
+                'proposal_automation_create_tasks' => config('system.settings2_proposals_automation_create_tasks'),
+            ];
+
+            //[automation] settings assigned users
+            $assigned_users = \App\Models\AutomationAssigned::Where('automationassigned_resource_type', 'proposal')
+                ->Where('automationassigned_resource_id', 0)
+                ->get();
+        }
+
+        $assigned = [];
+        foreach ($assigned_users as $user) {
+            $assigned[] = $user->automationassigned_userid;
+        }
+
+        //reponse payload
+        $payload = [
+            'page' => $this->pageSettings('edit'),
+            'proposal' => $proposal,
+            'automation' => $automation,
+            'assigned' => $assigned,
+        ];
+
+        //response
+        return new EditAutomationResponse($payload);
+    }
+
+    /**
+     * Update estiate automation
+     * @param int $id proposal  id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateAutomation(ProposalUpdateAutomation $request, $id) {
+
+        //get the project
+        $proposal = \App\Models\Proposal::Where('doc_id', $id)->first();
+
+        //update settings
+        $proposal->proposal_automation_status = request('proposal_automation_status');
+        $proposal->proposal_automation_create_project = (request('proposal_automation_create_project') == 'on') ? 'yes' : 'no';
+        $proposal->proposal_automation_project_title = request('proposal_automation_project_title');
+        $proposal->proposal_automation_project_status = request('proposal_automation_project_status');
+        $proposal->proposal_automation_create_tasks = (request('proposal_automation_create_tasks') == 'on') ? 'yes' : 'no';
+        $proposal->proposal_automation_project_email_client = (request('proposal_automation_project_email_client') == 'on') ? 'yes' : 'no';
+        $proposal->proposal_automation_create_invoice = (request('proposal_automation_create_invoice') == 'on') ? 'yes' : 'no';
+        $proposal->proposal_automation_invoice_due_date = request('proposal_automation_invoice_due_date');
+        $proposal->proposal_automation_invoice_email_client = (request('proposal_automation_invoice_email_client') == 'on') ? 'yes' : 'no';
+        $proposal->save();
+
+        //additional settings
+        if (request('proposal_automation_status') == 'disabled') {
+            $proposal->proposal_automation_create_project = 'no';
+            $proposal->proposal_automation_project_title = '';
+            $proposal->proposal_automation_project_status = 'not_started';
+            $proposal->proposal_automation_create_tasks = 'no';
+            $proposal->proposal_automation_project_email_client = 'no';
+            $proposal->proposal_automation_create_invoice = 'no';
+            $proposal->proposal_automation_invoice_due_date = null;
+            $proposal->proposal_automation_invoice_email_client = 'no';
+            $proposal->save();
+        }
+
+        //assigned users (reset)
+        \App\Models\AutomationAssigned::Where('automationassigned_resource_type', 'proposal')
+            ->Where('automationassigned_resource_id', $id)
+            ->delete();
+
+        //assigned add (reset)
+        if (request('proposal_automation_status') == 'enabled' && is_array(request('proposal_automation_assigned_users'))) {
+            foreach (request('proposal_automation_assigned_users') as $user_id) {
+                $assigned = new \App\Models\AutomationAssigned();
+                $assigned->automationassigned_resource_type = 'proposal';
+                $assigned->automationassigned_resource_id = $id;
+                $assigned->automationassigned_userid = $user_id;
+                $assigned->save();
+            }
+        }
+
+        //get table friendly format
+        $proposals = $this->proposalrepo->search($proposal->doc_id);
+        $proposal = $proposals->first();
+
+        //reponse payload
+        $payload = [
+            'page' => $this->pageSettings('proposals'),
+            'proposal' => $proposal,
+            'proposals' => $proposals,
+        ];
+
+        //response
+        return new UpdateAutomationResponse($payload);
     }
 
     /**
@@ -579,82 +772,8 @@ class Proposals extends Controller {
      */
     public function publish($id) {
 
-        //get the project
-        $documents = $this->proposalrepo->search($id);
-        $document = $documents->first();
-
-        //get the estimate
-        if ($estimate = \App\Models\Estimate::Where('bill_proposalid', $id)->Where('bill_estimate_type', 'document')->first()) {
-            $value = $estimate->bill_final_amount;
-        } else {
-            $value = 0;
-        }
-
-        //mark as published
-        $document->doc_status = 'new';
-        $document->doc_date_published = now();
-        $document->doc_date_last_emailed = now();
-        $document->save();
-
-        /** ----------------------------------------------
-         * record event [comment]
-         * ----------------------------------------------*/
-        $data = [
-            'event_creatorid' => auth()->id(),
-            'event_item' => 'proposal',
-            'event_item_id' => $document->doc_id,
-            'event_item_lang' => 'event_created_proposal',
-            'event_item_content' => __('lang.proposal') . ' - ' . runtimeProposalIdFormat($document->doc_id),
-            'event_item_content2' => '',
-            'event_parent_type' => 'proposal',
-            'event_parent_id' => $document->doc_id,
-            'event_parent_title' => $document->doc_title,
-            'event_clientid' => $document->doc_client_id,
-            'event_show_item' => 'yes',
-            'event_show_in_timeline' => 'yes',
-            'eventresource_type' => (is_numeric($document->doc_project_id)) ? 'project' : 'client',
-            'eventresource_id' => (is_numeric($document->doc_project_id)) ? $document->doc_project_id : $document->doc_client_id,
-            'event_notification_category' => 'notifications_billing_activity',
-        ];
-        $event_id = $this->eventrepo->create($data);
-
-        /** ----------------------------------------------
-         * send email - client users - [queued]
-         * ----------------------------------------------*/
-        if ($document->docresource_type == 'client') {
-            if ($event_id = $this->eventrepo->create($data)) {
-                //get users (main client)
-                $users = $this->userrepo->getClientUsers($document->doc_client_id, 'owner', 'ids');
-                //record notification
-                $emailusers = $this->trackingrepo->recordEvent($data, $users, $event_id);
-            }
-            if (isset($emailusers) && is_array($emailusers)) {
-                $data = [
-                    'user_type' => 'client',
-                    'proposal_value' => $value,
-                ];
-                //send to users
-                if ($users = \App\Models\User::WhereIn('id', $emailusers)->get()) {
-                    foreach ($users as $user) {
-                        $mail = new \App\Mail\ProposalPublish($user, $data, $document);
-                        $mail->build();
-                    }
-                }
-            }
-        }
-
-        /** ----------------------------------------------
-         * send email - lead users - [queued]
-         * ----------------------------------------------*/
-        if ($document->docresource_type == 'lead') {
-            if ($lead = \App\Models\Lead::Where('lead_id', $document->doc_lead_id)->first()) {
-                $data = [
-                    'user_type' => 'lead',
-                    'proposal_value' => $value,
-                ];
-                $mail = new \App\Mail\ProposalPublish($lead, $data, $document);
-                $mail->build();
-            }
+        if (!$this->proposalrepo->publish($id)) {
+            abort(409, __('lang.error_request_could_not_be_completed'));
         }
 
         //payload
@@ -664,6 +783,64 @@ class Proposals extends Controller {
 
         //return the reposnse
         return new PublishResponse($payload);
+    }
+
+    /**
+     * schedule an proposal for publising later
+     * @param int $id proposal id
+     * @return \Illuminate\Http\Response
+     */
+    public function publishScheduled($id) {
+
+        //does the proposal exist
+        if (!$proposal = \App\Models\Proposal::Where('doc_id', $id)->first()) {
+            abort(404);
+        }
+
+        //custom error messages
+        $messages = [
+            'publishing_option_date.required' => __('lang.schedule_date') . '-' . __('lang.is_required'),
+        ];
+
+        //validate
+        $validator = Validator::make(request()->all(), [
+            'publishing_option_date' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (strtotime($value) < strtotime(now()->toDateString())) {
+                        return $fail(__('lang.schedule_date_cannot_be_past'));
+                    }
+                },
+            ],
+        ], $messages);
+
+        //errors
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $messages = '';
+            foreach ($errors->all() as $message) {
+                $messages .= "<li>$message</li>";
+            }
+            //redirect and show error (to make show the publish dropdown works again)
+            request()->session()->flash('error-notification', __('lang.error') . ': ' . $messages);
+            $jsondata['redirect_url'] = url("/proposals/$id");
+            return response()->json($jsondata);
+        }
+
+        //secdule the proposal
+        $proposal->doc_publishing_type = 'scheduled';
+        $proposal->doc_publishing_scheduled_date = request('publishing_option_date');
+        $proposal->doc_publishing_scheduled_status = 'pending';
+        $proposal->doc_publishing_scheduled_log = '';
+        $proposal->save();
+
+        //reponse payload
+        $payload = [
+            'id' => $id,
+        ];
+
+        //response
+        return new PublishScheduledResponse($payload);
     }
 
     /**
@@ -836,7 +1013,7 @@ class Proposals extends Controller {
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function accepted($id) {
+    public function accepted(ProposalAutomationRepository $automationrepo, $id) {
 
         //for sanity - do not apply any filters
         request()->merge([
@@ -944,6 +1121,11 @@ class Proposals extends Controller {
                 }
             }
         }
+
+        /** --------------------------------------------------------
+         * [automation] - proposal accepted
+         * --------------------------------------------------------*/
+        $automationrepo->process($proposal);
 
         //redirect
         if (auth()->check()) {

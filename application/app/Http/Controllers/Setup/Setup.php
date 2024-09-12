@@ -18,6 +18,7 @@ use App\Http\Controllers\Setup\SettingsResponse;
 use App\Http\Controllers\Setup\UserResponse;
 use App\Repositories\EnvRepository;
 use App\Repositories\SpaceRepository;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -85,7 +86,7 @@ class Setup extends Controller {
         $error['count'] = 0;
 
         //server requirements checks
-        $requirements['php_version'] = version_compare(PHP_VERSION, '7.3.0', ">=") && version_compare(PHP_VERSION, '8.2.0', "<");
+        $requirements['php_version'] = version_compare(PHP_VERSION, '8.2.0', ">=") && version_compare(PHP_VERSION, '8.3.0', "<=");
         $requirements['bcmath'] = extension_loaded("bcmath");
         $requirements['mysql'] = extension_loaded("mysqli");
         $requirements['ctype'] = extension_loaded("ctype");
@@ -199,10 +200,18 @@ class Setup extends Controller {
         $dbpass = request('database_password');
 
         //connect
-        $connection = @mysqli_connect($dbhost, $dbuser, $dbpass) or abort(409, __('Error(1001): Unable to connect to your database. Check details and try again'));
+        try {
+            $connection = @mysqli_connect($dbhost, $dbuser, $dbpass);
+        } catch (Exception $e) {
+            abort(409, __('Error(1001): Unable to connect to your database. Check details and try again'));
+        }
 
         //select the database
-        @mysqli_select_db($connection, $dbname) or abort(409, __('Error(1002): Unable to connect to your database. Check details and try again'));
+        try {
+            @mysqli_select_db($connection, $dbname);
+        } catch (Exception $e) {
+            abort(409, __('Error(1001): Unable to connect to your database. Check details and try again'));
+        }
 
         //update the .env file
         $data = [
@@ -300,6 +309,11 @@ class Setup extends Controller {
             abort(409, __('Fill in al required fields'));
         }
 
+        //update default settings
+        if (!$settings = \App\Models\Settings::Where('settings_id', 1)->first()) {
+            abort(409, __('Error(1007): Unable to load database settings'));
+        }
+
         //update default user
         if (!$user = \App\Models\User::Where('id', 1)->first()) {
             abort(409, __('Error(1005): Admin user could not be updated'));
@@ -313,6 +327,7 @@ class Setup extends Controller {
         $user->last_seen = now();
         $user->creatorid = 0;
         $user->unique_id = str_unique();
+        $user->timezone = $settings->settings_system_timezone;
         $user->save();
 
         //create spaces [TODO][SPACES] uncomment this for spaces
@@ -473,7 +488,7 @@ class Setup extends Controller {
                 'url' => url()->current(),
                 'domain' => request()->getHost(),
             ]);
-        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+        } catch (\Illuminate\Http\Client\ConnectionException$e) {
             //nothing
         }
 

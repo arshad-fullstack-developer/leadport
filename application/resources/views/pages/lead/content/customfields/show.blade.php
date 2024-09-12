@@ -10,7 +10,7 @@
 
         <span class="x-data-title">{{ $field->customfields_title }}:</span>
         <span class="x-data-content {{ $field->customfields_datatype }}">{!!
-            _clean(customFieldValueDisplay($field->customfields_name, $lead, $field->customfields_datatype)) !!}</span>
+            customFieldValueDisplay($field->customfields_name, $lead, $field->customfields_datatype) !!}</span>
 
 </div>
 @endforeach

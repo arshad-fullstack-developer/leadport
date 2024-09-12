@@ -177,6 +177,7 @@ class Index {
                     'visibility.stats_toggle_button' => true,
                     'visibility.tasks_checkbox' => true,
                     'visibility.tasks_col_mytime' => true,
+                    'visibility.filter_panel_client_project' => true,
                 ]);
                 if (auth()->user()->role_id == 1) {
                     config([
@@ -203,7 +204,7 @@ class Index {
         if (request('taskresource_type') == '' || request('taskresource_type') == 'client') {
             //team member with global permissions
             if (auth()->user()->is_team) {
-                if (auth()->user()->role->role_tasks >= 2 && auth()->user()->role->role_tasks_scope == 'gobal') {
+                if (auth()->user()->role->role_tasks >= 2 || \App\Models\ProjectManager::Where('projectsmanager_userid', auth()->id())->exists()) {
                     config([
                         //visibility
                         'visibility.list_page_actions_add_button' => true,
@@ -248,6 +249,7 @@ class Index {
             config([
                 'visibility.tasks_filter_milestone' => true,
                 'visibility.tasks_col_project' => false,
+                'visibility.filter_panel_client_project' => false,
             ]);
 
             //with permission to add tasks (team or client)

@@ -81,8 +81,8 @@ return [
     | correspond to a connection in your database configuration options.
     |
      */
-    //[MT]
-    'connection' => env('LANDLORD_DB_CONNECTION', 'landlord'),
+
+    'connection' => 'landlord',
 
     /*
     |--------------------------------------------------------------------------

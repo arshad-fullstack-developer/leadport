@@ -256,6 +256,16 @@
                 </label>
             </div>
 
+            <!--calendar-->
+            <div class="col-sm-12 col-lg-4 m-b-10">
+                <label class="custom-control custom-checkbox">
+                    <input type="checkbox" name="package_module_calendar" class="custom-control-input"
+                        {{ runtimePrechecked($package->package_module_calendar ?? '') }}>
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">@lang('lang.calendar')</span>
+                </label>
+            </div>
+
             <!--time_tracking-->
             <div class="col-sm-12 col-lg-4 m-b-10">
                 <label class="custom-control custom-checkbox">

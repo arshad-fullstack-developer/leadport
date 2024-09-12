@@ -1,16 +1,12 @@
 <?php
 
 /** ---------------------------------------------------------------------------------------------------------------
- * 
- * This middleware is a copy of the service provider (ConfigMailServiceProvider) in the main Grow CRM
- *      - We have used middleware because service providers were not working well in multi-tenancy
- *      - all the logic has been added to a helper function, so that we can also call it in cronjobs (becase 
- *            middleware is not executed in the cronbobs)
  *
+ * Boot settings from inside the helper file BootHelper.php
  *
  * @package    Grow CRM
  * @author     NextLoop
- * @revised    29 April 2023
+ * @revised    12 May 2024
  *----------------------------------------------------------------------------------------------------------------*/
 
 namespace App\Http\Middleware\General;
@@ -31,9 +27,12 @@ class BootMail {
             return $next($request);
         }
 
-        //boot mail settings (see notes in main comment above)
-        middlewareBootMail();
-
+        //boot mail settings
+        if (env('MT_TPYE')) {
+            middlewareSaaSBootMail();
+        } else {
+            middlewareBootMail();
+        }
 
         return $next($request);
 

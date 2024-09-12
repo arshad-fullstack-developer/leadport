@@ -1358,7 +1358,7 @@ class Tasks extends Controller {
             'event_parent_id' => $task->task_id,
             'event_parent_title' => $task->task_title,
             'event_show_item' => 'yes',
-            'event_show_in_timeline' => 'no',
+            'event_show_in_timeline' => config('system.settings_projects_events_show_task_status_change'),
             'event_clientid' => $task->task_clientid,
             'eventresource_type' => 'project',
             'eventresource_id' => $task->task_projectid,
@@ -2104,7 +2104,7 @@ class Tasks extends Controller {
                 'event_parent_id' => $task->task_projectid,
                 'event_parent_title' => $task->project_title,
                 'event_show_item' => 'yes',
-                'event_show_in_timeline' => 'yes',
+                'event_show_in_timeline' => config('system.settings_projects_events_show_task_status_change'),
                 'eventresource_type' => 'project',
                 'eventresource_id' => $task->task_projectid,
                 'event_notification_category' => 'notifications_tasks_activity',
@@ -2701,7 +2701,7 @@ class Tasks extends Controller {
                 'event_parent_id' => $task->task_id,
                 'event_parent_title' => $task->task_title,
                 'event_show_item' => 'yes',
-                'event_show_in_timeline' => 'no',
+                'event_show_in_timeline' => config('system.settings_projects_events_show_task_status_change'),
                 'event_clientid' => $task->task_clientid,
                 'eventresource_type' => 'project',
                 'eventresource_id' => $task->task_projectid,
@@ -3144,7 +3144,9 @@ class Tasks extends Controller {
             'copy_checklist' => (request('copy_checklist') == 'on') ? true : false,
             'copy_files' => (request('copy_files') == 'on') ? true : false,
         ];
-        $new_task = $this->taskrepo->cloneTask($task, $project, $data);
+        if (!$new_task = $this->taskrepo->cloneTask($task, $project, $data)) {
+            abort(409, __('lang.error_request_could_not_be_completed'));
+        }
 
         //assign the task to self, for none admin users
         if (auth()->user()->is_team) {
@@ -3154,7 +3156,7 @@ class Tasks extends Controller {
         }
 
         //get table friendly collection
-        $tasks = $this->taskrepo->search($new_task->task_id);
+        $tasks = $this->taskrepo->search($new_task->task_id, ['apply_filters' => false]);
 
         //process for timers
         $this->processTasks($tasks);
@@ -3172,8 +3174,6 @@ class Tasks extends Controller {
                 $task->fields = $this->getCustomFields($task);
             }
         }
-
-        Log::info("foo task", ['task' => $tasks->first()]);
 
         //payload
         $payload = [

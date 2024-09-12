@@ -67,7 +67,7 @@
         <span class="label {{ runtimeEstimateStatusColors($estimate->bill_status, 'label') }}">{{
             runtimeLang($estimate->bill_status) }}</span>
 
-        <!--estimate viewed-->
+        <!--estimate is scheduled-->
         @if($estimate->bill_publishing_type == 'scheduled' && $estimate->bill_publishing_scheduled_status == 'pending')
         <span class="label label-icons label-icons-warning" data-toggle="tooltip" data-placement="top"
             title="@lang('lang.scheduled_publishing_info'): {{ runtimeDate($estimate->bill_publishing_scheduled_date) }}"><i

@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Responses\Webform\SaveResponse;
 use App\Repositories\AttachmentRepository;
 use App\Repositories\WebformRepository;
+use App\Repositories\EventRepository;
+use App\Repositories\EventTrackingRepository;
 
 class Webform extends Controller {
 
@@ -20,10 +22,14 @@ class Webform extends Controller {
      */
     protected $webformrepo;
     protected $attachmentrepo;
+    protected $eventrepo;
+    protected $trackingrepo;
 
     public function __construct(
         WebformRepository $webformrepo,
-        AttachmentRepository $attachmentrepo
+        AttachmentRepository $attachmentrepo,
+        EventRepository $eventrepo,
+        EventTrackingRepository $trackingrepo,
     ) {
 
         //parent
@@ -31,7 +37,8 @@ class Webform extends Controller {
 
         $this->webformrepo = $webformrepo;
         $this->attachmentrepo = $attachmentrepo;
-
+        $this->eventrepo = $eventrepo;
+        $this->trackingrepo = $trackingrepo;
     }
 
     /**
@@ -62,7 +69,7 @@ class Webform extends Controller {
     }
 
     /**
-     * Display Webform in browser
+     * save submitted Webform
      *
      * @return \Illuminate\Http\Response
      */
@@ -124,6 +131,9 @@ class Webform extends Controller {
         $lead->lead_country = request('lead_country');
         $lead->lead_title = ($webform->webform_lead_title != '') ? $webform->webform_lead_title : request('lead_firstname') . ' ' . request('lead_lastname');
         $lead->lead_creatorid = 0;
+        $lead->lead_input_source = 'webform';
+        $lead->lead_input_ip_address = request()->ip();
+        $lead->lead_uniqueid = str_unique();
         $lead->save();
 
         //save every other possible field
@@ -155,6 +165,57 @@ class Webform extends Controller {
         //increase for counter
         $webform->webform_submissions = $webform->webform_submissions + 1;
         $webform->save();
+
+        //assign users
+        $assigned_users = [];
+        $preset_users = \App\Models\WebformAssigned::Where('webformassigned_formid', $id)->get();
+        foreach ($preset_users as $preset_user) {
+            $assigned = new \App\Models\LeadAssigned;
+            $assigned->leadsassigned_leadid = $lead->lead_id;
+            $assigned->leadsassigned_userid = $preset_user->webformassigned_userid;
+            $assigned->save();
+            $assigned_users[] = $preset_user->webformassigned_userid;
+        }
+
+        /** ----------------------------------------------
+         * record assignment events and send emails
+         * ----------------------------------------------*/
+        foreach ($assigned_users as $assigned_user_id) {
+            if ($assigned_user = \App\Models\User::Where('id', $assigned_user_id)->first()) {
+                $data = [
+                    'event_creatorid' => 0,
+                    'event_item' => 'assigned',
+                    'event_item_id' => '',
+                    'event_item_lang' => 'event_assigned_user_to_a_lead',
+                    'event_item_lang_alt' => 'event_assigned_user_to_a_lead_alt',
+                    'event_item_content' => __('lang.assigned'),
+                    'event_item_content2' => $assigned_user_id,
+                    'event_item_content3' => $assigned_user->first_name,
+                    'event_parent_type' => 'lead',
+                    'event_parent_id' => $lead->lead_id,
+                    'event_parent_title' => $lead->lead_title,
+                    'event_show_item' => 'yes',
+                    'event_show_in_timeline' => 'no',
+                    'event_clientid' => '',
+                    'eventresource_type' => 'lead',
+                    'eventresource_id' => $lead->lead_id,
+                    'event_notification_category' => 'notifications_new_assignement',
+                ];
+                //record event
+                if ($event_id = $this->eventrepo->create($data)) {
+                    //record notification (skip the user creating this event)
+                    $emailusers = $this->trackingrepo->recordEvent($data, [$assigned_user_id], $event_id);
+                }
+
+                /** ----------------------------------------------
+                 * send email [assignment]
+                 * ----------------------------------------------*/
+                if ($assigned_user->notifications_new_assignement == 'yes_email') {
+                    $mail = new \App\Mail\LeadAssignment($assigned_user, $data, $lead);
+                    $mail->build();
+                }
+            }
+        }
 
         /** ----------------------------------------------
          * send email to admin users

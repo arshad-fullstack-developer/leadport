@@ -151,6 +151,7 @@ class EstimateAutomationRepository {
         $project->project_status = $estimate->estimate_automation_project_status;
         $project->project_title = $estimate->estimate_automation_project_title;
         $project->project_creatorid = 0;
+        $project->project_uniqueid = str_unique();
         $project->project_date_start = now();
         $project->project_billing_rate = $this->settings->settings_projects_default_hourly_rate;
         $project->clientperm_tasks_view = $this->settings->settings_projects_clientperm_tasks_view;
@@ -160,6 +161,7 @@ class EstimateAutomationRepository {
         $project->clientperm_expenses_view = $this->settings->settings_projects_clientperm_expenses_view;
         $project->assignedperm_milestone_manage = $this->settings->settings_projects_assignedperm_milestone_manage;
         $project->assignedperm_tasks_collaborate = $this->settings->settings_projects_assignedperm_tasks_collaborate;
+        $project->project_calendar_timezone = config('system.settings_system_timezone');
         $project->save();
 
         //create default milestones
@@ -341,6 +343,7 @@ class EstimateAutomationRepository {
                     foreach ($product_tasks as $task_template) {
                         $task = new \App\Models\Task();
                         $task->task_creatorid = 0;
+                        $task->task_uniqueid = str_unique();
                         $task->task_projectid = $project->project_id;
                         $task->task_clientid = $estimate->bill_clientid;
                         $task->task_title = $task_template->product_task_title;
@@ -349,6 +352,7 @@ class EstimateAutomationRepository {
                         $task->task_status = 1; //default (new)
                         $task->task_milestoneid = $milestone->milestone_id;
                         $task->task_position = $count;
+                        $task->task_calendar_timezone = config('system.settings_system_timezone');
                         $task->save();
 
                         //add to list and map them
@@ -367,6 +371,7 @@ class EstimateAutomationRepository {
 
                     $task = new \App\Models\Task();
                     $task->task_creatorid = 0;
+                    $task->task_uniqueid = str_unique();
                     $task->task_projectid = $project->project_id;
                     $task->task_clientid = $estimate->bill_clientid;
                     $task->task_title = $item->lineitem_description;
@@ -374,6 +379,7 @@ class EstimateAutomationRepository {
                     $task->task_status = 1; //default (new)
                     $task->task_milestoneid = $milestone->milestone_id;
                     $task->task_position = $count;
+                    $task->task_calendar_timezone = config('system.settings_system_timezone');
                     $task->save();
                     $count++;
 

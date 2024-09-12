@@ -31,6 +31,8 @@ class CreateResponse implements Responsable {
             $$key = $value;
         }
 
+        config(['response' => 'create']);
+        
         //render the form
         $html = view('pages/proposals/components/modals/add-edit-inc', compact('page', 'categories', 'templates'))->render();
         $jsondata['dom_html'][] = array(

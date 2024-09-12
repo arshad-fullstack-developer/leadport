@@ -33,10 +33,14 @@ class EmailBillsCron {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
+
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
+
+        //boot theme for pdf css
+        middlewareBootTheme();
 
         //set the language to be used in this cronjon session
         $this->setLanguage();

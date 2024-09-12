@@ -15,19 +15,21 @@ use App\Http\Responses\Common\ChangeCategoryResponse;
 use App\Http\Responses\Contracts\AttachProjectResponse;
 use App\Http\Responses\Contracts\ChangeCategoryUpdateResponse;
 use App\Http\Responses\Contracts\ChangeStatusResponse;
+use App\Http\Responses\Contracts\CreateCloneResponse;
 use App\Http\Responses\Contracts\CreateResponse;
 use App\Http\Responses\Contracts\DestroyResponse;
 use App\Http\Responses\Contracts\EmailResponse;
 use App\Http\Responses\Contracts\IndexResponse;
 use App\Http\Responses\Contracts\PublishResponse;
+use App\Http\Responses\Contracts\PublishScheduledResponse;
 use App\Http\Responses\Contracts\SignatureResponse;
 use App\Http\Responses\Contracts\StoreResponse;
 use App\Http\Responses\Documents\ShowEditResponse;
 use App\Http\Responses\Documents\ShowPreviewResponse;
-use App\Http\Responses\Contracts\CreateCloneResponse;
 use App\Models\Category;
 use App\Models\Contract;
 use App\Repositories\CategoryRepository;
+use App\Repositories\CloneContractRepository;
 use App\Repositories\ContractRepository;
 use App\Repositories\EmailerRepository;
 use App\Repositories\EstimateGeneratorRepository;
@@ -35,7 +37,6 @@ use App\Repositories\EstimateRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
 use App\Repositories\UserRepository;
-use App\Repositories\CloneContractRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -519,71 +520,8 @@ class Contracts extends Controller {
      */
     public function publish($id) {
 
-        //get the project
-        $documents = $this->contractrepo->search($id);
-        $document = $documents->first();
-
-        //get the estimate
-        if ($estimate = \App\Models\Estimate::Where('bill_contractid', $id)->Where('bill_estimate_type', 'document')->first()) {
-            $value = $estimate->bill_final_amount;
-        } else {
-            $value = 0;
-        }
-
-        //mark as published
-        $document->doc_status = 'awaiting_signatures';
-        $document->doc_date_published = now();
-        $document->doc_date_last_emailed = now();
-        $document->save();
-
-        //refresh contract
-        $this->contractrepo->refreshContract($document->doc_id);
-
-        /** ----------------------------------------------
-         * record event [comment]
-         * ----------------------------------------------*/
-        $data = [
-            'event_creatorid' => auth()->id(),
-            'event_item' => 'contract',
-            'event_item_id' => $document->doc_id,
-            'event_item_lang' => 'event_created_contract',
-            'event_item_content' => __('lang.contract') . ' - ' . runtimeContractIdFormat($document->doc_id),
-            'event_item_content2' => '',
-            'event_parent_type' => 'contract',
-            'event_parent_id' => $document->doc_id,
-            'event_parent_title' => $document->doc_title,
-            'event_clientid' => $document->doc_client_id,
-            'event_show_item' => 'yes',
-            'event_show_in_timeline' => 'yes',
-            'eventresource_type' => (is_numeric($document->doc_project_id)) ? 'project' : 'client',
-            'eventresource_id' => (is_numeric($document->doc_project_id)) ? $document->doc_project_id : $document->doc_client_id,
-            'event_notification_category' => 'notifications_billing_activity',
-        ];
-        $event_id = $this->eventrepo->create($data);
-
-        /** ----------------------------------------------
-         * send email - client users - [queued]
-         * ----------------------------------------------*/
-        if ($document->docresource_type == 'client') {
-            if ($event_id = $this->eventrepo->create($data)) {
-                //get users (main client)
-                $users = $this->userrepo->getClientUsers($document->doc_client_id, 'owner', 'ids');
-                //record notification
-                $emailusers = $this->trackingrepo->recordEvent($data, $users, $event_id);
-            }
-            if (isset($emailusers) && is_array($emailusers)) {
-                $data = [
-                    'user_type' => 'client',
-                    'contract_value' => $value,
-                ];
-                //send to users
-                if ($users = \App\Models\User::WhereIn('id', $emailusers)->get()) {
-                    foreach ($users as $user) {
-                        $mail = new \App\Mail\ContractCreated($user, $data, $document);
-                        $mail->build();
-                    }
-                }
-            }
+        if (!$this->contractrepo->publish($id)) {
+            abort(409, __('lang.error_request_could_not_be_completed'));
         }
 
         //payload
@@ -593,6 +531,64 @@ class Contracts extends Controller {
 
         //return the reposnse
         return new PublishResponse($payload);
+    }
+
+    /**
+     * schedule an contract for publising later
+     * @param int $id contract id
+     * @return \Illuminate\Http\Response
+     */
+    public function publishScheduled($id) {
+
+        //does the contract exist
+        if (!$contract = \App\Models\Contract::Where('doc_id', $id)->first()) {
+            abort(404);
+        }
+
+        //custom error messages
+        $messages = [
+            'publishing_option_date.required' => __('lang.schedule_date') . '-' . __('lang.is_required'),
+        ];
+
+        //validate
+        $validator = Validator::make(request()->all(), [
+            'publishing_option_date' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (strtotime($value) < strtotime(now()->toDateString())) {
+                        return $fail(__('lang.schedule_date_cannot_be_past'));
+                    }
+                },
+            ],
+        ], $messages);
+
+        //errors
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $messages = '';
+            foreach ($errors->all() as $message) {
+                $messages .= "<li>$message</li>";
+            }
+            //redirect and show error (to make show the publish dropdown works again)
+            request()->session()->flash('error-notification', __('lang.error') . ': ' . $messages);
+            $jsondata['redirect_url'] = url("/contracts/$id");
+            return response()->json($jsondata);
+        }
+
+        //secdule the contract
+        $contract->doc_publishing_type = 'scheduled';
+        $contract->doc_publishing_scheduled_date = request('publishing_option_date');
+        $contract->doc_publishing_scheduled_status = 'pending';
+        $contract->doc_publishing_scheduled_log = '';
+        $contract->save();
+
+        //reponse payload
+        $payload = [
+            'id' => $id,
+        ];
+
+        //response
+        return new PublishScheduledResponse($payload);
     }
 
     /**
@@ -1145,8 +1141,7 @@ class Contracts extends Controller {
         return $stats;
     }
 
-
-        /**
+    /**
      * show the form for cloning an project
      * @param object CategoryRepository instance of the repository
      * @return \Illuminate\Http\Response

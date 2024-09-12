@@ -6,7 +6,7 @@
             <select name="customfields_datapayload[{{ $field->customfields_id }}]" id="customfields_datapayload[{{ $field->customfields_id }}]"
                 class="form-control form-control-sm select2-basic select2-multiple select2-tags-with-spaces select2-hidden-accessible"
                 multiple="multiple" tabindex="-1" aria-hidden="true">
-                {!! _clean(runtimeCustomFieldsJsonLists($field->customfields_datapayload, true)) !!}
+                {!! runtimeCustomFieldsJsonLists($field->customfields_datapayload, true) !!}
             </select>
         </div>
     </div>

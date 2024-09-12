@@ -26,6 +26,7 @@
         @endif
         @if($document->doc_type == 'contract')
         <!--more button (team)-->
+        <!--#/more button-->
         <a type="button" class="btn btn-secondary btn-sm waves-effect text-left"
             href="{{ url('/contracts/'.$document->doc_id) }}">@lang('lang.exit_editing_mode')</a>
         @endif

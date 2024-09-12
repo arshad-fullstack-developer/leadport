@@ -40,7 +40,7 @@ class contentResponse implements Responsable {
         if ($type == 'show-main') {
 
             // LEFT PANEL - MAIN (code is copied from ShowResponse)
-            $html = view('pages/lead/leftpanel', compact('page', 'lead', 'progress'))->render();
+            $html = view('pages/lead/leftpanel', compact('page', 'lead', 'progress', 'attachment_tags'))->render();
             $jsondata['dom_html'][] = array(
                 'selector' => '#card-leads-left-panel',
                 'action' => 'replace',

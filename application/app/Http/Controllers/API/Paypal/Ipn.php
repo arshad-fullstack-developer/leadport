@@ -16,7 +16,6 @@ use Log;
 class Ipn extends Controller {
 
     //paypal ip url (live or sandbox)
-    var $ipn_url = '';
 
     public function __construct() {
 
@@ -24,13 +23,6 @@ class Ipn extends Controller {
         parent::__construct();
 
         $this->middleware('guest');
-
-        //set paypal url
-        if (config('system.settings_paypal_mode') == 'sandbox') {
-            $this->ipn_url = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
-        } else {
-            $this->ipn_url = 'https://ipnpb.paypal.com/cgi-bin/webscr';
-        }
 
     }
 
@@ -66,15 +58,22 @@ class Ipn extends Controller {
      */
     public function initialiseIPN() {
 
+        //set paypal url
+        if (config('system.settings_paypal_mode') == 'sandbox') {
+            $ipn_url = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
+        } else {
+            $ipn_url = 'https://ipnpb.paypal.com/cgi-bin/webscr';
+        }
+
         //add the verification string into the post received from paypal
         request()->merge(['cmd' => '_notify-validate']);
         $payload = request()->all();
 
         //logs
-        Log::info("ipn call received. Have added verification string. Will now post back to paypal", ['process' => '[paypal-webhooks]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'payload' => $payload]);
+        Log::info("ipn call received. Have added verification string. Will now post back to paypal - URL ($ipn_url)", ['process' => '[paypal-webhooks]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'payload' => $payload]);
 
         //send back to paypal
-        $response = Http::asForm()->post($this->ipn_url, $payload);
+        $response = Http::asForm()->post($ipn_url, $payload);
 
         //validate if the handshake request was successful
         if ($response->failed()) {

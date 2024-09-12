@@ -4,7 +4,9 @@
     data-target="#cardModal" data-url="{{ urlResource('/leads/'.$lead->lead_id) }}" data-lead-id="{{ $lead->lead_id }}"
     data-loading-target="main-top-nav-bar" id="card_lead_{{ $lead->lead_id }}">
     <!--cover image-->
-    <div id="kanban-card-cover-image-{{ $lead->lead_id }}" class="kanban-card-cover-image {{ runtimeKanbanCoverImage($lead->lead_cover_image) }}" {!! runtimeCoverImage($lead->lead_cover_image_uniqueid, $lead->lead_cover_image_filename) !!}>
+    <div id="kanban-card-cover-image-{{ $lead->lead_id }}"
+        class="kanban-card-cover-image {{ runtimeKanbanCoverImage($lead->lead_cover_image) }}" {!!
+        runtimeCoverImage($lead->lead_cover_image_uniqueid, $lead->lead_cover_image_filename) !!}>
 
     </div>
     <div class="kanban-card-content-comntainer">
@@ -152,7 +154,10 @@
         <div class="x-footer row">
             <div class="col-6 x-icons">
 
-
+                <!--captured via a webform-->
+                @if($lead->lead_input_source == 'webform')
+                <span class="x-icon" data-toggle="tooltip" title="@lang('lang.source_webform')"><i class="sl-icon-cloud-upload"></i></span>
+                @endif
 
                 <!--created by you-->
                 @if($lead->lead_creatorid == auth()->user()->id)

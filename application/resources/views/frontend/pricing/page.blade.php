@@ -76,7 +76,8 @@
 
                                 <!--package_limits_projects-->
                                 <li>
-                                    @if($package->package_limits_projects > 0 || $package->package_limits_projects == -1)
+                                    @if($package->package_limits_projects > 0 || $package->package_limits_projects ==
+                                    -1)
                                     <span class="x-icon x-icon-yes"><i class="mdi mdi-check"></i></span>
                                     @else
                                     <span class="x-icon x-icon-no"><i class="mdi mdi-window-close"></i></span>
@@ -163,6 +164,16 @@
                                     <span class="x-icon x-icon-no"><i class="mdi mdi-window-close"></i></span>
                                     @endif
                                     <span class="x-text">@lang('lang.tickets')</span>
+                                </li>
+
+                                <!--package_module_calendar-->
+                                <li>
+                                    @if($package->package_module_calendar == 'yes')
+                                    <span class="x-icon x-icon-yes"><i class="mdi mdi-check"></i></span>
+                                    @else
+                                    <span class="x-icon x-icon-no"><i class="mdi mdi-window-close"></i></span>
+                                    @endif
+                                    <span class="x-text">@lang('lang.calendar')</span>
                                 </li>
 
                                 <!--package_module_expense-->
@@ -273,7 +284,8 @@
 
                                 <!--package_limits_projects-->
                                 <li>
-                                    @if($package->package_limits_projects > 0 || $package->package_limits_projects == -1)
+                                    @if($package->package_limits_projects > 0 || $package->package_limits_projects ==
+                                    -1)
                                     <span class="x-icon x-icon-yes"><i class="mdi mdi-check"></i></span>
                                     @else
                                     <span class="x-icon x-icon-no"><i class="mdi mdi-window-close"></i></span>
@@ -362,6 +374,16 @@
                                     <span class="x-text">@lang('lang.tickets')</span>
                                 </li>
 
+                                <!--package_module_calendar-->
+                                <li>
+                                    @if($package->package_module_calendar == 'yes')
+                                    <span class="x-icon x-icon-yes"><i class="mdi mdi-check"></i></span>
+                                    @else
+                                    <span class="x-icon x-icon-no"><i class="mdi mdi-window-close"></i></span>
+                                    @endif
+                                    <span class="x-text">@lang('lang.calendar')</span>
+                                </li>
+
                                 <!--package_module_expense-->
                                 <li>
                                     @if($package->package_module_expense == 'yes')
@@ -427,6 +449,11 @@
 
 
             </div>
+        </div>
+
+        <!--FOOTER-->
+        <div class="pricing-summary-content p-t-10">
+            {!! $content->frontend_data_3 !!}
         </div>
 
     </div>

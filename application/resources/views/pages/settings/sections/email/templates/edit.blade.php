@@ -21,7 +21,7 @@
                     <label class="control-label col-form-label required">{{ cleanLang(__('lang.email_body')) }}</label>
                     @endif
                     <textarea class="emailtemplate_body" name="emailtemplate_body" id="emailtemplate_body">
-                {!! _clean($template->emailtemplate_body) !!}
+                {!! $template->emailtemplate_body !!}
                     </textarea>
                 </div>
                 @if($template->emailtemplate_show_enabled == 'yes')
@@ -41,7 +41,7 @@
                 <!--form buttons-->
                 <div class="text-right p-t-30" id="email-templates-buttons-container">
                     <button type="submit" id="submitButton"
-                        class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request"
+                        class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request"
                         data-url="{{ url('settings/email/templates/'.$template->emailtemplate_id) }}" data-type="form"
                         data-loading-target="email-templates-buttons-container" data-form-id="email-templates-editing"
                         data-ajax-type="POST" data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>

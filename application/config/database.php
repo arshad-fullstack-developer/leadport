@@ -23,7 +23,7 @@ return [
     |
      */
 
-     'default' => env('DB_CONNECTION', 'mysql'),
+     'default' => 'tenant',
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
             'driver' => 'mysql',
             'host' => env_db_host(),
             'port' => env_db_port(),
-            'database' => env('TENANT_DB_DATABASE', ''),
+            'database' => null,
             'username' => env_db_user(),
             'password' => env_db_password(),
             'unix_socket' => '',
@@ -103,20 +103,6 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
-        ],
-       'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'leadport'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-            'engine' => null,
         ],
 
     ],

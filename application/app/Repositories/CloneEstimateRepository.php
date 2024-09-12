@@ -17,9 +17,9 @@ namespace App\Repositories;
 
 use App\Repositories\EstimateGeneratorRepository;
 use App\Repositories\EstimateRepository;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Log;
-use Illuminate\Support\Facades\File;
 
 class CloneEstimateRepository {
 
@@ -194,6 +194,13 @@ class CloneEstimateRepository {
         $new_estimate->bill_visibility = 'visible';
         $new_estimate->save();
 
+        //[automation]
+        /* [july 2024] we are not cloning automations so will skip this
+        if ($estimate->estimate_automation_status == 'enabled') {
+        $this->cloneAutomation($estimate, $new_estimate);
+        }
+         */
+
         Log::info("cloning estimate completed", ['process' => '[CloneEstimateRepository]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'new_estimate_id' => $new_estimate->bill_estimateid]);
 
         //return estimate id | estimate object
@@ -202,6 +209,32 @@ class CloneEstimateRepository {
         } else {
             return $new_estimate;
         }
+    }
+
+    /**
+     * clone automation
+     * [july 2024] we are not cloning automations so will skip this
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function cloneAutomation($estimate, $new_estimate) {
+
+        Log::info("cloning estimate automation - started", ['process' => '[clone-estimate]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+
+        //clone the assigned users
+        $assigned_users = \App\Models\AutomationAssigned::Where('automationassigned_resource_type', 'estimate')
+            ->Where('automationassigned_resource_id', $estimate->bill_estimateid)
+            ->get();
+
+        //clone each default assigned user
+        foreach ($assigned_users as $assigned_user) {
+            $new_user = $assigned_user->replicate();
+            $new_user->automationassigned_id = null;
+            $new_user->automationassigned_resource_id = $new_estimate->bill_estimateid;
+            $new_user->save();
+        }
+
+        Log::info("cloning estimate automation - ended", ['process' => '[clone-estimate]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
     }
 
     /**

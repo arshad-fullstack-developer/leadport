@@ -28,7 +28,7 @@
         <div id="webform">
             <!--form fields-->
             <div class="webform-fields-wrapper" id="webform-fields-wrapper">
-                {!! _clean($fields) !!}
+                {!! $fields !!}
             </div>
 
             <!--form errors-->

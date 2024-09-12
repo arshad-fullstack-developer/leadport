@@ -10,10 +10,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Http;
+use DB;
 use Log;
-use Illuminate\Support\Facades\DB;
-
 
 class Test extends Controller {
 
@@ -39,6 +37,18 @@ class Test extends Controller {
      */
     public function index() {
 
-        $foo = "ALTER TABLE `tableconfig` ADD `tableconfig_column_41` varchar(20) COLLATE 'utf8_general_ci' NULL DEFAULT 'hidden' COMMENT 'hidden|displayed'";
+        DB::statement('
+        DELETE a
+        FROM projects_assigned a
+        INNER JOIN (
+          SELECT projectsassigned_userid, projectsassigned_projectid, MIN(projectsassigned_id) AS min_id
+          FROM projects_assigned
+          GROUP BY projectsassigned_userid, projectsassigned_projectid
+        ) b ON a.projectsassigned_userid = b.projectsassigned_userid
+          AND a.projectsassigned_projectid = b.projectsassigned_projectid
+          AND a.projectsassigned_id <> b.min_id;');
+
+        dd('done');
     }
+
 }

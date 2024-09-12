@@ -1,7 +1,7 @@
 <div class="card-description" id="card-description">
     <div class="x-heading"><i class="mdi mdi-file-document-box"></i>{{ cleanLang(__('lang.description')) }}</div>
     <div class="x-content rich-text-formatting" id="card-description-container">
-        {!! _clean($lead->lead_description) !!}
+        {!! clean($lead->lead_description) !!}
     </div>
     @if($lead->permission_edit_lead)
     <!--buttons: edit-->

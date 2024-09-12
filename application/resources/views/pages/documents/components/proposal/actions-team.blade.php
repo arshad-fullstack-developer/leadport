@@ -17,15 +17,71 @@
         @endif
 
         @if(config('visibility.document_options_buttons'))
+        
         <!--publish-->
         @if($document->doc_status == 'draft')
-        <button type="button" data-toggle="tooltip" title="@lang('lang.publish_document')"
-            class="list-actions-button btn btn-page-actions waves-effect waves-dark confirm-action-info"
-            href="javascript:void(0)" data-confirm-title="@lang('lang.publish_document')"
-            data-confirm-text="@lang('lang.documeny_publish_confirm')"
-            data-url="{{ urlResource('/'.$document->doc_type.'s/'.$document->doc_id.'/publish') }}"
-            id="document-action-publish"><i class="sl-icon-share-alt"></i></button>
+        <span class="dropdown">
+            <button type="button" data-toggle="dropdown" title="{{ cleanLang(__('lang.publish_document')) }}"
+                aria-haspopup="true" aria-expanded="false"
+                class="data-toggle-tooltip  list-actions-button btn btn-page-actions waves-effect waves-dark">
+                <i class="sl-icon-share-alt"></i>
+            </button>
+            <div class="dropdown-menu w-px-250 p-t-20 p-l-20 p-r-20 js-stop-propagation"
+                aria-labelledby="listTableAction">
+                <div class="form-group form-group-checkbox row m-b-0">
+                    <div class="col-12">
+                        <input type="checkbox" id="publishing_option_now" name="publishing_option_now"
+                            class="filled-in chk-col-light-blue publishing_option"
+                            data-url="{{ urlResource('/'.$document->doc_type.'s/'.$document->doc_id.'/publish') }}"
+                            {{ runtimePreChecked2($document->doc_publishing_type, 'instant') }}>
+                        <label class="p-l-30" for="publishing_option_now">@lang('lang.publish_now') <span
+                                class="align-middle text-info font-16" data-toggle="tooltip"
+                                title="@lang('lang.it_will_be_sent_now')" data-placement="top"><i
+                                    class="ti-info-alt"></i></span></label>
+                    </div>
+                </div>
+
+                <div class="modal-selector m-l--20 m-r--20 p-t-5 p-b-5 m-t-10 p-l-20 p-r-20 p-t-10"
+                    id="publishing_option_later_container">
+
+                    <div class="form-group form-group-checkbox row  m-b-0">
+                        <div class="col-12">
+                            <input type="checkbox" id="publishing_option_later" name="publishing_option_later"
+                                class="filled-in chk-col-light-blue publishing_option"
+                                data-url="{{ urlResource('/'.$document->doc_type.'s/'.$document->doc_id.'/publish/scheduled') }}"
+                                data-type="form" data-form-id="publishing_option_later_container" data-ajax-type="post"
+                                {{ runtimePreChecked2($document->doc_publishing_type, 'scheduled') }}>
+                            <label class="p-l-30" for="publishing_option_later">@lang('lang.publish_later') <span
+                                    class="align-middle text-info font-16" data-toggle="tooltip"
+                                    title="@lang('lang.it_will_be_sent_schedule')" data-placement="top"><i
+                                        class="ti-info-alt"></i></span></label>
+                        </div>
+                    </div>
+
+                    <!--date-->
+                    <div class="form-group row m-b-10">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-sm pickadate publishing_option_date"
+                                autocomplete="off" name="publishing_option_date"
+                                value="{{ runtimeDatepickerDate($document->doc_publishing_scheduled_date ?? '') }}"
+                                {{ runtimePublihItemDate($document->doc_publishing_type) }}>
+                            <input class="mysql-date" type="hidden" name="publishing_option_date"
+                                id="publishing_option_date" value="{{ $document->doc_publishing_scheduled_date	 ?? '' }}">
+                        </div>
+                    </div>
+                </div>
+                <!--form buttons-->
+                <div class="text-right p-t-5 m-b-10">
+                    <button type="submit" id="publishing_option_button"
+                        class="btn btn-sm btn-info waves-effect text-left" data-url="" data-loading-target=""
+                        data-ajax-type="POST" data-lang-error-message="@lang('lang.schedule_date_is_requried')"
+                        data-lang-publish="@lang('lang.publish_now')" data-lang-schedule="@lang('lang.schedule')"
+                        data-on-start-submit-button="disable">{{ runtimePublihItemButtonLang($document->doc_publishing_type) }}</button>
+                </div>
+            </div>
+        </span>
         @endif
+
         <!--email invoice-->
         <button type="button" data-toggle="tooltip" title="@lang('lang.send_email')"
             class="list-actions-button btn btn-page-actions waves-effect waves-dark confirm-action-info"
@@ -91,7 +147,18 @@
                     href="javascript:void(0)" data-confirm-title="{{ cleanLang(__('lang.mark_as_revised')) }}"
                     id="bill-actions-dettach-project" data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
                     data-url="{{ url('/proposals/'.$document->doc_id.'/change-status?status=revised') }}">
-                    <i class="sl-icon-close display-inline-block p-r-5"></i> @lang('lang.mark_as_revised')</a>
+                    <i class="ti-reload display-inline-block p-r-5"></i> @lang('lang.mark_as_revised')</a>
+
+                <!--automation-->
+                <a href="javascript:void(0)"
+                    class="dropdown-item edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                    data-toggle="modal" data-target="#commonModal"
+                    data-url="{{ urlResource('/proposals/'.$document->doc_id.'/edit-automation') }}"
+                    data-loading-target="commonModalBody" data-modal-title="@lang('lang.proposal_automation')"
+                    data-action-url="{{ urlResource('/proposals/'.$document->doc_id.'/edit-automation') }}"
+                    data-action-method="POST" data-action-ajax-loading-target="commonModalBody"><i
+                        class="sl-icon-energy display-inline-block p-r-5"></i>@lang('lang.automation')
+                </a>
 
             </div>
         </span>
@@ -134,7 +201,6 @@
         </a>
         @endif
         @endif
-
 
         <!--delete proposal-->
         @if(config('visibility.delete_document_button'))

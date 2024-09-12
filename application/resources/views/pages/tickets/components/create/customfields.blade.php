@@ -57,7 +57,7 @@
         <select class="select2-basic form-control form-control-sm select2-preselected a-custom-field" id="{{ $field->customfields_name }}"
             name="{{ $field->customfields_name }}" data-preselected="{{ $field->current_value ?? ''}}">
             <option value=""></option>
-            {!! _clean(runtimeCustomFieldsJsonLists($field->customfields_datapayload)) !!}
+            {!! runtimeCustomFieldsJsonLists($field->customfields_datapayload) !!}
         </select>
     </div>
     @endif

@@ -40,7 +40,7 @@ class contentResponse implements Responsable {
         if ($type == 'show-main') {
 
             // LEFT PANEL - MAIN (code is copied from ShowResponse)
-            $html = view('pages/task/leftpanel', compact('page', 'task', 'progress'))->render();
+            $html = view('pages/task/leftpanel', compact('page', 'task', 'progress', 'attachment_tags'))->render();
             $jsondata['dom_html'][] = array(
                 'selector' => '#card-left-panel',
                 'action' => 'replace',
@@ -90,7 +90,7 @@ class contentResponse implements Responsable {
          * show custom fields tab
          * -------------------------------------------------------------------------*/
         if ($type == 'show-custom-fields') {
-            $html = view('pages/task/content/customfields/show', compact('task'))->render();
+            $html = view('pages/task/content/customfields/show', compact('task', 'fields'))->render();
             $jsondata['dom_html'][] = [
                 'selector' => '#card-left-panel',
                 'action' => 'replace',

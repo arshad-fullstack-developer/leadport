@@ -18,6 +18,11 @@
     <!--doc_id-->
     <td class="col_doc_id">
         <a href="{{ url('/proposals/'.$proposal->doc_id) }}">{{ runtimeProposalIdFormat($proposal->doc_id) }}</a>
+        <!--automation-->
+        @if(auth()->user()->is_team && $proposal->proposal_automation_status == 'enabled')
+        <span class="sl-icon-energy text-warning p-l-5" data-toggle="tooltip"
+            title="@lang('lang.proposal_automation')"></span>
+        @endif
     </td>
 
     <!--doc_date_start-->
@@ -65,6 +70,13 @@
     <td class="col_foo">
         <span
             class="label {{ runtimeProposalStatusColors($proposal->doc_status, 'label') }}">{{ runtimeLang($proposal->doc_status) }}</span>
+
+        <!--proposal is scheduled-->
+        @if($proposal->doc_publishing_type == 'scheduled' && $proposal->doc_publishing_scheduled_status == 'pending')
+        <span class="label label-icons label-icons-warning" data-toggle="tooltip" data-placement="top"
+            title="@lang('lang.scheduled_publishing_info'): {{ runtimeDate($proposal->doc_publishing_scheduled_date) }}"><i
+                class="sl-icon-clock"></i></span>
+        @endif
     </td>
 
     @if(config('visibility.proposals_col_action'))
@@ -158,6 +170,18 @@
                         id="bill-actions-dettach-project" data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
                         data-url="{{ url('/proposals/'.$proposal->doc_id.'/change-status?status=revised&ref=list') }}">
                         @lang('lang.mark_as_revised')</a>
+
+                    <!--automation-->
+                    <a href="javascript:void(0)"
+                        class="dropdown-item edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                        data-toggle="modal" data-target="#commonModal"
+                        data-url="{{ urlResource('/proposals/'.$proposal->doc_id.'/edit-automation?ref=list') }}"
+                        data-loading-target="commonModalBody" data-modal-title="@lang('lang.proposal_automation')"
+                        data-action-url="{{ urlResource('/proposals/'.$proposal->doc_id.'/edit-automation?ref=list') }}"
+                        data-action-method="POST"
+                        data-action-ajax-loading-target="commonModalBody">@lang('lang.automation')
+                    </a>
+
                 </div>
             </span>
             @endif

@@ -25,7 +25,7 @@
                 @endif
             </div>
         </div>
-        <div class="p-t-4">{!! _clean($comment->comment_text) !!}</div>
+        <div class="p-t-4">{!! clean($comment->comment_text) !!}</div>
     </div>
 </div>
 @endforeach

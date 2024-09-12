@@ -15,9 +15,9 @@
  *--------------------------------------------------------------------------*/
 namespace App\Repositories;
 
-use Log;
-use Exception;
 use DB;
+use Exception;
+use Log;
 
 class CloneProposalRepository {
 
@@ -51,6 +51,7 @@ class CloneProposalRepository {
         //set new data
         $new_proposal->doc_creatorid = auth()->id();
         $new_proposal->doc_created = now();
+        $new_proposal->doc_unique_id = str_unique();
         $new_proposal->doc_title = $data['doc_title'];
         $new_proposal->docresource_type = $data['docresource_type'];
         $new_proposal->docresource_id = $data['docresource_id'];
@@ -73,6 +74,20 @@ class CloneProposalRepository {
         $new_proposal->doc_status = 'draft';
         $new_proposal->doc_date_status_change = null;
         $new_proposal->save();
+
+        //[cleanup] remove recurring and other unwanted data, inherited from parent
+        $new_proposal->proposal_automation_status = 'disabled';
+        $new_proposal->proposal_automation_project_title = $data['doc_title'];
+        $new_proposal->proposal_automation_project_status = 'in_progress';
+        $new_proposal->proposal_automation_create_tasks = 'no';
+        $new_proposal->proposal_automation_project_email_client = 'no';
+        $new_proposal->proposal_automation_create_invoice = 'no';
+        $new_proposal->proposal_automation_invoice_due_date = 7;
+        $new_proposal->proposal_automation_invoice_email_client = 'no';
+        $new_proposal->proposal_automation_log_created_project_id = null;
+        $new_proposal->proposal_automation_log_created_invoice_id = null;
+        $new_proposal->save();
+
 
         //clone estimate
         if (!$estimate = \App\Models\Estimate::Where('bill_proposalid', $proposal->doc_id)->first()) {
@@ -115,10 +130,43 @@ class CloneProposalRepository {
             }
         }
 
+        //[automation]
+        /* [july 2024] we are not cloning automations so will skip this
+        if ($proposal->proposal_automation_status == 'enabled') {
+        $this->cloneAutomation($proposal, $new_proposal);
+        }
+         */
+
         Log::info("cloning proposal completed. new proposal id (" . $new_proposal->doc_id . ")", ['process' => '[clone-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'payload' => $data]);
 
         //make changes
         return $new_proposal;
+    }
+
+    /**
+     * clone automation
+     * [july 2024] we are not cloning automations so will skip this
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function cloneAutomation($proposal, $new_proposal) {
+
+        Log::info("cloning proposal automation - started", ['process' => '[clone-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+
+        //clone the assigned users
+        $assigned_users = \App\Models\AutomationAssigned::Where('automationassigned_resource_type', 'proposal')
+            ->Where('automationassigned_resource_id', $proposal->doc_id)
+            ->get();
+
+        //clone each default assigned user
+        foreach ($assigned_users as $assigned_user) {
+            $new_user = $assigned_user->replicate();
+            $new_user->automationassigned_id = null;
+            $new_user->automationassigned_resource_id = $new_proposal->doc_id;
+            $new_user->save();
+        }
+
+        Log::info("cloning proposal automation - ended", ['process' => '[clone-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
     }
 
     /**

@@ -51,6 +51,7 @@ class Visibility {
         $this->viewSpaces();
         $this->viewMessages();
         $this->viewReports();
+        $this->viewCalendar();
 
         //done
         return $next($request);
@@ -453,7 +454,7 @@ class Visibility {
     }
 
     /**
-     * visibility of the messages feature [team]
+     * visibility of the reprts feature [team]
      */
     public function viewReports() {
         if (auth()->user()->is_team) {
@@ -461,6 +462,17 @@ class Visibility {
                 if (config('modules.reports')) {
                     config(['visibility.modules.reports' => true]);
                 }
+            }
+        }
+    }
+
+    /**
+     * visibility of the calendar feature [team]
+     */
+    public function viewCalendar() {
+        if (auth()->user()->is_team) {
+            if (config('modules.calendar')) {
+                config(['visibility.modules.calendar' => true]);
             }
         }
     }

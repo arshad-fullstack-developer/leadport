@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TaxRate extends Model {
 
     /**
-     * @primaryKey string - primry key column. 
+     * @primaryKey string - primry key column.
      * @dateFormat string - date storage format
      * @guarded string - allow mass assignment except specified
      * @CREATED_AT string - creation date column

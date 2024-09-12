@@ -24,11 +24,12 @@ class RecurringTasksCron {
             if (\Spatie\Multitenancy\Models\Tenant::current() == null) {
                 return;
             }
-            //boot system settings
-            middlwareBootSystem();
-            middlewareBootMail();
         }
 
+        //boot system settings
+        middlewareBootSettings();
+        middlewareBootMail();
+        
         //todays date
         $today = \Carbon\Carbon::now()->format('Y-m-d');
 

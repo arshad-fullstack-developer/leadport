@@ -20,13 +20,14 @@ use App\Http\Responses\Templates\Projects\ShowResponse;
 use App\Http\Responses\Templates\Projects\StoreResponse;
 use App\Http\Responses\Templates\Projects\UpdateDetailsResponse;
 use App\Http\Responses\Templates\Projects\UpdateResponse;
-use App\Repositories\CustomFieldsRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\CustomFieldsRepository;
 use App\Repositories\DestroyRepository;
 use App\Repositories\MilestoneCategoryRepository;
 use App\Repositories\MilestoneRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\TagRepository;
+use App\Repositories\FileFolderRepository;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Validator;
@@ -43,7 +44,7 @@ class Projects extends Controller {
      */
     protected $tagrepo;
 
-        /**
+    /**
      * The customrepo repository instance.
      */
     protected $customrepo;
@@ -51,7 +52,8 @@ class Projects extends Controller {
     public function __construct(
         ProjectRepository $projectrepo,
         TagRepository $tagrepo,
-        CustomFieldsRepository $customrepo
+        CustomFieldsRepository $customrepo,
+        FileFolderRepository $filefolderrepo
     ) {
 
         //parent
@@ -91,7 +93,7 @@ class Projects extends Controller {
         $this->projectrepo = $projectrepo;
         $this->tagrepo = $tagrepo;
         $this->customrepo = $customrepo;
-
+        $this->filefolderrepo = $filefolderrepo;
     }
 
     /**
@@ -167,6 +169,9 @@ class Projects extends Controller {
         if (!$project_id = $this->projectrepo->createTemplate()) {
             abort(409, __('lang.error_request_could_not_be_completed'));
         }
+
+        //add default folders
+        $this->filefolderrepo->addDefault($project_id);
 
         //get the project object (friendly for rendering in blade template)
         $projects = $this->projectrepo->search($project_id, ['apply_filters' => false]);

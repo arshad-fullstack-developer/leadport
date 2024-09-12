@@ -44,7 +44,7 @@ class accountLimitsTeam {
 
         //check limits
         $count = \App\Models\User::Where('type', 'team')->Where('status', 'active')->count();
-        $allowed = config('system.settings_saas_package_limits_clients');
+        $allowed = config('system.settings_saas_package_limits_team');
 
         //maximum reached
         if ($count >= $allowed) {

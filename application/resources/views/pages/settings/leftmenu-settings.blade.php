@@ -363,6 +363,11 @@
                                 id="settings-menu-categories-proposal" href="javascript:void(0);"
                                 data-url="/categories?filter_category_type=proposal&source=ext">{{ cleanLang(__('lang.categories')) }}
                             </a></li>
+                        <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
+                                id="settings-menu-estimates-automation" href="javascript:void(0);"
+                                data-url="/settings/proposals/automation">@lang('lang.automation')
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

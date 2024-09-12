@@ -1,5 +1,5 @@
 <?php
-// Illuminate\Support\Env::disablePutenv();
+
 /*
 |--------------------------------------------------------------------------
 | NEXTLOOP NOTES
@@ -12,10 +12,6 @@
  */
 
 return [
-
-
-
-    
 
     /*
     |--------------------------------------------------------------------------
@@ -41,7 +37,7 @@ return [
     |
      */
 
-    'env' => env('APP_ENV', 'local'),
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +50,7 @@ return [
     |
      */
 
-    'debug' => env('APP_DEBUG', true),
+    'debug' => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -79,7 +75,7 @@ return [
     |
      */
 
-    'url' => env('APP_URL', 'http://localhost/leadport'),
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -175,8 +171,6 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
-        //Multitenancy
-        Spatie\Multitenancy\MultitenancyServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -194,16 +188,10 @@ return [
 
         /*
          * nextloop: Service Providers...
-         * No longer used
-         * see instead these files
-         *    - Middleware\General\BootSystem.php
-         *    - Middleware\General\BootMail.php
-         *    - Middleware\General\BootTheme.php
+         * These must only be run when setup has been completed
+         * A check is added in each service provider
          */
-        //App\Providers\ConfigSystemServiceProvider::class,
-        //App\Providers\ConfigMailServiceProvider::class,
-        //App\Providers\ConfigThemeServiceProvider::class,
-
+        App\Providers\UpdateServiceProvider::class,
     ],
 
     /*
@@ -255,7 +243,6 @@ return [
         'NX' => App\Nextloop\Core::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Multitenancy' => Spatie\Multitenancy\MultitenancyFacade::class,
     ],
 
     /*
