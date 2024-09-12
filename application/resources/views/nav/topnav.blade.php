@@ -8,7 +8,7 @@
             @if(request('dashboard_section') == 'settings')
             <!--exist-->
             <div class="sidenav-menu-item exit-panel m-b-17">
-                <a class="waves-effect waves-dark text-info" href="/home" id="settings-exit-button"
+                <a class="waves-effect waves-dark text-info" href="{{ url('home') }}" id="settings-exit-button"
                     aria-expanded="false" target="_self">
                     <i class="sl-icon-logout text-info"></i>
                     <span id="settings-exit-text" class="font-14">{{ str_limit(__('lang.exit_settings'), 20) }}</span>
@@ -579,7 +579,7 @@
 
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a href="/logout">
+                                <a href="{{ url('logout') }}">
                                     <i class="fa fa-power-off p-r-4"></i> {{ cleanLang(__('lang.logout')) }}</a>
                             </li>
                         </ul>

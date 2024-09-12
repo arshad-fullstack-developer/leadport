@@ -13,10 +13,10 @@
     <base href="<?php echo e(url('/')); ?>" target="_self">
 
     <!--JQUERY & OTHER HEADER JS-->
-    <script src="public/vendor/js/vendor.header.js?v=<?php echo e(config('system.versioning')); ?>"></script>
+    <script src="<?php echo e(asset('public/vendor/js/vendor.header.js?v=')); ?>  <?php echo e(config('system.versioning')); ?>"></script>
 
     <!--BOOTSTRAP-->
-    <link href="public/vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo e(asset('public/vendor/css/bootstrap/bootstrap.min.css')); ?>" rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,12 +35,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!--VENDORS CSS-->
-    <link rel="stylesheet" href="/public/vendor/css/vendor.css?v=<?php echo e(config('system.versioning')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('public/vendor/css/vendor.css?v=')); ?>  <?php echo e(config('system.versioning')); ?>">
     <link rel="stylesheet"
-        href="/public/vendor/js/bootstrap-timepicker/bootstrap-timepicker.css?v=<?php echo e(config('system.versioning')); ?>">
+        href="<?php echo e(asset('public/vendor/js/bootstrap-timepicker/bootstrap-timepicker.css?v=')); ?> <?php echo e(config('system.versioning')); ?>">
 
     <!--ICONS-->
-    <link rel="stylesheet" href="public/vendor/fonts/growcrm-icons/styles.css?v=<?php echo e(config('system.versioning')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('public/vendor/fonts/growcrm-icons/styles.css?v=')); ?> <?php echo e(config('system.versioning')); ?>">
 
     <!--DYNAMIC CSS VARS-->
     <style>
@@ -56,23 +56,23 @@
     <!--THEME STYLE-->
     <!--use the default theme for all external pages (e.g. proposals, cotracts etc) -->
     <?php if(config('visibility.external_view_use_default_theme')): ?>
-    <link href="public/themes/default/css/style.css?v=<?php echo e(config('system.settings_system_javascript_versioning')); ?>"
+    <link href="<?php echo e(asset('public/themes/default/css/style.css?v=')); ?> <?php echo e(config('system.settings_system_javascript_versioning')); ?>"
         rel="stylesheet">
     <?php else: ?>
     <?php if(auth()->check()): ?>
     <link
-        href="public/themes/<?php echo e(auth()->user()->pref_theme); ?>/css/style.css?v=<?php echo e(config('system.settings_system_javascript_versioning')); ?>"
+        href="leadport/public/themes/<?php echo e(auth()->user()->pref_theme); ?>/css/style.css?v=<?php echo e(config('system.settings_system_javascript_versioning')); ?>"
         rel="stylesheet">
     <?php else: ?>
-    <link href="<?php echo e(config('theme.selected_theme_css')); ?> " rel="stylesheet">
+    <link href="<?php echo e(asset('public/themes/default/css/style.css?v=')); ?>" rel="stylesheet">
     <?php endif; ?>
     <?php endif; ?>
 
     <!--USERS CUSTON CSS FILE-->
-    <link href="public/css/custom.css?v=<?php echo e(config('system.versioning')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('public/css/custom.css?v=')); ?> <?php echo e(config('system.versioning')); ?>" rel="stylesheet">
 
     <!--PRINTING CSS-->
-    <link href="public/css/print.css?v=<?php echo e(config('system.versioning')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('public/css/print.css?v=')); ?> <?php echo e(config('system.versioning')); ?>" rel="stylesheet">
 
     <!-- Favicon icon -->
     <link rel="apple-touch-icon" sizes="57x57" href="public/images/favicon/apple-icon-57x57.png">
@@ -184,7 +184,7 @@
     </script>
 
     <!--boot js-->
-    <script src="public/js/core/head.js?v=<?php echo e(config('system.versioning')); ?>"></script>
+    <script src="<?php echo e(asset('public/js/core/head.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
 
     <!--stripe payments js-->
     <?php if(@config('visibility.stripe_js')): ?>

@@ -935,3 +935,21 @@ Did you mean one of these?
 #29 E:\\xampp\\htdocs\\leadport\\application\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
 #30 {main}
 "} 
+[2024-09-12 08:43:48] local.ERROR: Command "optimize:config" is not defined.
+
+Did you mean one of these?
+    module:publish-config
+    optimize
+    optimize:clear {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"optimize:config\" is not defined.
+
+Did you mean one of these?
+    module:publish-config
+    optimize
+    optimize:clear at E:\\xampp\\htdocs\\leadport\\application\\vendor\\symfony\\console\\Application.php:702)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\symfony\\console\\Application.php(258): Symfony\\Component\\Console\\Application->find('optimize:config')
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\symfony\\console\\Application.php(167): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(197): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 E:\\xampp\\htdocs\\leadport\\application\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 {main}
+"} 

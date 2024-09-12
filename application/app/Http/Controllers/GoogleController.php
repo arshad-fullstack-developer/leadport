@@ -70,8 +70,10 @@ class GoogleController extends Controller
                 'htmlLink' => $event->getHtmlLink(),
             ];
         }
-        
-        return view('pages.calendar.calendar', ['events' => $eventDetails]);
+
+        //dd($eventDetails);
+
+        return view('pages.google-calendar.calendar', ['events' => $eventDetails]);
     }
 
     // Create a new event in the user's calendar

@@ -14,3 +14,18 @@
         Route::post('events/create', "Landlord\GoogleController@createEvent");
         Route::post('events/{id}/delete', "Landlord\GoogleController@deleteEvent");
     });
+
+    Route::get('auth/redirect', "GoogleController@redirectToGoogle");
+    Route::get('callback', "GoogleController@handleGoogleCallback");
+    Route::get('eventss', "GoogleController@viewEvents");
+    Route::post('events/create', "GoogleController@createEvent");
+    Route::post('events/{id}/delete', "GoogleController@deleteEvent");
+
+
+    Route::group(['prefix' => 'ctickets'], function () {
+
+        Route::get('index', "TicketController@index");
+        Route::post('create', "TicketController@store");
+        Route::get('{id}/edit', "TicketController@edit");
+
+    });
