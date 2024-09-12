@@ -12359,9 +12359,6 @@ textarea.error {
   border: none;
   outline: none;
 }
-.modal .modal-dialog .modal-header .modal-title {
-  color: #20aee3;
-}
 .modal .modal-dialog .modal-body {
   padding-left: 30px;
   padding-right: 30px;
@@ -12450,7 +12447,7 @@ textarea.error {
     max-width: 450px;
   }
   .modal-lg {
-    max-width: 650px;
+    max-width: 750px;
   }
   .modal-xl {
     max-width: 800px;
@@ -18100,10 +18097,12 @@ chat application Page
 /* ----------------------------------------------------------
 * FIX - adding products on proposal estimate - modal
 * --------------------------------------------------------*/
-.proposals #itemsModal, .contracts #itemsModal {
+.proposals #itemsModal,
+.contracts #itemsModal {
   z-index: 2000;
 }
-.proposals .modal-backdrop, .contracts .modal-backdrop {
+.proposals .modal-backdrop,
+.contracts .modal-backdrop {
   z-index: 50;
 }
 
@@ -18455,6 +18454,240 @@ chat application Page
 }
 .search-modal .search-modal-container .search-results-container .x-each-category:last-child {
   border-bottom: 0px;
+}
+
+/* ----------------------------------------------------------
+* search modal window
+* --------------------------------------------------------*/
+.calendar {
+  float: none;
+}
+.calendar .fc-timeGridWeek-button,
+.calendar .fc-timeGridDay-button,
+.calendar .fc-listWeek-button,
+.calendar .fc-custom_button_settings-button {
+  margin-left: 5px !important;
+  border-radius: 5px !important;
+}
+.calendar .fc-button {
+  border: 0px;
+  padding: 2px 10px 1px 10px;
+  font-size: 15px;
+  background-color: #e9f0f3 !important;
+  color: #778993 !important;
+  height: 37px;
+  font-weight: 500;
+}
+.calendar .fc-button.fc-button-active {
+  background-color: #e4f1ff !important;
+  color: #20aee3 !important;
+}
+.calendar .fc-custom_button_add_event-button {
+  padding-top: 8px !important;
+  color: #fff !important;
+  background: #ff5c6c !important;
+  border: 1px solid #ff5c6c !important;
+  border-radius: 50% !important;
+  height: 45px !important;
+  font-size: 19px !important;
+  margin-left: 15px !important;
+  vertical-align: middle !important;
+  margin-top: -4px !important;
+  width: 45px !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  -webkit-box-shadow: 0 3px 15px -2px rgba(37, 45, 51, 0.4) !important;
+  box-shadow: 0 3px 15px -2px rgba(37, 45, 51, 0.4) !important;
+  -webkit-transition: all ease-in 0.15s !important;
+  transition: all ease-in 0.15s !important;
+}
+.calendar .fc-custom_button_add_event-button:hover {
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+}
+
+/* ----------------------------------------------------------
+* timepicker
+* --------------------------------------------------------*/
+.bootstrap-timepicker-widget.dropdown-menu {
+  border-radius: 5px;
+}
+.bootstrap-timepicker-widget.dropdown-menu input {
+  width: 40px;
+  border: solid 1px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  letter-spacing: 2px;
+  font-size: 15px;
+  border-color: #ced4da;
+  background-color: #ffffff;
+  color: #67757c;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(2) > td:nth-child(1) {
+  text-align: right;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(2) > td:nth-child(2) {
+  width: 25px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(2) > td:nth-child(3) {
+  text-align: left;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(1) {
+  padding-left: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(1) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(3) {
+  padding-right: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(3) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(1) {
+  padding-left: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(1) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(3) {
+  padding-right: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(3) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+
+/* ----------------------------------------------------------
+* calendar
+* --------------------------------------------------------*/
+.calendar-show-container {
+  margin-top: -52px;
+}
+.calendar-show-container .event-title {
+  font-size: 17px;
+  padding-bottom: 18px;
+  padding-top: 18px;
+  margin-bottom: 38px;
+}
+.calendar-show-container .event-details {
+  margin-bottom: 28px;
+  padding-left: 10px;
+}
+.calendar-show-container .event-details .event-icon {
+  font-weight: 400;
+}
+.calendar-show-container .event-details .event-icon i {
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.calendar-show-container .event-details .event-icon span {
+  font-size: 14px;
+  display: inline-block;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+.calendar-show-container .event-details .event-info {
+  vertical-align: middle;
+}
+.calendar-show-container .event-details .event-info label a {
+  color: inherit;
+}
+.calendar-show-container .event-details .event-info.file-attachments ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+.calendar-show-container .event-details .event-info.file-attachments ul li {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 20px;
+}
+.calendar-show-container .event-details .event-info.file-attachments ul li a {
+  visibility: visible;
+}
+.calendar-show-container .calendar-show-date-to {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #eafaff;
+}
+
+.fc .fc-list-event:hover td {
+  background-color: initial;
+}
+
+.fc-daygrid-event-dot {
+  border-color: var(--calendar-fc-daygrid-dot-event-contrast) !important;
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event {
+  background: var(--calendar-fc-daygrid-dot-event-background);
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event:hover {
+  background: var(--calendar-fc-daygrid-dot-event-background);
+}
+
+.fc-event {
+  line-height: 1.2;
+  padding: 2px 4px;
+  font-size: 0.9em;
+}
+
+.fc-daygrid-event {
+  min-height: 20px;
+  max-height: 40px;
+}
+
+.fc-list {
+  border: 1px solid #bec6d1;
+}
+
+.fc-list-table .fc-list-day-cushion,
+.fc-list-table .fc-list-day-cushion {
+  background-color: #505b69;
+}
+.fc-list-table .fc-list-day-cushion a,
+.fc-list-table .fc-list-day-cushion a {
+  color: #bec6d1;
+}
+
+/*event colors*/
+.event-type-event {
+  background-color: var(--calendar-type-event-background);
+  color: #ffffff;
+}
+.event-type-event:hover {
+  background-color: var(--calendar-type-event-background);
+  color: #ffffff;
+}
+
+.event-type-project {
+  background-color: var(--calendar-type-project-background);
+  color: #ffffff;
+}
+.event-type-project:hover {
+  background-color: var(--calendar-type-project-background);
+  color: #ffffff;
+}
+
+.event-type-task {
+  background-color: var(--calendar-type-task-background);
+  color: #ffffff;
+}
+.event-type-task:hover {
+  background-color: var(--calendar-type-task-background);
+  color: #ffffff;
 }
 
 /* ----------------------------------------------------------------
@@ -19206,20 +19439,185 @@ Its not meant to be a copy of features.scss file (which already merged into this
 }
 
 /* ----------------------------------------------------------
- * general
+ * general;
  * --------------------------------------------------------*/
 .dropzone {
-  background: #e4e4e4;
-  color: #000000;
-  border-color: #8d9197;
+  background: #21262c;
+  color: #c9cfd2;
 }
-
 .dropzone .dz-message i {
-  color: #272c33;
+  color: #c9cfd2;
 }
 
 .dropzone .dz-preview .dz-remove {
   background: #a6a8aa;
+}
+
+.comment-text table td,
+.comment-text table th,
+.project-description table td,
+.project-description table th,
+.modal-body table td,
+.modal-body table th,
+.card-description table td,
+.card-description table th,
+.card-show-form-data table td,
+.card-show-form-data table th,
+.timeline table td,
+.timeline table th,
+#knowledgebase-table-wrapper table td,
+#knowledgebase-table-wrapper table th {
+  border-color: #21262c;
+  background-color: #3e454f;
+  color: #c9cfd2;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: #c9cfd2;
+  background-color: #4b545f;
+  border-color: #c9cfd2;
+}
+
+.kanban-card .kanban-card-content-comntainer .label-default {
+  color: #c9cfd2;
+  background-color: #30363d;
+}
+
+.card-reminders-container .datepicker td.active {
+  background: #353c44 !important;
+  color: #118ab7 !important;
+}
+.card-reminders-container .datepicker td.today {
+  background: #96b4c6 !important;
+  color: #04384c !important;
+}
+
+.bill-file-attachments .x-file-attachment {
+  background-color: #383f48;
+}
+.bill-file-attachments .x-file-attachment:hover {
+  background-color: #4c545e;
+}
+
+#settings-wrapper .alert-info {
+  background-color: #272c33;
+  border-color: #20aee3;
+}
+#settings-wrapper .alert-info .card-text {
+  color: #20aee3;
+}
+
+#calendar {
+  background-color: #272C33 !important;
+  color: #787F91 !important;
+  border: none;
+}
+
+/* FullCalendar Header */
+.fc-toolbar {
+  background-color: transparent !important;
+  border-bottom: 1px solid #383F48 !important;
+}
+
+.fc-toolbar h2 {
+  color: #787F91 !important;
+}
+
+.fc-button {
+  background-color: #383F48 !important;
+  border: none;
+  color: #787F91 !important;
+}
+
+.fc-button:hover {
+  background-color: #272C33 !important;
+}
+
+.fc-button:disabled {
+  background-color: #383F48 !important;
+  opacity: 0.5;
+}
+
+.fc-button-active {
+  background-color: #787F91 !important;
+  color: #272C33 !important;
+}
+
+/* FullCalendar Day Grid */
+.fc-daygrid-day {
+  background-color: #272C33 !important;
+  border: 1px solid #787F91 !important;
+}
+
+.fc-daygrid-day.fc-day-today {
+  background-color: #383F48 !important;
+}
+
+.fc-daygrid-day-top {
+  color: #787F91 !important;
+}
+
+.fc-daygrid-day-top a {
+  color: #20aee3 !important;
+}
+
+.fc-day-other .fc-daygrid-day-top a {
+  color: #ffffff !important;
+}
+
+.fc-daygrid-day-events {
+  background-color: #272C33;
+}
+
+.fc-daygrid-event {
+  background-color: #383F48;
+  color: #787F91;
+  border: 1px solid #787F91;
+}
+
+/* Day Headers */
+.fc-col-header-cell {
+  background-color: #272C33 !important;
+  color: #787F91 !important;
+  border: 1px solid #787F91 !important;
+}
+
+.fc-col-header-cell .fc-col-header-cell-cushion {
+  color: #787F91 !important;
+}
+
+/* Event Tooltip */
+.fc-event-title,
+.fc-event-time {
+  color: #ffffff;
+}
+
+.fc .fc-timegrid-slot {
+  background-color: #717c8b;
+}
+
+.calendar .fc-button:not(.fc-custom_button_add_event-button) {
+  background-color: #131519 !important;
+  color: #787f91 !important;
+}
+
+.calendar .fc-button.fc-button-active {
+  background-color: #131519 !important;
+  color: #20aee3 !important;
+}
+
+.fc-theme-standard .fc-popover-header {
+  background-color: #272c33;
+}
+
+.fc .fc-more-popover .fc-popover-body {
+  background-color: #383f48;
+}
+
+.calendar-show-container .event-details .event-info.file-attachments ul li a {
+  background-color: #131619;
+  color: #b6c1ca;
 }
 
 /* ----------------------------------------------------------
@@ -19560,7 +19958,8 @@ hr {
   border-color: #e1e6ec !important;
 }
 
-.select2-container--bootstrap .select2-selection.form-control, .form-control {
+.select2-container--bootstrap .select2-selection.form-control,
+.form-control {
   background-color: #e4e4e4;
   border-color: #ced4da;
 }

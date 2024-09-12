@@ -12324,7 +12324,7 @@ textarea.error {
 .modal .modal-content {
   border-radius: 4px;
   background-color: #ffffff;
-  color: #67757c;
+  color: #454f53;
 }
 .modal .modal-content .x-extra-close-icon {
   position: absolute;
@@ -12357,9 +12357,6 @@ textarea.error {
 .modal .modal-dialog .modal-header button.close:hover, .modal .modal-dialog .modal-header button.close:active, .modal .modal-dialog .modal-header button.close:visited, .modal .modal-dialog .modal-header button.close:focus {
   border: none;
   outline: none;
-}
-.modal .modal-dialog .modal-header .modal-title {
-  color: #20aee3;
 }
 .modal .modal-dialog .modal-body {
   padding-left: 30px;
@@ -12449,7 +12446,7 @@ textarea.error {
     max-width: 450px;
   }
   .modal-lg {
-    max-width: 650px;
+    max-width: 750px;
   }
   .modal-xl {
     max-width: 800px;
@@ -18099,10 +18096,12 @@ chat application Page
 /* ----------------------------------------------------------
 * FIX - adding products on proposal estimate - modal
 * --------------------------------------------------------*/
-.proposals #itemsModal, .contracts #itemsModal {
+.proposals #itemsModal,
+.contracts #itemsModal {
   z-index: 2000;
 }
-.proposals .modal-backdrop, .contracts .modal-backdrop {
+.proposals .modal-backdrop,
+.contracts .modal-backdrop {
   z-index: 50;
 }
 
@@ -18454,6 +18453,240 @@ chat application Page
 }
 .search-modal .search-modal-container .search-results-container .x-each-category:last-child {
   border-bottom: 0px;
+}
+
+/* ----------------------------------------------------------
+* search modal window
+* --------------------------------------------------------*/
+.calendar {
+  float: none;
+}
+.calendar .fc-timeGridWeek-button,
+.calendar .fc-timeGridDay-button,
+.calendar .fc-listWeek-button,
+.calendar .fc-custom_button_settings-button {
+  margin-left: 5px !important;
+  border-radius: 5px !important;
+}
+.calendar .fc-button {
+  border: 0px;
+  padding: 2px 10px 1px 10px;
+  font-size: 15px;
+  background-color: #e9f0f3 !important;
+  color: #778993 !important;
+  height: 37px;
+  font-weight: 500;
+}
+.calendar .fc-button.fc-button-active {
+  background-color: #e4f1ff !important;
+  color: #20aee3 !important;
+}
+.calendar .fc-custom_button_add_event-button {
+  padding-top: 8px !important;
+  color: #fff !important;
+  background: #ff5c6c !important;
+  border: 1px solid #ff5c6c !important;
+  border-radius: 50% !important;
+  height: 45px !important;
+  font-size: 19px !important;
+  margin-left: 15px !important;
+  vertical-align: middle !important;
+  margin-top: -4px !important;
+  width: 45px !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+  -webkit-box-shadow: 0 3px 15px -2px rgba(37, 45, 51, 0.4) !important;
+  box-shadow: 0 3px 15px -2px rgba(37, 45, 51, 0.4) !important;
+  -webkit-transition: all ease-in 0.15s !important;
+  transition: all ease-in 0.15s !important;
+}
+.calendar .fc-custom_button_add_event-button:hover {
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+}
+
+/* ----------------------------------------------------------
+* timepicker
+* --------------------------------------------------------*/
+.bootstrap-timepicker-widget.dropdown-menu {
+  border-radius: 5px;
+}
+.bootstrap-timepicker-widget.dropdown-menu input {
+  width: 40px;
+  border: solid 1px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  letter-spacing: 2px;
+  font-size: 15px;
+  border-color: #ced4da;
+  background-color: #ffffff;
+  color: #67757c;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(2) > td:nth-child(1) {
+  text-align: right;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(2) > td:nth-child(2) {
+  width: 25px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(2) > td:nth-child(3) {
+  text-align: left;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(1) {
+  padding-left: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(1) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(3) {
+  padding-right: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(1) > td:nth-child(3) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(1) {
+  padding-left: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(1) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(3) {
+  padding-right: 18px;
+}
+.bootstrap-timepicker-widget.dropdown-menu tr:nth-child(3) > td:nth-child(3) a:hover {
+  background: #e9f2f9;
+  border-color: transparent;
+}
+
+/* ----------------------------------------------------------
+* calendar
+* --------------------------------------------------------*/
+.calendar-show-container {
+  margin-top: -52px;
+}
+.calendar-show-container .event-title {
+  font-size: 17px;
+  padding-bottom: 18px;
+  padding-top: 18px;
+  margin-bottom: 38px;
+}
+.calendar-show-container .event-details {
+  margin-bottom: 28px;
+  padding-left: 10px;
+}
+.calendar-show-container .event-details .event-icon {
+  font-weight: 400;
+}
+.calendar-show-container .event-details .event-icon i {
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.calendar-show-container .event-details .event-icon span {
+  font-size: 14px;
+  display: inline-block;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+.calendar-show-container .event-details .event-info {
+  vertical-align: middle;
+}
+.calendar-show-container .event-details .event-info label a {
+  color: inherit;
+}
+.calendar-show-container .event-details .event-info.file-attachments ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+.calendar-show-container .event-details .event-info.file-attachments ul li {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 20px;
+}
+.calendar-show-container .event-details .event-info.file-attachments ul li a {
+  visibility: visible;
+}
+.calendar-show-container .calendar-show-date-to {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #eafaff;
+}
+
+.fc .fc-list-event:hover td {
+  background-color: initial;
+}
+
+.fc-daygrid-event-dot {
+  border-color: var(--calendar-fc-daygrid-dot-event-contrast) !important;
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event {
+  background: var(--calendar-fc-daygrid-dot-event-background);
+}
+
+.fc-daygrid-dot-event.fc-event-mirror,
+.fc-daygrid-dot-event:hover {
+  background: var(--calendar-fc-daygrid-dot-event-background);
+}
+
+.fc-event {
+  line-height: 1.2;
+  padding: 2px 4px;
+  font-size: 0.9em;
+}
+
+.fc-daygrid-event {
+  min-height: 20px;
+  max-height: 40px;
+}
+
+.fc-list {
+  border: 1px solid #bec6d1;
+}
+
+.fc-list-table .fc-list-day-cushion,
+.fc-list-table .fc-list-day-cushion {
+  background-color: #505b69;
+}
+.fc-list-table .fc-list-day-cushion a,
+.fc-list-table .fc-list-day-cushion a {
+  color: #bec6d1;
+}
+
+/*event colors*/
+.event-type-event {
+  background-color: var(--calendar-type-event-background);
+  color: #ffffff;
+}
+.event-type-event:hover {
+  background-color: var(--calendar-type-event-background);
+  color: #ffffff;
+}
+
+.event-type-project {
+  background-color: var(--calendar-type-project-background);
+  color: #ffffff;
+}
+.event-type-project:hover {
+  background-color: var(--calendar-type-project-background);
+  color: #ffffff;
+}
+
+.event-type-task {
+  background-color: var(--calendar-type-task-background);
+  color: #ffffff;
+}
+.event-type-task:hover {
+  background-color: var(--calendar-type-task-background);
+  color: #ffffff;
 }
 
 /* ----------------------------------------------------------------
@@ -18924,7 +19157,7 @@ h6 {
 }
 
 .settings .left-sidebar .sidebar-nav {
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .sidebar-nav > ul > li.active > a {
@@ -18939,6 +19172,29 @@ h6 {
 .sidebar-nav ul li a.active,
 .sidebar-nav ul li a:hover {
   color: #6e85bb;
+}
+
+.settings .left-sidebar .sidenav-menu-item ul li a.active {
+  color: #20aee3;
+}
+
+.settings .sidebar-nav > ul > li.active > a {
+  color: #20aee3;
+  border-color: #20aee3;
+}
+
+.settings .sidebar-nav > ul > li.active > a i {
+  color: #20aee3;
+}
+
+.settings .sidebar-nav ul li a.active,
+.settings .sidebar-nav ul li a:hover {
+  color: #20aee3;
+}
+
+.settings .navbar-header {
+  background-color: #2d4356;
+  border-color: #2d4356;
 }
 
 .topbar .navbar-collapse {

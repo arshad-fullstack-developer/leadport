@@ -1047,6 +1047,12 @@ $(document).ready(function () {
         $("#" + target_containter).show();
         $(this).addClass('active');
 
+        //show custom fields option
+        if ($(this).attr('data-type') == 'new') {
+            $("#new-client-custom-fields").show();
+        } else {
+            $("#new-client-custom-fields").hide();
+        }
 
     });
 
@@ -1812,7 +1818,7 @@ $(document).ready(function () {
 
         //reset category dropdown
         $("#browse_canned").val('');
-        $("#browse_canned"). trigger("change");
+        $("#browse_canned").trigger("change");
 
         // check if the input field is focused and the Enter key is pressed - execute search now
         if ($(this).is(':focus') && e.keyCode === 13) {
@@ -1839,6 +1845,51 @@ $(document).ready(function () {
         //request
         nxAjaxUxRequest($(this));
     });
+
+
+    /** --------------------------------------------------------------------------------------------------
+     *  proposal automation [default status]
+     * -------------------------------------------------------------------------------------------------*/
+    $(document).on("select2:select", "#settings2_proposals_automation_default_status, #automation_default_status, #proposal_automation_status", function (e) {
+
+        var selection = e.params.data.id;
+        //toggle permissions
+        if (selection == 'enabled') {
+            $("#settings-automation-options-container").show();
+            $("#automation-options-container").show();
+        } else {
+            $("#settings-automation-options-container").hide();
+            $("#automation-options-container").hide();
+        }
+    });
+
+    /*----------------------------------------------------------------
+     *  proposal automation [create project]
+     * -----------------------------------------------------------*/
+    $(document).on('change', '#settings2_proposals_automation_create_project, #proposal_automation_create_project', function () {
+        if ($(this).is(':checked')) {
+            $("#settings_automation_create_project_options").show();
+            $("#proposal_automation_create_project_options").show();
+        } else {
+            $("#settings_automation_create_project_options").hide();
+            $("#proposal_automation_create_project_options").hide();
+        }
+    });
+
+
+    /*----------------------------------------------------------------
+     *  proposal automation [create invoice]
+     * -----------------------------------------------------------*/
+    $(document).on('change', '#settings2_proposals_automation_create_invoice, #proposal_automation_create_invoice', function () {
+        if ($(this).is(':checked')) {
+            $("#settings_automation_create_invoice_options").show();
+            $("#proposal_automation_create_invoice_options").show();
+        } else {
+            $("#settings_automation_create_invoice_options").hide();
+            $("#proposal_automation_create_invoice_options").hide();
+        }
+    });
+
 
 
 });

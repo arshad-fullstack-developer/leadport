@@ -5450,6 +5450,9 @@ widget-chart-page product review
   color: #4d595e;
   font-size: 12px;
 }
+.pdf-page .bill-pdf .bill-table-pdf .invoice-table th.x-description {
+  width: 350px;
+}
 .pdf-page .bill-pdf .bill-table-pdf .invoice-table th.hidden {
   display: none;
 }

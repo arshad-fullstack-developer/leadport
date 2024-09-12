@@ -61,14 +61,14 @@ foreach ($paths as $key => $value) {
 }
 
 //check minimum php version
-if (version_compare(PHP_VERSION, '7.3.0', ">=")) {
+if (version_compare(PHP_VERSION, '8.2', ">=")) {
     $messages_php = '';
 } else {
-    $messages_php = '<tr><td class="p-l-15">PHP Version <strong>7.3</strong> or <strong>7.4</strong> </td><td class="x-td-checks" width="40px"><span class="x-checks x-check-failed text-danger font-18"><i class="sl-icon-close"></i></span></td></tr>';
+    $messages_php = '<tr><td class="p-l-15">PHP Version <strong>8.2</strong> or <strong>8.3</strong> </td><td class="x-td-checks" width="40px"><span class="x-checks x-check-failed text-danger font-18"><i class="sl-icon-close"></i></span></td></tr>';
     $messages_php .= '
         <tr><td colspan="2">
         <div class="alert alert-danger">
-        This version of Grow CRM requires <strong>PHP 7.3+</strong>.
+        This version of Grow CRM requires <strong>PHP 8.2+</strong>.
         <br/>
         <br/>You server is currently running <strong> PHP ' . phpversion() . '</strong>
         <br/><br/>
@@ -82,7 +82,7 @@ $page = '
 <!DOCTYPE html><html lang="en" class="team"><head><link href="public/vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet"><link href="public/themes/default/css/style.css" rel="stylesheet"><link rel="stylesheet" href="public/vendor/css/vendor.css"></head>
 <body class="setup-prechecks"><div class="x-wrapper w-90 max-width-1000">
 <div class="col-12 p-t-40 card-no-border"><div class="card"><div class="card-body"><div class="text-center"><h3 class="card-title">GROW CRM</h3>
-<h5>System Check</h5><div><img src="public/images/system-checks.png" width="300" alt="system checks failed" /></div><p class="card-text">The following (minimum system requirements) must be met before you can continue. See <a href="https://growcrm.io/documentation/saas-installation/" target="_blank">documentation</a> for details.</p>
+<h5>System Check</h5><div><img src="public/images/system-checks.png" width="300" alt="system checks failed" /></div><p class="card-text">The following (minimum system requirements) must be met before you can continue. See <a href="https://growcrm.io/documentation/2-installation/" target="_blank">documentation</a> for details.</p>
 </div><div class="m-t-20">';
 
 //page - php

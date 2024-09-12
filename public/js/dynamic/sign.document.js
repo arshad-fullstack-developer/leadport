@@ -1,5 +1,3 @@
-"use strict";
-
 var wrapper = document.getElementById("signature-wrapper");
 var canvas = wrapper.querySelector("canvas");
 var signaturePad = new SignaturePad(canvas, {

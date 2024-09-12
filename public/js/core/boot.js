@@ -139,6 +139,18 @@ function NXbootstrap($self, action) {
         });
 
 
+        //https://jdewit.github.io/bootstrap-timepicker/
+        $('.timepicker').timepicker({
+            template: 'dropdown',
+            showInputs: true,
+            minuteStep: 1,
+            showMeridian: false,
+            icons: {
+                up: 'ti-angle-up',
+                down: 'ti-angle-down'
+            },
+        });
+
         /**
          * [nextloop] [datepicker]
          * change the format of the date that is posted to backend (mysql format). This way, you can
