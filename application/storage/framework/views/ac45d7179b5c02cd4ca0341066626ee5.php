@@ -4,7 +4,6 @@
             <div class="pull-left"><?php echo e(runtimeLang($board['name'])); ?></div>
             <div class="pull-right x-action-icons">
                 <!--action add-->
-                <?php if(config('visibility.kanban_board_add_buttons')): ?>
                 <span class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form cursor-pointer"
                     data-toggle="modal" data-target="#commonModal"
                     data-url="<?php echo e(urlResource('/tasks/create?status='.$board['id'])); ?>"
@@ -13,7 +12,6 @@
                     data-action-ajax-loading-target="commonModalBody"
                     data-save-button-class="" data-action-ajax-loading-target="commonModalBody"><i
                         class="mdi mdi-plus-circle"></i></span>
-                <?php endif; ?>
             </div>
         </div>
         <!--cards-->

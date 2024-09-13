@@ -46,6 +46,11 @@
                 href="{{ url('/projects/'.$task->project_id) }}">{{ str_limit($task->project_title ?? '---', 18) }}</a></span>
     </td>
     @endif
+    
+    <td class="tasks_col_project">
+        <span class="x-strike-through">{{ ($task->transport_type === 'transport') ? 'Transport' : 'Task'  }}</span>
+    </td>
+ 
     @if(config('visibility.tasks_col_milestone'))
     <td class="tasks_col_milestone">
         <span class="x-strike-through">{{ str_limit($task->milestone_title ?? '---', 12) }}</span>
@@ -61,8 +66,19 @@
         <!--assigned users-->
         @if(count($task->assigned ?? []) > 0)
         @foreach($task->assigned->take(2) as $user)
-        <img src="{{ $user->avatar }}" data-toggle="tooltip" title="{{ $user->first_name }}" data-placement="top"
-            alt="{{ $user->first_name }}" class="img-circle avatar-xsmall">
+        
+        <?php
+        $firstNameInitial = strtoupper(substr($user->first_name, 0, 1));
+        $lastNameInitial = strtoupper(substr($user->last_name, 0, 1));
+        $initials = $firstNameInitial . $lastNameInitial;
+        ?>
+        
+        <!--<img src="{{ $user->avatar }}" data-toggle="tooltip" title="{{ $user->first_name }}" data-placement="top"-->
+        <!--    alt="{{ $user->first_name }}" class="img-circle avatar-xsmall">-->
+            
+        <div class="text-white bg-success img-circle avatar-xsmall text-center pt-1">
+            {{ $initials }}
+       </div>
         @endforeach
         @else
         <span>---</span>
@@ -86,7 +102,7 @@
     <td class="tasks_col_my_time">
         @if($task->assigned_to_me)
         <span class="x-timer-time timers {{ runtimeTimerRunningStatus($task->timer_current_status) }}"
-            id="task_timer_table_{{ $task->task_id }}">{!! clean(runtimeSecondsHumanReadable($task->my_time, false))
+            id="task_timer_table_{{ $task->task_id }}">{!! _clean(runtimeSecondsHumanReadable($task->my_time, false))
             !!}</span>
         @if($task->task_status != 'completed')
         <!--start a timer-->
@@ -169,7 +185,7 @@
 
             <!--view-->
             <button type="button" title="{{ cleanLang(__('lang.view')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm show-modal-button reset-card-modal-form js-ajax-ux-request"
+                class="data-toggle-action-tooltip btn btn-outline-warning btn-circle btn-sm show-modal-button reset-card-modal-form js-ajax-ux-request"
                 data-toggle="modal" data-target="#cardModal" data-url="{{ urlResource('/tasks/'.$task->task_id) }}"
                 data-loading-target="main-top-nav-bar">
                 <i class="ti-new-window"></i>

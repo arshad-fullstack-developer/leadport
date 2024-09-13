@@ -1,7 +1,7 @@
     <!--[dependency][lock-1] start-->
     <?php if(config('visibility.task_is_open')): ?>
     <!----------Assigned----------->
-    <?php if(config('visibility.tasks_card_assigned')): ?>
+    <?php if(config('visibility.tasks_card_assigned') && auth()->user()->role_id == 1): ?>
     <div class="x-section">
         <div class="x-title">
             <h6><?php echo e(cleanLang(__('lang.assigned_users'))); ?></h6>
@@ -12,8 +12,8 @@
         <!--user-->
         <?php if($task->permission_assign_users): ?>
         <span class="x-assigned-user x-assign-new js-card-settings-button-static card-task-assigned text-info"
-            data-container=".card-modal" tabindex="0" data-popover-content="card-task-team"
-            data-title="<?php echo e(cleanLang(__('lang.assign_users'))); ?>"><i class="mdi mdi-plus"></i></span>
+            tabindex="0" data-popover-content="card-task-team" data-title="<?php echo e(cleanLang(__('lang.assign_users'))); ?>"><i
+                class="mdi mdi-plus"></i></span>
         <?php endif; ?>
     </div>
     <?php else: ?>
@@ -36,23 +36,16 @@
         <!--start date-->
         <?php if(config('visibility.tasks_standard_features')): ?>
         <div class="x-element" id="task-start-date"><i class="mdi mdi-calendar-plus"></i>
-            <span><?php echo e(cleanLang(__('lang.start_date'))); ?>:</span>
+            <span><?php echo e(cleanLang(__('lang.week'))); ?>:</span>
             <?php if($task->permission_edit_task): ?>
-            <span class="x-highlight x-editable card-pickadate"
-                data-url="<?php echo e(urlResource('/tasks/'.$task->task_id.'/update-start-date/')); ?>" data-type="form"
-                data-progress-bar='hidden' data-form-id="task-start-date" data-hidden-field="task_date_start"
-                data-container="task-start-date-container" data-ajax-type="post"
-                id="task-start-date-container"><?php echo e(runtimeDate($task->task_date_start)); ?></span></span>
-            <input type="hidden" name="task_date_start" id="task_date_start">
-            <?php else: ?>
-            <span class="x-highlight"><?php echo e(runtimeDate($task->task_date_start)); ?></span>
+            <input type="week" name="task_date_start" id="task_date_start" value="<?php echo e($task->week); ?>">
             <?php endif; ?>
         </div>
         <?php endif; ?>
         <!--due date-->
         <?php if(config('visibility.tasks_standard_features')): ?>
         <div class="x-element" id="task-due-date"><i class="mdi mdi-calendar-clock"></i>
-            <span><?php echo e(cleanLang(__('lang.due_date'))); ?>:</span>
+            <span>Field name:</span>
             <?php if($task->permission_edit_task): ?>
             <span class="x-highlight x-editable card-pickadate"
                 data-url="<?php echo e(urlResource('/tasks/'.$task->task_id.'/update-due-date/')); ?>" data-type="form"
@@ -68,9 +61,9 @@
         <!--status-->
         <div class="x-element" id="card-task-status"><i class="mdi mdi-flag"></i>
             <span><?php echo e(cleanLang(__('lang.status'))); ?>: </span>
-            <?php if($task->permission_edit_task): ?>
-            <span class="x-highlight x-editable js-card-settings-button-static" data-container=".card-modal"
-                id="card-task-status-text" tabindex="0" data-popover-content="card-task-statuses" data-offset="0 25%"
+            <?php if($task->permission_participate): ?>
+            <span class="x-highlight x-editable js-card-settings-button-static" id="card-task-status-text" tabindex="0"
+                data-popover-content="card-task-statuses" data-offset="0 25%"
                 data-status-id="<?php echo e($task->taskstatus_id); ?>"
                 data-title="<?php echo e(cleanLang(__('lang.status'))); ?>"><?php echo e(runtimeLang($task->taskstatus_title)); ?></strong></span>
             <?php else: ?>
@@ -79,35 +72,43 @@
         </div>
 
         <!--priority-->
-        <div class="x-element" id="card-task-priority"><i class="mdi mdi-flag"></i>
-            <span><?php echo e(cleanLang(__('lang.priority'))); ?>: </span>
-            <?php if($task->permission_edit_task): ?>
-            <span class="x-highlight x-editable js-card-settings-button-static" data-container=".card-modal"
-                id="card-task-priority-text" tabindex="0" data-popover-content="card-task-priorities"
-                data-offset="0 25%" data-status-id="<?php echo e($task->taskpriority_id); ?>"
-                data-title="<?php echo e(cleanLang(__('lang.priority'))); ?>"><?php echo e(runtimeLang($task->taskpriority_title)); ?></strong></span>
+        <div class="x-element" id="card-task-priority"><i class="mdi mdi-verified"></i>
+            <span><?php echo e(cleanLang(__('lang.priority'))); ?>:
+            </span>
+            <?php if($task->permission_participate): ?>
+            <span class="x-highlight x-editable js-card-settings-button-static" id="card-task-priority-text"
+                tabindex="0" data-popover-content="card-task-priorities"
+                data-title="<?php echo e(cleanLang(__('lang.priority'))); ?>"><?php echo e(runtimeLang($task->task_priority)); ?></strong></span>
+            <input type="hidden" name="task_priority" id="task_priority">
             <?php else: ?>
-            <span class="x-highlight"><?php echo e(runtimeLang($task->taskpriority_title)); ?></span>
+            <span class="x-highlight"><?php echo e(runtimeLang($task->task_priority)); ?></span>
             <?php endif; ?>
         </div>
 
         <!--client visibility-->
-        <?php if(auth()->user()->type =='team'): ?>
+        <!-- <?php if(auth()->user()->type =='team'): ?>
         <div class="x-element" id="card-task-client-visibility"><i class="mdi mdi-eye"></i>
             <span><?php echo e(cleanLang(__('lang.client'))); ?>:</span>
-            <?php if($task->permission_edit_task): ?>
-            <span class="x-highlight x-editable js-card-settings-button-static" data-container=".card-modal"
-                id="card-task-client-visibility-text" tabindex="0" data-popover-content="card-task-visibility"
+            <span class="x-highlight x-editable js-card-settings-button-static" id="card-task-client-visibility-text"
+                tabindex="0" data-popover-content="card-task-visibility"
                 data-title="<?php echo e(cleanLang(__('lang.client_visibility'))); ?>"><?php echo e(runtimeDBlang($task->task_client_visibility, 'task_client_visibility')); ?></strong></span>
-            <input type="hidden" name="task_client_visibility" id="task_client_visibility">
-            <?php else: ?>
-            <span
-                class="x-highlight"><?php echo e(runtimeDBlang($task->task_client_visibility, 'task_client_visibility')); ?></span>
-            <?php endif; ?>
+               <input type="hidden" name="task_client_visibility" id="task_client_visibility">
+        </div>
+        <?php endif; ?> -->
+         <?php if(auth()->user()->type =='team'): ?>
+        <div class="x-element" id="card-task-client"><i class="mdi mdi-eye"></i>
+            <span><?php echo e(cleanLang(__('lang.client'))); ?>:</span>
+            <div class="form-group text-right">
+             <input type="text" class="form-control costum" name="task_client_name" id="task_client_name" value="<?php echo e($task->client); ?>">
+            <button type="button" class="btn btn-success btn-sm" id="card-task-update-client-button"
+                data-progress-bar='hidden' data-url="<?php echo e(url('/tasks/'.$task->task_id.'/update-client')); ?>"
+                data-type="form" data-ajax-type="post" data-form-id="popover-body">
+                <?php echo e(cleanLang(__('lang.update'))); ?>
 
+            </button>
+            </div>
         </div>
         <?php endif; ?>
-
         <!--reminder-->
         <?php if(config('visibility.modules.reminders') && $task->project_type == 'project'): ?>
         <div class="card-reminders-container" id="card-reminders-container">
@@ -156,9 +157,9 @@
 
         <!--change milestone-->
         <?php if($task->permission_edit_task && auth()->user()->type =='team'): ?>
-        <div class="x-element x-action js-card-settings-button-static" data-container=".card-modal"
-            id="card-task-milestone" tabindex="0" data-popover-content="card-task-milestones"
-            data-title="<?php echo e(cleanLang(__('lang.milestone'))); ?>"><i class="mdi mdi-redo-variant"></i>
+        <div class="x-element x-action js-card-settings-button-static" id="card-task-milestone" tabindex="0"
+            data-popover-content="card-task-milestones" data-title="<?php echo e(cleanLang(__('lang.milestone'))); ?>"><i
+                class="mdi mdi-redo-variant"></i>
             <span class="x-highlight"><?php echo e(cleanLang(__('lang.change_milestone'))); ?></strong></span>
         </div>
         <?php $count_action ++ ; ?>
@@ -291,24 +292,6 @@
     <?php endif; ?>
 
 
-    <!--task priorities - popover -->
-    <?php if($task->permission_participate): ?>
-    <div class="hidden" id="card-task-priorities">
-        <ul class="list">
-            <?php $__currentLoopData = config('task_priorities'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $priority): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <li class="card-tasks-update-priority-link" data-button-text="card-task-priority-text"
-                data-progress-bar='hidden' data-url="<?php echo e(urlResource('/tasks/'.$task->task_id.'/update-priority')); ?>"
-                data-type="form" data-value="<?php echo e($priority->taskpriority_id); ?>" data-form-id="--set-dynamically--"
-                data-ajax-type="post">
-                <?php echo e(runtimeLang($priority->taskpriority_title)); ?></li>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-        </ul>
-        <input type="hidden" name="task_priority" id="task_priority">
-        <input type="hidden" name="current_task_priority_text" id="current_task_priority_text">
-    </div>
-    <?php endif; ?>
-
-
     <!--task priority - popover-->
     <?php if($task->permission_participate): ?>
     <div class="hidden" id="card-task-priorities">
@@ -403,16 +386,29 @@
             <!--client users-->
             <h5><?php echo app('translator')->get('lang.client_users'); ?></h5>
             <?php $__currentLoopData = $client_users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $staff): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            
+              <?php
+                    $firstNameInitial = strtoupper(substr($staff->first_name, 0, 1));
+                    $lastNameInitial = strtoupper(substr($staff->last_name, 0, 1));
+                    $initials = $firstNameInitial . $lastNameInitial;
+                ?>
+                    
             <div class="form-check m-b-15">
                 <label class="custom-control custom-checkbox">
                     <input type="checkbox" name="assigned[<?php echo e($staff->id); ?>]"
                         class="custom-control-input assigned_user_<?php echo e($staff->id); ?>">
                     <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description"><img
-                            src="<?php echo e(getUsersAvatar($staff->avatar_directory, $staff->avatar_filename)); ?>"
-                            class="img-circle avatar-xsmall"> <?php echo e($staff->first_name); ?>
+                    <span class="custom-control-description">
+                        <!--<img-->
+                        <!--    src="<?php echo e(getUsersAvatar($staff->avatar_directory, $staff->avatar_filename)); ?>"-->
+                        <!--    class="img-circle avatar-xsmall"> -->
+                            
+                             <div class="text-white bg-success img-circle avatar-xsmall text-center p-1">
+                                <?php echo e($initials); ?>
 
-                        <?php echo e($staff->last_name); ?></span>
+                            </div> 
+                        
+                        </span>
                 </label>
             </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -426,4 +422,25 @@
                 </button>
             </div>
         </div>
-    </div><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/task/rightpanel.blade.php ENDPATH**/ ?>
+    </div>
+
+<script>
+$(document).on('change','#task_date_start',function(){
+    var week = document.getElementById('task_date_start').value;
+    console.log(week)
+          $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '<?php echo e(url('/')); ?>/tasks/<?php echo e($task->task_id); ?>/update-start-date',
+                type: "POST",
+                data: {week:week},
+                success: function (response) {
+                    console.log(response)
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                   console.log(textStatus, errorThrown);
+                }
+            });
+})
+</script><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/task/rightpanel.blade.php ENDPATH**/ ?>

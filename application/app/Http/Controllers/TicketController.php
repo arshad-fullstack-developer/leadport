@@ -71,11 +71,7 @@ class TicketController extends Controller {
                 $responses[$key] = $this->fetchData($requestUrl);
             }
             
-            // Accessing individual responses
-
-            // $response = Http::accept('application/json')->get($companyUrl);
-            // $companyDetails =  json_decode($response->getBody(), true);
-            // dd($response->getBody());
+            $page               = $this->pageSettings('create');
             $transportType      = $responses['transportType']['common'] ?? null;
             $equipmentType      = $responses['equipmentType']['common'] ?? null;
             $loadType           = $responses['loadType']['common'] ?? null;
@@ -88,25 +84,9 @@ class TicketController extends Controller {
 
 
 
-        //reponse payload
-        $payload = [
-            'page' => $this->pageSettings('create'),
-            'categories' => $categories,
-            'clients_projects' => $clients_projects,
-            'fields' => $this->getCustomFields(),
-            'transportType'     => $transportType,
-            'equipmentType'     => $equipmentType,
-            'loadType'          => $loadType,
-            'countries'         => $countries,
-            'transportChannels' => $transportChannels,
-            'carriageType'      => $carriageType,
-            'orderTypes'        => $orderTypes,
-            'orderStatus'       => $orderStatus,
-            'incoterms'         => $incoterms
-        ];
 
         //show the view
-        return new CreateResponse($payload);
+        return view('pages.customtickets.components.create.wrapper',compact('page','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
     }
 
     /**
@@ -116,6 +96,7 @@ class TicketController extends Controller {
     public function store(Request $request) {
 
 
+        //dd($request->all());
         unset($request['visibility_left_menu_toggle_button']);
         unset($request['system_language']);
         unset($request['user_has_due_reminder']);
@@ -203,8 +184,6 @@ class TicketController extends Controller {
                 'skip_dom_reset' => true,
             ));
         }
-
-
 
     }
 
@@ -387,7 +366,9 @@ class TicketController extends Controller {
     }
 
     public function updateTicketDetails(Request $request, $id){
-            
+          
+    
+
         $TicketDetails = [];   
 
         if(isset($request->goods) && count($request->goods) > 0){
@@ -522,7 +503,7 @@ class TicketController extends Controller {
             'crumbs_special_class' => 'list-pages-crumbs',
             'page' => 'tickets',
             'no_results_message' => __('lang.no_results_found'),
-            'mainmenu_tickets' => 'active',
+            'mainmenu_ctickets' => 'active',
             'sidepanel_id' => 'sidepanel-filter-tickets',
             'dynamic_search_url' => url('tickets/search?action=search&ticketresource_id=' . request('ticketresource_id') . '&ticketresource_type=' . request('ticketresource_type')),
             'load_more_button_route' => 'tickets',
@@ -540,7 +521,7 @@ class TicketController extends Controller {
             $page += [
                 'meta_title' => __('lang.tickets'),
                 'heading' => __('lang.tickets'),
-                'mainmenu_tickets' => 'active',
+                'mainmenu_ctickets' => 'active',
             ];
             if (request('source') == 'ext') {
                 $page += [
@@ -559,7 +540,7 @@ class TicketController extends Controller {
             $page += [
                 'meta_title' => __('lang.open_support_ticket'),
                 'heading' => __('lang.tickets'),
-                'mainmenu_tickets' => 'active',
+                'mainmenu_ctickets' => 'active',
             ];
             return $page;
         }

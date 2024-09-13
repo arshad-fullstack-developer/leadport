@@ -407,7 +407,7 @@
                             <!--fileupload-->
                             <div class="text-lg-right">
                                 <button type="submit" class="btn btn-rounded-x btn-success m-t-20 ajax-request"
-                                    id="ticket-compose-form-button" data-url="{{ url('/tickets/'.$ticket['Id'].'/update-details') }}" data-type="form"
+                                    id="ticket-compose-form-button" data-url="{{ url('/ctickets/'.$ticket['Id'].'/update-details') }}" data-type="form"
                                     data-ajax-type="post" data-loading-overlay-target="wrapper-tickets"
                                     data-loading-overlay-classname="overlay"
                                     data-form-id="ticket-compose">{{ cleanLang(__('lang.update')) }}</button>

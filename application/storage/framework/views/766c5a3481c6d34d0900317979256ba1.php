@@ -14,25 +14,6 @@
             <!--body-->
             <div class="r-panel-body">
 
-                <?php if(config('visibility.filter_panel_client_project')): ?>
-                <!--company name-->
-                <div class="filter-block">
-                    <div class="title">
-                        <?php echo e(cleanLang(__('lang.client_name'))); ?>
-
-                    </div>
-                    <div class="fields">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <select name="filter_task_clientid" id="filter_task_clientid"
-                                    class="clients_and_projects_toggle form-control form-control-sm js-select2-basic-search select2-hidden-accessible"
-                                    data-projects-dropdown="filter_task_projectid"
-                                    data-feed-request-type="clients_projects"
-                                    data-ajax--url="<?php echo e(url('/')); ?>/feed/company_names"></select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!--project-->
                 <div class="filter-block">
@@ -43,14 +24,13 @@
                     <div class="fields">
                         <div class="row">
                             <div class="col-md-12">
-                                <select class="select2-basic form-control form-control-sm dynamic_filter_task_projectid" data-allow-clear="true"
-                                    id="filter_task_projectid" name="filter_task_projectid" disabled>
-                                </select>
+                                <select name="filter_task_projectid" id="filter_task_projectid"
+                                    class="form-control form-control-sm js-select2-basic-search select2-hidden-accessible"
+                                    data-ajax--url="<?php echo e(url('/')); ?>/feed/projects?ref=general"></select>
                             </div>
                         </div>
                     </div>
                 </div>
-                <?php endif; ?>
 
                 <!--task type (when viewing a project)-->
                 <?php if(config('visibility.tasks_filter_milestone')): ?>
@@ -190,10 +170,8 @@
                                     class="form-control  form-control-sm select2-basic select2-multiple select2-hidden-accessible"
                                     multiple="multiple" tabindex="-1" aria-hidden="true">
                                     <option value=""></option>
-                                    <?php $__currentLoopData = $priorities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $priority): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($priority->taskpriority_id); ?>"><?php echo e($priority->taskpriority_title); ?>
-
-                                    </option>
+                                    <?php $__currentLoopData = config('settings.task_priority'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e(runtimeLang($key)); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
@@ -215,8 +193,7 @@
                                     multiple="multiple" tabindex="-1" aria-hidden="true">
                                     <option value=""></option>
                                     <?php $__currentLoopData = config('task_statuses'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task_status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($task_status->taskstatus_id); ?>">
-                                        <?php echo e(runtimeLang($task_status->taskstatus_title)); ?></option>
+                                    <option value="<?php echo e($task_status->taskstatus_id); ?>"><?php echo e(runtimeLang($task_status->taskstatus_title)); ?></option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
@@ -224,7 +201,7 @@
                     </div>
                 </div>
 
-
+                
                 <!--state-->
                 <div class="filter-block">
                     <div class="title">
@@ -234,8 +211,8 @@
                     <div class="fields">
                         <div class="row">
                             <div class="col-md-12">
-                                <select class="select2-basic form-control form-control-sm" id="filter_task_state"
-                                    name="filter_task_state">
+                                <select class="select2-basic form-control form-control-sm"
+                                    id="filter_task_state" name="filter_task_state">
                                     <option value=""></option>
                                     <option value="active"><?php echo app('translator')->get('lang.active_tasks'); ?></option>
                                     <option value="archived"><?php echo app('translator')->get('lang.archives_tasks'); ?></option>

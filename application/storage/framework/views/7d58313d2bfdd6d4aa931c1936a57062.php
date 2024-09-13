@@ -4,7 +4,7 @@
     </div>
     <!--current tags-->
     <div id="card-tags-current-tags-container">
-        <?php if(count($current_tags ?? []) >0): ?>
+        <?php if(count($current_tags) >0): ?>
         <div class="x-tags">
             <?php $__currentLoopData = $current_tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $current): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <span class="x-each-tag"><?php echo e($current->tag_title); ?></span>

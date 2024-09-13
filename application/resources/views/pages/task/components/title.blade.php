@@ -17,10 +17,12 @@
     </div>
 </div>
 @endif
+@if($task->project_title)
 <div class=""><small><strong>@lang('lang.project'): </strong></small><small id="card-task-milestone-title"><a
             href="{{ url('projects/'.$task->project_id ?? '') }}">{{ $task->project_title ?? '---' }}</a></small></div>
 <div class="m-b-15"><small><strong>@lang('lang.milestone'): </strong></small><small
         id="card-task-milestone-title">{{ runtimeLang($task->milestone_title, 'task_milestone') }}</small></div>
+@endif
 
 <!--this item is archived notice-->
 @if(runtimeArchivingOptions())

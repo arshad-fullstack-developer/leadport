@@ -33,15 +33,6 @@
         </button>
         <?php endif; ?>
 
-
-        <!--HIDE COMPLETED TASKS-->
-        <button type="button" data-toggle="tooltip" title="<?php echo e(cleanLang(__('lang.hide_completed_tasks'))); ?>"
-            id="pref_hide_completed_tasks"
-            class="list-actions-button btn btn-page-actions waves-effect waves-dark js-ajax-ux-request <?php echo e(runtimeActive(auth()->user()->pref_hide_completed_tasks)); ?>"
-            data-url="<?php echo e(urlResource('/tasks/search?action=search&toggle=pref_hide_completed_tasks')); ?>">
-            <i class="ti-check-box"></i>
-        </button>
-
         <!--TOGGLE STATS-->
         <?php if(config('visibility.stats_toggle_button')): ?>
         <button type="button" data-toggle="tooltip" title="<?php echo e(cleanLang(__('lang.quick_stats'))); ?>"
@@ -55,13 +46,15 @@
 
 
         <!--TASKS - KANBAN VIEW & SORTING-->
+        <?php if(config('visibility.tasks_kanban_actions')): ?>
         <button type="button" data-toggle="tooltip" title="<?php echo e(cleanLang(__('lang.kanban_view'))); ?>"
-            class="list-actions-button btn btn-page-actions waves-effect waves-dark js-ajax-ux-request"
+            id="pref_view_tasks_layout"
+            class="list-actions-button btn btn-page-actions waves-effect waves-dark js-ajax-ux-request <?php echo e(runtimeActive(auth()->user()->pref_view_tasks_layout)); ?>"
             data-url="<?php echo e(urlResource('/tasks/search?action=search&toggle=layout')); ?>">
             <i class="sl-icon-list"></i>
         </button>
         <!--kanban task sorting-->
-        <div class="btn-group">
+        <div class="btn-group" id="list_actions_sort_kanban">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                 class="list-actions-button btn waves-effect waves-dark dropdown-toggle">
                 <i class="mdi mdi-sort"></i></button>
@@ -77,6 +70,7 @@
                     data-url="<?php echo e(urlResource('/tasks?action=sort&orderby=task_title&sortorder=asc')); ?>"><?php echo e(cleanLang(__('lang.title'))); ?></a>
             </div>
         </div>
+        <?php endif; ?>
 
 
         <!--FILTERING-->
@@ -92,7 +86,7 @@
         <!--ADD NEW ITEM-->
         <?php if(config('visibility.list_page_actions_add_button')): ?>
         <button type="button"
-            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form <?php echo e($page['add_button_classes'] ?? ''); ?>"
+            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form <?php echo e($page['add_button_classes'] ?? ''); ?>"
             data-toggle="modal" data-target="#commonModal" data-url="<?php echo e($page['add_modal_create_url'] ?? ''); ?>"
             data-loading-target="commonModalBody" data-modal-title="<?php echo e($page['add_modal_title'] ?? ''); ?>"
             data-action-url="<?php echo e($page['add_modal_action_url'] ?? ''); ?>"
@@ -107,7 +101,7 @@
 
         <!--add new button (link)-->
         <?php if( config('visibility.list_page_actions_add_button_link')): ?>
-        <a id="fx-page-actions-add-button" type="button" class="btn btn-danger btn-add-circle edit-add-modal-button"
+        <a id="fx-page-actions-add-button" type="button" class="btn btn-success btn-add-circle edit-add-modal-button"
             href="<?php echo e($page['add_button_link_url'] ?? ''); ?>">
             <i class="ti-plus"></i>
         </a>

@@ -13,24 +13,6 @@
             <!--body-->
             <div class="r-panel-body">
 
-                @if(config('visibility.filter_panel_client_project'))
-                <!--company name-->
-                <div class="filter-block">
-                    <div class="title">
-                        {{ cleanLang(__('lang.client_name')) }}
-                    </div>
-                    <div class="fields">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <select name="filter_task_clientid" id="filter_task_clientid"
-                                    class="clients_and_projects_toggle form-control form-control-sm js-select2-basic-search select2-hidden-accessible"
-                                    data-projects-dropdown="filter_task_projectid"
-                                    data-feed-request-type="clients_projects"
-                                    data-ajax--url="{{ url('/') }}/feed/company_names"></select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!--project-->
                 <div class="filter-block">
@@ -40,14 +22,13 @@
                     <div class="fields">
                         <div class="row">
                             <div class="col-md-12">
-                                <select class="select2-basic form-control form-control-sm dynamic_filter_task_projectid" data-allow-clear="true"
-                                    id="filter_task_projectid" name="filter_task_projectid" disabled>
-                                </select>
+                                <select name="filter_task_projectid" id="filter_task_projectid"
+                                    class="form-control form-control-sm js-select2-basic-search select2-hidden-accessible"
+                                    data-ajax--url="{{ url('/') }}/feed/projects?ref=general"></select>
                             </div>
                         </div>
                     </div>
                 </div>
-                @endif
 
                 <!--task type (when viewing a project)-->
                 @if(config('visibility.tasks_filter_milestone'))
@@ -181,9 +162,8 @@
                                     class="form-control  form-control-sm select2-basic select2-multiple select2-hidden-accessible"
                                     multiple="multiple" tabindex="-1" aria-hidden="true">
                                     <option value=""></option>
-                                    @foreach($priorities as $priority)
-                                    <option value="{{ $priority->taskpriority_id }}">{{ $priority->taskpriority_title }}
-                                    </option>
+                                    @foreach(config('settings.task_priority') as $key => $value)
+                                    <option value="{{ $key }}">{{ runtimeLang($key) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -204,8 +184,7 @@
                                     multiple="multiple" tabindex="-1" aria-hidden="true">
                                     <option value=""></option>
                                     @foreach(config('task_statuses') as $task_status)
-                                    <option value="{{ $task_status->taskstatus_id }}">
-                                        {{ runtimeLang($task_status->taskstatus_title) }}</option>
+                                    <option value="{{ $task_status->taskstatus_id }}">{{ runtimeLang($task_status->taskstatus_title) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -213,7 +192,7 @@
                     </div>
                 </div>
 
-
+                
                 <!--state-->
                 <div class="filter-block">
                     <div class="title">
@@ -222,8 +201,8 @@
                     <div class="fields">
                         <div class="row">
                             <div class="col-md-12">
-                                <select class="select2-basic form-control form-control-sm" id="filter_task_state"
-                                    name="filter_task_state">
+                                <select class="select2-basic form-control form-control-sm"
+                                    id="filter_task_state" name="filter_task_state">
                                     <option value=""></option>
                                     <option value="active">@lang('lang.active_tasks')</option>
                                     <option value="archived">@lang('lang.archives_tasks')</option>

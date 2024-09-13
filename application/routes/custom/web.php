@@ -25,7 +25,11 @@
     Route::group(['prefix' => 'ctickets'], function () {
 
         Route::get('index', "TicketController@index");
-        Route::post('create', "TicketController@store");
+        Route::get('create', "TicketController@create");
         Route::get('{id}/edit', "TicketController@edit");
+        Route::post('store', "TicketController@store");
+        Route::post('{id}/update-details', "TicketController@updateTicketDetails");
+        Route::post('{id}/update-details', "TicketController@updateTicketDetails");
+
 
     });

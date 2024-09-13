@@ -11,7 +11,7 @@
 
 
         <!-- action buttons -->
-        <?php echo $__env->make('pages.tickets.components.misc.list-page-actions', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('pages.customtickets.components.misc.list-page-actions', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <!-- action buttons -->
 
     </div>

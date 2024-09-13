@@ -4,7 +4,7 @@
     </div>
     <!--current tags-->
     <div id="card-tags-current-tags-container">
-        @if(count($current_tags ?? []) >0)
+        @if(count($current_tags) >0)
         <div class="x-tags">
             @foreach($current_tags as $current)
             <span class="x-each-tag">{{ $current->tag_title }}</span>

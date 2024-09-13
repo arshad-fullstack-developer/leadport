@@ -1,4 +1,4 @@
-<?php if(auth()->user()->is_team && $task->assigned_to_me && $task->permission_edit_task): ?>
+<?php if(auth()->user()->is_team && $task->assigned_to_me): ?>
 <div class="x-section x-timer m-t-10" id="task-users-task-timer">
     <div class="x-title  text-left p-b-5">
         <h6 class=" m-b-0"><?php echo e(cleanLang(__('lang.my_timer'))); ?>

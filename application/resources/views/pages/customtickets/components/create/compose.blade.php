@@ -353,7 +353,7 @@
                 <label for="notes" class="form-label fw-bold">Notes</label>
             <input type="text" class="form-control" name="Notes" placeholder="About Notes" aria-label="notes">
             </div>
-             @include('pages.ticket.components.misc.goods')
+             @include('pages.customticket.components.misc.goods')
           </div>
           
           <div class="row mt-3">
@@ -365,7 +365,7 @@
 
           <div class="text-lg-right">
               <button type="submit" class="btn btn-rounded-x btn-success m-t-20 ajax-request"
-              id="ticket-compose-form-button" data-url="{{ url('/tickets') }}" data-type="form"
+              id="ticket-compose-form-button" data-url="{{ url('ctickets/store') }}" data-type="form"
               data-ajax-type="post" data-loading-overlay-target="wrapper-tickets"
               data-loading-overlay-classname="overlay"
               data-form-id="ticket-compose">{{ cleanLang(__('lang.submit_ticket')) }}</button>

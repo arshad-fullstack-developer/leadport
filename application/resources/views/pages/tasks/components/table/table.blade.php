@@ -19,6 +19,13 @@
                                     class="sorting-icons"><i class="ti-arrows-vertical"></i></span></a>
                         </th>
                         @endif
+                        
+                        <th class="tasks_col_title">
+                            <a class="js-ajax-ux-request js-list-sorting" id="sort_task_project" href="javascript:void(0)"
+                                >{{ cleanLang(__('lang.type')) }}<span
+                          class="sorting-icons"><i class="ti-arrows-vertical"></i></span></a>
+                        </th>
+
                         @if(config('visibility.tasks_col_milestone'))
                         <th class="tasks_col_milestone">
                             <a class="js-ajax-ux-request js-list-sorting" id="sort_milestone" href="javascript:void(0)"

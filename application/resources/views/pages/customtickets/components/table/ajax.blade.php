@@ -35,29 +35,20 @@
     <td class="tickets_col_action actions_column">
         <!--action button-->
         <span class="list-table-action dropdown font-size-inherit">
+
             <!--delete-->
-            @if(config('visibility.action_buttons_delete'))
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
                 data-confirm-title="{{ cleanLang(__('lang.delete_item')) }}" data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
                 data-ajax-type="DELETE" data-url="{{ url('/tickets/'.$ticket['Id'].'/delete-ticket') }}">
                 <i class="sl-icon-trash"></i>
             </button>
-            @endif
             <!--edit-->
            
             <a href="{{ urlResource('/ctickets/'.$ticket['Id'].'/edit') }}"
             class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm"
             ><i class="sl-icon-note"></i></a>
-            <!-- <button type="button" title="{{ cleanLang(__('lang.edit')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm"
-                data-url="{{ urlResource('/tickets/'.$ticket['Id'].'/edit?edit_type=all&edit_source=list') }}"
-                data-loading-target="commonModalBody" data-modal-title="{{ cleanLang(__('lang.edit_ticket')) }}"
-                data-action-url="{{ urlResource('/tickets/'.$ticket['Id']) }}" data-action-method="PUT"
-                data-action-ajax-class="js-ajax-ux-request" data-action-ajax-loading-target="tickets-td-container">
-                <i class="sl-icon-note"></i>
-            </button> -->
-           
+
             <a href="javascript:void(0)" title="{{ cleanLang(__('lang.view')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
                 <i class="ti-new-window"></i>

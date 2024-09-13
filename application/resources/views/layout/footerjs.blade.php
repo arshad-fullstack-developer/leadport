@@ -19,6 +19,9 @@
 <!--BILLING-->
 <script src="{{ asset('public/js/core/billing.js?v=') }} {{ config('system.versioning') }}"></script>
 
+<!--CUSTOM-->
+<script src="{{ asset('public/js/core/custom.js?v=') }} {{ config('system.versioning') }}"></script>
+
 <!--project page charts-->
 @if(@config('visibility.projects_d3_vendor'))
 <script src="{{ asset('public/vendor/js/d3/d3.min.js?v=') }} {{ config('system.versioning') }}"></script>
@@ -55,3 +58,4 @@
 <!--calendaerfull js [v6.1.13]-->
 <script src="{{ asset('public/vendor/js/fullcalendar/index.global.min.js?v=') }} {{ config('system.versioning') }}"></script>
 <!--IMPORTANT NOTES (June 2024) - any new JS libraries added here that are booted/initiated in boot.js should also be added to the landlord footerjs.blade.js, for saas-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB-zOugcVXjeBpcYUO2apwS7zkI8C5kG0&libraries=places&callback=initMap"></script>

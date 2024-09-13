@@ -276,6 +276,8 @@ return [
     'collapsed' => "Collapsed",
     'color' => "Color",
     'comma' => "Comma",
+    'task_type' => "Task Type",
+    'select_project' => "Select Project",
     'comment_not_found' => "Comment could not be found",
     'comment' => "Comment",
     'comments' => "Comments",

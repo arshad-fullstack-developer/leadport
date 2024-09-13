@@ -3,7 +3,7 @@
     id="list-page-actions-container">
     <div id="list-page-actions">
         <!--SEARCH BOX-->
-        @if( config('visibility.list_page_actions_search'))
+       
         <div class="header-search" id="header-search">
             <i class="sl-icon-magnifier"></i>
             <input type="text" class="form-control search-records list-actions-search"
@@ -11,18 +11,18 @@
                 data-form-id="header-search" id="search_query" name="search_query"
                 placeholder="{{ cleanLang(__('lang.search')) }}">
         </div>
-        @endif
+        
 
         <!--TOGGLE STATS-->
-        @if( config('visibility.stats_toggle_button'))
-        <button type="button" data-toggle="tooltip" title="{{ cleanLang(__('lang.quick_stats')) }}"
+        
+        <!-- <button type="button" data-toggle="tooltip" title="{{ cleanLang(__('lang.quick_stats')) }}"
             class="list-actions-button btn btn-page-actions waves-effect waves-dark js-toggle-stats-widget update-user-ux-preferences"
             data-type="statspanel" data-progress-bar="hidden"
             data-url-temp="{{ url('/') }}/{{ auth()->user()->team_or_contact }}/updatepreferences" data-url=""
             data-target="list-pages-stats-widget">
             <i class="ti-stats-up"></i>
         </button>
-        @endif
+        -->
 
         <!--FILTERING-->
         @if(config('visibility.list_page_actions_filter_button'))
@@ -46,20 +46,17 @@
 
 
         <!--ADD NEW ITEM-->
-        @if(config('visibility.list_page_actions_add_button'))
-        <button type="button"
-            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
-            data-toggle="modal" data-target="#commonModal" data-url="{{ $page['add_modal_create_url'] ?? '' }}"
-            data-loading-target="commonModalBody" data-modal-title="{{ $page['add_modal_title'] ?? '' }}"
-            data-action-url="{{ $page['add_modal_action_url'] ?? '' }}"
-            data-action-method="{{ $page['add_modal_action_method'] ?? '' }}"
-            data-action-ajax-class="{{ $page['add_modal_action_ajax_class'] ?? '' }}"
-            data-modal-size="{{ $page['add_modal_size'] ?? '' }}"
-            data-action-ajax-loading-target="{{ $page['add_modal_action_ajax_loading_target'] ?? '' }}"
-            data-save-button-class="{{ $page['add_modal_save_button_class'] ?? '' }}" data-project-progress="0">
+  
+        <!-- <button type="button"
+            class="btn btn-success btn-add-circle edit-add-modal-button reset-target-modal-form">
             <i class="ti-plus"></i>
-        </button>
-        @endif
+        </button> -->
+
+        <a type="button" class="btn btn-success btn-add-circle edit-add-modal-button reset-target-modal-form"
+            href="{{ url('ctickets/create') }}">
+            <i class="ti-plus"></i>
+        </a>
+        
 
         <!--add new button (link)-->
         @if( config('visibility.list_page_actions_add_button_link'))

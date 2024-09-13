@@ -19,6 +19,9 @@
 <!--BILLING-->
 <script src="<?php echo e(asset('public/js/core/billing.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
 
+<!--CUSTOM-->
+<script src="<?php echo e(asset('public/js/core/custom.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
+
 <!--project page charts-->
 <?php if(@config('visibility.projects_d3_vendor')): ?>
 <script src="<?php echo e(asset('public/vendor/js/d3/d3.min.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
@@ -54,4 +57,6 @@
 
 <!--calendaerfull js [v6.1.13]-->
 <script src="<?php echo e(asset('public/vendor/js/fullcalendar/index.global.min.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
-<!--IMPORTANT NOTES (June 2024) - any new JS libraries added here that are booted/initiated in boot.js should also be added to the landlord footerjs.blade.js, for saas--><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/layout/footerjs.blade.php ENDPATH**/ ?>
+<!--IMPORTANT NOTES (June 2024) - any new JS libraries added here that are booted/initiated in boot.js should also be added to the landlord footerjs.blade.js, for saas-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB-zOugcVXjeBpcYUO2apwS7zkI8C5kG0&libraries=places&callback=initMap"></script>
+<?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/layout/footerjs.blade.php ENDPATH**/ ?>

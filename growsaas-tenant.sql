@@ -1,4 +1,4 @@
--- Adminer 4.8.1 MySQL 10.4.21-MariaDB-log dump
+-- Adminer 4.8.4 MySQL 10.4.21-MariaDB-log dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -24,7 +24,6 @@ CREATE TABLE `attachments` (
   PRIMARY KEY (`attachment_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `attachments`;
 
 DROP TABLE IF EXISTS `automation_assigned`;
 CREATE TABLE `automation_assigned` (
@@ -37,11 +36,80 @@ CREATE TABLE `automation_assigned` (
   PRIMARY KEY (`automationassigned_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `automation_assigned`;
+
+DROP TABLE IF EXISTS `calendar_events`;
+CREATE TABLE `calendar_events` (
+  `calendar_event_id` int(11) NOT NULL AUTO_INCREMENT,
+  `calendar_event_uniqueid` varchar(100) DEFAULT NULL,
+  `calendar_event_created` datetime NOT NULL,
+  `calendar_event_updated` datetime NOT NULL,
+  `calendar_event_creatorid` int(11) DEFAULT NULL,
+  `calendar_event_title` varchar(200) DEFAULT NULL,
+  `calendar_event_description` text DEFAULT NULL,
+  `calendar_event_location` text DEFAULT NULL,
+  `calendar_event_all_day` varchar(50) DEFAULT 'yes' COMMENT 'yes|no',
+  `calendar_event_start_date` date DEFAULT NULL,
+  `calendar_event_start_time` time DEFAULT NULL,
+  `calendar_event_end_date` date DEFAULT NULL,
+  `calendar_event_end_time` time DEFAULT NULL,
+  `calendar_event_sharing` varchar(100) DEFAULT 'self' COMMENT 'myself|whole-team|selected-users',
+  `calendar_event_reminder` varchar(100) DEFAULT 'no' COMMENT 'yes|no',
+  `calendar_event_reminder_sent` varchar(20) DEFAULT 'no' COMMENT 'yes|no',
+  `calendar_event_timezoe` text DEFAULT NULL COMMENT 'timezone used in the dates',
+  `calendar_event_reminder_date_sent` datetime DEFAULT NULL,
+  `calendar_event_reminder_duration` int(11) DEFAULT NULL,
+  `calendar_event_reminder_period` text DEFAULT NULL COMMENT 'optional - e.g 1 for 1 day',
+  `calendar_event_colour` varchar(50) DEFAULT NULL COMMENT 'optional - hour| day | week | month | year',
+  PRIMARY KEY (`calendar_event_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `calendar_events_sharing`;
+CREATE TABLE `calendar_events_sharing` (
+  `calendarsharing_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '[truncate]',
+  `calendarsharing_created` datetime DEFAULT NULL,
+  `calendarsharing_updated` datetime DEFAULT NULL,
+  `calendarsharing_eventid` int(11) NOT NULL,
+  `calendarsharing_userid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`calendarsharing_id`),
+  KEY `calendarassigned_eventid` (`calendarsharing_eventid`),
+  KEY `calendarassigned_userid` (`calendarsharing_userid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
+
+
+DROP TABLE IF EXISTS `canned`;
+CREATE TABLE `canned` (
+  `canned_id` int(11) NOT NULL AUTO_INCREMENT,
+  `canned_created` datetime NOT NULL,
+  `canned_updated` datetime NOT NULL,
+  `canned_creatorid` int(11) DEFAULT NULL,
+  `canned_categoryid` int(11) DEFAULT NULL,
+  `canned_title` varchar(250) DEFAULT NULL,
+  `canned_message` text DEFAULT NULL,
+  `canned_visibility` varchar(20) DEFAULT 'public' COMMENT 'public|private',
+  PRIMARY KEY (`canned_id`),
+  KEY `canned_categoryid` (`canned_categoryid`),
+  KEY `canned_creatorid` (`canned_creatorid`),
+  KEY `canned_visibility` (`canned_visibility`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `canned_recently_used`;
+CREATE TABLE `canned_recently_used` (
+  `cannedrecent_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cannedrecent_created` datetime NOT NULL,
+  `cannedrecent_updated` datetime NOT NULL,
+  `cannedrecent_userid` int(11) NOT NULL,
+  `cannedrecent_cannedid` int(11) NOT NULL,
+  PRIMARY KEY (`cannedrecent_id`),
+  KEY `cannedrecent_userid` (`cannedrecent_userid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '[do not truncate] - only delete where category_system_default = no',
+  `category_uniqueid` varchar(100) NOT NULL,
   `category_created` datetime DEFAULT NULL,
   `category_updated` datetime DEFAULT NULL,
   `category_creatorid` int(11) DEFAULT NULL,
@@ -55,23 +123,23 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`category_id`),
   KEY `category_type` (`category_type`),
   KEY `category_creatorid` (`category_creatorid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate][system defaults] - 1=project,2=client,3lead,4=invoice,5=estimate,6=contract,7=expense,8=item,9=ticket, 10=knowledgebase, 11=proposal';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate][system defaults] - 1=project,2=client,3lead,4=invoice,5=estimate,6=contract,7=expense,8=item,9=ticket, 10=knowledgebase, 11=proposa, -1=cannedl';
 
-TRUNCATE `categories`;
-INSERT INTO `categories` (`category_id`, `category_created`, `category_updated`, `category_creatorid`, `category_name`, `category_description`, `category_system_default`, `category_visibility`, `category_icon`, `category_type`, `category_slug`) VALUES
-(1,	'2020-09-02 15:41:04',	'2022-11-11 12:05:55',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'project',	'1-seo'),
-(2,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'client',	'2-default'),
-(3,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'lead',	'3-default'),
-(4,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'invoice',	'4-default'),
-(5,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'estimate',	'5-default'),
-(6,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'contract',	'6-default'),
-(7,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'expense',	'7-default'),
-(8,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'item',	'8-default'),
-(9,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Support',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'ticket',	'9-support'),
-(10,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Frequently Asked Questions',	'Answers to some of the most frequently asked questions',	'yes',	'everyone',	'sl-icon-call-out',	'knowledgebase',	'10-frequently-asked-questions'),
-(11,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'proposal',	'11-proposal'),
-(60,	NULL,	NULL,	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-docs',	'subscription',	'subscription'),
-(21,	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Uncategorised',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'milestones',	'1-uncategorised');
+INSERT INTO `categories` (`category_id`, `category_uniqueid`, `category_created`, `category_updated`, `category_creatorid`, `category_name`, `category_description`, `category_system_default`, `category_visibility`, `category_icon`, `category_type`, `category_slug`) VALUES
+(1,	'46105664.69159548',	'2020-09-02 15:41:04',	'2022-11-11 12:05:55',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'project',	'1-seo'),
+(2,	'07480753.29925123',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'client',	'2-default'),
+(3,	'27183358.46141427',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'lead',	'3-default'),
+(4,	'49157065.07361046',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'invoice',	'4-default'),
+(5,	'89334039.24587060',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'estimate',	'5-default'),
+(6,	'54933186.00904754',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'contract',	'6-default'),
+(7,	'39724217.95906825',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'expense',	'7-default'),
+(8,	'60361477.14086916',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'item',	'8-default'),
+(9,	'89350153.04490019',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Support',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'ticket',	'9-support'),
+(10,	'54399642.58528154',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Frequently Asked Questions',	'Answers to some of the most frequently asked questions',	'yes',	'everyone',	'sl-icon-call-out',	'knowledgebase',	'10-frequently-asked-questions'),
+(11,	'29441850.71624788',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'proposal',	'11-proposal'),
+(60,	'69798397.34117621',	NULL,	NULL,	0,	'Default',	NULL,	'yes',	'everyone',	'sl-icon-docs',	'subscription',	'subscription'),
+(21,	'46775500.74485788',	'2020-09-02 15:41:04',	'2020-01-01 00:00:00',	0,	'Uncategorised',	NULL,	'yes',	'everyone',	'sl-icon-folder',	'milestones',	'1-uncategorised'),
+(-1,	'00265030.07496227',	'2024-03-09 15:08:50',	'2024-03-09 15:08:50',	0,	'General',	'General canned responses',	'yes',	'everyone',	'sl-icon-docs',	'canned',	'');
 
 DROP TABLE IF EXISTS `category_users`;
 CREATE TABLE `category_users` (
@@ -83,7 +151,6 @@ CREATE TABLE `category_users` (
   PRIMARY KEY (`categoryuser_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `category_users`;
 
 DROP TABLE IF EXISTS `checklists`;
 CREATE TABLE `checklists` (
@@ -105,7 +172,6 @@ CREATE TABLE `checklists` (
   KEY `checklist_status` (`checklist_status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `checklists`;
 
 DROP TABLE IF EXISTS `clients`;
 CREATE TABLE `clients` (
@@ -227,7 +293,6 @@ CREATE TABLE `clients` (
   KEY `client_importid` (`client_importid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `clients`;
 
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
@@ -246,7 +311,6 @@ CREATE TABLE `comments` (
   KEY `commentresource_id` (`commentresource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `comments`;
 
 DROP TABLE IF EXISTS `contracts`;
 CREATE TABLE `contracts` (
@@ -300,10 +364,13 @@ CREATE TABLE `contracts` (
   `doc_status` varchar(100) DEFAULT 'draft' COMMENT 'draft|awaiting_signatures|active|expired',
   `docresource_type` varchar(100) DEFAULT NULL COMMENT 'client|lead',
   `docresource_id` int(11) DEFAULT NULL,
+  `doc_publishing_type` varchar(20) DEFAULT 'instant' COMMENT 'instant|scheduled',
+  `doc_publishing_scheduled_date` datetime DEFAULT NULL,
+  `doc_publishing_scheduled_status` text DEFAULT NULL COMMENT 'pending|published|failed',
+  `doc_publishing_scheduled_log` text DEFAULT NULL,
   PRIMARY KEY (`doc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `contracts`;
 
 DROP TABLE IF EXISTS `contract_templates`;
 CREATE TABLE `contract_templates` (
@@ -320,7 +387,6 @@ CREATE TABLE `contract_templates` (
   KEY `contract_template_creatorid` (`contract_template_creatorid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `contract_templates`;
 INSERT INTO `contract_templates` (`contract_template_id`, `contract_template_created`, `contract_template_updated`, `contract_template_creatorid`, `contract_template_title`, `contract_template_heading_color`, `contract_template_title_color`, `contract_template_body`, `contract_template_system`) VALUES
 (1,	'2023-01-07 17:07:29',	'2022-05-22 09:15:49',	0,	'Default Template',	'#FFFFFF',	'#FFFFFF',	'This agreement (the &ldquo;Agreement&rdquo;) is between <strong>{client_company_name}</strong> (the &ldquo;Client&rdquo;) and <strong>{company_name}</strong> (the &ldquo;Service Provider&rdquo;). This Agreement is dated <strong>{contract_date}</strong>.<br /><br />\r\n<h6><span style=\"text-decoration: underline;\"><br />DELIVERABLES</span></h6>\r\n<br />The Client is hiring the Service Provider to do the following: <br /><br />\r\n<ul>\r\n<li>Design a website template.</li>\r\n<li>Convert the template into a WordPress theme.</li>\r\n<li>Install the WordPress theme on the Client\'s website.</li>\r\n</ul>\r\n<h6><span style=\"text-decoration: underline;\"><br /><br />DURATION</span></h6>\r\n<br />The Service Provider will begin work on&nbsp;<strong>{contract_date}</strong> and must complete the work by <strong>{contract_end_date}</strong>.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />PAYMENT</span></h6>\r\n<br />The Client will pay the Service Provider a sum of <strong>{pricing_table_total}</strong>. Of this, the Client will pay the Service Provider a 3<strong>0% deposit</strong>, before work begins.<br /><br /><strong>{pricing_table}</strong><br /><br />The Service Provider will invoice the Client on or after <strong>{contract_end_date}</strong>. <br /><br />The Client agrees to pay the Service Provider in full within <strong>7 days</strong> of receiving the invoice. Payment after that date will incur a late fee of <strong>$500 per month</strong>.<br /><br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br />EXPENSES</span></h6>\r\n<br />The Client will reimburse the Service Provider&rsquo;s expenses. Expenses do not need to be pre-approved by the Client.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />REVISIONS</span></h6>\r\n<br />The Client will incur additional fees for revisions requested which are outside the scope of the Deliverables at the Service Provider&rsquo;s standard hourly rate of <strong>$50/Hour</strong>.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />OWNERSHIP AND AUTHORSHIP</span></h6>\r\n<strong><br />Ownership:</strong> The Client owns all Deliverables (including intellectual property rights) once the Client has paid the Service Provider in full.<br /><br /><strong>Authorship:</strong> The Client agrees the Service Provider may showcase the Deliverables in the Service Provider&rsquo;s portfolio and in websites, printed literature and other media for the purpose of recognition.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />CONFIDENTIALITY AND NON-DISCLOSURE<br /></span></h6>\r\nEach party promises to the other party that it will not share information that is marked confidential and nonpublic with a third party, unless the disclosing party gives written permission first. Each party must continue to follow these obligations, even after the Agreement ends.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />NON-SOLICITATION</span></h6>\r\n<br />Until this Agreement ends, the Service Provider won&rsquo;t encourage Client employees or service providers to stop working for the Client for any reason.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />REPRESENTATIONS</span></h6>\r\n<br />Each party promises to the other party that it has the authority to enter into and perform all of its obligations under this Agreement.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />TERM AND TERMINATION</span></h6>\r\n<br />Either party may end this Agreement at any time and for any reason, by providing <strong>7 days\'</strong> written notice. <br /><br />The Client will pay the Service Provider for all work that has been completed when the Agreement ends and will reimburse the Service Provider for any prior expenses.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />LIMITATION OF LIABILITY</span></h6>\r\n<br />The Service Provider&rsquo;s Deliverables are sold &ldquo;as is&rdquo; and the Service Provider&rsquo;s maximum liability is the total sum paid by the Client to the Service Provider under this Agreement.<br /><span style=\"text-decoration-line: underline; color: #455a64;\"><br /><br />INDEMNITY</span><br /><br />The Client agrees to indemnify, save and hold harmless the Service Provider from any and all damages, liabilities, costs, losses or expenses arising out of any claim, demand, or action by a third party as a result of the work the Service Provider has done under this Agreement.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />GENERAL</span></h6>\r\n<br />Governing Law and Dispute Resolution. The laws of <strong>France</strong> govern the rights and obligations of the Client and the Service Provider under this Agreement, without regard to conflict of law provisions of that state.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />NOTICES</span></h6>\r\n<br />All notices to either party shall be in writing and delivered by email or registered mail. Notices must be delivered to the party&rsquo;s address(es) listed at the end of this Agreement.<br />Severability.&nbsp; If any portion of this Agreement is changed or disregarded because it is unenforceable, the rest of the Agreement is still enforceable.<br />\r\n<h6><span style=\"text-decoration: underline;\"><br /><br /><br />ENTIRE AGREEMENT</span></h6>\r\n<br />This Agreement supersedes all other prior Agreements (both written and oral) between the parties.<br /><br /><strong>The undersigned agree to and accept the terms of this Agreement.</strong>',	'no');
 
@@ -340,7 +406,6 @@ CREATE TABLE `cs_affiliate_earnings` (
   PRIMARY KEY (`cs_affiliate_earning_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `cs_affiliate_earnings`;
 INSERT INTO `cs_affiliate_earnings` (`cs_affiliate_earning_id`, `cs_affiliate_earning_created`, `cs_affiliate_earning_updated`, `cs_affiliate_earning_projectid`, `cs_affiliate_earning_invoiceid`, `cs_affiliate_earning_invoice_payment_date`, `cs_affiliate_earning_commission_approval_date`, `cs_affiliate_earning_affiliateid`, `cs_affiliate_earning_amount`, `cs_affiliate_earning_commission_rate`, `cs_affiliate_earning_status`) VALUES
 (3,	'2022-08-16 18:25:17',	'2022-08-16 18:25:50',	5,	137,	'2022-08-16 18:25:17',	'2022-08-16 18:25:50',	167,	100.00,	10.00,	'paid');
 
@@ -357,7 +422,6 @@ CREATE TABLE `cs_affiliate_projects` (
   PRIMARY KEY (`cs_affiliate_project_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `cs_affiliate_projects`;
 INSERT INTO `cs_affiliate_projects` (`cs_affiliate_project_id`, `cs_affiliate_project_created`, `cs_affiliate_project_updated`, `cs_affiliate_project_creatorid`, `cs_affiliate_project_affiliateid`, `cs_affiliate_project_projectid`, `cs_affiliate_project_commission_rate`, `cs_affiliate_project_status`) VALUES
 (7,	2022,	2022,	1,	167,	5,	10.00,	'active');
 
@@ -373,7 +437,6 @@ CREATE TABLE `cs_events` (
   PRIMARY KEY (`cs_event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `cs_events`;
 INSERT INTO `cs_events` (`cs_event_id`, `cs_event_created`, `cs_event_updated`, `cs_event_affliateid`, `cs_event_invoiceid`, `cs_event_project_title`, `cs_event_amount`) VALUES
 (3,	'2022-08-16',	'2022-08-16',	167,	137,	'Redesign the layout of our helpdesk',	100.00);
 
@@ -402,7 +465,6 @@ CREATE TABLE `customfields` (
   PRIMARY KEY (`customfields_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='checkbox fields are stored as ''on'' or null';
 
-TRUNCATE `customfields`;
 INSERT INTO `customfields` (`customfields_id`, `customfields_created`, `customfields_updated`, `customfields_position`, `customfields_datatype`, `customfields_datapayload`, `customfields_type`, `customfields_name`, `customfields_title`, `customfields_required`, `customfields_show_client_page`, `customfields_show_project_page`, `customfields_show_task_summary`, `customfields_show_lead_summary`, `customfields_show_invoice`, `customfields_show_ticket_page`, `customfields_show_filter_panel`, `customfields_standard_form_status`, `customfields_status`, `customfields_sorting_a_z`) VALUES
 (1,	'2021-01-09 17:02:59',	'2022-10-02 15:07:33',	1,	'text',	'',	'projects',	'project_custom_field_1',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (2,	'2021-01-09 17:03:12',	'2021-07-13 15:56:23',	1,	'text',	'',	'projects',	'project_custom_field_2',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
@@ -414,7 +476,7 @@ INSERT INTO `customfields` (`customfields_id`, `customfields_created`, `customfi
 (8,	'2021-01-09 17:03:45',	'2021-07-09 17:25:11',	1,	'text',	'',	'projects',	'project_custom_field_8',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (9,	'2021-01-09 17:03:50',	'2021-07-09 17:25:11',	1,	'text',	'',	'projects',	'project_custom_field_9',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (10,	'2021-01-09 17:03:55',	'2021-07-09 17:25:11',	1,	'text',	'',	'projects',	'project_custom_field_10',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
-(11,	'2021-01-09 17:04:09',	'2022-11-24 15:05:02',	1,	'text',	'',	'clients',	'client_custom_field_1',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
+(11,	'2021-01-09 17:04:09',	'2024-01-30 08:03:48',	1,	'text',	'',	'clients',	'client_custom_field_1',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (12,	'2021-01-09 17:04:15',	'2022-04-13 12:14:12',	5,	'text',	'',	'clients',	'client_custom_field_2',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (13,	'2021-01-09 17:04:19',	'2021-07-09 16:49:46',	1,	'text',	'',	'clients',	'client_custom_field_3',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (14,	'2021-01-09 17:04:25',	'2021-07-09 16:49:47',	1,	'text',	'',	'clients',	'client_custom_field_4',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
@@ -444,7 +506,7 @@ INSERT INTO `customfields` (`customfields_id`, `customfields_created`, `customfi
 (38,	'2021-01-09 17:06:42',	'2021-05-08 20:15:21',	1,	'text',	'',	'tasks',	'task_custom_field_8',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (39,	'2021-01-09 17:06:47',	'2021-05-08 20:15:21',	1,	'text',	'',	'tasks',	'task_custom_field_9',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (40,	'2021-01-09 17:06:52',	'2021-05-08 20:15:21',	1,	'text',	'',	'tasks',	'task_custom_field_10',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
-(127,	'2021-07-04 18:06:09',	'2023-05-23 16:41:20',	6,	'paragraph',	'',	'leads',	'lead_custom_field_47',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
+(127,	'2021-07-04 18:06:09',	'2024-01-27 14:28:40',	6,	'paragraph',	'',	'leads',	'lead_custom_field_47',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (126,	'2021-07-04 18:06:09',	'2021-07-10 18:56:29',	1,	'paragraph',	'',	'leads',	'lead_custom_field_46',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (125,	'2021-07-04 18:06:09',	'2021-07-10 18:55:43',	1,	'paragraph',	'',	'leads',	'lead_custom_field_45',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (124,	'2021-07-04 18:06:09',	'2021-07-10 18:55:43',	1,	'paragraph',	'',	'leads',	'lead_custom_field_44',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
@@ -684,7 +746,7 @@ INSERT INTO `customfields` (`customfields_id`, `customfields_created`, `customfi
 (328,	'2021-07-04 18:38:50',	'2021-07-04 18:38:50',	1,	'dropdown',	'',	'tasks',	'task_custom_field_48',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (329,	'2021-07-04 18:38:50',	'2021-07-04 18:38:50',	1,	'dropdown',	'',	'tasks',	'task_custom_field_49',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (330,	'2021-07-04 18:38:50',	'2021-07-04 18:38:50',	1,	'dropdown',	'',	'tasks',	'task_custom_field_50',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
-(331,	'2021-07-04 18:38:59',	'2022-11-24 15:04:48',	3,	'dropdown',	'',	'clients',	'client_custom_field_41',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
+(331,	'2021-07-04 18:38:59',	'2024-01-10 07:16:49',	3,	'dropdown',	'',	'clients',	'client_custom_field_41',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (332,	'2021-07-04 18:38:59',	'2021-08-04 14:17:27',	4,	'dropdown',	'',	'clients',	'client_custom_field_42',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (333,	'2021-07-04 18:38:59',	'2021-07-09 17:19:44',	1,	'dropdown',	'',	'clients',	'client_custom_field_43',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
 (334,	'2021-07-04 18:38:59',	'2021-07-09 17:19:44',	1,	'dropdown',	'',	'clients',	'client_custom_field_44',	'',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'disabled',	'disabled',	'z'),
@@ -847,7 +909,6 @@ CREATE TABLE `email_log` (
   PRIMARY KEY (`emaillog_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `email_log`;
 
 DROP TABLE IF EXISTS `email_queue`;
 CREATE TABLE `email_queue` (
@@ -876,7 +937,6 @@ CREATE TABLE `email_queue` (
   KEY `emailqueue_status` (`emailqueue_status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `email_queue`;
 
 DROP TABLE IF EXISTS `email_templates`;
 CREATE TABLE `email_templates` (
@@ -901,7 +961,6 @@ CREATE TABLE `email_templates` (
   KEY `emailtemplate_category` (`emailtemplate_category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate]';
 
-TRUNCATE `email_templates`;
 INSERT INTO `email_templates` (`emailtemplate_module_unique_id`, `emailtemplate_module_name`, `emailtemplate_name`, `emailtemplate_lang`, `emailtemplate_type`, `emailtemplate_category`, `emailtemplate_subject`, `emailtemplate_body`, `emailtemplate_variables`, `emailtemplate_created`, `emailtemplate_updated`, `emailtemplate_status`, `emailtemplate_language`, `emailtemplate_real_template`, `emailtemplate_show_enabled`, `emailtemplate_id`) VALUES
 (NULL,	NULL,	'New User Welcome',	'template_lang_new_user_welcome',	'everyone',	'users',	'Welcome - Your Account Details',	'<!DOCTYPE html>\n<html>\n\n<head>\n\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n    <title>Email Confirmation</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <style type=\"text/css\">\n        @media screen {\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 400;\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\n            }\n\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 700;\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\n            }\n        }\n\n        body,\n        table,\n        td,\n        a {\n            -ms-text-size-adjust: 100%;\n            /* 1 */\n            -webkit-text-size-adjust: 100%;\n            /* 2 */\n        }\n\n        img {\n            -ms-interpolation-mode: bicubic;\n        }\n\n        a[x-apple-data-detectors] {\n            font-family: inherit !important;\n            font-size: inherit !important;\n            font-weight: inherit !important;\n            line-height: inherit !important;\n            color: inherit !important;\n            text-decoration: none !important;\n        }\n\n        div[style*=\"margin: 16px 0;\"] {\n            margin: 0 !important;\n        }\n\n        body {\n            width: 100% !important;\n            height: 100% !important;\n            padding: 0 !important;\n            margin: 0 !important;\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            background-color: #f9fafc;\n            color: #60676d;\n        }\n\n        table {\n            border-collapse: collapse !important;\n        }\n\n        a {\n            color: #1a82e2;\n        }\n\n        img {\n            height: auto;\n            line-height: 100%;\n            text-decoration: none;\n            border: 0;\n            outline: none;\n        }\n\n        .table-1 {\n            max-width: 600px;\n        }\n\n        .table-1 td {\n            padding: 36px 24px 40px;\n            text-align: center;\n        }\n\n        .table-1 h1 {\n            margin: 0;\n            font-size: 32px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n        }\n\n        .table-2 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n            padding: 36px 24px 0;\n            border-top: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .table-2 h1 {\n            margin: 0;\n            font-size: 20px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n        }\n\n        .table-3 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n\n            background-color: #ffffff;\n        }\n\n        .td-1 {\n            padding: 24px;\n            font-size: 16px;\n            line-height: 24px;\n            background-color: #ffffff;\n            text-align: left;\n            padding-bottom: 10px;\n            padding-top: 0px;\n        }\n\n        .table-gray {\n            width: 100%;\n        }\n\n        .table-gray tr {\n            height: 24px;\n        }\n\n        .table-gray .td-1 {\n            background-color: #f1f3f7;\n            width: 30%;\n            border: solid 1px #e7e9ec;\n            padding-top: 5px;\n            padding-bottom: 5px;\n        }\n\n        .table-gray .td-2 {\n            background-color: #f1f3f7;\n            width: 70%;\n            border: solid 1px #e7e9ec;\n        }\n\n        .button, .button:active, .button:visited {\n            display: inline-block;\n            padding: 16px 36px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            color: #ffffff;\n            text-decoration: none;\n            border-radius: 6px;\n            background-color: #1a82e2;\n            border-radius: 6px;\n        }\n\n        .signature {\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            border-bottom: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .footer {\n            max-width: 600px;\n        }\n\n        .footer td {\n            padding: 12px 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            line-height: 20px;\n            color: #666;\n        }\n\n        .td-button {\n            padding: 12px;\n            background-color: #ffffff;\n            text-align: center;\n        }\n\n        .p-24 {\n            padding: 24px;\n        }\n    </style>\n\n</head>\n\n<body>\n<!-- start body -->\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\n<tbody>\n<tr>\n<td align=\"center\">\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Welcome</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start hero -->\n<tr>\n<td align=\"center\">\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Hi {first_name},</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start copy block -->\n<tr>\n<td align=\"center\">\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\n<tbody>\n<tr>\n<td class=\"td-1\">\n<p>Your account has been created. Below are your login details.</p>\n</td>\n</tr>\n<tr>\n<td class=\"td-1\">\n<table class=\"table-gray\" cellpadding=\"5\">\n<tbody>\n<tr>\n<td class=\"td-1\"><strong>Username</strong></td>\n<td class=\"td-2\">{username}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Password</strong></td>\n<td class=\"td-2\">{password}</td>\n</tr>\n</tbody>\n</table>\n<p>You will be asked to change your password the first time you log in.</p>\n</td>\n</tr>\n<tr>\n<td align=\"left\" bgcolor=\"#ffffff\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td class=\"td-button\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"center\"><a class=\"button\" href=\"{dashboard_url}\" target=\"_blank\" rel=\"noopener\">Login To You Account</a></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"signature\">\n<p>{email_signature}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end copy block --> <!-- start footer -->\n<tr>\n<td class=\"p-24\" align=\"center\">\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\n<tbody>\n<tr>\n<td align=\"center\">\n<p>{email_footer}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end footer --></tbody>\n</table>\n<!-- end body -->\n</body>\n\n</html>',	'{first_name}, {last_name}, {username}, {password}',	'2019-12-08 17:13:10',	'2020-11-12 10:10:48',	'enabled',	'english',	'yes',	'yes',	1),
 (NULL,	NULL,	'Reset Password Request',	'template_lang_reset_password_request',	'everyone',	'users',	'Reset Password Request',	'<!DOCTYPE html>\n<html>\n\n<head>\n\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n    <title>Email Confirmation</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <style type=\"text/css\">\n        @media screen {\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 400;\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\n            }\n\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 700;\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\n            }\n        }\n\n        body,\n        table,\n        td,\n        a {\n            -ms-text-size-adjust: 100%;\n            /* 1 */\n            -webkit-text-size-adjust: 100%;\n            /* 2 */\n        }\n\n        img {\n            -ms-interpolation-mode: bicubic;\n        }\n\n        a[x-apple-data-detectors] {\n            font-family: inherit !important;\n            font-size: inherit !important;\n            font-weight: inherit !important;\n            line-height: inherit !important;\n            color: inherit !important;\n            text-decoration: none !important;\n        }\n\n        div[style*=\"margin: 16px 0;\"] {\n            margin: 0 !important;\n        }\n\n        body {\n            width: 100% !important;\n            height: 100% !important;\n            padding: 0 !important;\n            margin: 0 !important;\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            background-color: #f9fafc;\n            color: #60676d;\n        }\n\n        table {\n            border-collapse: collapse !important;\n        }\n\n        a {\n            color: #1a82e2;\n        }\n\n        img {\n            height: auto;\n            line-height: 100%;\n            text-decoration: none;\n            border: 0;\n            outline: none;\n        }\n\n        .table-1 {\n            max-width: 600px;\n        }\n\n        .table-1 td {\n            padding: 36px 24px 40px;\n            text-align: center;\n        }\n\n        .table-1 h1 {\n            margin: 0;\n            font-size: 32px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n        }\n\n        .table-2 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n            padding: 36px 24px 0;\n            border-top: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .table-2 h1 {\n            margin: 0;\n            font-size: 20px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n        }\n\n        .table-3 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n\n            background-color: #ffffff;\n        }\n\n        .td-1 {\n            padding: 24px;\n            font-size: 16px;\n            line-height: 24px;\n            background-color: #ffffff;\n            text-align: left;\n            padding-bottom: 10px;\n            padding-top: 0px;\n        }\n\n        .table-gray {\n            width: 100%;\n        }\n\n        .table-gray tr {\n            height: 24px;\n        }\n\n        .table-gray .td-1 {\n            background-color: #f1f3f7;\n            width: 30%;\n            border: solid 1px #e7e9ec;\n            padding-top: 5px;\n            padding-bottom: 5px;\n        }\n\n        .table-gray .td-2 {\n            background-color: #f1f3f7;\n            width: 70%;\n            border: solid 1px #e7e9ec;\n        }\n\n        .button, .button:active, .button:visited {\n            display: inline-block;\n            padding: 16px 36px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            color: #ffffff;\n            text-decoration: none;\n            border-radius: 6px;\n            background-color: #1a82e2;\n            border-radius: 6px;\n        }\n\n        .signature {\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            border-bottom: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .footer {\n            max-width: 600px;\n        }\n\n        .footer td {\n            padding: 12px 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            line-height: 20px;\n            color: #666;\n        }\n\n        .td-button {\n            padding: 12px;\n            background-color: #ffffff;\n            text-align: center;\n        }\n\n        .p-24 {\n            padding: 24px;\n        }\n    </style>\n\n</head>\n\n<body>\n<!-- start body -->\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\n<tbody>\n<tr>\n<td align=\"center\">\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Reset Your Password</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start hero -->\n<tr>\n<td align=\"center\">\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Hi {first_name},</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start copy block -->\n<tr>\n<td align=\"center\">\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\n<tbody>\n<tr>\n<td class=\"td-1\">\n<p>To complete your password request, please follow the link below.</p>\n</td>\n</tr>\n<tr>\n<td class=\"td-1\">\n<p>If you are not the one that has initiated this password request, please contact us.</p>\n</td>\n</tr>\n<tr>\n<td align=\"left\" bgcolor=\"#ffffff\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td class=\"td-button\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"center\"><a class=\"button\" href=\"{password_reset_link}\" target=\"_blank\" rel=\"noopener\">Reset Password</a></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"signature\">\n<p>{email_signature}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end copy block --> <!-- start footer -->\n<tr>\n<td class=\"p-24\" align=\"center\">\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\n<tbody>\n<tr>\n<td align=\"center\">\n<p>{email_footer}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end footer --></tbody>\n</table>\n<!-- end body -->\n</body>\n\n</html>',	'{first_name}, {last_name}, {password_reset_link}',	'2019-12-08 17:13:10',	'2020-11-12 12:21:58',	'enabled',	'english',	'yes',	'yes',	2),
@@ -947,7 +1006,9 @@ INSERT INTO `email_templates` (`emailtemplate_module_unique_id`, `emailtemplate_
 (NULL,	NULL,	'New Contract',	'template_lang_new_contract',	'client',	'contracts',	'New Contract - #{contract_id}',	'<!DOCTYPE html>\n<html>\n\n<head>\n\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n    <title>Email Confirmation</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <style type=\"text/css\">\n        @media screen {\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 400;\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\n            }\n\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 700;\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\n            }\n        }\n\n        body,\n        table,\n        td,\n        a {\n            -ms-text-size-adjust: 100%;\n            /* 1 */\n            -webkit-text-size-adjust: 100%;\n            /* 2 */\n        }\n\n        img {\n            -ms-interpolation-mode: bicubic;\n        }\n\n        a[x-apple-data-detectors] {\n            font-family: inherit !important;\n            font-size: inherit !important;\n            font-weight: inherit !important;\n            line-height: inherit !important;\n            color: inherit !important;\n            text-decoration: none !important;\n        }\n\n        div[style*=\"margin: 16px 0;\"] {\n            margin: 0 !important;\n        }\n\n        body {\n            width: 100% !important;\n            height: 100% !important;\n            padding: 0 !important;\n            margin: 0 !important;\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            background-color: #f9fafc;\n            color: #60676d;\n        }\n\n        table {\n            border-collapse: collapse !important;\n        }\n\n        a {\n            color: #1a82e2;\n        }\n\n        img {\n            height: auto;\n            line-height: 100%;\n            text-decoration: none;\n            border: 0;\n            outline: none;\n        }\n\n        .table-1 {\n            max-width: 600px;\n        }\n\n        .table-1 td {\n            padding: 36px 24px 40px;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-1 h1 {\n            margin: 0;\n            font-size: 32px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n            padding: 36px 24px 0;\n            border-top: 3px solid #d4dadf;\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 h1 {\n            margin: 0;\n            font-size: 20px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-3 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .td-1 {\n            padding: 24px;\n            font-size: 16px;\n            line-height: 24px;\n            background-color: #ffffff;\n            text-align: left;\n            padding-bottom: 10px;\n            padding-top: 0px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray {\n            width: 100%;\n        }\n\n        .table-gray tr {\n            height: 24px;\n        }\n\n        .table-gray .td-1 {\n            background-color: #f1f3f7;\n            width: 30%;\n            border: solid 1px #e7e9ec;\n            padding-top: 5px;\n            padding-bottom: 5px;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray .td-2 {\n            background-color: #f1f3f7;\n            width: 70%;\n            border: solid 1px #e7e9ec;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .button, .button:active, .button:visited {\n            display: inline-block;\n            padding: 16px 36px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            color: #ffffff;\n            text-decoration: none;\n            border-radius: 6px;\n            background-color: #1a82e2;\n            border-radius: 6px;\n        }\n\n        .signature {\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            border-bottom: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .footer {\n            max-width: 600px;\n        }\n\n        .footer td {\n            padding: 12px 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            line-height: 20px;\n            color: #666;\n        }\n\n        .td-button {\n            padding: 12px;\n            background-color: #ffffff;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .p-24 {\n            padding: 24px;\n        }\n    </style>\n\n</head>\n\n<body>\n<!-- start body -->\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\n<tbody>\n<tr>\n<td align=\"center\">\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>New Contract</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start hero -->\n<tr>\n<td align=\"center\">\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Hi {first_name},</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start copy block -->\n<tr>\n<td align=\"center\">\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\n<tbody>\n<tr>\n<td class=\"td-1\">\n<p>We have prepared a contract for you to review and sign.</p>\n</td>\n</tr>\n<tr>\n<td class=\"td-1\">\n<table class=\"table-gray\" style=\"width: 100%;\" cellpadding=\"5\">\n<tbody>\n<tr>\n<td class=\"td-1\"><strong>Contract Title</strong></td>\n<td class=\"td-2\">{contract_title}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Contract ID</strong></td>\n<td class=\"td-2\">{contract_id}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Value</strong></td>\n<td class=\"td-2\">{contract_value}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Date</strong></td>\n<td class=\"td-2\">{contract_date}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>End Date</strong></td>\n<td class=\"td-2\">{contract_end_date}</td>\n</tr>\n</tbody>\n</table>\n<p>You can view the contract using the link below</p>\n</td>\n</tr>\n<tr>\n<td align=\"left\" bgcolor=\"#ffffff\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td class=\"td-button\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"center\"><a class=\"button\" href=\"{contract_url}\" target=\"_blank\" rel=\"noopener\">View Contract</a></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"signature\">\n<p>{email_signature}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end copy block --> <!-- start footer -->\n<tr>\n<td class=\"p-24\" align=\"center\">\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\n<tbody>\n<tr>\n<td align=\"center\">\n<p>{email_footer}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end footer --></tbody>\n</table>\n<!-- end body -->\n</body>\n\n</html>',	'{first_name}, {last_name}, {contract_id}, {contract_title}, {contract_date}, {contract_end_date}, {contract_value}, {contract_url}',	'2019-12-08 17:13:10',	'2023-03-28 09:12:14',	'enabled',	'english',	'yes',	'yes',	151),
 (NULL,	NULL,	'Contract Signed',	'template_lang_contract_signed',	'team',	'contracts',	'Contract Has Been Signed - #{contract_id}',	'<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n\r\n    <meta charset=\"utf-8\">\r\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\r\n    <title>Email Confirmation</title>\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n    <style type=\"text/css\">\r\n        @media screen {\r\n            @font-face {\r\n                font-family: \'Source Sans Pro\';\r\n                font-style: normal;\r\n                font-weight: 400;\r\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\r\n            }\r\n\r\n            @font-face {\r\n                font-family: \'Source Sans Pro\';\r\n                font-style: normal;\r\n                font-weight: 700;\r\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\r\n            }\r\n        }\r\n\r\n        body,\r\n        table,\r\n        td,\r\n        a {\r\n            -ms-text-size-adjust: 100%;\r\n            /* 1 */\r\n            -webkit-text-size-adjust: 100%;\r\n            /* 2 */\r\n        }\r\n\r\n        img {\r\n            -ms-interpolation-mode: bicubic;\r\n        }\r\n\r\n        a[x-apple-data-detectors] {\r\n            font-family: inherit !important;\r\n            font-size: inherit !important;\r\n            font-weight: inherit !important;\r\n            line-height: inherit !important;\r\n            color: inherit !important;\r\n            text-decoration: none !important;\r\n        }\r\n\r\n        div[style*=\"margin: 16px 0;\"] {\r\n            margin: 0 !important;\r\n        }\r\n\r\n        body {\r\n            width: 100% !important;\r\n            height: 100% !important;\r\n            padding: 0 !important;\r\n            margin: 0 !important;\r\n            padding: 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            background-color: #f9fafc;\r\n            color: #60676d;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse !important;\r\n        }\r\n\r\n        a {\r\n            color: #1a82e2;\r\n        }\r\n\r\n        img {\r\n            height: auto;\r\n            line-height: 100%;\r\n            text-decoration: none;\r\n            border: 0;\r\n            outline: none;\r\n        }\r\n\r\n        .table-1 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-1 td {\r\n            padding: 36px 24px 40px;\r\n            text-align: center;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-1 h1 {\r\n            margin: 0;\r\n            font-size: 32px;\r\n            font-weight: 600;\r\n            letter-spacing: -1px;\r\n            line-height: 48px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-2 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-2 td {\r\n            padding: 36px 24px 0;\r\n            border-top: 3px solid #d4dadf;\r\n            background-color: #ffffff;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-2 h1 {\r\n            margin: 0;\r\n            font-size: 20px;\r\n            font-weight: 600;\r\n            letter-spacing: -1px;\r\n            line-height: 48px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-3 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-2 td {\r\n\r\n            background-color: #ffffff;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .td-1 {\r\n            padding: 24px;\r\n            font-size: 16px;\r\n            line-height: 24px;\r\n            background-color: #ffffff;\r\n            text-align: left;\r\n            padding-bottom: 10px;\r\n            padding-top: 0px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-gray {\r\n            width: 100%;\r\n        }\r\n\r\n        .table-gray tr {\r\n            height: 24px;\r\n        }\r\n\r\n        .table-gray .td-1 {\r\n            background-color: #f1f3f7;\r\n            width: 30%;\r\n            border: solid 1px #e7e9ec;\r\n            padding-top: 5px;\r\n            padding-bottom: 5px;\r\n            font-size:16px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-gray .td-2 {\r\n            background-color: #f1f3f7;\r\n            width: 70%;\r\n            border: solid 1px #e7e9ec;\r\n            font-size:16px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .button, .button:active, .button:visited {\r\n            display: inline-block;\r\n            padding: 16px 36px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            color: #ffffff;\r\n            text-decoration: none;\r\n            border-radius: 6px;\r\n            background-color: #1a82e2;\r\n            border-radius: 6px;\r\n        }\r\n\r\n        .signature {\r\n            padding: 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            line-height: 24px;\r\n            border-bottom: 3px solid #d4dadf;\r\n            background-color: #ffffff;\r\n        }\r\n\r\n        .footer {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .footer td {\r\n            padding: 12px 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 14px;\r\n            line-height: 20px;\r\n            color: #666;\r\n        }\r\n\r\n        .td-button {\r\n            padding: 12px;\r\n            background-color: #ffffff;\r\n            text-align: center;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .p-24 {\r\n            padding: 24px;\r\n        }\r\n    </style>\r\n\r\n</head>\r\n\r\n<body>\r\n<!-- start body -->\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\r\n<tbody>\r\n<tr>\r\n<td align=\"center\">\r\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\">\r\n<h1>Contract Accepted</h1>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end hero --> <!-- start hero -->\r\n<tr>\r\n<td align=\"center\">\r\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\">\r\n<h1>Hi {first_name},</h1>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end hero --> <!-- start copy block -->\r\n<tr>\r\n<td align=\"center\">\r\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\r\n<tbody>\r\n<tr>\r\n<td class=\"td-1\">\r\n<p>The client has signed the contract.</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\">\r\n<table class=\"table-gray\" style=\"width: 100%;\" cellpadding=\"5\">\r\n<tbody>\r\n<tr>\r\n<td class=\"td-1\"><strong>Contract Title</strong></td>\r\n<td class=\"td-2\">{contract_title}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>Contract ID</strong></td>\r\n<td class=\"td-2\">{contract_id}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>Value</strong></td>\r\n<td class=\"td-2\">{contract_value}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>Date</strong></td>\r\n<td class=\"td-2\">{contract_date}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>End Date</strong></td>\r\n<td class=\"td-2\">{contract_end_date}</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p>You can view the contract using the link below</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td align=\"left\" bgcolor=\"#ffffff\">\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td class=\"td-button\">\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"center\"><a class=\"button\" href=\"{contract_url}\" target=\"_blank\" rel=\"noopener\">View Contract</a></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td class=\"signature\">\r\n<p>{email_signature}</p>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end copy block --> <!-- start footer -->\r\n<tr>\r\n<td class=\"p-24\" align=\"center\">\r\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\r\n<tbody>\r\n<tr>\r\n<td align=\"center\">\r\n<p>{email_footer}</p>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end footer --></tbody>\r\n</table>\r\n<!-- end body -->\r\n</body>\r\n\r\n</html>',	'{first_name}, {last_name}, {contract_id}, {contract_title}, {contract_date}, {contract_end_date}, {contract_value}, {contract_url}',	'2019-12-08 17:13:10',	'2023-01-06 04:28:52',	'enabled',	'english',	'yes',	'yes',	152),
 (NULL,	NULL,	'Proposal Revised',	'template_lang_proposal_revised',	'client',	'proposals',	'Proposal Revised - #{proposal_id}',	'<!DOCTYPE html>\n<html>\n\n<head>\n\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n    <title>Email Confirmation</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <style type=\"text/css\">\n        @media screen {\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 400;\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\n            }\n\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 700;\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\n            }\n        }\n\n        body,\n        table,\n        td,\n        a {\n            -ms-text-size-adjust: 100%;\n            /* 1 */\n            -webkit-text-size-adjust: 100%;\n            /* 2 */\n        }\n\n        img {\n            -ms-interpolation-mode: bicubic;\n        }\n\n        a[x-apple-data-detectors] {\n            font-family: inherit !important;\n            font-size: inherit !important;\n            font-weight: inherit !important;\n            line-height: inherit !important;\n            color: inherit !important;\n            text-decoration: none !important;\n        }\n\n        div[style*=\"margin: 16px 0;\"] {\n            margin: 0 !important;\n        }\n\n        body {\n            width: 100% !important;\n            height: 100% !important;\n            padding: 0 !important;\n            margin: 0 !important;\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            background-color: #f9fafc;\n            color: #60676d;\n        }\n\n        table {\n            border-collapse: collapse !important;\n        }\n\n        a {\n            color: #1a82e2;\n        }\n\n        img {\n            height: auto;\n            line-height: 100%;\n            text-decoration: none;\n            border: 0;\n            outline: none;\n        }\n\n        .table-1 {\n            max-width: 600px;\n        }\n\n        .table-1 td {\n            padding: 36px 24px 40px;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-1 h1 {\n            margin: 0;\n            font-size: 32px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n            padding: 36px 24px 0;\n            border-top: 3px solid #d4dadf;\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 h1 {\n            margin: 0;\n            font-size: 20px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-3 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .td-1 {\n            padding: 24px;\n            font-size: 16px;\n            line-height: 24px;\n            background-color: #ffffff;\n            text-align: left;\n            padding-bottom: 10px;\n            padding-top: 0px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray {\n            width: 100%;\n        }\n\n        .table-gray tr {\n            height: 24px;\n        }\n\n        .table-gray .td-1 {\n            background-color: #f1f3f7;\n            width: 30%;\n            border: solid 1px #e7e9ec;\n            padding-top: 5px;\n            padding-bottom: 5px;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray .td-2 {\n            background-color: #f1f3f7;\n            width: 70%;\n            border: solid 1px #e7e9ec;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .button, .button:active, .button:visited {\n            display: inline-block;\n            padding: 16px 36px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            color: #ffffff;\n            text-decoration: none;\n            border-radius: 6px;\n            background-color: #1a82e2;\n            border-radius: 6px;\n        }\n\n        .signature {\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            border-bottom: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .footer {\n            max-width: 600px;\n        }\n\n        .footer td {\n            padding: 12px 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            line-height: 20px;\n            color: #666;\n        }\n\n        .td-button {\n            padding: 12px;\n            background-color: #ffffff;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .p-24 {\n            padding: 24px;\n        }\n    </style>\n\n</head>\n\n<body>\n<!-- start body -->\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\n<tbody>\n<tr>\n<td align=\"center\">\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Revised Proposal</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start hero -->\n<tr>\n<td align=\"center\">\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Hi {first_name},</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start copy block -->\n<tr>\n<td align=\"center\">\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\n<tbody>\n<tr>\n<td class=\"td-1\">\n<p>Please find attached our revised proposal for your project.</p>\n</td>\n</tr>\n<tr>\n<td class=\"td-1\">\n<table class=\"table-gray\" style=\"width: 100%;\" cellpadding=\"5\">\n<tbody>\n<tr>\n<td class=\"td-1\"><strong>Proposal Title</strong></td>\n<td class=\"td-2\">{proposal_title}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Proposal ID</strong></td>\n<td class=\"td-2\">{proposal_id}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Proposal Value</strong></td>\n<td class=\"td-2\">{proposal_value}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Proposal Date</strong></td>\n<td class=\"td-2\">{proposal_date}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Valid Until Date</strong></td>\n<td class=\"td-2\">{proposal_expiry_date}</td>\n</tr>\n</tbody>\n</table>\n<p>You can view the proposal using the link below</p>\n</td>\n</tr>\n<tr>\n<td align=\"left\" bgcolor=\"#ffffff\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td class=\"td-button\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"center\"><a class=\"button\" href=\"{proposal_url}\" target=\"_blank\" rel=\"noopener\">View Proposal</a></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"signature\">\n<p>{email_signature}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end copy block --> <!-- start footer -->\n<tr>\n<td class=\"p-24\" align=\"center\">\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\n<tbody>\n<tr>\n<td align=\"center\">\n<p>{email_footer}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end footer --></tbody>\n</table>\n<!-- end body -->\n</body>\n\n</html>',	'{first_name}, {last_name}, {proposal_id}, {proposal_title}, {proposal_value}, {proposal_date}, {proposal_expiry_date}, {proposal_url}',	'2019-12-08 17:13:10',	'2022-05-29 08:05:02',	'enabled',	'english',	'yes',	'yes',	148),
-(NULL,	NULL,	'Reminder',	'reminder',	'everyone',	'other',	'Due Reminder - {reminder_title}',	'<!DOCTYPE html>\n<html>\n\n<head>\n\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n    <title>Email Confirmation</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <style type=\"text/css\">\n        @media screen {\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 400;\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\n            }\n\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 700;\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\n            }\n        }\n\n        body,\n        table,\n        td,\n        a {\n            -ms-text-size-adjust: 100%;\n            /* 1 */\n            -webkit-text-size-adjust: 100%;\n            /* 2 */\n        }\n\n        img {\n            -ms-interpolation-mode: bicubic;\n        }\n\n        a[x-apple-data-detectors] {\n            font-family: inherit !important;\n            font-size: inherit !important;\n            font-weight: inherit !important;\n            line-height: inherit !important;\n            color: inherit !important;\n            text-decoration: none !important;\n        }\n\n        div[style*=\"margin: 16px 0;\"] {\n            margin: 0 !important;\n        }\n\n        body {\n            width: 100% !important;\n            height: 100% !important;\n            padding: 0 !important;\n            margin: 0 !important;\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            background-color: #f9fafc;\n            color: #60676d;\n        }\n\n        table {\n            border-collapse: collapse !important;\n        }\n\n        a {\n            color: #1a82e2;\n        }\n\n        img {\n            height: auto;\n            line-height: 100%;\n            text-decoration: none;\n            border: 0;\n            outline: none;\n        }\n\n        .table-1 {\n            max-width: 600px;\n        }\n\n        .table-1 td {\n            padding: 36px 24px 40px;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-1 h1 {\n            margin: 0;\n            font-size: 32px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n            padding: 36px 24px 0;\n            border-top: 3px solid #d4dadf;\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 h1 {\n            margin: 0;\n            font-size: 20px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-3 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .td-1 {\n            padding: 24px;\n            font-size: 16px;\n            line-height: 24px;\n            background-color: #ffffff;\n            text-align: left;\n            padding-bottom: 10px;\n            padding-top: 0px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray {\n            width: 100%;\n        }\n\n        .table-gray tr {\n            height: 24px;\n        }\n\n        .table-gray .td-1 {\n            background-color: #f1f3f7;\n            width: 30%;\n            border: solid 1px #e7e9ec;\n            padding-top: 5px;\n            padding-bottom: 5px;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray .td-2 {\n            background-color: #f1f3f7;\n            width: 70%;\n            border: solid 1px #e7e9ec;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .button, .button:active, .button:visited {\n            display: inline-block;\n            padding: 16px 36px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            color: #ffffff;\n            text-decoration: none;\n            border-radius: 6px;\n            background-color: #1a82e2;\n            border-radius: 6px;\n        }\n\n        .signature {\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            border-bottom: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .footer {\n            max-width: 600px;\n        }\n\n        .footer td {\n            padding: 12px 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            line-height: 20px;\n            color: #666;\n        }\n\n        .td-button {\n            padding: 12px;\n            background-color: #ffffff;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .p-24 {\n            padding: 24px;\n        }\n    </style>\n\n</head>\n\n<body>\n<!-- start body -->\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\n<tbody>\n<tr>\n<td align=\"center\">\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Reminder</h1>\n<h2>({linked_item_type})</h2>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start hero -->\n<tr>\n<td align=\"center\">\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Hi {first_name},</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start copy block -->\n<tr>\n<td align=\"center\">\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\n<tbody>\n<tr>\n<td class=\"td-1\">\n<p>The following reminder is now due.</p>\n</td>\n</tr>\n<tr>\n<td class=\"td-1\">\n<table class=\"table-gray\" cellpadding=\"5\">\n<tbody>\n<tr>\n<td class=\"td-1\"><strong>Reminder Title</strong></td>\n<td class=\"td-2\">{reminder_title}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Reminder Item Title</strong></td>\n<td class=\"td-2\">{linked_item_title}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Due Date</strong></td>\n<td class=\"td-2\">{reminder_date}&nbsp;{reminder_time}&nbsp;</td>\n</tr>\n</tbody>\n</table>\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td align=\"left\" bgcolor=\"#ffffff\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td class=\"td-button\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"center\"><a class=\"button\" href=\"{linked_item_url}\" target=\"_blank\" rel=\"noopener\">View Reminder Item</a></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"signature\">\n<p>{email_signature}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end copy block --> <!-- start footer -->\n<tr>\n<td class=\"p-24\" align=\"center\">\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\n<tbody>\n<tr>\n<td align=\"center\">\n<p>{email_footer}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end footer --></tbody>\n</table>\n<!-- end body -->\n</body>\n\n</html>',	'{first_name}, {last_name}, {reminder_title}, {reminder_date}, {reminder_time}, {reminder_notes}, {linked_item_type}, {linked_item_name}, {linked_item_title}, {linked_item_id}, {linked_item_url}',	'2019-12-08 17:13:10',	'2022-08-18 15:59:04',	'enabled',	'english',	'yes',	'yes',	150);
+(NULL,	NULL,	'Reminder',	'reminder',	'everyone',	'other',	'Due Reminder - {reminder_title}',	'<!DOCTYPE html>\n<html>\n\n<head>\n\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n    <title>Email Confirmation</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <style type=\"text/css\">\n        @media screen {\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 400;\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\n            }\n\n            @font-face {\n                font-family: \'Source Sans Pro\';\n                font-style: normal;\n                font-weight: 700;\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\n            }\n        }\n\n        body,\n        table,\n        td,\n        a {\n            -ms-text-size-adjust: 100%;\n            /* 1 */\n            -webkit-text-size-adjust: 100%;\n            /* 2 */\n        }\n\n        img {\n            -ms-interpolation-mode: bicubic;\n        }\n\n        a[x-apple-data-detectors] {\n            font-family: inherit !important;\n            font-size: inherit !important;\n            font-weight: inherit !important;\n            line-height: inherit !important;\n            color: inherit !important;\n            text-decoration: none !important;\n        }\n\n        div[style*=\"margin: 16px 0;\"] {\n            margin: 0 !important;\n        }\n\n        body {\n            width: 100% !important;\n            height: 100% !important;\n            padding: 0 !important;\n            margin: 0 !important;\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            background-color: #f9fafc;\n            color: #60676d;\n        }\n\n        table {\n            border-collapse: collapse !important;\n        }\n\n        a {\n            color: #1a82e2;\n        }\n\n        img {\n            height: auto;\n            line-height: 100%;\n            text-decoration: none;\n            border: 0;\n            outline: none;\n        }\n\n        .table-1 {\n            max-width: 600px;\n        }\n\n        .table-1 td {\n            padding: 36px 24px 40px;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-1 h1 {\n            margin: 0;\n            font-size: 32px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n            padding: 36px 24px 0;\n            border-top: 3px solid #d4dadf;\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-2 h1 {\n            margin: 0;\n            font-size: 20px;\n            font-weight: 600;\n            letter-spacing: -1px;\n            line-height: 48px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-3 {\n            max-width: 600px;\n        }\n\n        .table-2 td {\n\n            background-color: #ffffff;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .td-1 {\n            padding: 24px;\n            font-size: 16px;\n            line-height: 24px;\n            background-color: #ffffff;\n            text-align: left;\n            padding-bottom: 10px;\n            padding-top: 0px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray {\n            width: 100%;\n        }\n\n        .table-gray tr {\n            height: 24px;\n        }\n\n        .table-gray .td-1 {\n            background-color: #f1f3f7;\n            width: 30%;\n            border: solid 1px #e7e9ec;\n            padding-top: 5px;\n            padding-bottom: 5px;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .table-gray .td-2 {\n            background-color: #f1f3f7;\n            width: 70%;\n            border: solid 1px #e7e9ec;\n            font-size:16px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .button, .button:active, .button:visited {\n            display: inline-block;\n            padding: 16px 36px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            color: #ffffff;\n            text-decoration: none;\n            border-radius: 6px;\n            background-color: #1a82e2;\n            border-radius: 6px;\n        }\n\n        .signature {\n            padding: 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 16px;\n            line-height: 24px;\n            border-bottom: 3px solid #d4dadf;\n            background-color: #ffffff;\n        }\n\n        .footer {\n            max-width: 600px;\n        }\n\n        .footer td {\n            padding: 12px 24px;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n            font-size: 14px;\n            line-height: 20px;\n            color: #666;\n        }\n\n        .td-button {\n            padding: 12px;\n            background-color: #ffffff;\n            text-align: center;\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\n        }\n\n        .p-24 {\n            padding: 24px;\n        }\n    </style>\n\n</head>\n\n<body>\n<!-- start body -->\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\n<tbody>\n<tr>\n<td align=\"center\">\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Reminder</h1>\n<h2>({linked_item_type})</h2>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start hero -->\n<tr>\n<td align=\"center\">\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"left\">\n<h1>Hi {first_name},</h1>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end hero --> <!-- start copy block -->\n<tr>\n<td align=\"center\">\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\n<tbody>\n<tr>\n<td class=\"td-1\">\n<p>The following reminder is now due.</p>\n</td>\n</tr>\n<tr>\n<td class=\"td-1\">\n<table class=\"table-gray\" cellpadding=\"5\">\n<tbody>\n<tr>\n<td class=\"td-1\"><strong>Reminder Title</strong></td>\n<td class=\"td-2\">{reminder_title}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Reminder Item Title</strong></td>\n<td class=\"td-2\">{linked_item_title}</td>\n</tr>\n<tr>\n<td class=\"td-1\"><strong>Due Date</strong></td>\n<td class=\"td-2\">{reminder_date}&nbsp;{reminder_time}&nbsp;</td>\n</tr>\n</tbody>\n</table>\n<p>&nbsp;</p>\n</td>\n</tr>\n<tr>\n<td align=\"left\" bgcolor=\"#ffffff\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td class=\"td-button\">\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tbody>\n<tr>\n<td align=\"center\"><a class=\"button\" href=\"{linked_item_url}\" target=\"_blank\" rel=\"noopener\">View Reminder Item</a></td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"signature\">\n<p>{email_signature}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end copy block --> <!-- start footer -->\n<tr>\n<td class=\"p-24\" align=\"center\">\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\n<tbody>\n<tr>\n<td align=\"center\">\n<p>{email_footer}</p>\n</td>\n</tr>\n</tbody>\n</table>\n</td>\n</tr>\n<!-- end footer --></tbody>\n</table>\n<!-- end body -->\n</body>\n\n</html>',	'{first_name}, {last_name}, {reminder_title}, {reminder_date}, {reminder_time}, {reminder_notes}, {linked_item_type}, {linked_item_name}, {linked_item_title}, {linked_item_id}, {linked_item_url}',	'2019-12-08 17:13:10',	'2022-08-18 15:59:04',	'enabled',	'english',	'yes',	'yes',	150),
+(NULL,	NULL,	'New Web Form Submitted',	'template_lang_lead_form_submitted',	'team',	'leads',	'New Form Submitted',	'<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n\r\n    <meta charset=\"utf-8\">\r\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\r\n    <title>Email Confirmation</title>\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n    <style type=\"text/css\">\r\n        @media screen {\r\n            @font-face {\r\n                font-family: \'Source Sans Pro\';\r\n                font-style: normal;\r\n                font-weight: 400;\r\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\r\n            }\r\n\r\n            @font-face {\r\n                font-family: \'Source Sans Pro\';\r\n                font-style: normal;\r\n                font-weight: 700;\r\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\r\n            }\r\n        }\r\n\r\n        body,\r\n        table,\r\n        td,\r\n        a {\r\n            -ms-text-size-adjust: 100%;\r\n            /* 1 */\r\n            -webkit-text-size-adjust: 100%;\r\n            /* 2 */\r\n        }\r\n\r\n        img {\r\n            -ms-interpolation-mode: bicubic;\r\n        }\r\n\r\n        a[x-apple-data-detectors] {\r\n            font-family: inherit !important;\r\n            font-size: inherit !important;\r\n            font-weight: inherit !important;\r\n            line-height: inherit !important;\r\n            color: inherit !important;\r\n            text-decoration: none !important;\r\n        }\r\n\r\n        div[style*=\"margin: 16px 0;\"] {\r\n            margin: 0 !important;\r\n        }\r\n\r\n        body {\r\n            width: 100% !important;\r\n            height: 100% !important;\r\n            padding: 0 !important;\r\n            margin: 0 !important;\r\n            padding: 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            background-color: #f9fafc;\r\n            color: #60676d;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse !important;\r\n        }\r\n\r\n        a {\r\n            color: #1a82e2;\r\n        }\r\n\r\n        img {\r\n            height: auto;\r\n            line-height: 100%;\r\n            text-decoration: none;\r\n            border: 0;\r\n            outline: none;\r\n        }\r\n\r\n        .table-1 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-1 td {\r\n            padding: 36px 24px 40px;\r\n            text-align: center;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-1 h1 {\r\n            margin: 0;\r\n            font-size: 32px;\r\n            font-weight: 600;\r\n            letter-spacing: -1px;\r\n            line-height: 48px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-2 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-2 td {\r\n            padding: 36px 24px 0;\r\n            border-top: 3px solid #d4dadf;\r\n            background-color: #ffffff;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-2 h1 {\r\n            margin: 0;\r\n            font-size: 20px;\r\n            font-weight: 600;\r\n            letter-spacing: -1px;\r\n            line-height: 48px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-3 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-2 td {\r\n\r\n            background-color: #ffffff;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .td-1 {\r\n            padding: 24px;\r\n            font-size: 16px;\r\n            line-height: 24px;\r\n            background-color: #ffffff;\r\n            text-align: left;\r\n            padding-bottom: 10px;\r\n            padding-top: 0px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-gray {\r\n            width: 100%;\r\n        }\r\n\r\n        .table-gray tr {\r\n            height: 24px;\r\n        }\r\n\r\n        .table-gray .td-1 {\r\n            background-color: #f1f3f7;\r\n            width: 30%;\r\n            border: solid 1px #e7e9ec;\r\n            padding-top: 5px;\r\n            padding-bottom: 5px;\r\n            font-size:16px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-gray .td-2 {\r\n            background-color: #f1f3f7;\r\n            width: 70%;\r\n            border: solid 1px #e7e9ec;\r\n            font-size:16px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .button, .button:active, .button:visited {\r\n            display: inline-block;\r\n            padding: 16px 36px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            color: #ffffff;\r\n            text-decoration: none;\r\n            border-radius: 6px;\r\n            background-color: #1a82e2;\r\n            border-radius: 6px;\r\n        }\r\n\r\n        .signature {\r\n            padding: 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            line-height: 24px;\r\n            border-bottom: 3px solid #d4dadf;\r\n            background-color: #ffffff;\r\n        }\r\n\r\n        .footer {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .footer td {\r\n            padding: 12px 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 14px;\r\n            line-height: 20px;\r\n            color: #666;\r\n        }\r\n\r\n        .td-button {\r\n            padding: 12px;\r\n            background-color: #ffffff;\r\n            text-align: center;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .p-24 {\r\n            padding: 24px;\r\n        }\r\n    </style>\r\n\r\n</head>\r\n\r\n<body>\r\n<!-- start body -->\r\n<table style=\"height: 744px; width: 100%;\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\r\n<tbody>\r\n<tr style=\"height: 75px;\">\r\n<td style=\"height: 75px;\" align=\"center\">\r\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\">\r\n<h1>New Form Submitted</h1>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end hero --> <!-- start hero -->\r\n<tr style=\"height: 75px;\">\r\n<td style=\"height: 75px;\" align=\"center\">\r\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\">\r\n<h1>Hi {first_name},</h1>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end hero --> <!-- start copy block -->\r\n<tr style=\"height: 519px;\">\r\n<td style=\"height: 519px;\" align=\"center\">\r\n<table class=\"table-3\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\r\n<tbody>\r\n<tr>\r\n<td class=\"td-1\">\r\n<p>A new lead form has been submitted.</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\">\r\n<table class=\"table-gray\" cellpadding=\"5\">\r\n<tbody>\r\n<tr>\r\n<td class=\"td-1\" style=\"width: 204.3px;\"><strong>Form Name</strong></td>\r\n<td class=\"td-2\" style=\"width: 479.7px;\">{form_name}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\" style=\"width: 204.3px;\"><strong>From Name</strong></td>\r\n<td class=\"td-2\" style=\"width: 479.7px;\">{submitted_by_name}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\" style=\"width: 204.3px;\"><strong>From Email</strong></td>\r\n<td class=\"td-2\" style=\"width: 479.7px;\">{submitted_by_email}</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p>{form_content}<br /><br />You can manage your lead via the dashboard.</p>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td align=\"left\" bgcolor=\"#ffffff\">\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td class=\"td-button\">\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"center\"><a class=\"button\" href=\"{lead_url}\" target=\"_blank\" rel=\"noopener\">Manage Lead</a></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<tr>\r\n<td class=\"signature\">\r\n<p>{email_signature}</p>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end copy block --> <!-- start footer -->\r\n<tr style=\"height: 75px;\">\r\n<td class=\"p-24\" style=\"height: 75px;\" align=\"center\">\r\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\r\n<tbody>\r\n<tr>\r\n<td align=\"center\">\r\n<p>{email_footer}</p>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end footer --></tbody>\r\n</table>\r\n<!-- end body -->\r\n</body>\r\n\r\n</html>',	'{first_name}, {form_name}, {submitted_by_name}, {submitted_by_email}, {form_content}, {lead_url}',	'2024-01-27 15:08:11',	'2024-01-27 15:08:11',	'enabled',	'english',	'yes',	'yes',	155),
+(NULL,	NULL,	'Calendar Reminder',	'calendar_reminder',	'team',	'other',	'Reminder - {event_title}',	'<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n\r\n    <meta charset=\"utf-8\">\r\n    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\r\n    <title>Email Confirmation</title>\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n    <style type=\"text/css\">\r\n        @media screen {\r\n            @font-face {\r\n                font-family: \'Source Sans Pro\';\r\n                font-style: normal;\r\n                font-weight: 400;\r\n                src: local(\'Source Sans Pro Regular\'), local(\'SourceSansPro-Regular\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format(\'woff\');\r\n            }\r\n\r\n            @font-face {\r\n                font-family: \'Source Sans Pro\';\r\n                font-style: normal;\r\n                font-weight: 700;\r\n                src: local(\'Source Sans Pro Bold\'), local(\'SourceSansPro-Bold\'), url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format(\'woff\');\r\n            }\r\n        }\r\n\r\n        body,\r\n        table,\r\n        td,\r\n        a {\r\n            -ms-text-size-adjust: 100%;\r\n            /* 1 */\r\n            -webkit-text-size-adjust: 100%;\r\n            /* 2 */\r\n        }\r\n\r\n        img {\r\n            -ms-interpolation-mode: bicubic;\r\n        }\r\n\r\n        a[x-apple-data-detectors] {\r\n            font-family: inherit !important;\r\n            font-size: inherit !important;\r\n            font-weight: inherit !important;\r\n            line-height: inherit !important;\r\n            color: inherit !important;\r\n            text-decoration: none !important;\r\n        }\r\n\r\n        div[style*=\"margin: 16px 0;\"] {\r\n            margin: 0 !important;\r\n        }\r\n\r\n        body {\r\n            width: 100% !important;\r\n            height: 100% !important;\r\n            padding: 0 !important;\r\n            margin: 0 !important;\r\n            padding: 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            background-color: #f9fafc;\r\n            color: #60676d;\r\n        }\r\n\r\n        table {\r\n            border-collapse: collapse !important;\r\n        }\r\n\r\n        a {\r\n            color: #1a82e2;\r\n        }\r\n\r\n        img {\r\n            height: auto;\r\n            line-height: 100%;\r\n            text-decoration: none;\r\n            border: 0;\r\n            outline: none;\r\n        }\r\n\r\n        .table-1 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-1 td {\r\n            padding: 36px 24px 40px;\r\n            text-align: center;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-1 h1 {\r\n            margin: 0;\r\n            font-size: 32px;\r\n            font-weight: 600;\r\n            letter-spacing: -1px;\r\n            line-height: 48px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-2 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-2 td {\r\n            padding: 36px 24px 0;\r\n            border-top: 3px solid #d4dadf;\r\n            background-color: #ffffff;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-2 h1 {\r\n            margin: 0;\r\n            font-size: 20px;\r\n            font-weight: 600;\r\n            letter-spacing: -1px;\r\n            line-height: 48px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-3 {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .table-2 td {\r\n\r\n            background-color: #ffffff;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .td-1 {\r\n            padding: 24px;\r\n            font-size: 16px;\r\n            line-height: 24px;\r\n            background-color: #ffffff;\r\n            text-align: left;\r\n            padding-bottom: 10px;\r\n            padding-top: 0px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-gray {\r\n            width: 100%;\r\n        }\r\n\r\n        .table-gray tr {\r\n            height: 24px;\r\n        }\r\n\r\n        .table-gray .td-1 {\r\n            background-color: #f1f3f7;\r\n            width: 30%;\r\n            border: solid 1px #e7e9ec;\r\n            padding-top: 5px;\r\n            padding-bottom: 5px;\r\n            font-size:16px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .table-gray .td-2 {\r\n            background-color: #f1f3f7;\r\n            width: 70%;\r\n            border: solid 1px #e7e9ec;\r\n            font-size:16px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .button, .button:active, .button:visited {\r\n            display: inline-block;\r\n            padding: 16px 36px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            color: #ffffff;\r\n            text-decoration: none;\r\n            border-radius: 6px;\r\n            background-color: #1a82e2;\r\n            border-radius: 6px;\r\n        }\r\n\r\n        .signature {\r\n            padding: 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 16px;\r\n            line-height: 24px;\r\n            border-bottom: 3px solid #d4dadf;\r\n            background-color: #ffffff;\r\n        }\r\n\r\n        .footer {\r\n            max-width: 600px;\r\n        }\r\n\r\n        .footer td {\r\n            padding: 12px 24px;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n            font-size: 14px;\r\n            line-height: 20px;\r\n            color: #666;\r\n        }\r\n\r\n        .td-button {\r\n            padding: 12px;\r\n            background-color: #ffffff;\r\n            text-align: center;\r\n            font-family: \'Source Sans Pro\', Helvetica, Arial, sans-serif;\r\n        }\r\n\r\n        .p-24 {\r\n            padding: 24px;\r\n        }\r\n    </style>\r\n\r\n</head>\r\n\r\n<body>\r\n<!-- start body -->\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start hero -->\r\n<tbody>\r\n<tr>\r\n<td align=\"center\">\r\n<table class=\"table-1\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\">\r\n<h1>Reminder</h1>\r\n<h2>{event_title}</h2>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end hero --> <!-- start hero -->\r\n<tr>\r\n<td align=\"center\">\r\n<table class=\"table-2\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"left\">\r\n<h1>Hi {first_name},</h1>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end hero --> <!-- start copy block -->\r\n<tr>\r\n<td align=\"center\">\r\n<table class=\"table-3\" style=\"height: 428px; width: 100%;\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start copy -->\r\n<tbody>\r\n<tr style=\"height: 56px;\">\r\n<td class=\"td-1\" style=\"height: 56px;\">\r\n<p>This is a reminder for this following event:</p>\r\n</td>\r\n</tr>\r\n<tr style=\"height: 209px;\">\r\n<td class=\"td-1\" style=\"height: 209px;\">\r\n<table class=\"table-gray\" cellpadding=\"5\">\r\n<tbody>\r\n<tr>\r\n<td class=\"td-1\"><strong>Title</strong></td>\r\n<td class=\"td-2\">{event_title}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>Type</strong></td>\r\n<td class=\"td-2\">{event_type}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>Date Start</strong></td>\r\n<td class=\"td-2\">{event_start_date}</td>\r\n</tr>\r\n<tr>\r\n<td class=\"td-1\"><strong>Time Start</strong></td>\r\n<td class=\"td-2\">{event_start_time}</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<p>{event_details}</p>\r\n</td>\r\n</tr>\r\n<tr style=\"height: 107px;\">\r\n<td style=\"height: 107px;\" align=\"left\" bgcolor=\"#ffffff\">\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td class=\"td-button\">\r\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\r\n<tbody>\r\n<tr>\r\n<td align=\"center\"><a class=\"button\" href=\"{event_url}\" target=\"_blank\" rel=\"noopener\">View Details</a></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end copy block --> <!-- start footer -->\r\n<tr>\r\n<td class=\"p-24\" align=\"center\">\r\n<table class=\"footer\" border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\"><!-- start permission -->\r\n<tbody>\r\n<tr>\r\n<td align=\"center\">\r\n<p>{email_footer}</p>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n</td>\r\n</tr>\r\n<!-- end footer --></tbody>\r\n</table>\r\n<!-- end body -->\r\n</body>\r\n\r\n</html>',	'{first_name}, {last_name}, {event_type}, {event_title}, {event_details}, {event_start_date}, {event_end_date}, {event_start_time}, {event_end_time}, {event_url}',	'2024-06-16 17:33:13',	'2024-06-16 17:33:13',	'enabled',	'english',	'yes',	'yes',	156);
 
 DROP TABLE IF EXISTS `estimates`;
 CREATE TABLE `estimates` (
@@ -998,6 +1059,10 @@ CREATE TABLE `estimates` (
   `estimate_automation_copy_attachments` varchar(50) DEFAULT 'no' COMMENT 'yes|no',
   `estimate_automation_log_created_project_id` int(11) DEFAULT NULL,
   `estimate_automation_log_created_invoice_id` int(11) DEFAULT NULL,
+  `bill_publishing_type` varchar(20) DEFAULT 'instant' COMMENT 'instant|scheduled',
+  `bill_publishing_scheduled_date` date DEFAULT NULL,
+  `bill_publishing_scheduled_status` varchar(20) DEFAULT '' COMMENT 'pending|published|failed',
+  `bill_publishing_scheduled_log` text DEFAULT NULL,
   PRIMARY KEY (`bill_estimateid`),
   KEY `bill_clientid` (`bill_clientid`),
   KEY `bill_creatorid` (`bill_creatorid`),
@@ -1008,9 +1073,8 @@ CREATE TABLE `estimates` (
   KEY `bill_viewed_by_client` (`bill_viewed_by_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `estimates`;
-INSERT INTO `estimates` (`bill_estimateid`, `bill_uniqueid`, `bill_created`, `bill_updated`, `bill_date_sent_to_customer`, `bill_date_status_change`, `bill_clientid`, `bill_projectid`, `bill_proposalid`, `bill_contractid`, `bill_creatorid`, `bill_categoryid`, `bill_date`, `bill_expiry_date`, `bill_subtotal`, `bill_discount_type`, `bill_discount_percentage`, `bill_discount_amount`, `bill_amount_before_tax`, `bill_tax_type`, `bill_tax_total_percentage`, `bill_tax_total_amount`, `bill_adjustment_description`, `bill_adjustment_amount`, `bill_final_amount`, `bill_notes`, `bill_terms`, `bill_status`, `bill_type`, `bill_estimate_type`, `bill_visibility`, `bill_viewed_by_client`, `bill_system`, `bill_converted_to_invoice`, `bill_converted_to_invoice_invoiceid`, `estimate_automation_status`, `estimate_automation_create_project`, `estimate_automation_project_title`, `estimate_automation_project_status`, `estimate_automation_create_tasks`, `estimate_automation_project_email_client`, `estimate_automation_create_invoice`, `estimate_automation_invoice_due_date`, `estimate_automation_invoice_email_client`, `estimate_automation_copy_attachments`, `estimate_automation_log_created_project_id`, `estimate_automation_log_created_invoice_id`) VALUES
-(-100,	'84612794.02318210',	'2022-05-22 11:46:15',	'2022-05-22 11:46:15',	NULL,	'2022-05-22 11:46:15',	0,	0,	NULL,	NULL,	0,	5,	'2022-05-22',	NULL,	0.00,	'none',	0.00,	0.00,	0.00,	'summary',	0.00,	0.00,	NULL,	0.00,	0.00,	NULL,	'<p>Thank you for your business. We look forward to working with you on this project.</p>',	'draft',	'estimate',	'document',	'visible',	'no',	'yes',	'no',	NULL,	'disabled',	'no',	NULL,	'in_progress',	'no',	'no',	'no',	7,	'no',	'no',	NULL,	NULL);
+INSERT INTO `estimates` (`bill_estimateid`, `bill_uniqueid`, `bill_created`, `bill_updated`, `bill_date_sent_to_customer`, `bill_date_status_change`, `bill_clientid`, `bill_projectid`, `bill_proposalid`, `bill_contractid`, `bill_creatorid`, `bill_categoryid`, `bill_date`, `bill_expiry_date`, `bill_subtotal`, `bill_discount_type`, `bill_discount_percentage`, `bill_discount_amount`, `bill_amount_before_tax`, `bill_tax_type`, `bill_tax_total_percentage`, `bill_tax_total_amount`, `bill_adjustment_description`, `bill_adjustment_amount`, `bill_final_amount`, `bill_notes`, `bill_terms`, `bill_status`, `bill_type`, `bill_estimate_type`, `bill_visibility`, `bill_viewed_by_client`, `bill_system`, `bill_converted_to_invoice`, `bill_converted_to_invoice_invoiceid`, `estimate_automation_status`, `estimate_automation_create_project`, `estimate_automation_project_title`, `estimate_automation_project_status`, `estimate_automation_create_tasks`, `estimate_automation_project_email_client`, `estimate_automation_create_invoice`, `estimate_automation_invoice_due_date`, `estimate_automation_invoice_email_client`, `estimate_automation_copy_attachments`, `estimate_automation_log_created_project_id`, `estimate_automation_log_created_invoice_id`, `bill_publishing_type`, `bill_publishing_scheduled_date`, `bill_publishing_scheduled_status`, `bill_publishing_scheduled_log`) VALUES
+(-100,	'84612794.02318210',	'2022-05-22 11:46:15',	'2022-05-22 11:46:15',	NULL,	'2022-05-22 11:46:15',	0,	0,	NULL,	NULL,	0,	5,	'2022-05-22',	NULL,	0.00,	'none',	0.00,	0.00,	0.00,	'summary',	0.00,	0.00,	NULL,	0.00,	0.00,	NULL,	'<p>Thank you for your business. We look forward to working with you on this project.</p>',	'draft',	'estimate',	'document',	'visible',	'no',	'yes',	'no',	NULL,	'disabled',	'no',	NULL,	'in_progress',	'no',	'no',	'no',	7,	'no',	'no',	NULL,	NULL,	'instant',	NULL,	'',	NULL);
 
 DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
@@ -1046,7 +1110,6 @@ CREATE TABLE `events` (
   KEY `event_item_id` (`event_item_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `events`;
 
 DROP TABLE IF EXISTS `events_tracking`;
 CREATE TABLE `events_tracking` (
@@ -1073,7 +1136,6 @@ CREATE TABLE `events_tracking` (
   KEY `resource_id` (`resource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `events_tracking`;
 
 DROP TABLE IF EXISTS `expenses`;
 CREATE TABLE `expenses` (
@@ -1101,7 +1163,6 @@ CREATE TABLE `expenses` (
   KEY `expense_billable_invoiceid` (`expense_billable_invoiceid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `expenses`;
 
 SET NAMES utf8mb4;
 
@@ -1116,7 +1177,6 @@ CREATE TABLE `failed_jobs` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='[truncate]';
 
-TRUNCATE `failed_jobs`;
 
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE `files` (
@@ -1144,7 +1204,6 @@ CREATE TABLE `files` (
   KEY `fileresource_id` (`fileresource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `files`;
 
 DROP TABLE IF EXISTS `file_folders`;
 CREATE TABLE `file_folders` (
@@ -1159,9 +1218,8 @@ CREATE TABLE `file_folders` (
   PRIMARY KEY (`filefolder_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `file_folders`;
 INSERT INTO `file_folders` (`filefolder_id`, `filefolder_created`, `filefolder_updated`, `filefolder_creatorid`, `filefolder_projectid`, `filefolder_name`, `filefolder_default`, `filefolder_system`) VALUES
-(1,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	NULL,	'Default',	'yes',	'yes');
+(1,	'2024-07-11 09:08:22',	'2024-07-11 09:08:22',	0,	NULL,	'Default',	'yes',	'yes');
 
 DROP TABLE IF EXISTS `invoices`;
 CREATE TABLE `invoices` (
@@ -1209,6 +1267,10 @@ CREATE TABLE `invoices` (
   `bill_cron_date` datetime DEFAULT NULL COMMENT 'date when cron was run',
   `bill_viewed_by_client` varchar(20) DEFAULT 'no' COMMENT 'yes|no',
   `bill_system` varchar(20) DEFAULT 'no' COMMENT 'yes|no',
+  `bill_publishing_type` varchar(20) DEFAULT 'instant' COMMENT 'instant|scheduled',
+  `bill_publishing_scheduled_date` date DEFAULT NULL,
+  `bill_publishing_scheduled_status` varchar(20) DEFAULT '' COMMENT 'pending|published|failed',
+  `bill_publishing_scheduled_log` text DEFAULT NULL,
   PRIMARY KEY (`bill_invoiceid`),
   KEY `invoice_clientid` (`bill_clientid`),
   KEY `invoice_projectid` (`bill_projectid`),
@@ -1225,7 +1287,6 @@ CREATE TABLE `invoices` (
   KEY `bill_viewed_by_client` (`bill_viewed_by_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `invoices`;
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
@@ -1247,7 +1308,6 @@ CREATE TABLE `items` (
   KEY `item_categoryid` (`item_categoryid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `items`;
 
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE `jobs` (
@@ -1262,7 +1322,6 @@ CREATE TABLE `jobs` (
   KEY `jobs_queue_index` (`queue`(191))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='[truncate]';
 
-TRUNCATE `jobs`;
 
 DROP TABLE IF EXISTS `kb_categories`;
 CREATE TABLE `kb_categories` (
@@ -1281,9 +1340,8 @@ CREATE TABLE `kb_categories` (
   PRIMARY KEY (`kbcategory_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `kb_categories`;
 INSERT INTO `kb_categories` (`kbcategory_id`, `kbcategory_created`, `kbcategory_updated`, `kbcategory_creatorid`, `kbcategory_title`, `kbcategory_description`, `kbcategory_position`, `kbcategory_visibility`, `kbcategory_slug`, `kbcategory_icon`, `kbcategory_type`, `kbcategory_system_default`) VALUES
-(1,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	'Frequently Asked Questions',	'Answers to some of the most frequently asked questions',	1,	'everyone',	'1-frequently-asked-questions',	'sl-icon-call-out',	'text',	'yes');
+(1,	'2024-07-11 09:08:22',	'2024-07-11 09:08:22',	0,	'Frequently Asked Questions',	'Answers to some of the most frequently asked questions',	1,	'everyone',	'1-frequently-asked-questions',	'sl-icon-call-out',	'text',	'yes');
 
 DROP TABLE IF EXISTS `knowledgebase`;
 CREATE TABLE `knowledgebase` (
@@ -1302,11 +1360,11 @@ CREATE TABLE `knowledgebase` (
   KEY `knowledgebase_categoryid` (`knowledgebase_categoryid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `knowledgebase`;
 
 DROP TABLE IF EXISTS `leads`;
 CREATE TABLE `leads` (
   `lead_id` int(11) NOT NULL AUTO_INCREMENT,
+  `lead_uniqueid` varchar(100) DEFAULT NULL,
   `lead_importid` varchar(100) DEFAULT NULL,
   `lead_position` double NOT NULL,
   `lead_created` datetime DEFAULT NULL,
@@ -1328,6 +1386,8 @@ CREATE TABLE `leads` (
   `lead_zip` varchar(150) DEFAULT NULL,
   `lead_country` varchar(150) DEFAULT NULL,
   `lead_source` varchar(150) DEFAULT NULL,
+  `lead_input_source` varchar(20) DEFAULT 'app' COMMENT 'app|webform',
+  `lead_input_ip_address` text DEFAULT NULL,
   `lead_title` varchar(250) DEFAULT NULL,
   `lead_description` text DEFAULT NULL,
   `lead_value` decimal(10,2) DEFAULT NULL,
@@ -1339,6 +1399,9 @@ CREATE TABLE `leads` (
   `lead_status` tinyint(4) DEFAULT 1 COMMENT 'Deafult is id: 1 (leads_status) table',
   `lead_active_state` varchar(10) DEFAULT 'active' COMMENT 'active|archived',
   `lead_visibility` varchar(40) DEFAULT 'visible' COMMENT 'visible|hidden (used to prevent tasks that are still being cloned from showing in tasks list)',
+  `lead_cover_image` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `lead_cover_image_uniqueid` text DEFAULT NULL,
+  `lead_cover_image_filename` text DEFAULT NULL,
   `lead_custom_field_1` tinytext DEFAULT NULL,
   `lead_custom_field_2` tinytext DEFAULT NULL,
   `lead_custom_field_3` tinytext DEFAULT NULL,
@@ -1399,56 +1462,56 @@ CREATE TABLE `leads` (
   `lead_custom_field_58` text DEFAULT NULL,
   `lead_custom_field_59` text DEFAULT NULL,
   `lead_custom_field_60` text DEFAULT NULL,
-  `lead_custom_field_61` varchar(20) DEFAULT NULL,
-  `lead_custom_field_62` varchar(20) DEFAULT NULL,
-  `lead_custom_field_63` varchar(20) DEFAULT NULL,
-  `lead_custom_field_64` varchar(20) DEFAULT NULL,
-  `lead_custom_field_65` varchar(20) DEFAULT NULL,
-  `lead_custom_field_66` varchar(20) DEFAULT NULL,
-  `lead_custom_field_67` varchar(20) DEFAULT NULL,
-  `lead_custom_field_68` varchar(20) DEFAULT NULL,
-  `lead_custom_field_69` varchar(20) DEFAULT NULL,
-  `lead_custom_field_70` varchar(20) DEFAULT NULL,
-  `lead_custom_field_71` varchar(20) DEFAULT NULL,
-  `lead_custom_field_72` varchar(20) DEFAULT NULL,
-  `lead_custom_field_73` varchar(20) DEFAULT NULL,
-  `lead_custom_field_74` varchar(20) DEFAULT NULL,
-  `lead_custom_field_75` varchar(20) DEFAULT NULL,
-  `lead_custom_field_76` varchar(20) DEFAULT NULL,
-  `lead_custom_field_77` varchar(20) DEFAULT NULL,
-  `lead_custom_field_78` varchar(20) DEFAULT NULL,
-  `lead_custom_field_79` varchar(20) DEFAULT NULL,
-  `lead_custom_field_80` varchar(20) DEFAULT NULL,
-  `lead_custom_field_81` varchar(150) DEFAULT NULL,
-  `lead_custom_field_82` varchar(150) DEFAULT NULL,
-  `lead_custom_field_83` varchar(150) DEFAULT NULL,
-  `lead_custom_field_84` varchar(150) DEFAULT NULL,
-  `lead_custom_field_85` varchar(150) DEFAULT NULL,
-  `lead_custom_field_86` varchar(150) DEFAULT NULL,
-  `lead_custom_field_87` varchar(150) DEFAULT NULL,
-  `lead_custom_field_88` varchar(150) DEFAULT NULL,
-  `lead_custom_field_89` varchar(150) DEFAULT NULL,
-  `lead_custom_field_90` varchar(150) DEFAULT NULL,
-  `lead_custom_field_91` varchar(150) DEFAULT NULL,
-  `lead_custom_field_92` varchar(150) DEFAULT NULL,
-  `lead_custom_field_93` varchar(150) DEFAULT NULL,
-  `lead_custom_field_94` varchar(150) DEFAULT NULL,
-  `lead_custom_field_95` varchar(150) DEFAULT NULL,
-  `lead_custom_field_96` varchar(150) DEFAULT NULL,
-  `lead_custom_field_97` varchar(150) DEFAULT NULL,
-  `lead_custom_field_98` varchar(150) DEFAULT NULL,
-  `lead_custom_field_99` varchar(150) DEFAULT NULL,
-  `lead_custom_field_100` varchar(150) DEFAULT NULL,
-  `lead_custom_field_101` varchar(150) DEFAULT NULL,
-  `lead_custom_field_102` varchar(150) DEFAULT NULL,
-  `lead_custom_field_103` varchar(150) DEFAULT NULL,
-  `lead_custom_field_104` varchar(150) DEFAULT NULL,
-  `lead_custom_field_105` varchar(150) DEFAULT NULL,
-  `lead_custom_field_106` varchar(150) DEFAULT NULL,
-  `lead_custom_field_107` varchar(150) DEFAULT NULL,
-  `lead_custom_field_108` varchar(150) DEFAULT NULL,
-  `lead_custom_field_109` varchar(150) DEFAULT NULL,
-  `lead_custom_field_110` varchar(150) DEFAULT NULL,
+  `lead_custom_field_61` text DEFAULT NULL,
+  `lead_custom_field_62` text DEFAULT NULL,
+  `lead_custom_field_63` text DEFAULT NULL,
+  `lead_custom_field_64` text DEFAULT NULL,
+  `lead_custom_field_65` text DEFAULT NULL,
+  `lead_custom_field_66` text DEFAULT NULL,
+  `lead_custom_field_67` text DEFAULT NULL,
+  `lead_custom_field_68` text DEFAULT NULL,
+  `lead_custom_field_69` text DEFAULT NULL,
+  `lead_custom_field_70` text DEFAULT NULL,
+  `lead_custom_field_71` text DEFAULT NULL,
+  `lead_custom_field_72` text DEFAULT NULL,
+  `lead_custom_field_73` text DEFAULT NULL,
+  `lead_custom_field_74` text DEFAULT NULL,
+  `lead_custom_field_75` text DEFAULT NULL,
+  `lead_custom_field_76` text DEFAULT NULL,
+  `lead_custom_field_77` text DEFAULT NULL,
+  `lead_custom_field_78` text DEFAULT NULL,
+  `lead_custom_field_79` text DEFAULT NULL,
+  `lead_custom_field_80` text DEFAULT NULL,
+  `lead_custom_field_81` text DEFAULT NULL,
+  `lead_custom_field_82` text DEFAULT NULL,
+  `lead_custom_field_83` text DEFAULT NULL,
+  `lead_custom_field_84` text DEFAULT NULL,
+  `lead_custom_field_85` text DEFAULT NULL,
+  `lead_custom_field_86` text DEFAULT NULL,
+  `lead_custom_field_87` text DEFAULT NULL,
+  `lead_custom_field_88` text DEFAULT NULL,
+  `lead_custom_field_89` text DEFAULT NULL,
+  `lead_custom_field_90` text DEFAULT NULL,
+  `lead_custom_field_91` text DEFAULT NULL,
+  `lead_custom_field_92` text DEFAULT NULL,
+  `lead_custom_field_93` text DEFAULT NULL,
+  `lead_custom_field_94` text DEFAULT NULL,
+  `lead_custom_field_95` text DEFAULT NULL,
+  `lead_custom_field_96` text DEFAULT NULL,
+  `lead_custom_field_97` text DEFAULT NULL,
+  `lead_custom_field_98` text DEFAULT NULL,
+  `lead_custom_field_99` text DEFAULT NULL,
+  `lead_custom_field_100` text DEFAULT NULL,
+  `lead_custom_field_101` text DEFAULT NULL,
+  `lead_custom_field_102` text DEFAULT NULL,
+  `lead_custom_field_103` text DEFAULT NULL,
+  `lead_custom_field_104` text DEFAULT NULL,
+  `lead_custom_field_105` text DEFAULT NULL,
+  `lead_custom_field_106` text DEFAULT NULL,
+  `lead_custom_field_107` text DEFAULT NULL,
+  `lead_custom_field_108` text DEFAULT NULL,
+  `lead_custom_field_109` text DEFAULT NULL,
+  `lead_custom_field_110` text DEFAULT NULL,
   `lead_custom_field_111` int(11) DEFAULT NULL,
   `lead_custom_field_112` int(11) DEFAULT NULL,
   `lead_custom_field_113` int(11) DEFAULT NULL,
@@ -1499,7 +1562,6 @@ CREATE TABLE `leads` (
   KEY `lead_visibility` (`lead_visibility`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `leads`;
 
 DROP TABLE IF EXISTS `leads_assigned`;
 CREATE TABLE `leads_assigned` (
@@ -1513,7 +1575,6 @@ CREATE TABLE `leads_assigned` (
   KEY `leadsassigned_leadid` (`leadsassigned_leadid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `leads_assigned`;
 
 DROP TABLE IF EXISTS `leads_sources`;
 CREATE TABLE `leads_sources` (
@@ -1525,7 +1586,6 @@ CREATE TABLE `leads_sources` (
   PRIMARY KEY (`leadsources_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `leads_sources`;
 
 DROP TABLE IF EXISTS `leads_status`;
 CREATE TABLE `leads_status` (
@@ -1540,14 +1600,13 @@ CREATE TABLE `leads_status` (
   PRIMARY KEY (`leadstatus_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate]  expected to have 2 system default statuses (ID: 1 & 2) ''new'' & ''converted'' statuses ';
 
-TRUNCATE `leads_status`;
 INSERT INTO `leads_status` (`leadstatus_id`, `leadstatus_created`, `leadstatus_creatorid`, `leadstatus_updated`, `leadstatus_title`, `leadstatus_position`, `leadstatus_color`, `leadstatus_system_default`) VALUES
-(1,	'2023-11-07 14:28:30',	0,	'2023-11-07 14:28:30',	'New',	1,	'default',	'yes'),
-(2,	'2023-11-07 14:28:30',	0,	'2023-11-07 14:28:30',	'Converted',	6,	'success',	'yes'),
-(3,	'2023-11-07 14:28:30',	0,	'2023-11-07 14:28:30',	'Qualified',	3,	'info',	'no'),
-(4,	'2023-11-07 14:28:30',	0,	'2023-11-07 14:28:30',	'Proposal Sent',	5,	'lime',	'no'),
-(5,	'2023-11-07 14:28:30',	0,	'2023-11-07 14:28:30',	'Contacted',	2,	'warning',	'no'),
-(7,	'2023-11-07 14:28:30',	0,	'2023-11-07 14:28:30',	'Disqualified',	4,	'danger',	'no');
+(1,	'2024-07-11 09:08:22',	0,	'2024-07-11 09:08:22',	'New',	1,	'default',	'yes'),
+(2,	'2024-07-11 09:08:22',	0,	'2024-07-11 09:08:22',	'Converted',	6,	'success',	'yes'),
+(3,	'2024-07-11 09:08:22',	0,	'2024-07-11 09:08:22',	'Qualified',	3,	'info',	'no'),
+(4,	'2024-07-11 09:08:22',	0,	'2024-07-11 09:08:22',	'Proposal Sent',	5,	'lime',	'no'),
+(5,	'2024-07-11 09:08:22',	0,	'2024-07-11 09:08:22',	'Contacted',	2,	'warning',	'no'),
+(7,	'2024-07-11 09:08:22',	0,	'2024-07-11 09:08:22',	'Disqualified',	4,	'danger',	'no');
 
 DROP TABLE IF EXISTS `lineitems`;
 CREATE TABLE `lineitems` (
@@ -1580,7 +1639,6 @@ CREATE TABLE `lineitems` (
   KEY `lineitem_type` (`lineitem_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `lineitems`;
 
 DROP TABLE IF EXISTS `logs`;
 CREATE TABLE `logs` (
@@ -1600,7 +1658,6 @@ CREATE TABLE `logs` (
   PRIMARY KEY (`log_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `logs`;
 
 DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
@@ -1631,7 +1688,6 @@ CREATE TABLE `messages` (
   KEY `message_target` (`message_target`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `messages`;
 
 DROP TABLE IF EXISTS `messages_tracking`;
 CREATE TABLE `messages_tracking` (
@@ -1648,7 +1704,6 @@ CREATE TABLE `messages_tracking` (
   KEY `messagestracking_user_unique_id` (`messagestracking_user_unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `messages_tracking`;
 
 DROP TABLE IF EXISTS `milestones`;
 CREATE TABLE `milestones` (
@@ -1660,13 +1715,13 @@ CREATE TABLE `milestones` (
   `milestone_projectid` int(11) DEFAULT NULL,
   `milestone_position` int(11) NOT NULL DEFAULT 1,
   `milestone_type` varchar(50) NOT NULL DEFAULT 'categorised' COMMENT 'categorised|uncategorised [1 uncategorised milestone if automatically created when a new project is created]',
+  `milestone_color` varchar(50) NOT NULL DEFAULT 'default' COMMENT 'default|primary|success|info|warning|danger|lime|brown',
   PRIMARY KEY (`milestone_id`),
   KEY `milestone_projectid` (`milestone_projectid`),
   KEY `milestone_creatorid` (`milestone_creatorid`),
   KEY `milestone_type` (`milestone_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `milestones`;
 
 DROP TABLE IF EXISTS `milestone_categories`;
 CREATE TABLE `milestone_categories` (
@@ -1676,15 +1731,15 @@ CREATE TABLE `milestone_categories` (
   `milestonecategory_creatorid` int(11) NOT NULL,
   `milestonecategory_title` varchar(250) NOT NULL,
   `milestonecategory_position` int(11) NOT NULL,
+  `milestonecategory_color` varchar(100) DEFAULT 'default' COMMENT 'default|primary|success|info|warning|danger|lime|brown',
   PRIMARY KEY (`milestonecategory_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `milestone_categories`;
-INSERT INTO `milestone_categories` (`milestonecategory_id`, `milestonecategory_created`, `milestonecategory_updated`, `milestonecategory_creatorid`, `milestonecategory_title`, `milestonecategory_position`) VALUES
-(1,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	'Planning',	1),
-(2,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	'Design',	2),
-(3,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	'Development',	3),
-(4,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	'Testing',	4);
+INSERT INTO `milestone_categories` (`milestonecategory_id`, `milestonecategory_created`, `milestonecategory_updated`, `milestonecategory_creatorid`, `milestonecategory_title`, `milestonecategory_position`, `milestonecategory_color`) VALUES
+(1,	'2024-01-19 15:42:44',	'2024-01-19 17:30:24',	0,	'Planning',	1,	'default'),
+(2,	'2024-01-19 15:42:44',	'2024-01-19 17:30:32',	0,	'Design',	2,	'default'),
+(3,	'2024-01-19 15:42:44',	'2024-01-19 15:42:44',	0,	'Development',	3,	'default'),
+(4,	'2024-01-19 15:42:44',	'2024-01-19 15:42:44',	0,	'Testing',	4,	'default');
 
 DROP TABLE IF EXISTS `notes`;
 CREATE TABLE `notes` (
@@ -1703,7 +1758,6 @@ CREATE TABLE `notes` (
   KEY `noteresource_id` (`noteresource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]. Notes are always private to the user who created them. They are never visible to anyone else';
 
-TRUNCATE `notes`;
 
 DROP TABLE IF EXISTS `payments`;
 CREATE TABLE `payments` (
@@ -1730,7 +1784,6 @@ CREATE TABLE `payments` (
   KEY `payment_subscriptionid` (`payment_subscriptionid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `payments`;
 
 DROP TABLE IF EXISTS `payment_sessions`;
 CREATE TABLE `payment_sessions` (
@@ -1751,7 +1804,6 @@ CREATE TABLE `payment_sessions` (
   KEY `session_gateway_ref` (`session_gateway_ref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Track payment sessions so that IPN/Webhook calls can be linked to the correct invoice. Cronjob can be used to cleanup this table for any records older than 72hrs';
 
-TRUNCATE `payment_sessions`;
 
 DROP TABLE IF EXISTS `product_tasks`;
 CREATE TABLE `product_tasks` (
@@ -1765,7 +1817,6 @@ CREATE TABLE `product_tasks` (
   PRIMARY KEY (`product_task_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `product_tasks`;
 
 DROP TABLE IF EXISTS `product_tasks_dependencies`;
 CREATE TABLE `product_tasks_dependencies` (
@@ -1781,7 +1832,6 @@ CREATE TABLE `product_tasks_dependencies` (
   KEY `product_task_dependency_type` (`product_task_dependency_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `product_tasks_dependencies`;
 
 DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects` (
@@ -1820,6 +1870,13 @@ CREATE TABLE `projects` (
   `assignedperm_milestone_manage` varchar(40) DEFAULT 'yes' COMMENT 'yes | no',
   `assignedperm_tasks_collaborate` varchar(40) DEFAULT NULL COMMENT 'yes | no',
   `project_visibility` varchar(40) DEFAULT 'visible' COMMENT 'visible|hidden (used to prevent projects that are still being cloned from showing in projects list)',
+  `project_calendar_timezone` text DEFAULT NULL,
+  `project_calendar_location` text DEFAULT NULL COMMENT 'optional - used by the calendar',
+  `project_calendar_reminder` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `project_calendar_reminder_duration` int(11) DEFAULT NULL COMMENT 'optional - e.g 1 for 1 day',
+  `project_calendar_reminder_period` text DEFAULT NULL COMMENT 'optional - hours | days | weeks | months | years',
+  `project_calendar_reminder_sent` text DEFAULT NULL COMMENT 'yes|no',
+  `project_calendar_reminder_date_sent` datetime DEFAULT NULL,
   `project_custom_field_1` tinytext DEFAULT NULL,
   `project_custom_field_2` tinytext DEFAULT NULL,
   `project_custom_field_3` tinytext DEFAULT NULL,
@@ -1917,7 +1974,6 @@ CREATE TABLE `projects` (
   KEY `assignedperm_tasks_collaborate` (`assignedperm_tasks_collaborate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `projects`;
 
 DROP TABLE IF EXISTS `projects_assigned`;
 CREATE TABLE `projects_assigned` (
@@ -1931,7 +1987,6 @@ CREATE TABLE `projects_assigned` (
   KEY `projectsassigned_userid` (`projectsassigned_userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `projects_assigned`;
 
 DROP TABLE IF EXISTS `projects_manager`;
 CREATE TABLE `projects_manager` (
@@ -1945,7 +2000,6 @@ CREATE TABLE `projects_manager` (
   KEY `projectsmanager_projectid` (`projectsmanager_projectid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `projects_manager`;
 
 DROP TABLE IF EXISTS `proposals`;
 CREATE TABLE `proposals` (
@@ -1957,12 +2011,12 @@ CREATE TABLE `proposals` (
   `doc_date_status_change` datetime DEFAULT NULL,
   `doc_creatorid` int(11) NOT NULL COMMENT 'use ( -1 ) for logged out user.',
   `doc_categoryid` int(11) DEFAULT 11 COMMENT '11 is the default category',
-  `doc_heading` varchar(250) DEFAULT NULL COMMENT 'e.g. proposal',
-  `doc_heading_color` varchar(30) DEFAULT NULL,
-  `doc_title` varchar(250) DEFAULT NULL,
-  `doc_title_color` varchar(30) DEFAULT NULL,
-  `doc_hero_direcory` varchar(250) DEFAULT NULL,
-  `doc_hero_filename` varchar(250) DEFAULT NULL,
+  `doc_heading` text DEFAULT NULL COMMENT 'e.g. proposal',
+  `doc_heading_color` text DEFAULT NULL,
+  `doc_title` text DEFAULT NULL,
+  `doc_title_color` text DEFAULT NULL,
+  `doc_hero_direcory` text DEFAULT NULL,
+  `doc_hero_filename` text DEFAULT NULL,
   `doc_hero_updated` varchar(250) DEFAULT 'no' COMMENT 'ys|no (when no, we use default image path)',
   `doc_body` text DEFAULT '',
   `doc_date_start` date DEFAULT NULL COMMENT 'Proposal Issue Date | Contract Start Date',
@@ -1977,21 +2031,35 @@ CREATE TABLE `proposals` (
   `doc_type` varchar(150) DEFAULT NULL COMMENT 'proposal|contract',
   `doc_system_type` varchar(150) DEFAULT 'document' COMMENT 'document|template',
   `doc_signed_date` datetime DEFAULT NULL,
-  `doc_signed_first_name` varchar(150) DEFAULT '',
-  `doc_signed_last_name` varchar(150) DEFAULT '',
-  `doc_signed_signature_directory` varchar(150) DEFAULT '',
-  `doc_signed_signature_filename` varchar(150) DEFAULT '',
-  `doc_signed_ip_address` varchar(150) DEFAULT NULL,
-  `doc_fallback_client_first_name` varchar(150) DEFAULT '' COMMENT 'used for creating events when users are not logged in',
-  `doc_fallback_client_last_name` varchar(150) DEFAULT '' COMMENT 'used for creating events when users are not logged in',
-  `doc_fallback_client_email` varchar(150) DEFAULT '' COMMENT 'used for creating events when users are not logged in',
+  `doc_signed_first_name` text DEFAULT '',
+  `doc_signed_last_name` text DEFAULT '',
+  `doc_signed_signature_directory` text DEFAULT '',
+  `doc_signed_signature_filename` text DEFAULT '',
+  `doc_signed_ip_address` text DEFAULT NULL,
+  `doc_fallback_client_first_name` text DEFAULT '' COMMENT 'used for creating events when users are not logged in',
+  `doc_fallback_client_last_name` text DEFAULT '' COMMENT 'used for creating events when users are not logged in',
+  `doc_fallback_client_email` text DEFAULT '' COMMENT 'used for creating events when users are not logged in',
   `doc_status` varchar(100) DEFAULT 'draft' COMMENT 'draft|new|accepted|declined|revised|expired',
+  `proposal_automation_status` varchar(20) DEFAULT 'disabled' COMMENT 'enabled|disabled',
   `docresource_type` varchar(100) DEFAULT NULL COMMENT 'client|lead',
   `docresource_id` int(11) DEFAULT NULL,
+  `proposal_automation_create_project` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `proposal_automation_project_title` text DEFAULT NULL,
+  `proposal_automation_project_status` varchar(30) DEFAULT 'in_progress' COMMENT 'not_started | in_progress | on_hold',
+  `proposal_automation_create_tasks` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `proposal_automation_project_email_client` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `proposal_automation_create_invoice` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `proposal_automation_invoice_due_date` int(11) DEFAULT NULL,
+  `proposal_automation_invoice_email_client` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `proposal_automation_log_created_project_id` int(11) DEFAULT NULL,
+  `proposal_automation_log_created_invoice_id` int(11) DEFAULT NULL,
+  `doc_publishing_type` varchar(20) DEFAULT 'instant' COMMENT 'instant|scheduled',
+  `doc_publishing_scheduled_date` datetime DEFAULT NULL,
+  `doc_publishing_scheduled_status` text DEFAULT NULL COMMENT 'pending|published|failed',
+  `doc_publishing_scheduled_log` text DEFAULT NULL,
   PRIMARY KEY (`doc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `proposals`;
 
 DROP TABLE IF EXISTS `proposal_templates`;
 CREATE TABLE `proposal_templates` (
@@ -2009,7 +2077,6 @@ CREATE TABLE `proposal_templates` (
   KEY `proposal_template_creatorid` (`proposal_template_creatorid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `proposal_templates`;
 INSERT INTO `proposal_templates` (`proposal_template_id`, `proposal_template_created`, `proposal_template_updated`, `proposal_template_creatorid`, `proposal_template_title`, `proposal_template_heading_color`, `proposal_template_title_color`, `proposal_template_body`, `proposal_template_estimate_id`, `proposal_template_system`) VALUES
 (1,	'2023-01-07 17:07:29',	'2022-05-22 09:15:49',	1,	'Default Template',	'#FFFFFF',	'#FFFFFF',	'<h2 style=\"font-family: Montserrat;\"><span style=\"color: #67757c; font-size: 14px;\">Thank you, on behalf of the entire </span><strong style=\"color: #67757c; font-size: 14px;\">{company_name}</strong><span style=\"color: #67757c; font-size: 14px;\"> team, for reaching out to us and giving us the opportunity to collaborate with you on your project. We are ready to provide you with the experience and expertise needed to complete your project on time and on budget.</span></h2>\r\n<br /><strong>Once again, thank you for the opportunity to earn your business.<br /></strong><br /><br /><br />\r\n<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\">\r\n<tbody>\r\n<tr>\r\n<td style=\"width: 50%; border-color: #ffffff; text-align: left; vertical-align: top;\"><img src=\"public/documents/images/sample-1.jpg\" alt=\"\" width=\"389\" height=\"466\" /></td>\r\n<td style=\"width: 50%; border-color: #ffffff; vertical-align: top;\">\r\n<h3 style=\"font-family: Montserrat;\"><span style=\"text-decoration: underline;\">About Us</span></h3>\r\n<span style=\"font-family: Montserrat;\">We believe in creating websites that not only&nbsp;</span><span style=\"font-family: Montserrat;\">look amazing</span><span style=\"font-family: Montserrat;\">&nbsp;but also provide a fantastic user experience and are&nbsp;</span><span style=\"font-family: Montserrat;\">highly optimized</span><span style=\"font-family: Montserrat;\">&nbsp;to provide you with the best</span><span style=\"font-family: Montserrat;\">&nbsp;search ranking</span><span style=\"font-family: Montserrat;\">&nbsp;benefits possible. <br /><br /><strong>We are a full-stack development firm with experience in the following areas:</strong></span><br style=\"font-family: Montserrat;\" /><br style=\"font-family: Montserrat;\" />\r\n<ul>\r\n<li>\r\n<h5>Example Skill Set</h5>\r\n</li>\r\n<li>\r\n<h5>Example Skill Set</h5>\r\n</li>\r\n<li>\r\n<h5>Example Skill Set</h5>\r\n</li>\r\n<li>\r\n<h5>Example Skill Set</h5>\r\n</li>\r\n<li>\r\n<h5>Example Skill Set</h5>\r\n</li>\r\n<li>\r\n<h5>Example Skill Set</h5>\r\n</li>\r\n</ul>\r\n<br /><span style=\"font-family: Montserrat;\">We have over&nbsp;</span><span style=\"font-weight: 600; font-family: Montserrat;\">10 years</span><span style=\"font-family: Montserrat;\">&nbsp;of experience working with outstanding brands like yours. <br /><br />We are happy to provide you with references upon request.</span></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<h3><span style=\"text-decoration: underline;\"><br /><br />Your Needs</span></h3>\r\nAfter reviewing your requirements and discussing with you at length about them, we\'ve created a vision for your website that we believe will improve your overall brand presence, resulting in more leads and conversions for your business.<br /><br />\r\n<ul>\r\n<li>\r\n<h5>Example Item</h5>\r\n</li>\r\n<li>\r\n<h5>Example Item</h5>\r\n</li>\r\n<li>\r\n<h5>Example Item</h5>\r\n</li>\r\n<li>\r\n<h5>Example Item</h5>\r\n</li>\r\n</ul>\r\n<br />\r\n<table style=\"border-collapse: collapse; width: 100%; height: 337px;\" border=\"1\">\r\n<tbody>\r\n<tr style=\"height: 337px;\">\r\n<td style=\"width: 50%; border-color: #ffffff; vertical-align: top; height: 337px;\">\r\n<h3><span style=\"text-decoration: underline;\"><br />Our Process</span></h3>\r\n<span style=\"font-family: Montserrat;\">We have devised a process that ensures a robust, yet fluid approach to completing your project on time, on budget, and beyond your expectation.</span><br style=\"font-family: Montserrat;\" /><br style=\"font-family: Montserrat;\" /><span style=\"text-decoration: underline;\"><span style=\"font-weight: 600;\">Here\'s what you can expect once your project begins.</span></span><br style=\"font-family: Montserrat;\" /><br style=\"font-family: Montserrat;\" />\r\n<ul style=\"font-family: Montserrat;\">\r\n<li>\r\n<h5>Example Process Step</h5>\r\n</li>\r\n<li>\r\n<h5>Example Process Step</h5>\r\n</li>\r\n<li>\r\n<h5>Example Process Step</h5>\r\n</li>\r\n<li>\r\n<h5>Example Process Step</h5>\r\n</li>\r\n</ul>\r\n</td>\r\n<td style=\"width: 50%; border-color: #ffffff; height: 337px; text-align: right;\"><img src=\"public/documents/images/sample-2.png\" alt=\"\" width=\"401\" height=\"266\" /></td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<h3><span style=\"text-decoration: underline;\"><br /><br />Project Milestones</span></h3>\r\nOur estimated timeline for your project is shown in the table below.<br /><br />\r\n<table style=\"border-collapse: collapse; width: 100%; height: 240px;\" border=\"1\">\r\n<tbody>\r\n<tr style=\"height: 48px;\">\r\n<th style=\"width: 50%; background-color: #efeeee; height: 48px;\"><strong>Milestone</strong></th>\r\n<th style=\"width: 50%; background-color: #efeeee; height: 48px;\"><strong>Target Date</strong></th>\r\n</tr>\r\n<tr style=\"height: 48px;\">\r\n<td style=\"width: 50%; height: 48px;\">Example milestone 1</td>\r\n<td style=\"width: 50%; height: 48px;\">01-10-2022</td>\r\n</tr>\r\n<tr style=\"height: 48px;\">\r\n<td style=\"width: 50%; height: 48px;\">Example milestone 2</td>\r\n<td style=\"width: 50%; height: 48px;\">01-23-2022</td>\r\n</tr>\r\n<tr style=\"height: 48px;\">\r\n<td style=\"width: 50%; height: 48px;\">Example milestone 3</td>\r\n<td style=\"width: 50%; height: 48px;\">02-15-2022</td>\r\n</tr>\r\n<tr style=\"height: 48px;\">\r\n<td style=\"width: 50%; height: 48px;\">Example milestone 4</td>\r\n<td style=\"width: 50%; height: 48px;\">03-12-2022</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<h3><span style=\"text-decoration: underline;\"><br /><br />Project Pricing</span></h3>\r\nThe costs for your design project are listed in the table below.<br /><br />{pricing_table}<br />\r\n<h3><span style=\"text-decoration: underline;\"><br /><br />Meet The Team</span></h3>\r\n<p>We are a team of 8 and below are the people that will be working directly on your project.<br /><!--MEET THE TEACM [START]--></p>\r\n<table class=\"doc-meet-the-team\" style=\"height: autho;\" width=\"100%\">\r\n<tbody>\r\n<tr>\r\n<td style=\"width: 50%; background-color: #fbfcfd;\">\r\n<div class=\"row\">\r\n<div class=\"col-sm-12 col-md-4\"><img src=\"public/documents/images/sample-3.jpg\" alt=\"\" width=\"600\" height=\"600\" /></div>\r\n<div class=\"col-sm-6 col-md-8\">\r\n<h4>Jonathan Reed</h4>\r\n<strong>Project Lead</strong><br />75 Reed Street, London, U.K.<br /><strong>Tel:</strong> +44 123 456 7890<br /><strong>Email:</strong> john@example.com</div>\r\n</div>\r\n</td>\r\n<td class=\"spacer\">&nbsp;</td>\r\n<td style=\"width: 50%; background-color: #fbfcfd;\">\r\n<div class=\"row\">\r\n<div class=\"col-sm-12 col-md-4\"><img src=\"public/documents/images/sample-4.jpg\" alt=\"\" width=\"600\" height=\"600\" /></div>\r\n<div class=\"col-sm-6 col-md-8\">\r\n<h4>Jane Doney</h4>\r\n<strong>Web Designer</strong><br />75 Reed Street, London, U.K.<br /><strong>Tel:</strong> +44 123 456 7890<br /><strong>Email:</strong> jane@example.com</div>\r\n</div>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>\r\n<br /><!--MEET THE TEACM [END]--> <!--MEET THE TEACM [START]-->\r\n<table class=\"doc-meet-the-team\" style=\"height: autho;\" width=\"100%\">\r\n<tbody>\r\n<tr>\r\n<td style=\"width: 50%; background-color: #fbfcfd;\">\r\n<div class=\"row\">\r\n<div class=\"col-sm-12 col-md-4\"><img src=\"public/documents/images/sample-5.jpg\" alt=\"\" width=\"600\" height=\"600\" /></div>\r\n<div class=\"col-sm-6 col-md-8\">\r\n<h4>David Patterson</h4>\r\n<strong>UX &amp; UI Designer</strong><br />75 Reed Street, London, U.K.<br /><strong>Tel:</strong> +44 123 456 7890<br /><strong>Email:</strong> david@example.com</div>\r\n</div>\r\n</td>\r\n<td class=\"spacer\">&nbsp;</td>\r\n<td style=\"width: 50%; background-color: #fbfcfd;\">\r\n<div class=\"row\">\r\n<div class=\"col-sm-12 col-md-4\"><img src=\"public/documents/images/sample-6.jpg\" alt=\"\" width=\"150\" height=\"150\" /></div>\r\n<div class=\"col-sm-6 col-md-8\">\r\n<h4>Amanda Lewis</h4>\r\n<strong>Full-Stack Developer</strong><br />75 Reed Street, London, U.K.<br /><strong>Tel:</strong> +44 123 456 7890<br /><strong>Email:</strong>&nbsp;amanda@example.com</div>\r\n</div>\r\n</td>\r\n</tr>\r\n</tbody>\r\n</table>',	NULL,	'no');
 
@@ -2035,7 +2102,6 @@ CREATE TABLE `reminders` (
   KEY `reminder_sent` (`reminder_sent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `reminders`;
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
@@ -2083,15 +2149,16 @@ CREATE TABLE `roles` (
   `role_homepage` varchar(100) NOT NULL DEFAULT 'dashboard',
   `role_messages` varchar(20) NOT NULL DEFAULT 'yes' COMMENT 'yes|no',
   `role_reports` varchar(20) NOT NULL DEFAULT 'no' COMMENT 'yes|no',
+  `role_canned` varchar(20) NOT NULL DEFAULT 'no' COMMENT 'yes|no',
+  `role_canned_scope` varchar(20) NOT NULL DEFAULT 'own' COMMENT 'own|global',
   PRIMARY KEY (`role_id`),
   KEY `role_type` (`role_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate] [roles 1,2,3 required] [role 1 = admin] [role 2 = client] [role 3 = staff]';
 
-TRUNCATE `roles`;
-INSERT INTO `roles` (`role_id`, `role_created`, `role_updated`, `role_system`, `role_type`, `role_name`, `role_clients`, `role_contacts`, `role_contracts`, `role_invoices`, `role_estimates`, `role_proposals`, `role_payments`, `role_items`, `role_tasks`, `role_tasks_scope`, `role_projects`, `role_projects_scope`, `role_projects_billing`, `role_leads`, `role_leads_scope`, `role_expenses`, `role_expenses_scope`, `role_timesheets`, `role_timesheets_scope`, `role_team`, `role_team_scope`, `role_tickets`, `role_knowledgebase`, `role_manage_knowledgebase_categories`, `role_assign_projects`, `role_assign_leads`, `role_assign_tasks`, `role_set_project_permissions`, `role_subscriptions`, `role_templates_projects`, `role_templates_contracts`, `role_templates_proposals`, `role_content_import`, `role_content_export`, `role_module_cs_affiliate`, `role_homepage`, `role_messages`, `role_reports`) VALUES
-(1,	'2018-09-07 14:49:41',	'2018-09-07 14:49:41',	'yes',	'team',	'Administrator',	3,	4,	3,	3,	3,	4,	3,	3,	3,	'global',	3,	'global',	'2',	3,	'global',	3,	'global',	3,	'global',	3,	'global',	3,	3,	'yes',	'yes',	'yes',	'yes',	'yes',	'3',	'3',	'3',	'3',	'yes',	'yes',	'3',	'dashboard',	'yes',	'yes'),
-(3,	'2018-09-07 14:49:41',	'2023-09-08 15:38:37',	'no',	'team',	'Staff',	1,	1,	0,	0,	0,	3,	0,	0,	3,	'own',	1,	'own',	'0',	3,	'own',	3,	'own',	2,	'own',	1,	'global',	3,	1,	'no',	'no',	'no',	'no',	'no',	'0',	'1',	'0',	'1',	'yes',	'yes',	'3',	'dashboard',	'yes',	'no'),
-(2,	'2018-09-07 14:49:41',	'2018-09-07 14:49:41',	'yes',	'client',	'Client',	0,	3,	1,	1,	1,	0,	1,	0,	1,	'own',	1,	'own',	'0',	0,	'own',	0,	'own',	1,	'own',	1,	'global',	2,	1,	'no',	'no',	'no',	'no',	'no',	'1',	'0',	'0',	'0',	'no',	'no',	'3',	'dashboard',	'yes',	'no');
+INSERT INTO `roles` (`role_id`, `role_created`, `role_updated`, `role_system`, `role_type`, `role_name`, `role_clients`, `role_contacts`, `role_contracts`, `role_invoices`, `role_estimates`, `role_proposals`, `role_payments`, `role_items`, `role_tasks`, `role_tasks_scope`, `role_projects`, `role_projects_scope`, `role_projects_billing`, `role_leads`, `role_leads_scope`, `role_expenses`, `role_expenses_scope`, `role_timesheets`, `role_timesheets_scope`, `role_team`, `role_team_scope`, `role_tickets`, `role_knowledgebase`, `role_manage_knowledgebase_categories`, `role_assign_projects`, `role_assign_leads`, `role_assign_tasks`, `role_set_project_permissions`, `role_subscriptions`, `role_templates_projects`, `role_templates_contracts`, `role_templates_proposals`, `role_content_import`, `role_content_export`, `role_module_cs_affiliate`, `role_homepage`, `role_messages`, `role_reports`, `role_canned`, `role_canned_scope`) VALUES
+(1,	'2018-09-07 14:49:41',	'2018-09-07 14:49:41',	'yes',	'team',	'Administrator',	3,	4,	3,	3,	3,	4,	3,	3,	3,	'global',	3,	'global',	'2',	3,	'global',	3,	'global',	3,	'global',	3,	'global',	3,	3,	'yes',	'yes',	'yes',	'yes',	'yes',	'3',	'3',	'3',	'3',	'yes',	'yes',	'3',	'dashboard',	'yes',	'yes',	'yes',	'global'),
+(3,	'2018-09-07 14:49:41',	'2024-03-24 16:52:57',	'no',	'team',	'Staff',	1,	1,	0,	0,	0,	3,	0,	0,	3,	'own',	1,	'own',	'0',	3,	'own',	3,	'own',	2,	'own',	1,	'global',	3,	1,	'no',	'no',	'no',	'no',	'no',	'0',	'1',	'0',	'1',	'yes',	'yes',	'3',	'dashboard',	'yes',	'no',	'no',	'global'),
+(2,	'2018-09-07 14:49:41',	'2018-09-07 14:49:41',	'yes',	'client',	'Client',	0,	3,	1,	1,	1,	0,	1,	0,	1,	'own',	1,	'own',	'0',	0,	'own',	0,	'own',	1,	'own',	1,	'global',	2,	1,	'no',	'no',	'no',	'no',	'no',	'1',	'0',	'0',	'0',	'no',	'no',	'3',	'dashboard',	'yes',	'no',	'yes',	'own');
 
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
@@ -2105,7 +2172,6 @@ CREATE TABLE `sessions` (
   `last_activity` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `sessions`;
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
@@ -2181,7 +2247,8 @@ CREATE TABLE `settings` (
   `settings_modules_reminders` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
   `settings_modules_spaces` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
   `settings_modules_messages` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
-  `settings_modules_reports` text DEFAULT '' COMMENT 'enabled|disabled',
+  `settings_modules_reports` text DEFAULT NULL COMMENT 'enabled|disabled',
+  `settings_modules_calendar` text DEFAULT NULL COMMENT 'enabled|disabled',
   `settings_files_max_size_mb` int(11) DEFAULT 300 COMMENT 'maximum size in MB',
   `settings_knowledgebase_article_ordering` varchar(40) DEFAULT 'name' COMMENT 'name-asc|name-desc|date-asc|date-desc',
   `settings_knowledgebase_allow_guest_viewing` varchar(10) DEFAULT 'no' COMMENT 'yes | no',
@@ -2227,6 +2294,7 @@ CREATE TABLE `settings` (
   `settings_tasks_kanban_date_due` text DEFAULT NULL COMMENT 'show|hide',
   `settings_tasks_kanban_date_start` text DEFAULT NULL COMMENT 'show|hide',
   `settings_tasks_kanban_priority` text DEFAULT NULL COMMENT 'show|hide',
+  `settings_tasks_kanban_milestone` text DEFAULT NULL,
   `settings_tasks_kanban_client_visibility` text DEFAULT NULL COMMENT 'show|hide',
   `settings_tasks_kanban_project_title` varchar(10) DEFAULT 'show' COMMENT 'show|hide',
   `settings_tasks_kanban_client_name` varchar(10) DEFAULT 'show' COMMENT 'show|hide',
@@ -2237,6 +2305,7 @@ CREATE TABLE `settings` (
   `settings_invoices_recurring_grace_period` smallint(6) DEFAULT NULL COMMENT 'Number of days for due date on recurring invoices. If set to zero, invoices will be given due date same as invoice date',
   `settings_invoices_default_terms_conditions` text DEFAULT NULL,
   `settings_invoices_show_view_status` text NOT NULL,
+  `settings_invoices_show_project_on_invoice` text NOT NULL COMMENT 'yes|no',
   `settings_projects_cover_images` varchar(10) DEFAULT 'disabled' COMMENT 'enabled|disabled',
   `settings_projects_permissions_basis` varchar(40) DEFAULT 'user_roles' COMMENT 'user_roles|category_based',
   `settings_projects_categories_main_menu` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
@@ -2255,6 +2324,7 @@ CREATE TABLE `settings` (
   `settings_projects_clientperm_assigned_view` text DEFAULT NULL COMMENT 'yes|no',
   `settings_projects_assignedperm_milestone_manage` text DEFAULT NULL COMMENT 'yes|no',
   `settings_projects_assignedperm_tasks_collaborate` text DEFAULT NULL COMMENT 'yes|no',
+  `settings_projects_events_show_task_status_change` text DEFAULT NULL COMMENT 'yes|no',
   `settings_stripe_secret_key` text DEFAULT NULL,
   `settings_stripe_public_key` text DEFAULT NULL,
   `settings_stripe_webhooks_key` text DEFAULT NULL COMMENT 'from strip dashboard',
@@ -2299,9 +2369,8 @@ CREATE TABLE `settings` (
   PRIMARY KEY (`settings_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `settings`;
-INSERT INTO `settings` (`settings_id`, `settings_created`, `settings_updated`, `settings_type`, `settings_saas_tenant_id`, `settings_saas_status`, `settings_saas_package_id`, `settings_saas_onetimelogin_key`, `settings_saas_onetimelogin_destination`, `settings_saas_package_limits_clients`, `settings_saas_package_limits_team`, `settings_saas_package_limits_projects`, `settings_saas_notification_uniqueid`, `settings_saas_notification_body`, `settings_saas_notification_read`, `settings_saas_notification_action`, `settings_saas_notification_action_url`, `settings_saas_email_server_type`, `settings_saas_email_forwarding_address`, `settings_saas_email_local_address`, `settings_installation_date`, `settings_version`, `settings_purchase_code`, `settings_company_name`, `settings_company_address_line_1`, `settings_company_state`, `settings_company_city`, `settings_company_zipcode`, `settings_company_country`, `settings_company_telephone`, `settings_company_customfield_1`, `settings_company_customfield_2`, `settings_company_customfield_3`, `settings_company_customfield_4`, `settings_clients_registration`, `settings_clients_shipping_address`, `settings_clients_disable_email_delivery`, `settings_clients_app_login`, `settings_customfields_display_leads`, `settings_customfields_display_clients`, `settings_customfields_display_projects`, `settings_customfields_display_tasks`, `settings_customfields_display_tickets`, `settings_email_general_variables`, `settings_email_from_address`, `settings_email_from_name`, `settings_email_server_type`, `settings_email_smtp_host`, `settings_email_smtp_port`, `settings_email_smtp_username`, `settings_email_smtp_password`, `settings_email_smtp_encryption`, `settings_estimates_default_terms_conditions`, `settings_estimates_prefix`, `settings_estimates_show_view_status`, `settings_modules_projects`, `settings_modules_tasks`, `settings_modules_invoices`, `settings_modules_payments`, `settings_modules_leads`, `settings_modules_knowledgebase`, `settings_modules_estimates`, `settings_modules_expenses`, `settings_modules_notes`, `settings_modules_subscriptions`, `settings_modules_contracts`, `settings_modules_proposals`, `settings_modules_tickets`, `settings_modules_timetracking`, `settings_modules_reminders`, `settings_modules_spaces`, `settings_modules_messages`, `settings_modules_reports`, `settings_files_max_size_mb`, `settings_knowledgebase_article_ordering`, `settings_knowledgebase_allow_guest_viewing`, `settings_knowledgebase_external_pre_body`, `settings_knowledgebase_external_post_body`, `settings_knowledgebase_external_header`, `settings_system_timezone`, `settings_system_date_format`, `settings_system_datepicker_format`, `settings_system_default_leftmenu`, `settings_system_default_statspanel`, `settings_system_pagination_limits`, `settings_system_kanban_pagination_limits`, `settings_system_currency_code`, `settings_system_currency_symbol`, `settings_system_currency_position`, `settings_system_decimal_separator`, `settings_system_thousand_separator`, `settings_system_close_modals_body_click`, `settings_system_language_default`, `settings_system_language_allow_users_to_change`, `settings_system_logo_large_name`, `settings_system_logo_small_name`, `settings_system_logo_versioning`, `settings_system_session_login_popup`, `settings_system_javascript_versioning`, `settings_system_exporting_strip_html`, `settings_tags_allow_users_create`, `settings_leads_allow_private`, `settings_leads_allow_new_sources`, `settings_leads_kanban_value`, `settings_leads_kanban_date_created`, `settings_leads_kanban_category`, `settings_leads_kanban_date_contacted`, `settings_leads_kanban_telephone`, `settings_leads_kanban_source`, `settings_leads_kanban_email`, `settings_leads_kanban_tags`, `settings_leads_kanban_reminder`, `settings_tasks_client_visibility`, `settings_tasks_billable`, `settings_tasks_kanban_date_created`, `settings_tasks_kanban_date_due`, `settings_tasks_kanban_date_start`, `settings_tasks_kanban_priority`, `settings_tasks_kanban_client_visibility`, `settings_tasks_kanban_project_title`, `settings_tasks_kanban_client_name`, `settings_tasks_kanban_tags`, `settings_tasks_kanban_reminder`, `settings_tasks_send_overdue_reminder`, `settings_invoices_prefix`, `settings_invoices_recurring_grace_period`, `settings_invoices_default_terms_conditions`, `settings_invoices_show_view_status`, `settings_projects_cover_images`, `settings_projects_permissions_basis`, `settings_projects_categories_main_menu`, `settings_projects_default_hourly_rate`, `settings_projects_allow_setting_permission_on_project_creation`, `settings_projects_clientperm_files_view`, `settings_projects_clientperm_files_upload`, `settings_projects_clientperm_comments_view`, `settings_projects_clientperm_comments_post`, `settings_projects_clientperm_tasks_view`, `settings_projects_clientperm_tasks_collaborate`, `settings_projects_clientperm_tasks_create`, `settings_projects_clientperm_timesheets_view`, `settings_projects_clientperm_expenses_view`, `settings_projects_clientperm_milestones_view`, `settings_projects_clientperm_assigned_view`, `settings_projects_assignedperm_milestone_manage`, `settings_projects_assignedperm_tasks_collaborate`, `settings_stripe_secret_key`, `settings_stripe_public_key`, `settings_stripe_webhooks_key`, `settings_stripe_default_subscription_plan_id`, `settings_stripe_currency`, `settings_stripe_display_name`, `settings_stripe_status`, `settings_subscriptions_prefix`, `settings_paypal_email`, `settings_paypal_currency`, `settings_paypal_display_name`, `settings_paypal_mode`, `settings_paypal_status`, `settings_mollie_live_api_key`, `settings_mollie_test_api_key`, `settings_mollie_display_name`, `settings_mollie_mode`, `settings_mollie_currency`, `settings_mollie_status`, `settings_bank_details`, `settings_bank_display_name`, `settings_bank_status`, `settings_razorpay_keyid`, `settings_razorpay_secretkey`, `settings_razorpay_currency`, `settings_razorpay_display_name`, `settings_razorpay_status`, `settings_completed_check_email`, `settings_expenses_billable_by_default`, `settings_tickets_edit_subject`, `settings_tickets_edit_body`, `settings_theme_name`, `settings_theme_head`, `settings_theme_body`, `settings_track_thankyou_session_id`, `settings_proposals_prefix`, `settings_proposals_show_view_status`, `settings_contracts_prefix`, `settings_contracts_show_view_status`, `settings_cronjob_has_run`, `settings_cronjob_last_run`) VALUES
-(1,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	'saas',	0,	'',	0,	'',	NULL,	0,	0,	0,	'',	'',	'',	'',	'',	'local',	'',	'',	'2023-11-07 14:28:30',	'2.3',	'',	'ABC Inc',	'10 Redcamp Road',	'Milehill',	'Kent',	'ZE12 8QT',	'United Kingdom',	'012 345 6789',	'',	'',	'',	'',	'enabled',	'enabled',	'disabled',	'enabled',	'toggled',	'toggled',	'toggled',	'toggled',	'toggled',	'{our_company_name}, {todays_date}, {email_signature}, {email_footer}, {dashboard_url}',	'info@example.com',	'ABC Inc',	'sendmail',	'',	'',	'',	'',	'tls',	'<p>Thank you for your business. We look forward to working with you on this project.</p>',	'EST-',	'yes',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'disabled',	'enabled',	'enabled',	5000,	'name-asc',	'no',	NULL,	NULL,	NULL,	'Europe/Amsterdam',	'm-d-Y',	'mm-dd-yyyy',	'collapsed',	'collapsed',	35,	35,	'USD',	'$',	'left',	'fullstop',	'comma',	'no',	'english',	'yes',	'logo-tenant.png',	'logo-tenant-small.png',	'2023-11-07 14:28:30',	'enabled',	'2023-11-07',	'yes',	'yes',	'yes',	'yes',	'show',	'show',	'hide',	'show',	'show',	'hide',	'show',	'',	'',	'visible',	'billable',	'show',	'show',	'hide',	'show',	'hide',	'show',	'show',	'',	'',	'yes',	'INV-',	3,	'<p>Thank you for your business.</p>',	'no',	'enabled',	'user_roles',	'no',	NULL,	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'no',	'yes',	'yes',	'',	'',	'',	NULL,	'USD',	'Credit Card',	'disabled',	'SUB-',	'info@example.com',	'USD',	'Paypal',	'sandbox',	'disabled',	'',	'',	'Mollie',	'sandbox',	'USD',	'disabled',	'<p><strong>This is just an example:</strong></p>\r\n<p><strong>Bank Name:</strong>&nbsp;ABCD</p>\r\n<p><strong>Account Name:</strong>&nbsp;ABCD</p>\r\n<p><strong>Account Number:</strong>&nbsp;ABCD</p>',	'Bank Transfer',	'enabled',	'',	'',	'USD',	'RazorPay',	'disabled',	'yes',	'yes',	'yes',	'yes',	'default',	NULL,	NULL,	'',	'PROP-',	'yes',	'CO-',	'yes',	'no',	'0000-00-00 00:00:00');
+INSERT INTO `settings` (`settings_id`, `settings_created`, `settings_updated`, `settings_type`, `settings_saas_tenant_id`, `settings_saas_status`, `settings_saas_package_id`, `settings_saas_onetimelogin_key`, `settings_saas_onetimelogin_destination`, `settings_saas_package_limits_clients`, `settings_saas_package_limits_team`, `settings_saas_package_limits_projects`, `settings_saas_notification_uniqueid`, `settings_saas_notification_body`, `settings_saas_notification_read`, `settings_saas_notification_action`, `settings_saas_notification_action_url`, `settings_saas_email_server_type`, `settings_saas_email_forwarding_address`, `settings_saas_email_local_address`, `settings_installation_date`, `settings_version`, `settings_purchase_code`, `settings_company_name`, `settings_company_address_line_1`, `settings_company_state`, `settings_company_city`, `settings_company_zipcode`, `settings_company_country`, `settings_company_telephone`, `settings_company_customfield_1`, `settings_company_customfield_2`, `settings_company_customfield_3`, `settings_company_customfield_4`, `settings_clients_registration`, `settings_clients_shipping_address`, `settings_clients_disable_email_delivery`, `settings_clients_app_login`, `settings_customfields_display_leads`, `settings_customfields_display_clients`, `settings_customfields_display_projects`, `settings_customfields_display_tasks`, `settings_customfields_display_tickets`, `settings_email_general_variables`, `settings_email_from_address`, `settings_email_from_name`, `settings_email_server_type`, `settings_email_smtp_host`, `settings_email_smtp_port`, `settings_email_smtp_username`, `settings_email_smtp_password`, `settings_email_smtp_encryption`, `settings_estimates_default_terms_conditions`, `settings_estimates_prefix`, `settings_estimates_show_view_status`, `settings_modules_projects`, `settings_modules_tasks`, `settings_modules_invoices`, `settings_modules_payments`, `settings_modules_leads`, `settings_modules_knowledgebase`, `settings_modules_estimates`, `settings_modules_expenses`, `settings_modules_notes`, `settings_modules_subscriptions`, `settings_modules_contracts`, `settings_modules_proposals`, `settings_modules_tickets`, `settings_modules_timetracking`, `settings_modules_reminders`, `settings_modules_spaces`, `settings_modules_messages`, `settings_modules_reports`, `settings_modules_calendar`, `settings_files_max_size_mb`, `settings_knowledgebase_article_ordering`, `settings_knowledgebase_allow_guest_viewing`, `settings_knowledgebase_external_pre_body`, `settings_knowledgebase_external_post_body`, `settings_knowledgebase_external_header`, `settings_system_timezone`, `settings_system_date_format`, `settings_system_datepicker_format`, `settings_system_default_leftmenu`, `settings_system_default_statspanel`, `settings_system_pagination_limits`, `settings_system_kanban_pagination_limits`, `settings_system_currency_code`, `settings_system_currency_symbol`, `settings_system_currency_position`, `settings_system_decimal_separator`, `settings_system_thousand_separator`, `settings_system_close_modals_body_click`, `settings_system_language_default`, `settings_system_language_allow_users_to_change`, `settings_system_logo_large_name`, `settings_system_logo_small_name`, `settings_system_logo_versioning`, `settings_system_session_login_popup`, `settings_system_javascript_versioning`, `settings_system_exporting_strip_html`, `settings_tags_allow_users_create`, `settings_leads_allow_private`, `settings_leads_allow_new_sources`, `settings_leads_kanban_value`, `settings_leads_kanban_date_created`, `settings_leads_kanban_category`, `settings_leads_kanban_date_contacted`, `settings_leads_kanban_telephone`, `settings_leads_kanban_source`, `settings_leads_kanban_email`, `settings_leads_kanban_tags`, `settings_leads_kanban_reminder`, `settings_tasks_client_visibility`, `settings_tasks_billable`, `settings_tasks_kanban_date_created`, `settings_tasks_kanban_date_due`, `settings_tasks_kanban_date_start`, `settings_tasks_kanban_priority`, `settings_tasks_kanban_milestone`, `settings_tasks_kanban_client_visibility`, `settings_tasks_kanban_project_title`, `settings_tasks_kanban_client_name`, `settings_tasks_kanban_tags`, `settings_tasks_kanban_reminder`, `settings_tasks_send_overdue_reminder`, `settings_invoices_prefix`, `settings_invoices_recurring_grace_period`, `settings_invoices_default_terms_conditions`, `settings_invoices_show_view_status`, `settings_invoices_show_project_on_invoice`, `settings_projects_cover_images`, `settings_projects_permissions_basis`, `settings_projects_categories_main_menu`, `settings_projects_default_hourly_rate`, `settings_projects_allow_setting_permission_on_project_creation`, `settings_projects_clientperm_files_view`, `settings_projects_clientperm_files_upload`, `settings_projects_clientperm_comments_view`, `settings_projects_clientperm_comments_post`, `settings_projects_clientperm_tasks_view`, `settings_projects_clientperm_tasks_collaborate`, `settings_projects_clientperm_tasks_create`, `settings_projects_clientperm_timesheets_view`, `settings_projects_clientperm_expenses_view`, `settings_projects_clientperm_milestones_view`, `settings_projects_clientperm_assigned_view`, `settings_projects_assignedperm_milestone_manage`, `settings_projects_assignedperm_tasks_collaborate`, `settings_projects_events_show_task_status_change`, `settings_stripe_secret_key`, `settings_stripe_public_key`, `settings_stripe_webhooks_key`, `settings_stripe_default_subscription_plan_id`, `settings_stripe_currency`, `settings_stripe_display_name`, `settings_stripe_status`, `settings_subscriptions_prefix`, `settings_paypal_email`, `settings_paypal_currency`, `settings_paypal_display_name`, `settings_paypal_mode`, `settings_paypal_status`, `settings_mollie_live_api_key`, `settings_mollie_test_api_key`, `settings_mollie_display_name`, `settings_mollie_mode`, `settings_mollie_currency`, `settings_mollie_status`, `settings_bank_details`, `settings_bank_display_name`, `settings_bank_status`, `settings_razorpay_keyid`, `settings_razorpay_secretkey`, `settings_razorpay_currency`, `settings_razorpay_display_name`, `settings_razorpay_status`, `settings_completed_check_email`, `settings_expenses_billable_by_default`, `settings_tickets_edit_subject`, `settings_tickets_edit_body`, `settings_theme_name`, `settings_theme_head`, `settings_theme_body`, `settings_track_thankyou_session_id`, `settings_proposals_prefix`, `settings_proposals_show_view_status`, `settings_contracts_prefix`, `settings_contracts_show_view_status`, `settings_cronjob_has_run`, `settings_cronjob_last_run`) VALUES
+(1,	'2024-07-11 09:08:22',	'2024-07-11 09:08:22',	'saas',	0,	'',	0,	'',	NULL,	0,	0,	0,	'',	'',	'',	'',	'',	'local',	'',	'',	'2024-07-11 09:08:22',	'2.6',	'',	'ABC Inc',	'10 Redcamp Road',	'Milehill',	'Kent',	'ZE12 8QT',	'United Kingdom',	'012 345 6789',	'',	'',	'',	'',	'enabled',	'enabled',	'disabled',	'enabled',	'toggled',	'toggled',	'toggled',	'toggled',	'toggled',	'{our_company_name}, {todays_date}, {email_signature}, {email_footer}, {dashboard_url}',	'info@example.com',	'ABC Inc',	'sendmail',	'',	'',	'',	'',	'tls',	'<p>Thank you for your business. We look forward to working with you on this project.</p>',	'EST-',	'yes',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'disabled',	'enabled',	'enabled',	'enabled',	5000,	'name-asc',	'no',	NULL,	NULL,	NULL,	'Europe/Amsterdam',	'm-d-Y',	'mm-dd-yyyy',	'collapsed',	'collapsed',	35,	35,	'USD',	'$',	'left',	'fullstop',	'comma',	'no',	'english',	'yes',	'logo-tenant.png',	'logo-tenant-small.png',	'2024-07-11 09:08:22',	'enabled',	'2024-07-11',	'yes',	'yes',	'yes',	'yes',	'show',	'show',	'hide',	'show',	'show',	'hide',	'show',	'',	'',	'visible',	'billable',	'show',	'show',	'hide',	'show',	'hide',	'hide',	'show',	'show',	'',	'',	'yes',	'INV-',	3,	'<p>Thank you for your business.</p>',	'no',	'no',	'enabled',	'user_roles',	'no',	NULL,	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'yes',	'no',	'yes',	'yes',	'yes',	'',	'',	'',	NULL,	'USD',	'Credit Card',	'disabled',	'SUB-',	'info@example.com',	'USD',	'Paypal',	'sandbox',	'disabled',	'',	'',	'Mollie',	'sandbox',	'USD',	'disabled',	'<p><strong>This is just an example:</strong></p>\r\n<p><strong>Bank Name:</strong>&nbsp;ABCD</p>\r\n<p><strong>Account Name:</strong>&nbsp;ABCD</p>\r\n<p><strong>Account Number:</strong>&nbsp;ABCD</p>',	'Bank Transfer',	'enabled',	'',	'',	'USD',	'RazorPay',	'disabled',	'yes',	'yes',	'yes',	'yes',	'default',	NULL,	NULL,	'',	'PROP-',	'yes',	'CO-',	'yes',	'no',	'0000-00-00 00:00:00');
 
 DROP TABLE IF EXISTS `settings2`;
 CREATE TABLE `settings2` (
@@ -2309,6 +2378,17 @@ CREATE TABLE `settings2` (
   `settings2_created` datetime NOT NULL,
   `settings2_updated` datetime NOT NULL,
   `settings2_bills_pdf_css` text DEFAULT NULL,
+  `settings2_calendar_projects_colour` text DEFAULT NULL COMMENT 'default|primary|success|info|warning|danger|lime|brown',
+  `settings2_calendar_tasks_colour` text DEFAULT NULL COMMENT 'default|primary|success|info|warning|danger|lime|brown',
+  `settings2_calendar_events_colour` text DEFAULT NULL COMMENT 'default|primary|success|info|warning|danger|lime|brown',
+  `settings2_calendar_reminder_duration` int(11) DEFAULT NULL,
+  `settings2_calendar_reminder_period` text DEFAULT NULL COMMENT 'hours|days|weeks|months|years',
+  `settings2_calendar_events_assigning` text DEFAULT NULL COMMENT 'admin|everyone',
+  `settings2_calendar_first_day` int(11) DEFAULT NULL COMMENT 'Sunday =0, Monday =1, etc. Default 0',
+  `settings2_calendar_default_event_duration` int(11) DEFAULT NULL COMMENT 'default 30 minutes',
+  `settings2_calendar_send_reminder_projects` text DEFAULT NULL COMMENT 'start-date|due-date',
+  `settings2_calendar_send_reminder_tasks` text DEFAULT NULL COMMENT 'start-date|due-date',
+  `settings2_calendar_send_reminder_events` text DEFAULT NULL COMMENT 'start-date|due-date',
   `settings2_captcha_api_site_key` text DEFAULT NULL,
   `settings2_captcha_api_secret_key` text DEFAULT NULL,
   `settings2_captcha_status` varchar(10) DEFAULT 'disabled' COMMENT 'disabled|enabled',
@@ -2347,11 +2427,20 @@ CREATE TABLE `settings2` (
   `settings2_paystack_currency_code` text DEFAULT NULL,
   `settings2_paystack_display_name` text DEFAULT NULL,
   `settings2_paystack_status` varchar(10) DEFAULT 'disabled' COMMENT 'enabled|disabled',
+  `settings2_proposals_automation_default_status` text DEFAULT NULL COMMENT 'disabled|enabled',
+  `settings2_proposals_automation_create_project` text DEFAULT NULL COMMENT 'yes|no',
+  `settings2_proposals_automation_project_status` text DEFAULT NULL COMMENT 'not_started | in_progress | on_hold',
+  `settings2_proposals_automation_project_email_client` text DEFAULT NULL COMMENT 'yes|no',
+  `settings2_proposals_automation_create_invoice` text DEFAULT NULL COMMENT 'yes|no',
+  `settings2_proposals_automation_invoice_email_client` text DEFAULT NULL COMMENT 'yes|no',
+  `settings2_proposals_automation_invoice_due_date` int(11) DEFAULT NULL COMMENT 'default 7',
+  `settings2_proposals_automation_create_tasks` text DEFAULT NULL COMMENT 'yes|no',
   `settings2_file_folders_status` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
   `settings2_file_folders_manage_assigned` varchar(10) DEFAULT 'yes' COMMENT 'yes|no',
   `settings2_file_folders_manage_project_manager` varchar(10) DEFAULT 'yes' COMMENT 'yes|no',
   `settings2_file_folders_manage_client` varchar(10) DEFAULT 'yes' COMMENT 'yes|no',
   `settings2_file_bulk_download` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
+  `settings2_search_category_limit` int(11) DEFAULT 5,
   `settings2_spaces_team_space_id` text DEFAULT NULL,
   `settings2_spaces_team_space_status` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
   `settings2_spaces_user_space_status` varchar(10) DEFAULT 'enabled' COMMENT 'enabled|disabled',
@@ -2377,9 +2466,8 @@ CREATE TABLE `settings2` (
   PRIMARY KEY (`settings2_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `settings2`;
-INSERT INTO `settings2` (`settings2_id`, `settings2_created`, `settings2_updated`, `settings2_bills_pdf_css`, `settings2_captcha_api_site_key`, `settings2_captcha_api_secret_key`, `settings2_captcha_status`, `settings2_estimates_automation_default_status`, `settings2_estimates_automation_create_project`, `settings2_estimates_automation_project_status`, `settings2_estimates_automation_project_title`, `settings2_estimates_automation_project_email_client`, `settings2_estimates_automation_create_invoice`, `settings2_estimates_automation_invoice_email_client`, `settings2_estimates_automation_invoice_due_date`, `settings2_estimates_automation_create_tasks`, `settings2_estimates_automation_copy_attachments`, `settings2_extras_dimensions_billing`, `settings2_extras_dimensions_default_unit`, `settings2_extras_dimensions_show_measurements`, `settings2_projects_automation_default_status`, `settings2_projects_automation_create_invoices`, `settings2_projects_automation_convert_estimates_to_invoices`, `settings2_projects_automation_skip_draft_estimates`, `settings2_projects_automation_skip_declined_estimates`, `settings2_projects_automation_invoice_unbilled_hours`, `settings2_projects_automation_invoice_hourly_rate`, `settings2_projects_automation_invoice_hourly_tax_1`, `settings2_projects_automation_invoice_email_client`, `settings2_projects_automation_invoice_due_date`, `settings2_tasks_manage_dependencies`, `settings2_tap_secret_key`, `settings2_tap_publishable_key`, `settings2_tap_currency_code`, `settings2_tap_language`, `settings2_tap_display_name`, `settings2_tap_status`, `settings2_paystack_secret_key`, `settings2_paystack_public_key`, `settings2_paystack_currency_code`, `settings2_paystack_display_name`, `settings2_paystack_status`, `settings2_file_folders_status`, `settings2_file_folders_manage_assigned`, `settings2_file_folders_manage_project_manager`, `settings2_file_folders_manage_client`, `settings2_file_bulk_download`, `settings2_spaces_team_space_id`, `settings2_spaces_team_space_status`, `settings2_spaces_user_space_status`, `settings2_spaces_team_space_title`, `settings2_spaces_user_space_title`, `settings2_spaces_team_space_menu_name`, `settings2_spaces_user_space_menu_name`, `settings2_spaces_features_files`, `settings2_spaces_features_notes`, `settings2_spaces_features_comments`, `settings2_spaces_features_tasks`, `settings2_spaces_features_whiteboard`, `settings2_spaces_features_checklists`, `settings2_spaces_features_todos`, `settings2_spaces_features_reminders`, `settings2_tickets_replying_interface`, `settings2_tickets_archive_button`, `settings2_projects_cover_images_show_on_project`, `settings2_onboarding_status`, `settings2_onboarding_content`, `settings2_onboarding_view_status`, `settings2_tweak_reports_truncate_long_text`) VALUES
-(1,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	'',	'',	'',	'disabled',	'disabled',	'yes',	'on_hold',	'New Project',	'yes',	'yes',	'yes',	7,	'yes',	'yes',	'disabled',	'm2',	'no',	'disabled',	'yes',	'yes',	'yes',	'yes',	'yes',	NULL,	NULL,	'yes',	7,	'super-users',	'',	'',	'',	'en',	'',	'disabled',	'',	'',	'ZAR',	'',	'disabled',	'enabled',	'yes',	'yes',	'yes',	'enabled',	NULL,	'enabled',	'enabled',	'Team Workspace',	'My Workspace',	'Team Workspace',	'My Workspace',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'popup',	'yes',	'no',	'disabled',	'',	'seen',	'yes');
+INSERT INTO `settings2` (`settings2_id`, `settings2_created`, `settings2_updated`, `settings2_bills_pdf_css`, `settings2_calendar_projects_colour`, `settings2_calendar_tasks_colour`, `settings2_calendar_events_colour`, `settings2_calendar_reminder_duration`, `settings2_calendar_reminder_period`, `settings2_calendar_events_assigning`, `settings2_calendar_first_day`, `settings2_calendar_default_event_duration`, `settings2_calendar_send_reminder_projects`, `settings2_calendar_send_reminder_tasks`, `settings2_calendar_send_reminder_events`, `settings2_captcha_api_site_key`, `settings2_captcha_api_secret_key`, `settings2_captcha_status`, `settings2_estimates_automation_default_status`, `settings2_estimates_automation_create_project`, `settings2_estimates_automation_project_status`, `settings2_estimates_automation_project_title`, `settings2_estimates_automation_project_email_client`, `settings2_estimates_automation_create_invoice`, `settings2_estimates_automation_invoice_email_client`, `settings2_estimates_automation_invoice_due_date`, `settings2_estimates_automation_create_tasks`, `settings2_estimates_automation_copy_attachments`, `settings2_extras_dimensions_billing`, `settings2_extras_dimensions_default_unit`, `settings2_extras_dimensions_show_measurements`, `settings2_projects_automation_default_status`, `settings2_projects_automation_create_invoices`, `settings2_projects_automation_convert_estimates_to_invoices`, `settings2_projects_automation_skip_draft_estimates`, `settings2_projects_automation_skip_declined_estimates`, `settings2_projects_automation_invoice_unbilled_hours`, `settings2_projects_automation_invoice_hourly_rate`, `settings2_projects_automation_invoice_hourly_tax_1`, `settings2_projects_automation_invoice_email_client`, `settings2_projects_automation_invoice_due_date`, `settings2_tasks_manage_dependencies`, `settings2_tap_secret_key`, `settings2_tap_publishable_key`, `settings2_tap_currency_code`, `settings2_tap_language`, `settings2_tap_display_name`, `settings2_tap_status`, `settings2_paystack_secret_key`, `settings2_paystack_public_key`, `settings2_paystack_currency_code`, `settings2_paystack_display_name`, `settings2_paystack_status`, `settings2_proposals_automation_default_status`, `settings2_proposals_automation_create_project`, `settings2_proposals_automation_project_status`, `settings2_proposals_automation_project_email_client`, `settings2_proposals_automation_create_invoice`, `settings2_proposals_automation_invoice_email_client`, `settings2_proposals_automation_invoice_due_date`, `settings2_proposals_automation_create_tasks`, `settings2_file_folders_status`, `settings2_file_folders_manage_assigned`, `settings2_file_folders_manage_project_manager`, `settings2_file_folders_manage_client`, `settings2_file_bulk_download`, `settings2_search_category_limit`, `settings2_spaces_team_space_id`, `settings2_spaces_team_space_status`, `settings2_spaces_user_space_status`, `settings2_spaces_team_space_title`, `settings2_spaces_user_space_title`, `settings2_spaces_team_space_menu_name`, `settings2_spaces_user_space_menu_name`, `settings2_spaces_features_files`, `settings2_spaces_features_notes`, `settings2_spaces_features_comments`, `settings2_spaces_features_tasks`, `settings2_spaces_features_whiteboard`, `settings2_spaces_features_checklists`, `settings2_spaces_features_todos`, `settings2_spaces_features_reminders`, `settings2_tickets_replying_interface`, `settings2_tickets_archive_button`, `settings2_projects_cover_images_show_on_project`, `settings2_onboarding_status`, `settings2_onboarding_content`, `settings2_onboarding_view_status`, `settings2_tweak_reports_truncate_long_text`) VALUES
+(1,	'2024-07-11 09:08:22',	'2024-07-11 09:08:22',	'',	'#20AEE3',	'#6772E5',	'#24D2B5',	1,	'days',	'admin',	0,	30,	'due-date',	'due-date',	'start-date',	'',	'',	'disabled',	'disabled',	'yes',	'on_hold',	'New Project',	'yes',	'yes',	'yes',	7,	'yes',	'yes',	'disabled',	'm2',	'no',	'disabled',	'yes',	'yes',	'yes',	'yes',	'yes',	NULL,	NULL,	'yes',	7,	'super-users',	'',	'',	'',	'en',	'',	'disabled',	'',	'',	'ZAR',	'',	'disabled',	'disabled',	'no',	'not_started',	'yes',	'no',	'yes',	7,	'yes',	'enabled',	'yes',	'yes',	'yes',	'enabled',	5,	NULL,	'enabled',	'enabled',	'Team Workspace',	'My Workspace',	'Team Workspace',	'My Workspace',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'enabled',	'inline',	'yes',	'no',	'disabled',	'',	'seen',	'yes');
 
 DROP TABLE IF EXISTS `subscriptions`;
 CREATE TABLE `subscriptions` (
@@ -2424,7 +2512,6 @@ CREATE TABLE `subscriptions` (
   KEY `subscription_visibility` (`subscription_visibility`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `subscriptions`;
 
 DROP TABLE IF EXISTS `tableconfig`;
 CREATE TABLE `tableconfig` (
@@ -2473,12 +2560,81 @@ CREATE TABLE `tableconfig` (
   `tableconfig_column_38` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
   `tableconfig_column_39` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
   `tableconfig_column_40` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_1` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_2` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_3` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_4` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_5` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_6` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_7` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_8` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_9` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_10` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_11` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_12` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_13` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_14` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_15` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_16` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_17` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_18` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_19` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_20` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_21` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_22` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_23` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_24` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_25` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_26` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_27` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_28` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_29` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_30` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_31` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_32` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_33` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_34` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_35` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_36` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_37` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_38` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_39` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_40` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_41` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_42` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_43` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_44` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_45` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_46` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_47` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_48` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_49` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_50` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_51` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_52` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_53` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_54` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_55` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_56` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_57` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_58` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_59` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_60` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_61` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_62` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_63` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_64` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_65` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_66` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_67` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_68` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_69` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
+  `tableconfig_custom_70` varchar(20) DEFAULT 'hidden' COMMENT 'hidden|displayed',
   PRIMARY KEY (`tableconfig_id`),
   KEY `tableconfig_userid` (`tableconfig_userid`),
   KEY `tableconfig_table_name` (`tableconfig_table_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `tableconfig`;
 
 DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
@@ -2497,11 +2653,11 @@ CREATE TABLE `tags` (
   KEY `tagresource_id` (`tagresource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `tags`;
 
 DROP TABLE IF EXISTS `tasks`;
 CREATE TABLE `tasks` (
   `task_id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_uniqueid` varchar(100) DEFAULT NULL,
   `task_importid` varchar(100) DEFAULT NULL,
   `task_position` double NOT NULL COMMENT 'increment by 16384',
   `task_created` datetime DEFAULT NULL COMMENT 'always now()',
@@ -2516,7 +2672,7 @@ CREATE TABLE `tasks` (
   `task_client_visibility` varchar(100) DEFAULT 'yes',
   `task_milestoneid` int(11) DEFAULT NULL COMMENT 'new tasks must be set to the [uncategorised] milestone',
   `task_previous_status` varchar(100) DEFAULT 'new',
-  `task_priority` varchar(100) NOT NULL DEFAULT 'normal' COMMENT 'normal | high | urgent',
+  `task_priority` int(11) DEFAULT 1,
   `task_status` int(11) DEFAULT 1,
   `task_active_state` varchar(100) DEFAULT 'active' COMMENT 'active|archived',
   `task_billable` varchar(5) DEFAULT 'yes' COMMENT 'yes | no',
@@ -2538,7 +2694,17 @@ CREATE TABLE `tasks` (
   `task_recurring_copy_files` varchar(10) DEFAULT 'yes' COMMENT 'yes|no',
   `task_recurring_automatically_assign` varchar(10) DEFAULT 'yes' COMMENT 'yes|no',
   `task_recurring_finished` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
-  `task_cloning_original_task_id` varchar(10) DEFAULT NULL,
+  `task_cloning_original_task_id` text DEFAULT NULL,
+  `task_cover_image` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `task_cover_image_uniqueid` text DEFAULT NULL,
+  `task_cover_image_filename` text DEFAULT NULL,
+  `task_calendar_timezone` text DEFAULT NULL,
+  `task_calendar_location` text DEFAULT NULL COMMENT 'optional - used by the calendar',
+  `task_calendar_reminder` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
+  `task_calendar_reminder_duration` int(11) DEFAULT NULL COMMENT 'optional - e.g 1 for 1 day',
+  `task_calendar_reminder_period` text DEFAULT NULL COMMENT 'optional - hours | days | weeks | months | years',
+  `task_calendar_reminder_sent` text DEFAULT NULL COMMENT 'yes|no',
+  `task_calendar_reminder_date_sent` datetime DEFAULT NULL,
   `task_custom_field_1` tinytext DEFAULT NULL,
   `task_custom_field_2` tinytext DEFAULT NULL,
   `task_custom_field_3` tinytext DEFAULT NULL,
@@ -2569,26 +2735,26 @@ CREATE TABLE `tasks` (
   `task_custom_field_28` text DEFAULT NULL,
   `task_custom_field_29` text DEFAULT NULL,
   `task_custom_field_30` text DEFAULT NULL,
-  `task_custom_field_31` varchar(20) DEFAULT NULL,
-  `task_custom_field_32` varchar(20) DEFAULT NULL,
-  `task_custom_field_33` varchar(20) DEFAULT NULL,
-  `task_custom_field_34` varchar(20) DEFAULT NULL,
-  `task_custom_field_35` varchar(20) DEFAULT NULL,
-  `task_custom_field_36` varchar(20) DEFAULT NULL,
-  `task_custom_field_37` varchar(20) DEFAULT NULL,
-  `task_custom_field_38` varchar(20) DEFAULT NULL,
-  `task_custom_field_39` varchar(20) DEFAULT NULL,
-  `task_custom_field_40` varchar(20) DEFAULT NULL,
-  `task_custom_field_41` varchar(150) DEFAULT NULL,
-  `task_custom_field_42` varchar(150) DEFAULT NULL,
-  `task_custom_field_43` varchar(150) DEFAULT NULL,
-  `task_custom_field_44` varchar(150) DEFAULT NULL,
-  `task_custom_field_45` varchar(150) DEFAULT NULL,
-  `task_custom_field_46` varchar(150) DEFAULT NULL,
-  `task_custom_field_47` varchar(150) DEFAULT NULL,
-  `task_custom_field_48` varchar(150) DEFAULT NULL,
-  `task_custom_field_49` varchar(150) DEFAULT NULL,
-  `task_custom_field_50` varchar(150) DEFAULT NULL,
+  `task_custom_field_31` text DEFAULT NULL,
+  `task_custom_field_32` text DEFAULT NULL,
+  `task_custom_field_33` text DEFAULT NULL,
+  `task_custom_field_34` text DEFAULT NULL,
+  `task_custom_field_35` text DEFAULT NULL,
+  `task_custom_field_36` text DEFAULT NULL,
+  `task_custom_field_37` text DEFAULT NULL,
+  `task_custom_field_38` text DEFAULT NULL,
+  `task_custom_field_39` text DEFAULT NULL,
+  `task_custom_field_40` text DEFAULT NULL,
+  `task_custom_field_41` text DEFAULT NULL,
+  `task_custom_field_42` text DEFAULT NULL,
+  `task_custom_field_43` text DEFAULT NULL,
+  `task_custom_field_44` text DEFAULT NULL,
+  `task_custom_field_45` text DEFAULT NULL,
+  `task_custom_field_46` text DEFAULT NULL,
+  `task_custom_field_47` text DEFAULT NULL,
+  `task_custom_field_48` text DEFAULT NULL,
+  `task_custom_field_49` text DEFAULT NULL,
+  `task_custom_field_50` text DEFAULT NULL,
   `task_custom_field_51` int(11) DEFAULT NULL,
   `task_custom_field_52` int(11) DEFAULT NULL,
   `task_custom_field_53` int(11) DEFAULT NULL,
@@ -2614,7 +2780,6 @@ CREATE TABLE `tasks` (
   KEY `task_clientid` (`task_clientid`),
   KEY `task_billable` (`task_billable`),
   KEY `task_milestoneid` (`task_milestoneid`),
-  KEY `task_priority` (`task_priority`),
   KEY `taskresource_id` (`task_projectid`),
   KEY `task_visibility` (`task_visibility`),
   KEY `task_client_visibility` (`task_client_visibility`),
@@ -2628,7 +2793,6 @@ CREATE TABLE `tasks` (
   KEY `task_recurring_finished` (`task_recurring_finished`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `tasks`;
 
 DROP TABLE IF EXISTS `tasks_assigned`;
 CREATE TABLE `tasks_assigned` (
@@ -2642,7 +2806,6 @@ CREATE TABLE `tasks_assigned` (
   KEY `tasksassigned_userid` (`tasksassigned_userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `tasks_assigned`;
 
 DROP TABLE IF EXISTS `tasks_dependencies`;
 CREATE TABLE `tasks_dependencies` (
@@ -2664,7 +2827,26 @@ CREATE TABLE `tasks_dependencies` (
   KEY `tasksdependency_type` (`tasksdependency_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `tasks_dependencies`;
+
+DROP TABLE IF EXISTS `tasks_priority`;
+CREATE TABLE `tasks_priority` (
+  `taskpriority_id` int(11) NOT NULL AUTO_INCREMENT,
+  `taskpriority_created` datetime DEFAULT NULL,
+  `taskpriority_creatorid` int(11) DEFAULT NULL,
+  `taskpriority_updated` datetime DEFAULT NULL,
+  `taskpriority_title` varchar(200) NOT NULL,
+  `taskpriority_position` int(11) NOT NULL,
+  `taskpriority_color` varchar(100) NOT NULL DEFAULT 'default' COMMENT 'default|primary|success|info|warning|danger|lime|brown',
+  `taskpriority_system_default` varchar(10) NOT NULL DEFAULT 'no' COMMENT 'yes | no',
+  PRIMARY KEY (`taskpriority_id`),
+  KEY `taskpriority_creatorid` (`taskpriority_creatorid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate]  expected to have 2 system default statuses (ID: 1 & 2) ''new'' & ''converted'' statuses ';
+
+INSERT INTO `tasks_priority` (`taskpriority_id`, `taskpriority_created`, `taskpriority_creatorid`, `taskpriority_updated`, `taskpriority_title`, `taskpriority_position`, `taskpriority_color`, `taskpriority_system_default`) VALUES
+(1,	NULL,	0,	'2024-07-11 09:08:22',	'Normal',	1,	'lime',	'yes'),
+(2,	NULL,	0,	'2024-07-11 09:08:22',	'Low',	2,	'success',	'no'),
+(3,	NULL,	0,	'2024-07-11 09:08:22',	'High',	3,	'warning',	'no'),
+(4,	NULL,	0,	'2024-07-11 09:08:22',	'Urgent',	4,	'danger',	'no');
 
 DROP TABLE IF EXISTS `tasks_status`;
 CREATE TABLE `tasks_status` (
@@ -2679,7 +2861,6 @@ CREATE TABLE `tasks_status` (
   PRIMARY KEY (`taskstatus_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate]  expected to have 2 system default statuses (ID: 1 & 2) ''new'' & ''converted'' statuses ';
 
-TRUNCATE `tasks_status`;
 INSERT INTO `tasks_status` (`taskstatus_id`, `taskstatus_created`, `taskstatus_creatorid`, `taskstatus_updated`, `taskstatus_title`, `taskstatus_position`, `taskstatus_color`, `taskstatus_system_default`) VALUES
 (1,	NULL,	0,	'2021-09-26 11:13:40',	'New',	1,	'default',	'yes'),
 (2,	NULL,	0,	'2021-09-26 11:13:40',	'Completed',	4,	'success',	'yes'),
@@ -2703,7 +2884,6 @@ CREATE TABLE `tax` (
   KEY `taxresource_id` (`taxresource_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `tax`;
 
 DROP TABLE IF EXISTS `taxrates`;
 CREATE TABLE `taxrates` (
@@ -2722,9 +2902,8 @@ CREATE TABLE `taxrates` (
   PRIMARY KEY (`taxrate_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `taxrates`;
 INSERT INTO `taxrates` (`taxrate_id`, `taxrate_uniqueid`, `taxrate_created`, `taxrate_updated`, `taxrate_creatorid`, `taxrate_name`, `taxrate_value`, `taxrate_type`, `taxrate_clientid`, `taxrate_estimateid`, `taxrate_invoiceid`, `taxrate_status`) VALUES
-(1,	'zero-rated-tax-rate',	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	0,	'No Tax',	0.00,	'system',	NULL,	NULL,	NULL,	'enabled');
+(1,	'zero-rated-tax-rate',	'2024-07-11 09:08:22',	'2024-07-11 09:08:22',	0,	'No Tax',	0.00,	'system',	NULL,	NULL,	NULL,	'enabled');
 
 DROP TABLE IF EXISTS `tickets`;
 CREATE TABLE `tickets` (
@@ -2820,7 +2999,6 @@ CREATE TABLE `tickets` (
   KEY `ticket_status` (`ticket_status`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `tickets`;
 
 DROP TABLE IF EXISTS `tickets_status`;
 CREATE TABLE `tickets_status` (
@@ -2837,7 +3015,6 @@ CREATE TABLE `tickets_status` (
   PRIMARY KEY (`ticketstatus_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[do not truncate]  expected to have 2 system default statuses (ID: 1 & 2) ''new'' & ''converted'' statuses ';
 
-TRUNCATE `tickets_status`;
 INSERT INTO `tickets_status` (`ticketstatus_id`, `ticketstatus_created`, `ticketstatus_creatorid`, `ticketstatus_updated`, `ticketstatus_title`, `ticketstatus_position`, `ticketstatus_color`, `ticketstatus_use_for_client_replied`, `ticketstatus_use_for_team_replied`, `ticketstatus_system_default`) VALUES
 (1,	'2022-12-11 12:20:22',	0,	'2022-12-14 16:22:30',	'Open',	1,	'info',	'yes',	'no',	'yes'),
 (2,	'2022-12-11 12:21:19',	0,	'2022-12-14 14:31:03',	'Closed',	4,	'default',	'no',	'no',	'yes'),
@@ -2859,7 +3036,6 @@ CREATE TABLE `ticket_replies` (
   KEY `ticketreply_clientid` (`ticketreply_clientid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `ticket_replies`;
 
 DROP TABLE IF EXISTS `timelines`;
 CREATE TABLE `timelines` (
@@ -2873,7 +3049,6 @@ CREATE TABLE `timelines` (
   KEY `timeline_resourceid` (`timeline_resourceid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `timelines`;
 
 DROP TABLE IF EXISTS `timers`;
 CREATE TABLE `timers` (
@@ -2900,7 +3075,6 @@ CREATE TABLE `timers` (
   KEY `timer_billing_invoiceid` (`timer_billing_invoiceid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `timers`;
 
 DROP TABLE IF EXISTS `units`;
 CREATE TABLE `units` (
@@ -2914,7 +3088,6 @@ CREATE TABLE `units` (
   PRIMARY KEY (`unit_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate]';
 
-TRUNCATE `units`;
 
 DROP TABLE IF EXISTS `updates`;
 CREATE TABLE `updates` (
@@ -2926,7 +3099,6 @@ CREATE TABLE `updates` (
   PRIMARY KEY (`update_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='tracks updates sql file execution';
 
-TRUNCATE `updates`;
 
 DROP TABLE IF EXISTS `updating`;
 CREATE TABLE `updating` (
@@ -2950,43 +3122,43 @@ CREATE TABLE `updating` (
   PRIMARY KEY (`updating_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-TRUNCATE `updating`;
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `unique_id` varchar(150) DEFAULT NULL,
+  `unique_id` text DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
   `deleted` datetime DEFAULT NULL COMMENT 'date when acccount was deleted',
   `creatorid` int(11) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `phone` varchar(100) DEFAULT NULL,
-  `position` varchar(255) DEFAULT NULL,
+  `email` text DEFAULT NULL,
+  `password` text NOT NULL,
+  `first_name` text NOT NULL,
+  `last_name` text NOT NULL,
+  `phone` text DEFAULT NULL,
+  `position` text DEFAULT NULL,
   `clientid` int(11) DEFAULT NULL COMMENT 'for client users',
   `account_owner` varchar(10) DEFAULT 'no' COMMENT 'yes | no',
   `primary_admin` varchar(10) DEFAULT 'no' COMMENT 'yes | no (only 1 primary admin - created during setup)',
-  `avatar_directory` varchar(100) DEFAULT NULL,
-  `avatar_filename` varchar(100) DEFAULT NULL,
-  `type` varchar(150) NOT NULL COMMENT 'client | team |contact',
+  `avatar_directory` text DEFAULT NULL,
+  `avatar_filename` text DEFAULT NULL,
+  `type` text NOT NULL COMMENT 'client | team |contact',
   `status` varchar(20) DEFAULT 'active' COMMENT 'active|suspended|deleted',
   `role_id` int(11) NOT NULL DEFAULT 2 COMMENT 'for team users',
   `last_seen` datetime DEFAULT NULL,
   `theme` varchar(100) DEFAULT 'default',
-  `last_ip_address` varchar(100) DEFAULT NULL,
-  `social_facebook` varchar(200) DEFAULT NULL,
-  `social_twitter` varchar(200) DEFAULT NULL,
-  `social_linkedin` varchar(200) DEFAULT NULL,
-  `social_github` varchar(200) DEFAULT NULL,
-  `social_dribble` varchar(200) DEFAULT NULL,
+  `last_ip_address` text DEFAULT NULL,
+  `social_facebook` text DEFAULT NULL,
+  `social_twitter` text DEFAULT NULL,
+  `social_linkedin` text DEFAULT NULL,
+  `social_github` text DEFAULT NULL,
+  `social_dribble` text DEFAULT NULL,
   `pref_language` varchar(200) DEFAULT 'english' COMMENT 'english|french|etc',
   `pref_email_notifications` varchar(10) DEFAULT 'yes' COMMENT 'yes | no',
   `pref_leftmenu_position` varchar(50) DEFAULT 'collapsed' COMMENT 'collapsed | open',
   `pref_statspanel_position` varchar(50) DEFAULT 'collapsed' COMMENT 'collapsed | open',
   `pref_filter_own_tasks` varchar(50) DEFAULT 'no' COMMENT 'Show only a users tasks in the tasks list',
+  `pref_hide_completed_tasks` varchar(50) DEFAULT 'no' COMMENT 'yes | no',
   `pref_filter_own_projects` varchar(50) DEFAULT 'no' COMMENT 'Show only a users projects in the projects list',
   `pref_filter_show_archived_projects` varchar(50) DEFAULT 'no' COMMENT 'Show archived projects',
   `pref_filter_show_archived_tasks` varchar(50) DEFAULT 'no' COMMENT 'Show archived projects',
@@ -2997,7 +3169,11 @@ CREATE TABLE `users` (
   `pref_view_leads_layout` varchar(50) DEFAULT 'kanban' COMMENT 'list|kanban',
   `pref_view_projects_layout` varchar(50) DEFAULT 'list' COMMENT 'list|card|milestone|pipeline|category|gnatt',
   `pref_theme` varchar(100) DEFAULT 'default',
-  `remember_token` varchar(150) DEFAULT NULL,
+  `pref_calendar_dates_projects` varchar(30) DEFAULT 'due' COMMENT 'start|due|start_due',
+  `pref_calendar_dates_tasks` varchar(30) DEFAULT 'due' COMMENT 'start|due|start_due',
+  `pref_calendar_dates_events` varchar(30) DEFAULT 'due' COMMENT 'start|due|start_due',
+  `pref_calendar_view` varchar(30) DEFAULT 'own' COMMENT 'own|all',
+  `remember_token` text DEFAULT NULL,
   `remember_filters_tickets_status` varchar(20) DEFAULT 'disabled' COMMENT 'enabled|disabled',
   `remember_filters_tickets_payload` text DEFAULT NULL,
   `remember_filters_projects_status` varchar(20) DEFAULT 'disabled' COMMENT 'enabled|disabled',
@@ -3026,7 +3202,7 @@ CREATE TABLE `users` (
   `remember_filters_expenses_payload` text DEFAULT NULL,
   `remember_filters_timesheets_status` varchar(20) DEFAULT 'disabled' COMMENT 'enabled|disabled',
   `remember_filters_timesheets_payload` text DEFAULT NULL,
-  `forgot_password_token` varchar(150) DEFAULT NULL COMMENT 'random token',
+  `forgot_password_token` text DEFAULT NULL COMMENT 'random token',
   `forgot_password_token_expiry` datetime DEFAULT NULL,
   `force_password_change` varchar(10) DEFAULT 'no' COMMENT 'yes|no',
   `notifications_system` varchar(10) DEFAULT 'no' COMMENT 'no| yes | yes_email [everyone] NB: database defaults for all notifications are ''no'' actual values must be set in the settings config file',
@@ -3038,22 +3214,22 @@ CREATE TABLE `users` (
   `notifications_tasks_activity` varchar(10) DEFAULT 'no' COMMENT 'no | yes | yes_email  [everyone]',
   `notifications_tickets_activity` varchar(10) DEFAULT 'no' COMMENT 'no | yes | yes_email  [everyone]',
   `notifications_reminders` varchar(10) DEFAULT 'yes_email' COMMENT 'yes_email | no',
-  `thridparty_stripe_customer_id` varchar(150) DEFAULT NULL COMMENT 'optional - when customer pays via ',
+  `thridparty_stripe_customer_id` text DEFAULT NULL COMMENT 'optional - when customer pays via ',
   `dashboard_access` varchar(150) DEFAULT 'yes' COMMENT 'yes|no',
   `welcome_email_sent` varchar(150) DEFAULT 'no' COMMENT 'yes|no',
-  `space_uniqueid` varchar(150) DEFAULT NULL,
+  `space_uniqueid` text DEFAULT NULL,
+  `timezone` text DEFAULT NULL COMMENT 'experimental',
   PRIMARY KEY (`id`),
   KEY `clientid` (`clientid`),
   KEY `primary_contact` (`account_owner`),
-  KEY `type` (`type`),
+  KEY `type` (`type`(333)),
   KEY `role_id` (`role_id`),
-  KEY `email` (`email`),
+  KEY `email` (`email`(333)),
   KEY `dashboard_access` (`dashboard_access`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='[truncate] except user id 0 & 1';
 
-TRUNCATE `users`;
-INSERT INTO `users` (`id`, `unique_id`, `created`, `updated`, `deleted`, `creatorid`, `email`, `password`, `first_name`, `last_name`, `phone`, `position`, `clientid`, `account_owner`, `primary_admin`, `avatar_directory`, `avatar_filename`, `type`, `status`, `role_id`, `last_seen`, `theme`, `last_ip_address`, `social_facebook`, `social_twitter`, `social_linkedin`, `social_github`, `social_dribble`, `pref_language`, `pref_email_notifications`, `pref_leftmenu_position`, `pref_statspanel_position`, `pref_filter_own_tasks`, `pref_filter_own_projects`, `pref_filter_show_archived_projects`, `pref_filter_show_archived_tasks`, `pref_filter_show_archived_leads`, `pref_filter_show_archived_tickets`, `pref_filter_own_leads`, `pref_view_tasks_layout`, `pref_view_leads_layout`, `pref_view_projects_layout`, `pref_theme`, `remember_token`, `remember_filters_tickets_status`, `remember_filters_tickets_payload`, `remember_filters_projects_status`, `remember_filters_projects_payload`, `remember_filters_invoices_status`, `remember_filters_invoices_payload`, `remember_filters_estimates_status`, `remember_filters_estimates_payload`, `remember_filters_contracts_status`, `remember_filters_contracts_payload`, `remember_filters_payments_status`, `remember_filters_payments_payload`, `remember_filters_proposals_status`, `remember_filters_proposals_payload`, `remember_filters_clients_status`, `remember_filters_clients_payload`, `remember_filters_leads_status`, `remember_filters_leads_payload`, `remember_filters_tasks_status`, `remember_filters_tasks_payload`, `remember_filters_subscriptions_status`, `remember_filters_subscriptions_payload`, `remember_filters_products_status`, `remember_filters_products_payload`, `remember_filters_expenses_status`, `remember_filters_expenses_payload`, `remember_filters_timesheets_status`, `remember_filters_timesheets_payload`, `forgot_password_token`, `forgot_password_token_expiry`, `force_password_change`, `notifications_system`, `notifications_new_project`, `notifications_projects_activity`, `notifications_billing_activity`, `notifications_new_assignement`, `notifications_leads_activity`, `notifications_tasks_activity`, `notifications_tickets_activity`, `notifications_reminders`, `thridparty_stripe_customer_id`, `dashboard_access`, `welcome_email_sent`, `space_uniqueid`) VALUES
-(1,	NULL,	'2023-11-07 14:28:30',	'2023-11-07 14:28:30',	NULL,	1,	'admin@example.com',	'$2y$10$iTsSjhyjWNdjECnmDM8/w.xUUAmeKlmrdDWdg4F5TAjrlWh.WBWFG',	'John',	'Doe',	NULL,	NULL,	NULL,	'no',	'yes',	NULL,	NULL,	'team',	'active',	1,	'2023-11-07 14:28:30',	'default',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'english',	'yes',	'collapsed',	'collapsed',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'kanban',	'kanban',	'list',	'default',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	NULL,	NULL,	'no',	'yes_email',	'no',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	NULL,	'yes',	'no',	NULL);
+INSERT INTO `users` (`id`, `unique_id`, `created`, `updated`, `deleted`, `creatorid`, `email`, `password`, `first_name`, `last_name`, `phone`, `position`, `clientid`, `account_owner`, `primary_admin`, `avatar_directory`, `avatar_filename`, `type`, `status`, `role_id`, `last_seen`, `theme`, `last_ip_address`, `social_facebook`, `social_twitter`, `social_linkedin`, `social_github`, `social_dribble`, `pref_language`, `pref_email_notifications`, `pref_leftmenu_position`, `pref_statspanel_position`, `pref_filter_own_tasks`, `pref_hide_completed_tasks`, `pref_filter_own_projects`, `pref_filter_show_archived_projects`, `pref_filter_show_archived_tasks`, `pref_filter_show_archived_leads`, `pref_filter_show_archived_tickets`, `pref_filter_own_leads`, `pref_view_tasks_layout`, `pref_view_leads_layout`, `pref_view_projects_layout`, `pref_theme`, `pref_calendar_dates_projects`, `pref_calendar_dates_tasks`, `pref_calendar_dates_events`, `pref_calendar_view`, `remember_token`, `remember_filters_tickets_status`, `remember_filters_tickets_payload`, `remember_filters_projects_status`, `remember_filters_projects_payload`, `remember_filters_invoices_status`, `remember_filters_invoices_payload`, `remember_filters_estimates_status`, `remember_filters_estimates_payload`, `remember_filters_contracts_status`, `remember_filters_contracts_payload`, `remember_filters_payments_status`, `remember_filters_payments_payload`, `remember_filters_proposals_status`, `remember_filters_proposals_payload`, `remember_filters_clients_status`, `remember_filters_clients_payload`, `remember_filters_leads_status`, `remember_filters_leads_payload`, `remember_filters_tasks_status`, `remember_filters_tasks_payload`, `remember_filters_subscriptions_status`, `remember_filters_subscriptions_payload`, `remember_filters_products_status`, `remember_filters_products_payload`, `remember_filters_expenses_status`, `remember_filters_expenses_payload`, `remember_filters_timesheets_status`, `remember_filters_timesheets_payload`, `forgot_password_token`, `forgot_password_token_expiry`, `force_password_change`, `notifications_system`, `notifications_new_project`, `notifications_projects_activity`, `notifications_billing_activity`, `notifications_new_assignement`, `notifications_leads_activity`, `notifications_tasks_activity`, `notifications_tickets_activity`, `notifications_reminders`, `thridparty_stripe_customer_id`, `dashboard_access`, `welcome_email_sent`, `space_uniqueid`, `timezone`) VALUES
+(1,	NULL,	'2024-07-11 09:08:22',	'2024-07-11 09:08:22',	NULL,	1,	'admin@example.com',	'$2y$10$iTsSjhyjWNdjECnmDM8/w.xUUAmeKlmrdDWdg4F5TAjrlWh.WBWFG',	'John',	'Doe',	NULL,	NULL,	NULL,	'no',	'yes',	NULL,	NULL,	'team',	'active',	1,	'2024-07-11 09:08:22',	'default',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'english',	'yes',	'collapsed',	'collapsed',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'no',	'kanban',	'kanban',	'list',	'default',	'due',	'due',	'due',	'all',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	'disabled',	NULL,	NULL,	NULL,	'no',	'yes_email',	'no',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	'yes_email',	NULL,	'yes',	'no',	NULL,	NULL);
 
 DROP TABLE IF EXISTS `webforms`;
 CREATE TABLE `webforms` (
@@ -3077,7 +3253,6 @@ CREATE TABLE `webforms` (
   PRIMARY KEY (`webform_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `webforms`;
 
 DROP TABLE IF EXISTS `webforms_assigned`;
 CREATE TABLE `webforms_assigned` (
@@ -3089,7 +3264,6 @@ CREATE TABLE `webforms_assigned` (
   PRIMARY KEY (`webformassigned_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `webforms_assigned`;
 
 DROP TABLE IF EXISTS `webhooks`;
 CREATE TABLE `webhooks` (
@@ -3113,7 +3287,6 @@ CREATE TABLE `webhooks` (
   PRIMARY KEY (`webhooks_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Record all actionable webhooks, for later execution by a cronjob';
 
-TRUNCATE `webhooks`;
 
 DROP TABLE IF EXISTS `webmail_templates`;
 CREATE TABLE `webmail_templates` (
@@ -3127,6 +3300,5 @@ CREATE TABLE `webmail_templates` (
   PRIMARY KEY (`webmail_template_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE `webmail_templates`;
 
--- 2023-11-09 12:33:32
+-- 2024-07-17 10:59:50

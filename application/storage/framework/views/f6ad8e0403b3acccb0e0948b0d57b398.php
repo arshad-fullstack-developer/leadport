@@ -10,8 +10,8 @@
 </li>
 
 <!--custom tickets-->
-<li class="sidenav-menu-item <?php echo e($page['mainmenu_calendar'] ?? ''); ?> menu-tooltip menu-with-tooltip"
-    title="<?php echo e(cleanLang(__('lang.calendar'))); ?>">
+<li class="sidenav-menu-item <?php echo e($page['mainmenu_ctickets'] ?? ''); ?> menu-tooltip menu-with-tooltip"
+    title="<?php echo e(cleanLang(__('lang.tickets'))); ?>">
     <a class="waves-effect waves-dark" href="<?php echo e(url('ctickets/index')); ?>" aria-expanded="false" target="_self">
           <i class="ti-comments"></i>
         <span class="hide-menu"><?php echo e(cleanLang(__('lang.tickets'))); ?>

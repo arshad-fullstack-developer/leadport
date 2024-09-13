@@ -3,7 +3,7 @@
     $totalKgcalc = 0;
     $totalLdm = 0;
     $totalVolumeM3 = 0;
-    @endphp;    
+    @endphp  
     <i class="mdi mdi-plus-circle-outline text-success font-28 addgoods"></i>
     <table class="table" id="table">
         <thead>
@@ -27,7 +27,7 @@
             $totalKgcalc += $good['kgcalc'];
             $totalLdm += $good['ldm'];
             $totalVolumeM3 += $good['volumem3'];
-            @endphp;
+            @endphp
             <tr id="{{$key}}">
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][qty]"          value="{{  $good['qty']}}"></td>
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][unitid]"       value="{{  $good['unitid'] }}"></td>

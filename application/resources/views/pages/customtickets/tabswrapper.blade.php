@@ -1,5 +1,5 @@
 <!-- action buttons -->
-@include('pages.tickets.components.misc.list-page-actions')
+@include('pages.customtickets.components.misc.list-page-actions')
 <!-- action buttons -->
 
 <!--stats panel-->

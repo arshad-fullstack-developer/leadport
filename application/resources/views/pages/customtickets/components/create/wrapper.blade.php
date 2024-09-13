@@ -17,7 +17,7 @@
     <div class="row">
         <div class="col-12" id="tickets-table-wrapper">
             <!--tickets table-->
-            @include('pages.tickets.components.create.compose')
+            @include('pages.customtickets.components.create.compose')
             <!--tickets table-->
         </div>
     </div>

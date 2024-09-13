@@ -18,7 +18,7 @@
                 {{ cleanLang(__('lang.close')) }}
             </button>
             <!--submit button-->
-            <button type="button" class="btn btn-danger btn-sm x-submit-button" id="card-comment-post-button"
+            <button type="button" class="btn btn-success btn-sm x-submit-button" id="card-comment-post-button"
                 data-url="{{ urlResource('/tasks/'.$task->task_id.'/post-comment') }}" data-type="form" data-ajax-type="post"
                 data-form-id="post-card-comment-form" data-loading-target="card-coment-placeholder-input-container">
                 {{ cleanLang(__('lang.post')) }}
