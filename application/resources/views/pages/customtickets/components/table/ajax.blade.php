@@ -15,22 +15,22 @@
     @endif
     <td class="tickets_col_id"><a href="/tickets/{{ $ticket['Id'] }}">{{ $ticket['Id'] }}</a></td>
     <td class="tickets_col_subject">
-        {{ $ticket['Shipper'] }}
+        {{ $ticket['Shipper'] ?? '---' }}
     </td>
     <td class="tickets_col_client">
-        {{ $ticket['Consignee'] }}
+        {{ $ticket['Consignee'] ?? '---'  }}
     </td>
     <td class="tickets_col_department">
-        {{ $ticket['LoadType'] }}
+        {{ $ticket['LoadType'] ?? '---'  }}
     </td> 
     <td class="tickets_col_priority">
-        {{ $ticket['PickupDate'] }} 
+        {{ $ticket['PickupDate'] ?? '---'  }} 
     </td>
     <td class="tickets_col_activity">
-        {{ $ticket['DeliveryDate'] }} 
+        {{ $ticket['DeliveryDate'] ?? '---'  }} 
     </td>
     <td class="tickets_col_status">
-       {{$ticket['Status'] }}
+       {{$ticket['Status'] ?? '---'  }}
     </td>
     <td class="tickets_col_action actions_column">
         <!--action button-->

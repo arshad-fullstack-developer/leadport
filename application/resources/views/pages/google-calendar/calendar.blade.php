@@ -1,4 +1,4 @@
-@extends('landlord.layout.wrapper') @section('content')
+@extends('layout.wrapper') @section('content')
 <!-- main content -->
 <div class="container-fluid">
     <!-- page content -->

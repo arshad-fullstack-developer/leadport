@@ -27,34 +27,34 @@
         type='text/css' media='all' />
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/css/bootstrap.min.css') }}">
 
     <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/css/fontawesome.all.min.css') }}">
 
     <!-- Mobile Menu CSS -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/plugins/meanmenu/meanmenu.min.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/plugins/meanmenu/meanmenu.min.css') }}">
 
 
     <!-- Main css -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/css/style.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/css/style.css') }}">
 
     <!-- Custom css -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/css/custom.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/css/custom.css') }}">
 
     <!-- Vendor css -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/css/vendor.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/css/vendor.css') }}">
 
     <!-- Simple Line icons -->
-    <link rel="stylesheet" href="public/themes/frontend/assets/fonts/simplelineicons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="{{ asset('public/themes/frontend/assets/fonts/simplelineicons/css/simple-line-icons.css') }}">
 
 
     <!-- Simple Line icons -->
     <link rel="stylesheet"
-        href="public/themes/frontend/assets/fonts/material-design-iconic-font/material-design-icons.css">
+        href="{{ asset('public/themes/frontend/assets/fonts/material-design-iconic-font/material-design-icons.css') }}">
 
     <!-- jQuery JS -->
-    <script src="public/themes/frontend/assets/js/jquery.min.js"></script>
+    <script src="{{ asset('public/themes/frontend/assets/js/jquery.min.js') }}"></script>
 
 
     <!--[if lt IE 9]>

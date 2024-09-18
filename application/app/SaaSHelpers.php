@@ -389,7 +389,7 @@ function runtimeLandlordCronConfig() {
  */
 function dynamicStyleBackgroundImage($dir = "", $file = "") {
 
-    return "style=\"background-image: url(storage/frontend/$dir/$file)\"";
+    return "style=\"background-image: url(".env('APP_URL')."/storage/frontend/$dir/$file)\"";
 
 }
 

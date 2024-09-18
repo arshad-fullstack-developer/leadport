@@ -17,7 +17,7 @@ use Validator;
 
 class TicketController extends Controller {
 
-    public $baseUrl = "https://livesoftdocportgateway.azurewebsites.net/api/";
+    public $baseUrl = "https://docportgatewaynew.azurewebsites.net/api/";
 
     /**
      * Display a listing of tickets
@@ -31,7 +31,7 @@ class TicketController extends Controller {
 
         $tickets  = $result['ticket'] ?? null;
         $page     = $this->pageSettings('tickets');
-
+        
         //show the view
         return view('pages.customtickets.wrapper',compact('page','tickets'));
     }

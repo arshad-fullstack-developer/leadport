@@ -31,7 +31,7 @@
 
             <div class="col-lg-6">
                 <div class="x-splash-image">
-                    <img src="public/themes/frontend/assets/images/signup-splash.png">
+                    <img src="{{ asset('public/themes/frontend/assets/images/signup-splash.png') }}">
                 </div>
             </div>
             <div class="col-lg-6">
