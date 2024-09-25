@@ -1,0 +1,2 @@
+<?php echo $__env->make('pages.reports.invoices.month.filter', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php echo $__env->make('pages.reports.invoices.month.table', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/reports/invoices/month/wrapper.blade.php ENDPATH**/ ?>

@@ -274,7 +274,7 @@
 
             <!--add item modal-->
             <div class="text-right">
-                <button type="button" class="btn btn-danger btn-sm ajax-request"
+                <button type="button" class="btn btn-success btn-sm ajax-request"
                     data-url="{{ url('/settings/account/close-account') }}"
                     id="cancel_my_subscription_button_confirm">@lang('lang.cancel_account_confirmation')
                 </button>

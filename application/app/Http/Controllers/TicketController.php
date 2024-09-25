@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use App\Models\TicketForm;
 use Validator;
 
 class TicketController extends Controller {
@@ -89,6 +90,79 @@ class TicketController extends Controller {
         return view('pages.customtickets.components.create.wrapper',compact('page','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
     }
 
+
+    /**
+     * Generate a new link for ticket form
+     * @return \Illuminate\Http\Response
+     */
+
+    public function generateLink(Request $request)
+    {
+        // Generate a unique ID
+        $uniqueId = 'formID' . bin2hex(random_bytes(10)); // More secure unique ID
+        $expiryDate = now()->addDays(7); // Optional expiry date
+
+        // Store the unique ID in the database
+        $form = new TicketForm();
+        $form->share_id = $uniqueId;
+        $form->expiry_date = $expiryDate; // Optional
+        $form->save();
+
+        // Return the generated link
+        $appURL = url('/ctickets/form');
+        return response()->json(['link' => "{$appURL}?share_id={$uniqueId}"]);
+    }
+
+
+    /**
+     * Show the form for creating a new ticket for client side
+     * @return \Illuminate\Http\Response
+     */
+    public function ticketForm(Request $request)
+    {
+
+        $shareId = $request->query('share_id');
+
+        // Validate the share_id
+        $form = TicketForm::where('share_id', $shareId)
+                    ->where('expiry_date', '>', now()) // Check if not expired
+                    ->first();
+        if (!$form) {
+            return view('errors.404'); // Or redirect to an error page
+        }
+
+        $url = $this->baseUrl."Common/";
+
+        // Batch requests for better performance
+        $requests = [
+            'countries'         => $url.'GetCountries',
+            'loadType'          => $url.'HD_GetLoadType',
+            'carriageType'      => $url.'GetCarriageType?TransportChannelId=1',
+            'incoterms'         => $url.'GetIncoTerms',
+            'ticket'            => $this->baseUrl.'HelpDesk/GetTicketByUniqueId?UniqueId='.$shareId,
+        ];
+        
+        // Batch processing of requests
+        $responses = [];
+        foreach ($requests as $key => $requestUrl) {
+            $responses[$key] = $this->fetchData($requestUrl);
+        }
+        
+        $page               = $this->pageSettings('form');
+        $countries          = $responses['countries']['country'] ?? null;
+        $loadType           = $responses['loadType']['common'] ?? null;
+        $carriageType       = $responses['carriageType']['common'] ?? null;
+        $incoterms          = $responses['incoterms']['common'] ?? null;
+        $ticket             = $responses['ticket'] ?? null;
+
+        if($ticket ==  __('lang.no_data_found_for_the_given_uniqueId')){
+            $ticket = null;
+        }
+        //show the view
+        return view('pages.customtickets.components.request.page',compact('page','countries','loadType','carriageType','incoterms','ticket'));
+    }
+
+
     /**
      * Store a newly created ticket  in storage.
      * @return \Illuminate\Http\Response
@@ -115,6 +189,7 @@ class TicketController extends Controller {
         //dd($request->pickupRemarks);
         $cmrparam = array(
             "cmrparam"=> array(
+                'uniqueId'                  => $request->uniqueId ?? '',
                 "ShipmentOrderStatusId"     => $request->ShipmentOrderStatusId,
                 "TransportChannelId"        => $request->TransportChannelId,
                 "LoadTypeId"                => $request->LoadTypeId,
@@ -164,9 +239,10 @@ class TicketController extends Controller {
         
            
           $data  = json_encode($cmrparam,true);
-          //dd($data);
+         // dd($data);
           $response = Http::withBody(
           $data,'application/json')->post($this->baseUrl.'/HelpDesk');
+
          if($response->getStatusCode() == 201){    
             return response()->json(array(
                 'notification' => [
@@ -538,6 +614,17 @@ class TicketController extends Controller {
                 __('lang.create_new_ticket'),
             ];
             $page += [
+                'meta_title' => __('lang.open_support_ticket'),
+                'heading' => __('lang.tickets'),
+                'mainmenu_ctickets' => 'active',
+            ];
+            return $page;
+        }
+
+         //tickets form for client
+        if ($section == 'form') {
+            $page += [
+                'page_title' => __('lang.create_new_ticket'),
                 'meta_title' => __('lang.open_support_ticket'),
                 'heading' => __('lang.tickets'),
                 'mainmenu_ctickets' => 'active',

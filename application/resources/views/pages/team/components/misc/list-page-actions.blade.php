@@ -6,7 +6,7 @@
         <!--ADD NEW ITEM-->
         @if(config('visibility.list_page_actions_add_button'))
         <button type="button"
-            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
+            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
             data-toggle="modal" data-target="#commonModal" data-url="{{ $page['add_modal_create_url'] ?? '' }}"
             data-loading-target="commonModalBody" data-modal-title="{{ $page['add_modal_title'] ?? '' }}"
             data-action-url="{{ $page['add_modal_action_url'] ?? '' }}"

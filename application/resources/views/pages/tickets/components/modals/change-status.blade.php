@@ -12,7 +12,7 @@
 
 <!--form buttons-->
 <div class="text-right p-t-30">
-    <button type="submit" id="submitButton" class="btn btn-danger waves-effect text-left ajax-request" 
+    <button type="submit" id="submitButton" class="btn btn-success waves-effect text-left ajax-request" 
         data-url="{{ url('tickets/change-status') }}"
         data-form-id="main-body"
         data-ajax-type="POST" 

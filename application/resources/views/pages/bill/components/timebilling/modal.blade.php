@@ -16,7 +16,7 @@
 
             <div class="modal-footer p-t-0 p-b-20 invoice-billing-footer" id="timebillingModalFooter">
                 <button type="submit" id="timebillingModalSelectButton"
-                    class="btn btn-rounded-x btn-danger waves-effect text-left hidden" data-url="" data-loading-target=""
+                    class="btn btn-rounded-x btn-success waves-effect text-left hidden" data-url="" data-loading-target=""
                     data-ajax-type="POST" data-on-start-submit-button="disable">{{ cleanLang(__('lang.add_selected_items')) }}</button>
             </div>
         </div>

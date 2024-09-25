@@ -52,6 +52,12 @@
             <i class="ti-plus"></i>
         </button> -->
 
+        
+        <button type="button" class="btn btn-success btn-add-circle edit-add-modal-button reset-target-modal-form"
+           onclick="openSharePopup()">
+            <i class="ti-share"></i>
+        </button>
+
         <a type="button" class="btn btn-success btn-add-circle edit-add-modal-button reset-target-modal-form"
             href="{{ url('ctickets/create') }}">
             <i class="ti-plus"></i>
@@ -67,3 +73,53 @@
         @endif
     </div>
 </div>
+
+
+<!-- Popup Modal -->
+<div id="shareModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:20px; border:1px solid #ccc; z-index:1000;">
+    <h2>Copy link for form</h2>
+    <input type="text" id="formLink" class="form-control" readonly style="width:100%;">
+    <button class="btn btn-success btn-sm waves-effect text-left mt-2" onclick="copyLink()">Copy Link</button>
+    <button class="btn btn-secondary btn-sm waves-effect text-left mt-2" onclick="closeSharePopup()">Close</button>
+</div>
+
+<!-- Overlay -->
+<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:500;"></div>
+
+<script>
+
+function openSharePopup() {
+    // Make an AJAX request to generate and get the link
+    fetch("{{ url('ctickets/generate-link') }}", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for security
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('formLink').value = data.link; // Set the generated link
+
+        // Display the modal
+        document.getElementById('shareModal').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while generating the link.');
+    });
+}
+
+function closeSharePopup() {
+    document.getElementById('shareModal').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+
+function copyLink() {
+    const linkInput = document.getElementById('formLink');
+    linkInput.select();
+    document.execCommand('copy');
+    alert('Link copied to clipboard!');
+}
+</script>

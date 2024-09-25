@@ -117,12 +117,12 @@
         <!--save changes-->
         @if($page['mode'] == 'create')
         <button type="submit" id="pages-buttons-save-changes"
-            class="btn btn-danger btn-sm waves-effect text-left ajax-request disable-on-click"
+            class="btn btn-success btn-sm waves-effect text-left ajax-request disable-on-click"
             data-url="{{ url('/app-admin/frontend/pages') }}" data-form-id="pages-form" data-ajax-type="POST"
             data-on-start-submit-button="disable">@lang('lang.save_changes')</button>
         @else
         <button type="submit" id="pages-buttons-save-changes"
-            class="btn btn-danger btn-sm waves-effect text-left ajax-request disable-on-click"
+            class="btn btn-success btn-sm waves-effect text-left ajax-request disable-on-click"
             data-url="{{ url('/app-admin/frontend/pages/'.$content->page_id) }}" data-form-id="pages-form"
             data-ajax-type="PUT" data-on-start-submit-button="disable">@lang('lang.save_changes')</button>
         @endif

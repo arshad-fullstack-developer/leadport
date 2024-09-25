@@ -1024,6 +1024,7 @@ return [
     'percentage' => "Percentage",
     'performance' => "Performance",
     'period' => "Period",
+    'no_data_found_for_the_given_uniqueId'     => "No Data Found for the given UniqueId.",   
     'permission_denied_for_this_item' => "Permission denied for this item - ID",
     'permissions' => "Permissions",
     'phone' => "Phone",

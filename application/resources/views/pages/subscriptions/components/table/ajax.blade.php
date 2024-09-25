@@ -44,14 +44,14 @@
             @if(auth()->user()->is_client)
             <!--pay now-->
             @if($subscription->subscription_status == 'pending')
-            <button class="btn btn-rounded btn-danger btn-sm btn-action-danger waves-effect actions-modal-button js-ajax-ux-request "
+            <button class="btn btn-rounded btn-success btn-sm btn-action-danger waves-effect actions-modal-button js-ajax-ux-request "
                 data-toggle="modal" data-target="#actionsModal" data-loading-target="actionsModalBody"
                 data-modal-title="@lang('lang.subscription_payment')"
                 data-url="{{ url('/subscriptions/'.$subscription->subscription_id.'/pay?source=list') }}">@lang('lang.pay')</button>
             @endif
             <!--add new card-->
             @if($subscription->subscription_status == 'failed')
-            <button class="btn btn-rounded btn-danger action-btn btn-sm waves-effect text-left"
+            <button class="btn btn-rounded btn-success action-btn btn-sm waves-effect text-left"
                 data-url="">@lang('lang.pay')</button>
             @endif
             <!--just view-->

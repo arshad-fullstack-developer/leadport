@@ -30,7 +30,7 @@
         <a type="button" class="btn btn-secondary btn-sm waves-effect text-left"
             href="{{ url('/contracts/'.$document->doc_id) }}">@lang('lang.exit_editing_mode')</a>
         @endif
-        <button type="submit" id="submitButton" class="btn btn-danger btn-sm waves-effect text-left ajax-request"
+        <button type="submit" id="submitButton" class="btn btn-success btn-sm waves-effect text-left ajax-request"
             data-url="{{ url('/documents/'.$document->doc_id.'/update/body') }}" data-loading-target=""
             data-ajax-type="POST" data-button-loading-annimation="yes"
             data-on-start-submit-button="disable">@lang('lang.save_changes')</button>

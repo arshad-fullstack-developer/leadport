@@ -47,7 +47,7 @@
 
             <!--delete-field-->
             <div class="col-4">
-                <button type="button" class="btn btn-danger btn-sm btn-sm confirm-action-danger"
+                <button type="button" class="btn btn-success btn-sm btn-sm confirm-action-danger"
                     data-confirm-title="@lang('lang.delete_item')" data-confirm-text="@lang('lang.are_you_sure')"
                     data-ajax-type="DELETE" data-url="{{ url('/settings/customfields/'.$field->customfields_id)}}">
                     @lang('lang.delete_item')

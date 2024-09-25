@@ -14,7 +14,7 @@
             data-loading-target="card-reminders-container"
             data-url="{{ url('reminders/edit?&resource_type='.$payload['resource_type'].'&resource_id='.$payload['resource_id'].'&reminder_id='.$reminder->reminder_id) }}"
             id="card-a-reminder-button-see-notes">@lang('lang.edit')</button>
-        <button type="button" class="btn btn-rounded-x btn-danger btn-sm ajax-request"  
+        <button type="button" class="btn btn-rounded-x btn-success btn-sm ajax-request"  
             data-loading-class="loading-before-centre"
             data-loading-target="card-reminders-container"
             data-url="{{ url('reminders/delete?resource_type='.$payload['resource_type'].'&resource_id='.$payload['resource_id'].'&reminder_id='.$reminder->reminder_id) }}"

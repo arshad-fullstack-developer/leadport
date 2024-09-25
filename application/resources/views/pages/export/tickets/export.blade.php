@@ -160,7 +160,7 @@
                 <!--buttons-->
                 <div class="buttons-block">
 
-                    <button type="button" class="btn btn-rounded-x btn-danger js-ajax-ux-request apply-filter-button"
+                    <button type="button" class="btn btn-rounded-x btn-success js-ajax-ux-request apply-filter-button"
                         data-url="{{ urlResource('/export/tickets?') }}" data-type="form"
                         data-ajax-type="POST"
                         data-button-loading-annimation="yes">@lang('lang.export')</button>

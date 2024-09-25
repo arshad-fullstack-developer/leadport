@@ -245,7 +245,7 @@
                 <!--buttons-->
                 <div class="buttons-block">
 
-                    <button type="button" class="btn btn-rounded-x btn-danger js-ajax-ux-request apply-filter-button" id="export-estimates-button"
+                    <button type="button" class="btn btn-rounded-x btn-success js-ajax-ux-request apply-filter-button" id="export-estimates-button"
                         data-url="{{ urlResource('/export/estimates?') }}" data-type="form" data-ajax-type="POST"
                         data-button-loading-annimation="yes">@lang('lang.export')</button>
                 </div>

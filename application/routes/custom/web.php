@@ -13,6 +13,8 @@
         Route::get('eventss', "Landlord\GoogleController@viewEvents");
         Route::post('events/create', "Landlord\GoogleController@createEvent");
         Route::post('events/{id}/delete', "Landlord\GoogleController@deleteEvent");
+        Route::post('events/update', "Landlord\GoogleController@updateEvent");
+        Route::get('/auth/logout', "Landlord\GoogleController@logout");
     });
 
     Route::get('auth/redirect', "GoogleController@redirectToGoogle");
@@ -20,6 +22,8 @@
     Route::get('eventss', "GoogleController@viewEvents");
     Route::post('events/create', "GoogleController@createEvent");
     Route::post('events/{id}/delete', "GoogleController@deleteEvent");
+    Route::post('events/update', 'GoogleController@updateEvent');
+    Route::get('/auth/logout', 'GoogleController@logout');
 
 
     Route::group(['prefix' => 'ctickets'], function () {
@@ -30,6 +34,9 @@
         Route::post('store', "TicketController@store");
         Route::post('{id}/update-details', "TicketController@updateTicketDetails");
         Route::post('{id}/update-details', "TicketController@updateTicketDetails");
-
+        Route::post('/generate-link', 'TicketController@generateLink');
+        Route::get('form', "TicketController@ticketForm");
 
     });
+
+

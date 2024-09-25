@@ -232,7 +232,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="javascript:void(0)"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="mdi mdi-plus-circle-multiple-outline text-danger font-28"></i>
+                        <i class="mdi mdi-plus-circle-multiple-outline text-success font-28"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
 
@@ -456,7 +456,7 @@
                                             {{ auth()->user()->last_name }}</h4>
                                         <p class="text-muted" id="topnav_dropdown_email">{{ auth()->user()->email }}</p>
                                         <a href="javascript:void(0)"
-                                            class="btn btn-rounded btn-danger btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                                            class="btn btn-rounded btn-success btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
                                             data-toggle="modal" data-target="#commonModal"
                                             data-url="{{ url('/user/avatar') }}" data-loading-target="commonModalBody"
                                             data-modal-size="modal-sm"

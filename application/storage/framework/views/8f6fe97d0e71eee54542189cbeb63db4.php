@@ -31,7 +31,7 @@
 
             <!--submit-->
             <div class="text-right">
-                <button type="submit" class="btn btn-rounded-x btn-danger btn-sm waves-effect text-left ajax-request"
+                <button type="submit" class="btn btn-rounded-x btn-success btn-sm waves-effect text-left ajax-request"
                     data-url="<?php echo e(url('/app-admin/frontend/section/'.request()->segment(4).'/list')); ?>" data-form-id="landlord-settings-form"
                     data-loading-target="" data-ajax-type="post" data-type="form"
                     data-on-start-submit-button="disable"><?php echo e(cleanLang(__('lang.save_changes'))); ?></button>

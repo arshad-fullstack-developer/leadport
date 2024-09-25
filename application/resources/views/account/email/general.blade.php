@@ -78,7 +78,7 @@
         </div>
 
         <div class="text-right p-t-30">
-            <button type="submit" class="btn btn-danger waves-effect text-left ajax-request"
+            <button type="submit" class="btn btn-success waves-effect text-left ajax-request"
                 data-url="{{ url('/settings/account/email/local') }}" data-loading-target="" data-ajax-type="POST"
                 data-type="form" data-form-id="email_settings_local"
                 data-on-start-submit-button="disable">@lang('lang.save_changes')</button>
@@ -173,7 +173,7 @@
         </div>
 
         <div class="text-right p-t-30">
-            <button type="submit" class="btn btn-danger waves-effect text-left ajax-request"
+            <button type="submit" class="btn btn-success waves-effect text-left ajax-request"
                 data-url="{{ url('/settings/account/email/smtp') }}" data-loading-target="" data-ajax-type="POST"
                 data-type="form" data-form-id="email_settings_smtp"
                 data-on-start-submit-button="disable">@lang('lang.save_changes')</button>

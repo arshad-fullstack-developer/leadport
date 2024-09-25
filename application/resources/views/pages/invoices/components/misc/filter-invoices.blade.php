@@ -255,7 +255,7 @@
                     <input type="hidden" name="action" value="search">
                     <input type="hidden" name="source" value="{{ $page['source_for_filter_panels'] ?? '' }}">
                     <button type="button"
-                        class="btn btn-rounded-x btn-danger js-ajax-ux-request apply-filter-button"
+                        class="btn btn-rounded-x btn-success js-ajax-ux-request apply-filter-button"
                         data-url="{{ urlResource('/invoices/search') }}" data-type="form" data-ajax-type="GET">{{ cleanLang(__('lang.apply_filter')) }}</button>
                 </div>
             </div>

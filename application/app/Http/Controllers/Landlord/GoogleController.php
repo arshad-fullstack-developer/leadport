@@ -129,6 +129,60 @@ class GoogleController extends Controller
     }
 
 
+    public function updateEvent(Request $request)
+    {
+
+        //dd($request->all());
+        if (!$token = Session::get('google_access_token')) {
+            return redirect('app-admin/auth/redirect');
+        }
+
+        $this->client->setAccessToken($token);
+
+        // Check if the token is expired and refresh if necessary
+        if ($this->client->isAccessTokenExpired()) {
+            $refreshToken = $token['refresh_token'] ?? null;
+            if ($refreshToken) {
+                $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
+                Session::put('google_access_token', $this->client->getAccessToken());
+            } else {
+                return redirect('app-admin/auth/redirect');
+            }
+        }
+
+        // Retrieve the event ID from the request
+        $eventId = $request->event_id;
+
+        $start_date = new \DateTime($request->start_date);
+        $start_date = $start_date->format(\DateTime::ISO8601);
+        $end_date   = new \DateTime($request->end_date);
+        $end_date   = $end_date->format(\DateTime::ISO8601);
+        //dd($end_date);
+        // Prepare the updated event details
+        $event = new Google_Service_Calendar_Event([
+            'summary'      => $request->title,
+            'description'  => $request->description,
+            'start' => [
+                'dateTime' => $start_date,
+                'timeZone' => 'GMT-03:00',
+            ],
+            'end' => [
+                'dateTime' => $end_date,
+                'timeZone' => 'GMT-03:00',
+            ],
+        ]);
+
+        try {
+            // Update the event
+            $this->service->events->update('primary', $eventId, $event);
+        } catch (\Exception $e) {
+            return redirect('app-admin/eventss')->with('error', 'Failed to update event: ' . $e->getMessage());
+        }
+        
+        return redirect('app-admin/eventss');
+    }
+
+
     public function deleteEvent($eventId)
     {
     if (!$token = Session::get('google_access_token')) {
@@ -154,6 +208,13 @@ class GoogleController extends Controller
     } catch (\Exception $e) {
         return response()->json(['success' => false, 'message' => $e->getMessage()]);
     }
+   }
+
+   public function logout()
+   {
+       // Clear the session
+       Session::forget('google_access_token');
+       return redirect('https://accounts.google.com/Logout');
    }
 
 }

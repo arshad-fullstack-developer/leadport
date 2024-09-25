@@ -61,7 +61,7 @@
             data-action-ajax-loading-target="commonModalBody">{{ cleanLang(__('lang.send_test_email')) }}
         </button>
         <!--save changes-->
-        <button type="submit" id="email-general-settings-button" class="btn btn-rounded-x btn-danger waves-effect text-left"
+        <button type="submit" id="email-general-settings-button" class="btn btn-rounded-x btn-success waves-effect text-left"
             data-url="/settings/email/general" data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
 

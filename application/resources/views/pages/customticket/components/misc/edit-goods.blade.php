@@ -38,7 +38,7 @@
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][lengthcm]"     value="{{  $good['lengthcm'] }}"></td>
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][widthcm]"      value="{{  $good['widthcm'] }}"></td>
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][heightcm]"     value="{{  $good['heightcm'] }}"></td>
-                <td><button type="button" class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm"  onclick="removeIndex(this)"><i class="sl-icon-trash"></i></button></td>
+                <td><i class="sl-icon-trash" onclick="removeIndex(this)"></i></td>
             </tr>
             @endforeach
          </tbody>

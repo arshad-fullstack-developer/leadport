@@ -68,7 +68,7 @@
         <!--buttons-->
         <div class="text-right" id="webform-builder-settings-buttons">
             <button type="submit" id="commonModalSubmitButton"
-                class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request"
+                class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request"
                 data-url="{{ url('settings/formbuilder/'.$webform->webform_id.'/settings') }}" data-type="form"
                 data-form-id="webform-builder-settings" data-ajax-type="post"
                 data-loading-target="webform-builder-settings-buttons">{{ cleanLang(__('lang.save_changes')) }}</button>

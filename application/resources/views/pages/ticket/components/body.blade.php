@@ -82,7 +82,7 @@
             @include('pages.ticket.components.modals.reply')
             <!--form buttons-->
             <div class="text-right p-t-30">
-                <button type="button" class="btn btn-danger waves-effect text-left" id="ticket_reply_button_close"
+                <button type="button" class="btn btn-success waves-effect text-left" id="ticket_reply_button_close"
                     data-dismiss="modal">@lang('lang.cancel')</button>
                 <button type="submit" id="ticket_reply_button_submit"
                     class="btn btn-info waves-effect text-left js-ajax-ux-request"

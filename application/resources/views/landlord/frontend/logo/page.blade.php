@@ -19,7 +19,7 @@
                             45px)</p>
         
                         <a href="javascript:void(0)"
-                            class="btn btn-rounded-x btn-danger waves-effect js-ajax-ux-request reset-target-modal-form edit-add-modal-button"
+                            class="btn btn-rounded-x btn-success waves-effect js-ajax-ux-request reset-target-modal-form edit-add-modal-button"
                             data-toggle="modal" data-target="#commonModal" data-url="{{ url('app-admin/frontend/logo/uploadlogo?logo_size=frontend-logo') }}"
                             data-loading-target="commonModalBody" data-modal-size="modal-sm"
                             data-header-close-icon="hidden"
@@ -44,7 +44,7 @@
                             16px)</p>
         
                             <a href="javascript:void(0)"
-                            class="btn btn-rounded-x btn-danger waves-effect js-ajax-ux-request reset-target-modal-form edit-add-modal-button"
+                            class="btn btn-rounded-x btn-success waves-effect js-ajax-ux-request reset-target-modal-form edit-add-modal-button"
                             data-toggle="modal" data-target="#commonModal" data-url="{{ url('app-admin/frontend/logo/uploadlogo?logo_size=frontend-favicon') }}"
                             data-loading-target="commonModalBody" data-modal-size="modal-sm"
                             data-header-close-icon="hidden"

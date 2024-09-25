@@ -17,7 +17,7 @@ $(document).ready(function () {
 			}
 		  $("tr#row-"+rowIndex+j+"").append('<td><input type="'+type+'" class="form-control" name="goods['+rowIndex+']['+goods[i]+']" id="'+rowIndex+'"></td>');
 		}
-		$("tr#row-"+rowIndex+j+"").append('<td><button type="button" class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm"  onclick="removeIndex(this)"><i class="sl-icon-trash"></i></button></td>');
+		$("tr#row-"+rowIndex+j+"").append('<td><i class="sl-icon-trash" onclick="removeIndex(this)"></i></td>');
 		rowIndex++;
 		j++;
 	});
@@ -164,10 +164,8 @@ function addPickupField(type) {
 	  newField.classList.add(type);
 	  var name = type+'['+[pickupIndex]+']';
 	  newField.innerHTML = `
-		  <input type="text" class="form-control pickup mt-3" name="`+name+`" placeholder="`+type+`" aria-label="`+type+`">
-		  <button type="button" class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm" onclick="removeField(this)">
-			  <i class="sl-icon-trash"></i>
-		  </button>
+		  <input type="text" class="form-control pickup mt-2" name="`+name+`" placeholder="`+type+`" aria-label="`+type+`">
+			  <i class="sl-icon-trash" onclick="removeField(this)"></i>
 	  `;
 	  container.appendChild(newField);
 	  pickupIndex++;
@@ -180,10 +178,8 @@ function addRemarksField(type) {
 	  newField.classList.add(type);
 	  var name = type+'['+[deliveryIndex]+']';
 	  newField.innerHTML = `
-		  <input type="text" class="form-control delivery mt-3" name="`+name+`" placeholder="`+type+`" aria-label="`+type+`">
-		  <button type="button" class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm" onclick="removeField(this)">
-			  <i class="sl-icon-trash"></i>
-		  </button>
+		  <input type="text" class="form-control delivery mt-2" name="`+name+`" placeholder="`+type+`" aria-label="`+type+`">
+			  <i class="sl-icon-trash" onclick="removeField(this)"></i>
 	  `;
 	  container.appendChild(newField);
 	  deliveryIndex++;
@@ -195,3 +191,5 @@ function addRemarksField(type) {
 	  const field = button.parentElement;
 	  field.remove();
   }
+
+  

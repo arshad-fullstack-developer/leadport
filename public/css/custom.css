@@ -14791,3 +14791,13 @@ label.label.label-outline-info.p-t-3.p-b-3.p-l-8.p-r-8.custum {
   i.mdi.mdi-plus-circle-outline.text-success.font-28{
     cursor: pointer;
   }
+  .col-sm-12.col-lg-6.bg-white {
+    border-radius: 20px !important;
+    padding: 20px;
+}
+.deliveryRemarks {
+  display: flex;
+}
+.pickupRemarks {
+  display: flex;
+}

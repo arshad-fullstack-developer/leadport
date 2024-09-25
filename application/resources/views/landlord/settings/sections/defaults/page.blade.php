@@ -798,7 +798,7 @@
             <!--submit-->
             <div class="text-right m-t-30">
                 <button type="submit" id="commonModalSubmitButton"
-                    class="btn btn-rounded-x btn-danger waves-effect text-left ajax-request"
+                    class="btn btn-rounded-x btn-success waves-effect text-left ajax-request"
                     data-url="{{ url('app-admin/settings/defaults') }}" data-form-id="landlord-settings-form"
                     data-loading-target="" data-ajax-type="post" data-type="form"
                     data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>

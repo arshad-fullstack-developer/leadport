@@ -98,7 +98,7 @@
         <!-- form row two -->
             <div class="row mt-3 "  >
 
-              <div class=" col-sm-12 col-lg-6 " >
+              <div class=" col-sm-12 col-lg-6">
                   <h5><i class="bi bi-backpack-fill"></i>Shipper</h5>
 
                   <div class="row mt-3" >
@@ -351,6 +351,7 @@
                   
                 </div>
             </div>
+            
           </div>
 
       <!-- form row four -->

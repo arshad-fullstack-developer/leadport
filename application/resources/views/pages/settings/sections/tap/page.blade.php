@@ -92,7 +92,7 @@
     <!--buttons-->
     <div class="text-right">
         <button type="submit" id="commonModalSubmitButton"
-            class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request" data-url="/settings/tap"
+            class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request" data-url="/settings/tap"
             data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">@lang('lang.save_changes')</button>
     </div>

@@ -50,7 +50,7 @@
         @endif
         <!--delete button-->
         @if($payload['show_delete_button'])
-        <button type="button" class="btn btn-rounded-x btn-danger btn-sm js-ajax-ux-request" name="delete_reminder" id="delete_reminder"
+        <button type="button" class="btn btn-rounded-x btn-success btn-sm js-ajax-ux-request" name="delete_reminder" id="delete_reminder"
             data-url="{{ url('reminders/delete?resource_type='.$payload['resource_type'].'&resource_id='.$payload['resource_id'].'&ref='.request('ref').'&reminder_id='.$reminder->reminder_id) }}"
             data-loading-class="loading-before"
             >{{ cleanLang(__('lang.delete')) }}</button>

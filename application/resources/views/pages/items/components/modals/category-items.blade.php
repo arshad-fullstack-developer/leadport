@@ -91,7 +91,7 @@
 
 <div class="text-right m-t-20">
     <button type="submit" id="categoryItemsModalSelectButton"
-        class="btn btn-rounded-x btn-danger waves-effect text-left" data-url="" data-loading-target=""
+        class="btn btn-rounded-x btn-success waves-effect text-left" data-url="" data-loading-target=""
         data-ajax-type="POST"
         data-on-start-submit-button="disable">{{ cleanLang(__('lang.add_selected_items')) }}</button>
 </div>

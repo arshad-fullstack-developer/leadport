@@ -40,7 +40,7 @@
                             </div>
                             <!--fileupload-->
                             <div class="text-lg-right">
-                                <button type="submit" class="btn btn-rounded-x btn-danger m-t-20"
+                                <button type="submit" class="btn btn-rounded-x btn-success m-t-20"
                                     id="ticket-compose-form-button" data-url="{{ url('/tickets') }}" data-type="form"
                                     data-ajax-type="post" data-loading-overlay-target="wrapper-tickets"
                                     data-loading-overlay-classname="overlay"

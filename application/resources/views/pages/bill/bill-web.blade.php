@@ -226,7 +226,7 @@
                         <a class="btn btn-secondary btn-sm"
                             href="{{ url('/invoices/'.$bill->bill_invoiceid) }}">@lang('lang.exit_editing_mode')</a>
                         <!--save changes-->
-                        <button class="btn btn-danger btn-sm"
+                        <button class="btn btn-success btn-sm"
                             data-url="{{ url('/invoices/'.$bill->bill_invoiceid.'/edit-invoice') }}" data-type="form"
                             data-form-id="bill-form-container" data-ajax-type="post" id="billing-save-button">
                             @lang('lang.save_changes')
@@ -235,7 +235,7 @@
                         <a class="btn btn-secondary btn-sm billing-mode-only-item"
                             href="{{ url('/estimates/'.$bill->bill_estimateid) }}">@lang('lang.exit_editing_mode')</a>
                         <!--save changes-->
-                        <a class="btn btn-danger btn-sm" href="javascript:void(0);"
+                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
                             data-url="{{ url('/estimates/'.$bill->bill_estimateid.'/edit-estimate?estimate_mode='.request('estimate_mode')) }}"
                             data-type="form" data-form-id="bill-form-container" data-ajax-type="post"
                             data-loading-target="documents-side-panel-billing-content" data-loading-class="loading"

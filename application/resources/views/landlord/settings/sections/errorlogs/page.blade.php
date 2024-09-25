@@ -13,7 +13,7 @@
                 @lang('lang.download') - ({{ humanFileSize($log->getSize()) }})
             </a>
             <input type="hidden" name="filename" value="{{ $log->getFilename() }}">
-            <button type="button" class="btn btn-danger btn-sm btn-xs confirm-action-danger"
+            <button type="button" class="btn btn-success btn-sm btn-xs confirm-action-danger"
                 data-confirm-title="@lang('lang.delete_item')" data-confirm-text="@lang('lang.are_you_sure')"
                 data-ajax-type="DELETE"
                 data-url="{{ url('app-admin/settings/errorlogs/delete?key='.$key.'&filename='.$log->getFilename()) }}">

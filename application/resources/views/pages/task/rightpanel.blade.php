@@ -347,7 +347,7 @@
             </select>
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-danger btn-sm" id="card-tasks-update-milestone-button"
+            <button type="button" class="btn btn-success btn-sm" id="card-tasks-update-milestone-button"
                 data-progress-bar='hidden' data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-milestone') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -411,7 +411,7 @@
             @endforeach
 
             <div class="form-group text-right">
-                <button type="button" class="btn btn-danger btn-sm" id="card-tasks-update-assigned"
+                <button type="button" class="btn btn-success btn-sm" id="card-tasks-update-assigned"
                     data-progress-bar='hidden' data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-assigned') }}"
                     data-type="form" data-ajax-type="post" data-form-id="popover-body">
                     {{ cleanLang(__('lang.update')) }}

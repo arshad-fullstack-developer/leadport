@@ -48,7 +48,7 @@
             <!--buttons-->
             <div class="text-right">
                 <button type="submit" id="commonModalSubmitButton"
-                    class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request"
+                    class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request"
                     data-url="{{ url('app-admin/settings/captcha') }}" data-loading-target="" data-ajax-type="POST"
                     data-type="form"
                     data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>

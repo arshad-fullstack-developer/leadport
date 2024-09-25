@@ -16,6 +16,11 @@
     <!--events.js-->
     <script src="<?php echo e(asset('public/js/landlord/frontend/events.js')); ?>"></script>
 
+    <!--custom.js-->
+    <script src="<?php echo e(asset('public/js/core/custom.js')); ?>"></script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB-zOugcVXjeBpcYUO2apwS7zkI8C5kG0&libraries=places&callback=initMap"></script>
+
     <!--customer body code-->
     <?php echo _clean(config('system.settings_code_body')); ?>
 

@@ -9,7 +9,7 @@
             @lang('lang.subscription_complete_your_payment')
         </div>
         <div class="x-button">
-            <button type="button" class="btn btn-rounded-x btn-danger js-ajax-ux-request disable-on-click-please-wait" data-url="{{ url('/subscriptions/'.$subscription->subscription_id.'/pay') }}">
+            <button type="button" class="btn btn-rounded-x btn-success js-ajax-ux-request disable-on-click-please-wait" data-url="{{ url('/subscriptions/'.$subscription->subscription_id.'/pay') }}">
                 @lang('lang.complete_your_payment')</button>
         </div>
     </div>
@@ -23,7 +23,7 @@
             @lang('lang.subscription_payment_failed')
         </div>
         <div class="x-button">
-            <button type="button" class="btn btn-rounded-x btn-danger edit-add-modal-button js-ajax-ux-request"
+            <button type="button" class="btn btn-rounded-x btn-success edit-add-modal-button js-ajax-ux-request"
                 data-toggle="modal" data-url="/tickets/22/edit?edit_type=all&amp;edit_source=leftpanel"
                 data-action-url="/tickets/22" data-target="#commonModal" data-loading-target="commonModalBody"
                 data-action-method="PUT" data-modal-title="Edit Support Ticket">
