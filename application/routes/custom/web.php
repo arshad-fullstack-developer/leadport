@@ -17,13 +17,13 @@
         Route::get('/auth/logout', "Landlord\GoogleController@logout");
     });
 
-    Route::get('auth/redirect', "GoogleController@redirectToGoogle");
-    Route::get('callback', "GoogleController@handleGoogleCallback");
-    Route::get('eventss', "GoogleController@viewEvents");
-    Route::post('events/create', "GoogleController@createEvent");
-    Route::post('events/{id}/delete', "GoogleController@deleteEvent");
-    Route::post('events/update', 'GoogleController@updateEvent');
-    Route::get('/auth/logout', 'GoogleController@logout');
+        Route::get('auth/redirect', "GoogleController@redirectToGoogle");
+        Route::get('callback', "GoogleController@handleGoogleCallback");
+        Route::get('eventss', "GoogleController@viewEvents");
+        Route::post('events/create', "GoogleController@createEvent");
+        Route::post('events/{id}/delete', "GoogleController@deleteEvent");
+        Route::post('events/update', 'GoogleController@updateEvent');
+        Route::get('/auth/logout', 'GoogleController@logout');
 
 
     Route::group(['prefix' => 'ctickets'], function () {

@@ -14,7 +14,7 @@
     <div id="card-description-submit" class="p-t-10 hidden text-right">
         <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
             id="card-description-button-cancel">{{ cleanLang(__('lang.cancel')) }}</button>
-        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger js-description-save"
+        <button type="button" class="btn waves-effect waves-light btn-xs btn-success js-description-save"
             data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-description') }}" data-progress-bar='hidden'
             data-type="form" data-form-id="card-description" data-ajax-type="post"
             id="card-description-button-save">{{ cleanLang(__('lang.save')) }}</button>

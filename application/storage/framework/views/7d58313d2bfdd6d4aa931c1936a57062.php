@@ -42,7 +42,7 @@
         <div id="card-edit-tags-buttons" class="p-t-10 hidden text-right display-block">
             <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
                 id="card-tags-button-cancel"><?php echo app('translator')->get('lang.close'); ?></button>
-            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger ajax-request"
+            <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
                 data-url="<?php echo e(url('tasks/'.$task->task_id.'/update-tags')); ?>" data-progress-bar="hidden"
                 data-type="form" data-form-id="card-tags-container" data-ajax-type="post"
                 id="card-tags-button-save"><?php echo app('translator')->get('lang.save'); ?></button>

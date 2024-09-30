@@ -49,7 +49,7 @@
         <div id="project-description-submit" class="p-t-20 hidden text-right">
             <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
                 id="project-description-button-cancel">{{ cleanLang(__('lang.cancel')) }}</button>
-            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" data-type="form"
+            <button type="button" class="btn waves-effect waves-light btn-xs btn-success" data-type="form"
                 data-form-id="project-details-container" data-ajax-type="post"
                 data-url="{{ url('templates/projects/'.$project->project_id .'/project-details') }}"
                 id="project-description-button-save">{{ cleanLang(__('lang.save')) }}</button>

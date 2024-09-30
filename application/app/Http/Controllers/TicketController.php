@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Models\TicketForm;
+use App\Models\Event;
+use App\Models\EventTracking;
 use Validator;
 
 class TicketController extends Controller {
@@ -244,13 +246,44 @@ class TicketController extends Controller {
           $data,'application/json')->post($this->baseUrl.'/HelpDesk');
 
          if($response->getStatusCode() == 201){    
-            return response()->json(array(
-                'notification' => [
-                    'type' => 'success',
-                    'value' => __('lang.request_has_been_completed'),
-                ],
-                'skip_dom_reset' => true,
-            ));
+
+            $data = [
+                'event_creatorid' => auth()->id() ?? 1,
+                'event_item' => 'custom-ticket',
+                'event_item_id' => 0,
+                'event_item_lang' => 'event_closed_ticket',
+                'event_item_content'  => $request->Shipper,
+                'event_item_content2' => $request->Consignee,
+                'event_parent_type' => 'ticket',
+                'event_parent_id' => 0,
+                'event_show_item' => 'yes',
+                'event_show_in_timeline' => 'yes',
+                'eventresource_type' => 'project',
+                'event_notification_category' => 'notifications_tickets_activity',
+            ];
+
+            //record event
+            if ($event_id = Event::create($data)) {
+                
+                $eventtracking = new EventTracking;
+                $eventtracking->eventtracking_eventid = $event_id->event_id;
+                $eventtracking->eventtracking_userid  = $event_id->event_creatorid ?? 1;
+                $eventtracking->eventtracking_source  = 'ticket';
+                $eventtracking->eventtracking_source_id = 0;
+                $eventtracking->parent_type = 'ticket';
+                $eventtracking->parent_id = 0;
+                $eventtracking->resource_type = 'project';
+                $eventtracking->resource_id = 0;
+                $eventtracking->save();
+                return response()->json(array(
+                    'notification' => [
+                        'type' => 'success',
+                        'value' => __('lang.request_has_been_completed'),
+                    ],
+                    'skip_dom_reset' => true,
+                ));
+            }
+            
         }else{
             return response()->json(array(
                 'notification' => [

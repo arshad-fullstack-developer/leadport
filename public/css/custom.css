@@ -11547,9 +11547,9 @@ div.boards::-webkit-scrollbar {
       .estimate .invoice-wrapper .invoice-item-actions .btn:hover,
       .estimate .invoice-wrapper .invoice-item-actions .btn:active,
       .estimate .invoice-wrapper .invoice-item-actions .btn:focus {
-        background-color: #ff5f6f !important;
+        background-color: #23D26B !important;
         color: #ffffff !important;
-        border-color: #ff5f6f !important; }
+        border-color: #23D26B !important; }
         .invoice .invoice-wrapper .invoice-item-actions .btn:hover i, .invoice .invoice-wrapper .invoice-item-actions .btn:active i, .invoice .invoice-wrapper .invoice-item-actions .btn:focus i,
         .estimate .invoice-wrapper .invoice-item-actions .btn:hover i,
         .estimate .invoice-wrapper .invoice-item-actions .btn:active i,

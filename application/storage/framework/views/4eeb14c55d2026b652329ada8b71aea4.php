@@ -11,7 +11,7 @@
     <div id="card-title-submit" class="p-t-10 text-right">
         <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
             id="card-title-button-cancel"><?php echo e(cleanLang(__('lang.cancel'))); ?></button>
-        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
+        <button type="button" class="btn waves-effect waves-light btn-xs btn-success"
             data-url="<?php echo e(urlResource('/tasks/'.$task->task_id.'/update-title')); ?>" data-progress-bar='hidden'
             data-type="form" data-form-id="card-title-edit" data-ajax-type="post"
             id="card-title-button-save"><?php echo e(cleanLang(__('lang.save'))); ?></button>

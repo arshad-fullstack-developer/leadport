@@ -37,9 +37,13 @@
 @endif
 
 <!--tickets-->
-@if($event->event_item == 'ticket')
+@if($event->event_item == 'custom-ticket')
+<div class="x-description"><a href="{{ url('ctickets/index') }}">{!! clean($event->event_item_content)
+!!}</a>
+</div>
+@else
 <div class="x-description"><a href="{{ url('tickets/'.$event->event_item_id) }}">{!! clean($event->event_item_content)
-                !!}</a>
+!!}</a>
 </div>
 @endif
 

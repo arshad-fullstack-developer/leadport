@@ -3302,3 +3302,15 @@ CREATE TABLE `webmail_templates` (
 
 
 -- 2024-07-17 10:59:50
+
+
+DROP TABLE IF EXISTS `ticket_forms`;
+CREATE TABLE `ticket_forms` (
+  `id` int(11) NOT NULL,
+  `share_id` varchar(200) DEFAULT NULL,
+  `expiry_date` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

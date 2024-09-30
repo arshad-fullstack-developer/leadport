@@ -40,7 +40,10 @@
 <?php endif; ?>
 
 <!--tickets-->
-<?php if($event->event_item == 'ticket'): ?>
+<?php if($event->event_item == 'custom-ticket'): ?>
+<div class="x-description"><a href="<?php echo e(url('ctickets/index')); ?>"><?php echo clean($event->event_item_content); ?></a>
+</div>
+<?php else: ?>
 <div class="x-description"><a href="<?php echo e(url('tickets/'.$event->event_item_id)); ?>"><?php echo clean($event->event_item_content); ?></a>
 </div>
 <?php endif; ?>
