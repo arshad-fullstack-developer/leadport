@@ -43,12 +43,12 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
          </tbody>
          <tr>
-		        <td><input type="number" class="form-control" value="<?php echo e($totalQty); ?>" disabled></td>
+		        <td><input type="number" class="form-control" name="total_qty" value="<?php echo e($totalQty); ?>" disabled></td>
 				<td></td>
 				<td></td>
-	            <td><input type="number" class="form-control" value="<?php echo e($totalKgcalc); ?>" disabled></td>
-				<td><input type="number" class="form-control" value="<?php echo e($totalLdm); ?>" disabled></td>
-				<td><input type="number" class="form-control" value="<?php echo e($totalVolumeM3); ?>" disabled></td>
+	            <td><input type="number" class="form-control" name="total_kgcalc" value="<?php echo e($totalKgcalc); ?>" disabled></td>
+				<td><input type="number" class="form-control" name="total_ldm"    value="<?php echo e($totalLdm); ?>" disabled></td>
+				<td><input type="number" class="form-control" name="total_volume" value="<?php echo e($totalVolumeM3); ?>" disabled></td>
 				<td></td>
 				<td></td>
                 <td></td>

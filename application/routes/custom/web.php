@@ -33,9 +33,9 @@
         Route::get('{id}/edit', "TicketController@edit");
         Route::post('store', "TicketController@store");
         Route::post('{id}/update-details', "TicketController@updateTicketDetails");
-        Route::post('{id}/update-details', "TicketController@updateTicketDetails");
         Route::post('/generate-link', 'TicketController@generateLink');
         Route::get('form', "TicketController@ticketForm");
+        Route::post('{id}/convartToLead', 'TicketController@convartToLead');
 
     });
 

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\TicketForm;
 use App\Models\Event;
 use App\Models\EventTracking;
+use App\Models\Lead;
 use Validator;
 
 class TicketController extends Controller {
@@ -396,88 +397,56 @@ class TicketController extends Controller {
             $orderStatus       = $orderStatus;
             $incoterms         = $incoterms;
     
-
+            //dd($ticket);
         //response
         return view('pages.customticket.wrapper',compact('page','ticket','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
     }
 
     
-    public function convartToTask($id)
+    public function convartToLead(Request $request,$id)
     {       
 
-            //dd(request());
+            $baseUrl = env('APP_URL');
+            //dd($request->all());
+            $leadTitle = $request->ShipperCountry.'-'.$request->ConsigneeCountry."($request->PickupDate - $request->DeliveryDate)";
+            $leadDescription ="
+            <a href='$baseUrl/ctickets/$id/edit' }}'>Ticket ID : $id</a><br>
+            <p><strong>General Information</strong></p>
+            <p>$request->OrderType, $request->Incoterms, $request->LoadType, $request->Quantity</p>
+            <p>$request->Shipper</p>
+            <p><strong>Pickup:</strong></p>
+            <p>$request->ShipperCity, &nbsp;   $request->ShipperCountry, &nbsp; $request->ShipperAddress, &nbsp; $request->ShipperIndex</p>
+            <p><strong>Delivery:</strong></p>
+            <p>$request->ConsigneeCity, &nbsp; $request->ConsigneeCountry, &nbsp;  $request->ConsigneeAddress, &nbsp; $request->ConsigneeIndex</p>
+            <p><strong>Goods:</strong></p>
+            <p>$request->total_qty, &nbsp; $request->total_kgcalc, &nbsp;  $request->total_ldm, &nbsp;  $request->total_volume</p>
+            <p><strong>Additional Information:</strong></p>
+            <p>$request->IsTempSensitive, &nbsp; $request->TempValue, &nbsp;  $request->ADRValue, &nbsp;  $request->UNCode, &nbsp;  $request->FragileValue,  &nbsp;  $request->Notes</p>
+            ";
 
-            $goods = request()->goods ?? [];
+            $lead = new Lead;
+            $lead->lead_title = $leadTitle;
+            $lead->lead_description = $leadDescription;
+            $lead->save();
 
-            $task  = new Task();
+            if(isset($lead->lead_id)){
 
-            $task->task_creatorid        = auth()->user()->id;
-            $task->task_title            = request()->CompanyName;
-            $task->task_custom_field_1   = request()->TransportTypeId;
-            $task->task_custom_field_2   = request()->EquipmentTypeId;
-            $task->task_custom_field_3   = request()->LoadTypeId;
-            $task->task_custom_field_4   = request()->TransportTypeId;
-            $task->task_custom_field_5   = request()->PickupCountryId;
-            $task->task_custom_field_6   = request()->PickupCity;
-            $task->task_custom_field_7   = request()->PickupDate;
-            $task->task_custom_field_8   = request()->PickupAddress;
-            $task->task_custom_field_9   = request()->PickupIndex;
-            $task->task_custom_field_10  = request()->DeliveryCountryId;
-            $task->task_custom_field_11  = request()->DeliveryCity;
-            $task->task_custom_field_12  = request()->DeliveryDate;
-            $task->task_custom_field_13  = request()->DeliveryAddress;
-            $task->task_custom_field_14  = request()->DeliveryIndex;
-            $task->task_custom_field_15  = request()->TemperatureSensitivity;
-            $task->task_custom_field_16  = request()->Fragile;
-            $task->task_custom_field_17  = request()->ADR;
-            $task->task_custom_field_18  = request()->UnCode;
-            $task->task_custom_field_19  = request()->FirstName;
-            $task->task_custom_field_20  = request()->LastName;
-            $task->task_custom_field_22  = request()->PhoneNumber;
-            $task->task_custom_field_23  = request()->EmailAddress;
-            $task->save();
-
-            if(isset($goods) && count($goods) > 0)
-            {
-                foreach($goods as $good){
-
-                    $data = array(
-                        'tsk_id'        =>$task->task_id,
-                        'qty'           =>$good['QTY'],
-                        'unitid'        =>$good['UnitId'],
-                        'kgcalc'        =>$good['GrossWeight'],
-                        'ldm'           =>$good['LDM'],
-                        'description'   =>$good['Description'],
-                        'volumem3'      =>$good['VolumeM3'],
-                        'lengthcm'      =>$good['LengthCM'],
-                        'widthcm'       =>$good['WidthCM'],
-                        'heightcm'      =>$good['HeightCM'],
-                        'value'         =>$good['Value'],
-                        'chargeable_weight_total' =>$good['ChargeableWeightTotal']
-                    );
-
-                    $addGoods = Goods::create($data);
-
-                }
+                return response()->json(array(
+                    'notification' => [
+                        'conavrt_to_task' =>true,
+                        'type' => 'success',
+                        'value' => __('lang.request_has_been_completed'),
+                    ],
+                    'skip_dom_reset' => true,
+                ));
+    
             }
-
-            return response()->json(array(
-                'notification' => [
-                    'conavrt_to_task' =>true,
-                    'type' => 'success',
-                    'value' => __('lang.request_has_been_completed'),
-                ],
-                'skip_dom_reset' => true,
-            ));
-
-            
-
     }
 
     public function updateTicketDetails(Request $request, $id){
           
-    
 
+        //dd($request->all());
         $TicketDetails = [];   
 
         if(isset($request->goods) && count($request->goods) > 0){
@@ -491,7 +460,8 @@ class TicketController extends Controller {
 
         $cmrparam = array(
             "cmrparam"=> array(
-                "Id"                        => $id,
+                "Id"                        => $id,    
+                'uniqueId'                  => $request->uniqueId ?? '',
                 "ShipmentOrderStatusId"     => $request->ShipmentOrderStatusId,
                 "TransportChannelId"        => $request->TransportChannelId,
                 "LoadTypeId"                => $request->LoadTypeId,
@@ -531,13 +501,13 @@ class TicketController extends Controller {
                 "FragileValue"              => $request->FragileValue,
                 "IncotermsId"               => $request->IncotermsId,
                 "ChargeableWeightTotal"     => $request->ChargeableWeightTotal,
-                "orgion"                    => json_decode($request->orgion, true),
-                "destination"               => json_decode($request->destinations, true),
-                'pickupRemarks'             => array_values($request->pickupRemarks),
-                'deliveryRemarks'           => array_values($request->deliveryRemarks),
+                "orgion"                    => json_decode($request->origin, true),
+                "destination"               => json_decode($request->destination, true),
+                'pickupRemarks'             => $request->pickupRemarks,
+                'deliveryRemarks'           => $request->deliveryRemarks,
                 'goods'                     => $TicketDetails,
 
-        )); 
+        ));
            
           $data  = json_encode($cmrparam,true);
           //dd($data);

@@ -18,45 +18,45 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/general" id="settings-menu-main-general"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/general') }}" id="settings-menu-main-general"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.general_settings')) }}</a>
                         </li>
                         <!--[MULTITENANCY]-->
                         @if(config('system.settings_type') == 'standalone')
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/modules" id="settings-menu-main-modules"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/modules') }}" id="settings-menu-main-modules"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.modules')) }}</a>
                         </li>
                         @endif
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/company" id="settings-menu-main-company"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/company') }}" id="settings-menu-main-company"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.company_details')) }}</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/currency" id="settings-menu-main-currency"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/currency') }}" id="settings-menu-main-currency"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.currency')) }}</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/theme" id="settings-menu-main-theme"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/theme') }}" id="settings-menu-main-theme"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.theme')) }}</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/logos" id="settings-menu-main-logo"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/logos') }}" id="settings-menu-main-logo"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.company_logo')) }}</a>
                         </li>
                         <!--[MULTITENANCY]-->
                         @if(config('system.settings_type') == 'standalone')
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/cronjobs" id="settings-menu-main-cronjobs"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/cronjobs') }}" id="settings-menu-main-cronjobs"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.cronjob_settings')) }}</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/system/clearcache"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/system/clearcache') }}"
                                 id="settings-menu-main-cronjobs"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.clear_cache')) }}</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/errorlogs"
+                            <a href="javascript:void(0);" data-url="{{ url('settings/errorlogs') }}"
                                 id="settings-menu-main-errorlogs"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.error_logs')) }}</a>
                         </li>
@@ -75,19 +75,19 @@
                         </span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="javascript:void(0);" data-url="/settings/account/myaccount"
+                        <li><a href="javascript:void(0);" data-url="{{ url('settings/account/myaccount') }}"
                                 id="settings-menu-billing-account"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.my_account')) }}</a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/account/packages"
+                        <li><a href="javascript:void(0);" data-url="{{ url('settings/account/packages') }}"
                                 id="settings-menu-billing-packages"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.packages')) }}</a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/account/payments"
+                        <li><a href="javascript:void(0);" data-url="{{ url('settings/account/payments') }}"
                                 id="settings-menu-billing-payments"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.payments')) }}</a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/account/notices"
+                        <li><a href="javascript:void(0);" data-url="{{ url('settings/account/notices') }}"
                                 id="settings-menu-billing-notices"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">{{ cleanLang(__('lang.notices')) }}</a>
                         </li>

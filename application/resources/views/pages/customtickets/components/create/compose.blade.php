@@ -370,6 +370,7 @@
               data-loading-overlay-classname="overlay"
               data-form-id="ticket-compose">{{ cleanLang(__('lang.submit_ticket')) }}</button>
           </div>
+          
 </form>
 
 <script>

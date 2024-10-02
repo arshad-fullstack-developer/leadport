@@ -43,12 +43,12 @@
             @endforeach
          </tbody>
          <tr>
-		        <td><input type="number" class="form-control" value="{{ $totalQty }}" disabled></td>
+		        <td><input type="number" class="form-control" name="total_qty" value="{{ $totalQty }}" disabled></td>
 				<td></td>
 				<td></td>
-	            <td><input type="number" class="form-control" value="{{ $totalKgcalc }}" disabled></td>
-				<td><input type="number" class="form-control" value="{{ $totalLdm }}" disabled></td>
-				<td><input type="number" class="form-control" value="{{ $totalVolumeM3 }}" disabled></td>
+	            <td><input type="number" class="form-control" name="total_kgcalc" value="{{ $totalKgcalc }}" disabled></td>
+				<td><input type="number" class="form-control" name="total_ldm"    value="{{ $totalLdm }}" disabled></td>
+				<td><input type="number" class="form-control" name="total_volume" value="{{ $totalVolumeM3 }}" disabled></td>
 				<td></td>
 				<td></td>
                 <td></td>

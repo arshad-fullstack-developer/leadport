@@ -1,3 +1,15 @@
+
+<?php
+function getSelectedName($data, $id) {
+    foreach ($data as $item) {
+        if ($item['ID'] == $id) {
+            return $item['Name'];
+        }
+    }
+    return '';
+}
+?>
+
 <form class="w-100 ticket-compose" method="post" id="ticket-compose" data-user-type="<?php echo e(auth()->user()->type); ?>">
 
         <div class="form-header d-flex mb-4">
@@ -57,7 +69,7 @@
                               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <?php endif; ?>
-                        </div>
+                            <input type="hidden" id="OrderType" name="OrderType" value="<?php echo e(old('OrderType', getSelectedName($orderTypes, $ticket['ShipmentOrderTypeId']) ?? '')); ?>">                        </div>
                         <div class="col-sm-6">
                             <label for="inputState" class="form-label fw-bold">Incoterms</label>
                               <?php if(isset($incoterms)): ?> 
@@ -67,7 +79,7 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                               </select>
                               <?php endif; ?>
-                          </div>
+                              <input type="hidden" id="Incoterms" name="Incoterms" value="<?php echo e(old('Incoterms', getSelectedName($incoterms, $ticket['IncotermsId']) ?? '')); ?>">                          </div>
                       </div>
                       <div class="row mt-3" >
                         <div class="col-6">
@@ -79,7 +91,8 @@
                               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                             <?php endif; ?>
-                        </div>
+                            <input type="hidden" id="LoadType" name="LoadType" value="<?php echo e(old('LoadType', getSelectedName($loadType, $ticket['LoadTypeId']) ?? '')); ?>">
+                          </div>
 
                         <div class="col-6">
                             <label for="quantity" class="form-label fw-bold">Quantity</label>
@@ -124,10 +137,11 @@
                           <?php if(isset($countries) && count($countries) > 0): ?>
                                <select class="form-control" name="ShipperCountryId">
                                   <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($country['ID']); ?>"><?php echo e($country['Name']); ?></option>
+                                    <option value="<?php echo e($country['ID']); ?>" <?php echo e(runtimePreselected($country['ID'] ?? '', $ticket['ShipperCountryId'])); ?>><?php echo e($country['Name']); ?></option>
                                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                               </select>
                             <?php endif; ?>                     
+                            <input type="hidden" id="ShipperCountry" name="ShipperCountry" value="<?php echo e(old('ShipperCountry', getSelectedName($countries, $ticket['ShipperCountryId']) ?? '')); ?>">
                       </div>
                     <div class="col">
                       <label for="City" class="form-label fw-bold">City</label>
@@ -254,7 +268,8 @@
                                         <option value="<?php echo e($country['ID']); ?>" <?php echo e(runtimePreselected($country['ID'] ?? '', $ticket['ConsigneeCountryId'])); ?>><?php echo e($country['Name']); ?></option>
                                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                   </select>
-                                <?php endif; ?>               
+                                <?php endif; ?>  
+                                <input type="hidden" id="ConsigneeCountry" name="ConsigneeCountry" value="<?php echo e(old('ConsigneeCountry', getSelectedName($countries, $ticket['ConsigneeCountryId']) ?? '')); ?>">             
                         </div>
 
                         <div class="col">
@@ -380,7 +395,9 @@
                 <label for="notes" class="form-label fw-bold">Notes</label>
             <input type="text" class="form-control" name="Notes" placeholder="About Notes" value="<?php echo e($ticket['Notes']); ?>"  aria-label="notes">
             </div>
+
              <?php echo $__env->make('pages.customticket.components.misc.edit-goods', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    
           </div>
           
           <div class="row mt-3">
@@ -414,9 +431,9 @@
                                     data-form-id="ticket-compose"><?php echo e(cleanLang(__('lang.update'))); ?></button>
                                     
                                     <?php if(isset($ticket['Id'])): ?>
-                                    <button type="submit" class="btn btn-rounded-x btn-success m-t-20 request"
-                                     data-url="<?php echo e(url('/tickets/'.$ticket['Id'].'/convartToTask')); ?>" data-type="form" data-ajax-type="post"
-                                    ><?php echo e(cleanLang(__('lang.convart_to_task'))); ?></button>
+                                    <button type="submit" class="btn btn-rounded-x btn-success m-t-20 ajax-request"
+                                     data-url="<?php echo e(url('/ctickets/'.$ticket['Id'].'/convartToLead')); ?>" data-type="form" data-ajax-type="post"
+                                    ><?php echo e(cleanLang(__('lang.convart_to_lead'))); ?></button>
                                     <?php endif; ?>
                             </div>
                         </div>
@@ -426,53 +443,14 @@
         </div>
     </div>
 </form>
-
 <script>
-    
-$(document).ready(function() {
 
-    // Set up CSRF token for all AJAX requests
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    // Attach a click event handler to the button with the class 'ajax-request'
-    $('.request').on('click', function(e) {
-        e.preventDefault(); // Prevent the default form submission
-
-        var button = $(this);
-        var url = button.data('url'); // Get the URL from the data-url attribute
-        var type = button.data('type'); // Get the type from the data-type attribute
-        var ajaxType = button.data('ajax-type'); // Get the AJAX type (e.g., 'post')
-
-        // Perform the AJAX request
-        $.ajax({
-            url: url,
-            type: ajaxType,
-            data: button.closest('form').serialize(), // Serialize form data if needed
-            success: function(response) {
-                // Handle the successful response here
-                console.log('Success:', response.notification);
-
-                // Optionally, you can update the UI or perform other actions based on the response
-                alert('Task successfully converted!');
-            },
-            error: function(xhr, status, error) {
-                // Handle errors here
-                console.error('Error:', error);
-                alert('There was an error converting the task.');
-            }
-        });
-    });
-});
-   
     var pickupdata   = JSON.parse(document.getElementById("pickupLocation").value);
     var deliverydata = JSON.parse(document.getElementById("deliveryLocation").value);
 
     const pickupLocation   = { lat: pickupdata.lat,   lng: pickupdata.lng}; 
     const deliveryLocation = { lat: deliverydata.lat, lng: deliverydata.lng };
-
+    
     function initMap() {
             // Create a map centered at the midpoint between pickup and delivery locations
             const mapCenter = {
@@ -510,5 +488,27 @@ $(document).ready(function() {
 
             flightPath.setMap(map);
     }
+
+  function setHiddenFields() {
+    const updates = [
+        { selectId: 'orderType', hiddenId: 'OrderType' },
+        { selectId: 'incoterms', hiddenId: 'Incoterms' },
+        { selectId: 'loadType', hiddenId: 'LoadType' },
+        { selectId: 'shipperCountry', hiddenId: 'ShipperCountry' },
+        { selectId: 'consigneeCountry', hiddenId: 'ConsigneeCountry' }
+    ];
+
+    updates.forEach(({ selectId, hiddenId }) => {
+        const selectElement = document.getElementById(selectId);
+        const hiddenInput = document.getElementById(hiddenId);
+        hiddenInput.value = selectElement.options[selectElement.selectedIndex].text;
+    });
+}
+
+  // Call the function to set the initial values on page load
+  window.onload = setHiddenFields;
+
+
+
 </script>
 <?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/customticket/components/edit.blade.php ENDPATH**/ ?>

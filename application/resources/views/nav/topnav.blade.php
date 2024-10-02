@@ -17,7 +17,7 @@
             @else
             <!--logo-->
             <div class="sidenav-menu-item logo m-t-0">
-                <a class="navbar-brand" href="/home">
+                <a class="navbar-brand" href="{{ url('home') }}">
                     <img src="{{ runtimeLogoSmall() }}" alt="homepage" class="logo-small" />
                     <img src="{{ runtimeLogoLarge() }}" alt="homepage" class="logo-large" />
                 </a>
@@ -218,7 +218,7 @@
                 <!-- settings -->
                 @if(auth()->user()->is_admin)
                 <li class="nav-item">
-                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="/settings" id="32"
+                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="{{ url('settings') }}" id="32"
                         aria-expanded="false">
                         <i class="sl-icon-settings"></i>
                     </a>

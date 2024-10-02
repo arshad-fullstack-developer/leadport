@@ -14801,3 +14801,63 @@ label.label.label-outline-info.p-t-3.p-b-3.p-l-8.p-r-8.custum {
 .pickupRemarks {
   display: flex;
 }
+
+.top-search-bar .top-search-container {
+  max-width: 150px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.top-search-bar .top-search-container i {
+  position: absolute;
+  font-size: 14px;
+  left: 12px;
+  top: 30px;
+}
+.top-search-bar .top-search-container input {
+  background-color: transparent;
+  height: 30px;
+  min-height: 30px;
+  vertical-align: bottom;
+  font-size: 13px;
+  padding-left: 35px;
+  border-color: #d0d0d0;
+  margin-top:15%;
+}
+.x-search-field {
+    width: 100% !important;
+    height:20px;
+}
+
+.search-modal .modal-header .x-search-field .form-group .form-control {
+    width: 100% !important;
+    padding-left: 40px;
+    border: 0px;
+    font-size: 17px !important;
+    font-weight: 200;
+    height: 55px;
+}
+.search-modal .modal-header {
+    background-color: #ffffff;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-bottom: solid 1px #f3f4f5 !important;
+}
+.search-modal .search-modal-container .search-modal-message .x-holder-start {
+    text-align: center;
+    padding-bottom: 70px;
+    padding-top: 50px;
+}
+.search-modal .search-modal-container .search-modal-message .x-holder-start img {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.search-modal .modal-header .x-search-field i {
+    position: absolute;
+    left: 10px;
+    top: 19px;
+    font-size: 20px;
+    opacity: 0.6;
+}
