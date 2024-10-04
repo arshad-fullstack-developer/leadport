@@ -431,9 +431,12 @@ function getSelectedName($data, $id) {
                                     data-form-id="ticket-compose"><?php echo e(cleanLang(__('lang.update'))); ?></button>
                                     
                                     <?php if(isset($ticket['Id'])): ?>
-                                    <button type="submit" class="btn btn-rounded-x btn-success m-t-20 ajax-request"
-                                     data-url="<?php echo e(url('/ctickets/'.$ticket['Id'].'/convartToLead')); ?>" data-type="form" data-ajax-type="post"
-                                    ><?php echo e(cleanLang(__('lang.convart_to_lead'))); ?></button>
+                                    <button type="submit" class="btn btn-rounded-x btn-success m-t-20 ajax-request" id="convart_to_lead"
+                                          data-url="<?php echo e(url('/ctickets/'.$ticket['Id'].'/convartToLead')); ?>" data-type="form" data-ajax-type="post"
+                                          <?php echo e(isset($ticket['is_lead_convarted']) && $ticket['is_lead_convarted'] ? 'disabled' : ''); ?>>
+                                      <?php echo e(cleanLang(__('lang.convart_to_lead'))); ?>
+
+                                    </button>
                                     <?php endif; ?>
                             </div>
                         </div>
@@ -443,12 +446,12 @@ function getSelectedName($data, $id) {
         </div>
     </div>
 </form>
-<script>
 
+<script>
     var pickupdata   = JSON.parse(document.getElementById("pickupLocation").value);
     var deliverydata = JSON.parse(document.getElementById("deliveryLocation").value);
 
-    const pickupLocation   = { lat: pickupdata.lat,   lng: pickupdata.lng}; 
+    const pickupLocation   = { lat: pickupdata.lat,   lng: pickupdata.lng }; 
     const deliveryLocation = { lat: deliverydata.lat, lng: deliverydata.lng };
     
     function initMap() {
@@ -505,10 +508,9 @@ function getSelectedName($data, $id) {
     });
 }
 
-  // Call the function to set the initial values on page load
   window.onload = setHiddenFields;
 
-
+ 
 
 </script>
 <?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/customticket/components/edit.blade.php ENDPATH**/ ?>

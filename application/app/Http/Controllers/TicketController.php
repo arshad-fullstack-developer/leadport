@@ -379,9 +379,14 @@ class TicketController extends Controller {
             $incoterms          = $responses['incoterms']['common'] ?? null;
 
             $ticket = $responses['ticket'];
+            $lead   = Lead::where('ticket_id',$id)->first();
 
             if (!$ticket) {
                 abort(409, __('lang.ticket_not_found'));
+            }
+
+            if (isset($lead)) {
+                $ticket['is_lead_convarted'] = true;
             }
 
  
@@ -406,6 +411,12 @@ class TicketController extends Controller {
     public function convartToLead(Request $request,$id)
     {       
 
+            $lead = Lead::where('ticket_id',$id)->first();
+
+            if(isset($lead)) {
+                abort(409, __('lang.already_ticket_convart_lead'));
+            }
+
             $baseUrl = env('APP_URL');
             //dd($request->all());
             $leadTitle = $request->ShipperCountry.'-'.$request->ConsigneeCountry."($request->PickupDate - $request->DeliveryDate)";
@@ -425,22 +436,51 @@ class TicketController extends Controller {
             ";
 
             $lead = new Lead;
+            $lead->ticket_id  = $id;
             $lead->lead_title = $leadTitle;
             $lead->lead_description = $leadDescription;
-            $lead->save();
+        
+            if($lead->save() && isset($lead->lead_id)){
 
-            if(isset($lead->lead_id)){
-
-                return response()->json(array(
-                    'notification' => [
-                        'conavrt_to_task' =>true,
-                        'type' => 'success',
-                        'value' => __('lang.request_has_been_completed'),
-                    ],
-                    'skip_dom_reset' => true,
-                ));
+                $data = [
+                    'event_creatorid' => auth()->id() ?? 1,
+                    'event_item' => 'lead',
+                    'event_item_id' => $lead->lead_id.'/'.$leadTitle,
+                    'event_item_lang' => 'event_closed_leads',
+                    'event_item_content'  => $request->Shipper,
+                    'event_item_content2' => $request->Consignee,
+                    'event_parent_type' => 'leads',
+                    'event_parent_id' => $lead->lead_id,
+                    'event_show_item' => 'yes',
+                    'event_show_in_timeline' => 'yes',
+                    'eventresource_type' => 'project',
+                    'event_notification_category' => 'notifications_leads_activity',
+                ];
     
+                //record event
+                if ($event_id = Event::create($data)) {
+                    
+                    $eventtracking = new EventTracking;
+                    $eventtracking->eventtracking_eventid = $event_id->event_id;
+                    $eventtracking->eventtracking_userid  = $event_id->event_creatorid ?? 1;
+                    $eventtracking->eventtracking_source  = 'leads';
+                    $eventtracking->eventtracking_source_id = 0;
+                    $eventtracking->parent_type = 'leads';
+                    $eventtracking->parent_id = $lead->lead_id;
+                    $eventtracking->resource_type = 'project';
+                    $eventtracking->resource_id = $lead->lead_id;
+                    $eventtracking->save();
+                    return response()->json(array(
+                        'notification' => [
+                            'type' => 'success',
+                            'value' => __('lang.request_has_been_completed'),
+                        ],
+                        'skip_dom_reset' => true,
+                    ));
+                }
             }
+
+
     }
 
     public function updateTicketDetails(Request $request, $id){

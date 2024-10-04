@@ -39,11 +39,15 @@
 </div>
 <?php endif; ?>
 
-<!--tickets-->
+
+<!--custom-ticket-->
 <?php if($event->event_item == 'custom-ticket'): ?>
 <div class="x-description"><a href="<?php echo e(url('ctickets/index')); ?>"><?php echo clean($event->event_item_content); ?></a>
 </div>
-<?php else: ?>
+<?php endif; ?>
+
+<!--tickets-->
+<?php if($event->event_item == 'ticket'): ?>
 <div class="x-description"><a href="<?php echo e(url('tickets/'.$event->event_item_id)); ?>"><?php echo clean($event->event_item_content); ?></a>
 </div>
 <?php endif; ?>
@@ -58,6 +62,13 @@
 <!--estimate-->
 <?php if($event->event_item == 'estimate'): ?>
 <div class="x-description"><a href="<?php echo e(url('estimates/'.$event->event_item_id)); ?>"><?php echo clean($event->event_item_content); ?></a>
+</div>
+<?php endif; ?>
+
+
+<!--lead-->
+<?php if($event->event_item == 'lead'): ?>
+<div class="x-description"><a href="<?php echo e(url('leads')); ?>"><?php echo clean($event->event_item_content); ?></a>
 </div>
 <?php endif; ?>
 

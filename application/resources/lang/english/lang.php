@@ -1421,6 +1421,7 @@ return [
     'ticket_id' => "Ticket ID",
     'ticket_is_on_hold' => "This support ticket is currently on hold and you cannot post a new reply to it",
     'ticket_not_found' => "Ticket could not be found",
+    'already_ticket_convart_lead' => "This ticket is already convarted in lead",
     'ticket_options' => "Ticket Options",
     'ticket_reply' => "Support Ticket Reply",
     'ticket_settings' => "Ticket Settings",

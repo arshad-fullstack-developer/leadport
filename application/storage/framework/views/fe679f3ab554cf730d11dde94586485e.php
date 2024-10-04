@@ -77,7 +77,15 @@
 
 <!-- Popup Modal -->
 <div id="shareModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:20px; border:1px solid #ccc; z-index:1000;">
-    <h2>Copy link for form</h2>
+    <h2>Share with</h2>
+    <div class="socail-platform">
+    <a href="#" target="_blank" id="whatsapp">
+     <img src="<?php echo e(asset('/public/images/whatsapp.png')); ?>" alt="" class="socailicons">
+    </a>
+    <a href="#" target="_blank" id="email" class="socailicons">
+    <i class="ti-email" id="emailicon"></i>
+    </a>
+    </div>
     <input type="text" id="formLink" class="form-control" readonly style="width:100%;">
     <button class="btn btn-success btn-sm waves-effect text-left mt-2" onclick="copyLink()">Copy Link</button>
     <button class="btn btn-secondary btn-sm waves-effect text-left mt-2" onclick="closeSharePopup()">Close</button>
@@ -100,7 +108,8 @@ function openSharePopup() {
     .then(response => response.json())
     .then(data => {
         document.getElementById('formLink').value = data.link; // Set the generated link
-
+        document.getElementById('whatsapp').href  = "https://api.whatsapp.com/send?text="+data.link; // Set the generated link
+        document.getElementById('email').href     = "mailto:?body="+data.link; // Set the generated link
         // Display the modal
         document.getElementById('shareModal').style.display = 'block';
         document.getElementById('overlay').style.display = 'block';

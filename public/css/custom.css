@@ -14861,3 +14861,13 @@ label.label.label-outline-info.p-t-3.p-b-3.p-l-8.p-r-8.custum {
     font-size: 20px;
     opacity: 0.6;
 }
+
+.socailicons {
+    padding: 10px;
+    margin-bottom: 13px;
+    width: 50px;
+}
+
+i#emailicon {
+  font-size: 25px;
+}
