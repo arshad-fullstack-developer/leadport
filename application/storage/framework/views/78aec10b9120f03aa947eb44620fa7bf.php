@@ -13,7 +13,7 @@
         </span>
     </td>
     <?php endif; ?>
-    <td class="tickets_col_id"><a href="/tickets/<?php echo e($ticket['Id']); ?>"><?php echo e($ticket['Id']); ?></a></td>
+    <td class="tickets_col_id"><a href="<?php echo e(urlResource('/ctickets/'.$ticket['Id'].'/view')); ?>"><?php echo e($ticket['Id']); ?></a></td>
     <td class="tickets_col_subject">
         <?php echo e($ticket['Shipper'] ?? '---'); ?>
 
@@ -53,7 +53,7 @@
             class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm"
             ><i class="sl-icon-note"></i></a>
 
-            <a href="javascript:void(0)" title="<?php echo e(cleanLang(__('lang.view'))); ?>"
+            <a href="<?php echo e(urlResource('/ctickets/'.$ticket['Id'].'/view')); ?>" title="<?php echo e(cleanLang(__('lang.view'))); ?>"
                 class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
                 <i class="ti-new-window"></i>
             </a>

@@ -118,7 +118,7 @@ function getSelectedName($data, $id) {
                     
                     <div class="col">
                       <label for="shipper_date"  class="form-label fw-bold">Date</label>
-                      <input type="text" class="form-control pickadate" id="shipper_date" name="PickupDate" placeholder="Date" aria-label="date" value="<?php echo e($ticket['PickupDate']); ?>">
+                      <input type="date" class="form-control" id="shipper_date" name="PickupDate" placeholder="Date" aria-label="date" value="<?php echo e($ticket['PickupDate']); ?>">
                   </div>
                   <div class="col">
                     <label for="id" class="form-label fw-bold">Time</label>
@@ -244,7 +244,7 @@ function getSelectedName($data, $id) {
                   <div class="row mt-3" >
                     <div class="col">
                       <label for="consignee_date" class="form-label fw-bold">Date</label>
-                      <input type="text" class="form-control pickadate" id="consignee_date" name="DeliveryDate" value="<?php echo e($ticket['DeliveryDate']); ?>" placeholder="Date" aria-label="date">
+                      <input type="date" class="form-control" id="consignee_date" name="DeliveryDate" value="<?php echo e($ticket['DeliveryDate']); ?>" placeholder="Date" aria-label="date">
                   </div>
                   <div class="col">
                     <label for="id" class="form-label fw-bold">Time</label>

@@ -13,7 +13,7 @@
         </span>
     </td>
     @endif
-    <td class="tickets_col_id"><a href="/tickets/{{ $ticket['Id'] }}">{{ $ticket['Id'] }}</a></td>
+    <td class="tickets_col_id"><a href="{{ urlResource('/ctickets/'.$ticket['Id'].'/view') }}">{{ $ticket['Id'] }}</a></td>
     <td class="tickets_col_subject">
         {{ $ticket['Shipper'] ?? '---' }}
     </td>
@@ -49,7 +49,7 @@
             class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm"
             ><i class="sl-icon-note"></i></a>
 
-            <a href="javascript:void(0)" title="{{ cleanLang(__('lang.view')) }}"
+            <a href="{{ urlResource('/ctickets/'.$ticket['Id'].'/view') }}" title="{{ cleanLang(__('lang.view')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
                 <i class="ti-new-window"></i>
             </a>

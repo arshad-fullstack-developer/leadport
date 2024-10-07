@@ -303,6 +303,77 @@ class TicketController extends Controller {
      * @param int $id ticket  id
      * @return \Illuminate\Http\Response
      */
+
+    public function view($id){
+
+        // Batch requests for better performance
+        $requests = [
+            'transportType'     => $this->baseUrl.'Common/HD_GetTransportType',
+            'equipmentType'     => $this->baseUrl.'Common/HD_GetEquipmentType',
+            'loadType'          => $this->baseUrl.'Common/HD_GetLoadType',
+            'countries'         => $this->baseUrl.'Common/GetCountries',
+            'transportChannels' => $this->baseUrl.'Common/GetTransportChannel',
+            'carriageType'      => $this->baseUrl.'Common/GetCarriageType?TransportChannelId=1',
+            'orderTypes'        => $this->baseUrl.'Common/GetShipmentOrderType',
+            'orderStatus'       => $this->baseUrl.'Common/GetShipmentOrderStatus',
+            'incoterms'         => $this->baseUrl.'Common/GetIncoTerms',
+            'ticket'            => $this->baseUrl.'HelpDesk/'.$id,
+            ];
+        
+        
+        // Batch processing of requests
+        $responses = [];
+        foreach ($requests as $key => $requestUrl) {
+            $responses[$key] = $this->fetchData($requestUrl);
+        }
+        
+        // Accessing individual responses
+        $transportType      = $responses['transportType']['common'] ?? null;
+        $equipmentType      = $responses['equipmentType']['common'] ?? null;
+        $loadType           = $responses['loadType']['common'] ?? null;
+        $countries          = $responses['countries']['country'] ?? null;
+        $transportChannels  = $responses['transportChannels']['common'] ?? null;
+        $carriageType       = $responses['carriageType']['common'] ?? null;
+        $orderTypes         = $responses['orderTypes']['common'] ?? null;
+        $orderStatus        = $responses['orderStatus']['common'] ?? null;
+        $incoterms          = $responses['incoterms']['common'] ?? null;
+
+        $ticket = $responses['ticket'];
+        $lead   = Lead::where('ticket_id',$id)->first();
+
+        if (!$ticket) {
+            abort(409, __('lang.ticket_not_found'));
+        }
+
+        if (isset($lead)) {
+            $ticket['is_lead_convarted'] = true;
+        }
+
+        $ticket['viewmode'] = true;
+        $page = $this->pageSettings('tickets');
+        $ticket = $ticket;
+        $transportType     = $transportType;
+        $equipmentType     = $equipmentType;
+        $loadType          = $loadType;
+        $countries         = $countries;
+        $transportChannels = $transportChannels;
+        $carriageType      = $carriageType;
+        $orderTypes        = $orderTypes;
+        $orderStatus       = $orderStatus;
+        $incoterms         = $incoterms;
+
+        //dd($ticket);
+    //response
+    return view('pages.customticket.wrapper',compact('page','ticket','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+    
+  }
+
+    /**
+     * Display the specified ticket
+     * @param object TicketReplyRepository instance of the repository
+     * @param int $id ticket  id
+     * @return \Illuminate\Http\Response
+     */
     public function show(TicketReplyRepository $replyrepo, $id) {
 
         //get the ticket

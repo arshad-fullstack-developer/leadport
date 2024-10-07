@@ -212,7 +212,7 @@ return [
     'load_type'        =>"LoadType",   
     'pickup_date'      =>"PickupDate",
     'delivery_date'    =>"DeliveryDate",
-    'convart_to_lead'  =>"Convart To Lead",
+    'convart_to_lead'  =>"Convert To Lead",
     'Category Ordering' => "Category Ordering",
     'category_already_exists' => "A category with that name already exists",
     'category_icon' => "Category Icon",

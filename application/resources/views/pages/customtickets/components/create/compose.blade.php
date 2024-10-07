@@ -104,7 +104,7 @@
                     
                     <div class="col">
                       <label for="shipper_date"  class="form-label fw-bold">Date</label>
-                      <input type="text" class="form-control pickadate" id="shipper_date" name="PickupDate" placeholder="Date" aria-label="date">
+                      <input type="date" class="form-control" id="shipper_date" name="PickupDate" placeholder="Date" aria-label="date">
                   </div>
                   <div class="col">
                     <label for="id" class="form-label fw-bold">Time</label>
@@ -217,7 +217,7 @@
                   <div class="row mt-3" >
                     <div class="col">
                       <label for="consignee_date" class="form-label fw-bold">Date</label>
-                      <input type="text" class="form-control pickadate" id="consignee_date" name="DeliveryDate" placeholder="Date" aria-label="date">
+                      <input type="date" class="form-control" id="consignee_date" name="DeliveryDate" placeholder="Date" aria-label="date">
                   </div>
                   <div class="col">
                     <label for="id" class="form-label fw-bold">Time</label>
@@ -374,6 +374,11 @@
 </form>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentYear = new Date().getFullYear();
+        const minDate = `${currentYear}-01-01`; // Minimum date format YYYY-MM-DD
 
-
+        document.getElementById('shipper_date').setAttribute('min', minDate);
+        document.getElementById('consignee_date').setAttribute('min', minDate);
+    });
 </script>

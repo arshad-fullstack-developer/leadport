@@ -15,9 +15,13 @@
     <!-- page content -->
     <div class="row">
         <div class="col-12" id="tickets-table-wrapper">
+            <?php if(isset($ticket['viewmode']) && $ticket['viewmode'] == true): ?>
+            <?php echo $__env->make('pages.customticket.components.view', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>         
+            <?php else: ?>
             <!--tickets table-->
             <?php echo $__env->make('pages.customticket.components.edit', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <!--tickets table-->
+            <?php endif; ?>
         </div>
     </div>
     <!--page content -->

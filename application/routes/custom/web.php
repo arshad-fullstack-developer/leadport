@@ -31,6 +31,7 @@
         Route::get('index', "TicketController@index");
         Route::get('create', "TicketController@create");
         Route::get('{id}/edit', "TicketController@edit");
+        Route::get('{id}/view', "TicketController@view");
         Route::post('store', "TicketController@store");
         Route::post('{id}/update-details', "TicketController@updateTicketDetails");
         Route::post('/generate-link', 'TicketController@generateLink');
