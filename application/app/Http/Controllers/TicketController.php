@@ -16,12 +16,12 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\TicketForm;
 use App\Models\Event;
 use App\Models\EventTracking;
+use App\Models\CustomTicket;
+use App\Models\CTicketGood;
 use App\Models\Lead;
 use Validator;
 
 class TicketController extends Controller {
-
-    public $baseUrl = "https://docportgatewaynew.azurewebsites.net/api/";
 
     /**
      * Display a listing of tickets
@@ -30,21 +30,19 @@ class TicketController extends Controller {
      */
     public function index() {
 
-        $response = Http::accept('application/json')->get($this->baseUrl.'HelpDesk');
-        $result   = json_decode($response->getBody(), true);
+        $result   = CustomTicket::orderby('id','DESC')->get();
 
-        $tickets  = $result['ticket'] ?? null;
+        $tickets  = $result?? null;
         $page     = $this->pageSettings('tickets');
         
-        //show the view
         return view('pages.customtickets.wrapper',compact('page','tickets'));
     }
 
 
-    public function fetchData($url) {
-            $response = Http::accept('application/json')->get($url);
-            return json_decode($response->getBody(), true);
-    
+    public function fetchData($model) {
+
+            $response = $model::get();
+            return $response;
     }
 
     /**
@@ -53,22 +51,16 @@ class TicketController extends Controller {
      */
     public function create() {
 
-
-             $url = $this->baseUrl."Common/";
-
             // Batch requests for better performance
-            $requests = [
-                'transportType'     => $url.'HD_GetTransportType',
-                'equipmentType'     => $url.'HD_GetEquipmentType',
-                'loadType'          => $url.'HD_GetLoadType',
-                'countries'         => $url.'GetCountries',
-                'transportChannels' => $url.'GetTransportChannel',
-                'carriageType'      => $url.'GetCarriageType?TransportChannelId=1',
-                'orderTypes'        => $url.'GetShipmentOrderType',
-                'orderStatus'       => $url.'GetShipmentOrderStatus',
-                'incoterms'         => $url.'GetIncoTerms',
-                ];
-            
+             $requests  = [
+                'loadType'          => 'App\Models\CTicketLoadType',
+                'countries'         => 'App\Models\CTicketCountry',
+                'transportChannels' => 'App\Models\CTicketTransportChannel',
+                'carriageType'      => 'App\Models\CTicketCarriageType',
+                'orderTypes'        => 'App\Models\CTicketOrderType',
+                'orderStatus'       => 'App\Models\CTicketStatus',
+                'incoterms'         => 'App\Models\CTicketIncoterms',
+             ];   
             // Batch processing of requests
             $responses = [];
             foreach ($requests as $key => $requestUrl) {
@@ -76,21 +68,17 @@ class TicketController extends Controller {
             }
             
             $page               = $this->pageSettings('create');
-            $transportType      = $responses['transportType']['common'] ?? null;
-            $equipmentType      = $responses['equipmentType']['common'] ?? null;
-            $loadType           = $responses['loadType']['common'] ?? null;
-            $countries          = $responses['countries']['country'] ?? null;
-            $transportChannels  = $responses['transportChannels']['common'] ?? null;
-            $carriageType       = $responses['carriageType']['common'] ?? null;
-            $orderTypes         = $responses['orderTypes']['common'] ?? null;
-            $orderStatus        = $responses['orderStatus']['common'] ?? null;
-            $incoterms          = $responses['incoterms']['common'] ?? null;
-
-
+            $loadType           = $responses['loadType']?? null;
+            $countries          = $responses['countries']?? null;
+            $transportChannels  = $responses['transportChannels']?? null;
+            $carriageType       = $responses['carriageType']?? null;
+            $orderTypes         = $responses['orderTypes']?? null;
+            $orderStatus        = $responses['orderStatus']?? null;
+            $incoterms          = $responses['incoterms']?? null;
 
 
         //show the view
-        return view('pages.customtickets.components.create.wrapper',compact('page','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+        return view('pages.customtickets.components.create.wrapper',compact('page','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
     }
 
 
@@ -134,15 +122,12 @@ class TicketController extends Controller {
             return view('errors.404'); // Or redirect to an error page
         }
 
-        $url = $this->baseUrl."Common/";
-
         // Batch requests for better performance
         $requests = [
-            'countries'         => $url.'GetCountries',
-            'loadType'          => $url.'HD_GetLoadType',
-            'carriageType'      => $url.'GetCarriageType?TransportChannelId=1',
-            'incoterms'         => $url.'GetIncoTerms',
-            'ticket'            => $this->baseUrl.'HelpDesk/GetTicketByUniqueId?UniqueId='.$shareId,
+            'loadType'          => 'App\Models\CTicketLoadType',
+            'countries'         => 'App\Models\CTicketCountry',
+            'carriageType'      => 'App\Models\CTicketCarriageType',
+            'incoterms'         => 'App\Models\CTicketIncoterms',
         ];
         
         // Batch processing of requests
@@ -151,16 +136,14 @@ class TicketController extends Controller {
             $responses[$key] = $this->fetchData($requestUrl);
         }
         
-        $page               = $this->pageSettings('form');
-        $countries          = $responses['countries']['country'] ?? null;
-        $loadType           = $responses['loadType']['common'] ?? null;
-        $carriageType       = $responses['carriageType']['common'] ?? null;
-        $incoterms          = $responses['incoterms']['common'] ?? null;
-        $ticket             = $responses['ticket'] ?? null;
 
-        if($ticket ==  __('lang.no_data_found_for_the_given_uniqueId')){
-            $ticket = null;
-        }
+        $page               = $this->pageSettings('form');
+        $countries          = $responses['countries']?? null;
+        $loadType           = $responses['loadType']?? null;
+        $carriageType       = $responses['carriageType']?? null;
+        $incoterms          = $responses['incoterms']?? null;
+        $ticket             = CustomTicket::where('uniqueId',$shareId)->first();
+
         //show the view
         return view('pages.customtickets.components.request.page',compact('page','countries','loadType','carriageType','incoterms','ticket'));
     }
@@ -173,88 +156,43 @@ class TicketController extends Controller {
     public function store(Request $request) {
 
 
-        //dd($request->all());
-        unset($request['visibility_left_menu_toggle_button']);
+        //dd($request->deliveryRemarks);
+        $goods = [];
+        $goods = $request->goods;
+
+        unset($request['goods']);
+        unset($request['totalQuantity']);
+        unset($request['totalWeight']);
+        unset($request['totalLDM']);
+        unset($request['totalVolume']);
         unset($request['system_language']);
         unset($request['user_has_due_reminder']);
         unset($request['resource_query']);
         unset($request['system_languages']);
         unset($request['projects_menu_list']);    
-        
-        $TicketDetails = [];    
-        if(isset($request->goods) && count($request->goods) > 0){
+        unset($request['visibility_left_menu_toggle_button']);
 
-                foreach($request->goods as $good){
-                        $TicketDetails[] = $good;
+
+        $createTicket = CustomTicket::create($request->all());
+
+        if(isset($goods) && count($goods) > 0 && isset($createTicket->id)){
+
+                foreach($goods as $good){
+                    $good['ticket_id'] = $createTicket->id;
+                    $createGoods = CTicketGood::create($good);
                 }
+
         }
 
-        //dd($request->pickupRemarks);
-        $cmrparam = array(
-            "cmrparam"=> array(
-                'uniqueId'                  => $request->uniqueId ?? '',
-                "ShipmentOrderStatusId"     => $request->ShipmentOrderStatusId,
-                "TransportChannelId"        => $request->TransportChannelId,
-                "LoadTypeId"                => $request->LoadTypeId,
-                "Notes"                     => $request->Notes,
-                "UNCode"                    => $request->UNCode,
-                "ShipmentOrderTypeId"       => $request->ShipmentOrderTypeId,
-                "Quantity"                  => $request->Quantity,
-                "PickupDate"                => $request->PickupDate,
-                "PickupTime"                => $request->PickupTime,
-                "Shipper"                   => $request->Shipper,
-                "ShipperCity"               => $request->ShipperCity,
-                "ShipperIndex"              => $request->ShipperIndex,
-                "ShipperAddress"            => $request->ShipperAddress,
-                "ShipperCountryId"          => $request->ShipperCountryId,
-                "DeliveryDate"              => $request->DeliveryDate,
-                "DeliveryTime"              => $request->DeliveryTime,
-                "ConsigneeCountryId"        => $request->ConsigneeCountryId,
-                "ConsigneeCity"             => $request->ConsigneeCity,
-                "ConsigneeIndex"            => $request->ConsigneeIndex,
-                "ConsigneeAddress"          => $request->ConsigneeAddress,
-                "Consignee"                 => $request->Consignee,
-                "IsDifferentPickup"         => ($request->IsDifferentPickup == 'on') ? true : false,
-                "AltPickupCountryId"        => $request->AltPickupCountryId,
-                "AltPickupCity"             => $request->AltPickupCity,
-                "AltPickupIndex"            => $request->AltPickupIndex,
-                "AltPickupAddress"          => $request->AltPickupAddress,
-                "AltShipper"                => $request->AltShipper,
-                "IsDifferentDelivery"       => ($request->IsDifferentDelivery == 'on') ? true : false,
-                "AltDeliveryCountryId"      => $request->AltDeliveryCountryId,
-                "AltDeliveryCity"           => $request->AltDeliveryCity,
-                "AltDeliveryIndex"          => $request->AltDeliveryIndex,
-                "AltDeliveryAddress"        => $request->AltDeliveryAddress,
-                "AltDelivery"               => $request->AltDelivery,
-                "IsTempSensitive"           => true,
-                "TempValue"                 => $request->TempValue,
-                "ADRValue"                  => $request->ADRValue,
-                "FragileValue"              => $request->FragileValue,
-                "IncotermsId"               => $request->IncotermsId,
-                "ChargeableWeightTotal"     => $request->ChargeableWeightTotal,
-                "orgion"                    => json_decode($request->origin, true),
-                "destination"               => json_decode($request->destination, true),
-                'pickupRemarks'             => $request->pickupRemarks,
-                'deliveryRemarks'           => $request->deliveryRemarks,
-                'goods'                     => $TicketDetails,
-
-        )); 
-        
-           
-          $data  = json_encode($cmrparam,true);
-         // dd($data);
-          $response = Http::withBody(
-          $data,'application/json')->post($this->baseUrl.'/HelpDesk');
-
-         if($response->getStatusCode() == 201){    
+         if(isset($createTicket->id)){    
 
             $data = [
                 'event_creatorid' => auth()->id() ?? 1,
                 'event_item' => 'custom-ticket',
                 'event_item_id' => 0,
                 'event_item_lang' => 'event_closed_ticket',
-                'event_item_content'  => $request->Shipper,
-                'event_item_content2' => $request->Consignee,
+                'event_item_content'  => $request->shipper_name,
+                'event_item_content2' => $request->consignee_name,
                 'event_parent_type' => 'ticket',
                 'event_parent_id' => 0,
                 'event_show_item' => 'yes',
@@ -307,19 +245,15 @@ class TicketController extends Controller {
     public function view($id){
 
         // Batch requests for better performance
-        $requests = [
-            'transportType'     => $this->baseUrl.'Common/HD_GetTransportType',
-            'equipmentType'     => $this->baseUrl.'Common/HD_GetEquipmentType',
-            'loadType'          => $this->baseUrl.'Common/HD_GetLoadType',
-            'countries'         => $this->baseUrl.'Common/GetCountries',
-            'transportChannels' => $this->baseUrl.'Common/GetTransportChannel',
-            'carriageType'      => $this->baseUrl.'Common/GetCarriageType?TransportChannelId=1',
-            'orderTypes'        => $this->baseUrl.'Common/GetShipmentOrderType',
-            'orderStatus'       => $this->baseUrl.'Common/GetShipmentOrderStatus',
-            'incoterms'         => $this->baseUrl.'Common/GetIncoTerms',
-            'ticket'            => $this->baseUrl.'HelpDesk/'.$id,
-            ];
-        
+        $requests  = [
+            'loadType'          => 'App\Models\CTicketLoadType',
+            'countries'         => 'App\Models\CTicketCountry',
+            'transportChannels' => 'App\Models\CTicketTransportChannel',
+            'carriageType'      => 'App\Models\CTicketCarriageType',
+            'orderTypes'        => 'App\Models\CTicketOrderType',
+            'orderStatus'       => 'App\Models\CTicketStatus',
+            'incoterms'         => 'App\Models\CTicketIncoterms',
+         ];   
         
         // Batch processing of requests
         $responses = [];
@@ -328,17 +262,17 @@ class TicketController extends Controller {
         }
         
         // Accessing individual responses
-        $transportType      = $responses['transportType']['common'] ?? null;
-        $equipmentType      = $responses['equipmentType']['common'] ?? null;
-        $loadType           = $responses['loadType']['common'] ?? null;
-        $countries          = $responses['countries']['country'] ?? null;
-        $transportChannels  = $responses['transportChannels']['common'] ?? null;
-        $carriageType       = $responses['carriageType']['common'] ?? null;
-        $orderTypes         = $responses['orderTypes']['common'] ?? null;
-        $orderStatus        = $responses['orderStatus']['common'] ?? null;
-        $incoterms          = $responses['incoterms']['common'] ?? null;
+        $transportType      = $responses['transportType']?? null;
+        $equipmentType      = $responses['equipmentType']?? null;
+        $loadType           = $responses['loadType']?? null;
+        $countries          = $responses['countries']?? null;
+        $transportChannels  = $responses['transportChannels']?? null;
+        $carriageType       = $responses['carriageType']?? null;
+        $orderTypes         = $responses['orderTypes']?? null;
+        $orderStatus        = $responses['orderStatus']?? null;
+        $incoterms          = $responses['incoterms']?? null;
 
-        $ticket = $responses['ticket'];
+        $ticket = CustomTicket::where('id',$id)->first();
         $lead   = Lead::where('ticket_id',$id)->first();
 
         if (!$ticket) {
@@ -351,9 +285,7 @@ class TicketController extends Controller {
 
         $ticket['viewmode'] = true;
         $page = $this->pageSettings('tickets');
-        $ticket = $ticket;
-        $transportType     = $transportType;
-        $equipmentType     = $equipmentType;
+        $ticket            = $ticket;
         $loadType          = $loadType;
         $countries         = $countries;
         $transportChannels = $transportChannels;
@@ -364,49 +296,10 @@ class TicketController extends Controller {
 
         //dd($ticket);
     //response
-    return view('pages.customticket.wrapper',compact('page','ticket','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+    return view('pages.customticket.wrapper',compact('page','ticket','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
     
   }
 
-    /**
-     * Display the specified ticket
-     * @param object TicketReplyRepository instance of the repository
-     * @param int $id ticket  id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TicketReplyRepository $replyrepo, $id) {
-
-        //get the ticket
-        if (!$tickets = $this->ticketrepo->search($id)) {
-            abort(409, __('lang.ticket_not_found'));
-        }
-
-        //ticket
-        $ticket = $tickets->first();
-
-        //get replies
-        $replies = $replyrepo->search(['ticket_id' => $id]);
-
-        //page settings
-        $page = $this->pageSettings('ticket', $ticket);
-
-        //mark all project events as read
-        \App\Models\EventTracking::where('parent_id', $id)
-            ->where('parent_type', 'ticket')
-            ->where('eventtracking_userid', auth()->id())
-            ->update(['eventtracking_status' => 'read']);
-
-        //reponse payload
-        $payload = [
-            'page' => $page,
-            'ticket' => $ticket,
-            'replies' => $replies,
-            'fields' => $this->getCustomFields(),
-        ];
-
-        //process reponse
-        return new ShowResponse($payload);
-    }
 
     /**
      * Show the form for editing the specified ticket
@@ -416,20 +309,16 @@ class TicketController extends Controller {
      */
     public function edit($id) {
 
-
             // Batch requests for better performance
-            $requests = [
-                'transportType'     => $this->baseUrl.'Common/HD_GetTransportType',
-                'equipmentType'     => $this->baseUrl.'Common/HD_GetEquipmentType',
-                'loadType'          => $this->baseUrl.'Common/HD_GetLoadType',
-                'countries'         => $this->baseUrl.'Common/GetCountries',
-                'transportChannels' => $this->baseUrl.'Common/GetTransportChannel',
-                'carriageType'      => $this->baseUrl.'Common/GetCarriageType?TransportChannelId=1',
-                'orderTypes'        => $this->baseUrl.'Common/GetShipmentOrderType',
-                'orderStatus'       => $this->baseUrl.'Common/GetShipmentOrderStatus',
-                'incoterms'         => $this->baseUrl.'Common/GetIncoTerms',
-                'ticket'            => $this->baseUrl.'HelpDesk/'.$id,
-                ];
+            $requests  = [
+                'loadType'          => 'App\Models\CTicketLoadType',
+                'countries'         => 'App\Models\CTicketCountry',
+                'transportChannels' => 'App\Models\CTicketTransportChannel',
+                'carriageType'      => 'App\Models\CTicketCarriageType',
+                'orderTypes'        => 'App\Models\CTicketOrderType',
+                'orderStatus'       => 'App\Models\CTicketStatus',
+                'incoterms'         => 'App\Models\CTicketIncoterms',
+             ]; 
             
             
             // Batch processing of requests
@@ -439,17 +328,15 @@ class TicketController extends Controller {
             }
             
             // Accessing individual responses
-            $transportType      = $responses['transportType']['common'] ?? null;
-            $equipmentType      = $responses['equipmentType']['common'] ?? null;
-            $loadType           = $responses['loadType']['common'] ?? null;
-            $countries          = $responses['countries']['country'] ?? null;
-            $transportChannels  = $responses['transportChannels']['common'] ?? null;
-            $carriageType       = $responses['carriageType']['common'] ?? null;
-            $orderTypes         = $responses['orderTypes']['common'] ?? null;
-            $orderStatus        = $responses['orderStatus']['common'] ?? null;
-            $incoterms          = $responses['incoterms']['common'] ?? null;
+            $loadType           = $responses['loadType']?? null;
+            $countries          = $responses['countries']?? null;
+            $transportChannels  = $responses['transportChannels']?? null;
+            $carriageType       = $responses['carriageType']?? null;
+            $orderTypes         = $responses['orderTypes']?? null;
+            $orderStatus        = $responses['orderStatus']?? null;
+            $incoterms          = $responses['incoterms']?? null;
 
-            $ticket = $responses['ticket'];
+            $ticket = CustomTicket::where('id',$id)->first();
             $lead   = Lead::where('ticket_id',$id)->first();
 
             if (!$ticket) {
@@ -462,9 +349,7 @@ class TicketController extends Controller {
 
  
             $page = $this->pageSettings('tickets');
-            $ticket = $ticket;
-            $transportType     = $transportType;
-            $equipmentType     = $equipmentType;
+            $ticket            = $ticket;
             $loadType          = $loadType;
             $countries         = $countries;
             $transportChannels = $transportChannels;
@@ -475,35 +360,42 @@ class TicketController extends Controller {
     
             //dd($ticket);
         //response
-        return view('pages.customticket.wrapper',compact('page','ticket','transportType','equipmentType','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+        return view('pages.customticket.wrapper',compact('page','ticket','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
     }
 
     
     public function convartToLead(Request $request,$id)
     {       
-
+        
             $lead = Lead::where('ticket_id',$id)->first();
 
             if(isset($lead)) {
                 abort(409, __('lang.already_ticket_convart_lead'));
             }
 
+            $order_type        = $this->getModelInfo('App\Models\CTicketOrderType',$request->ticket_order_type_id);
+            $incoterms         = $this->getModelInfo('App\Models\CTicketIncoterms',$request->ticket_incoterms_id);
+            $load_type         = $this->getModelInfo('App\Models\CTicketLoadType',$request->ticket_loadtype_id);
+            $shipper_country   = $this->getModelInfo('App\Models\CTicketCountry' ,$request->shipping_country_id);
+            $consignee_country = $this->getModelInfo('App\Models\CTicketCountry' ,$request->delivery_country_id);
+
             $baseUrl = env('APP_URL');
             //dd($request->all());
-            $leadTitle = $request->ShipperCountry.'-'.$request->ConsigneeCountry."($request->PickupDate - $request->DeliveryDate)";
+            $leadTitle = $shipper_country->name.'-'.$consignee_country->name."($request->shipping_date - $request->delivery_date)";
             $leadDescription ="
             <a href='$baseUrl/ctickets/$id/edit' }}'>Ticket ID : $id</a><br>
             <p><strong>General Information</strong></p>
-            <p>$request->OrderType, $request->Incoterms, $request->LoadType, $request->Quantity</p>
-            <p>$request->Shipper</p>
+            <p>$order_type->name, $incoterms->name, $load_type->name, $request->quantity</p>
+            <p><strong>Shipper: </strong>$request->shipper_name</p>
             <p><strong>Pickup:</strong></p>
-            <p>$request->ShipperCity, &nbsp;   $request->ShipperCountry, &nbsp; $request->ShipperAddress, &nbsp; $request->ShipperIndex</p>
+            <p>$request->shipping_city, &nbsp;   $shipper_country->name, &nbsp; $request->shipping_address, &nbsp; $request->shipping_index</p>
+            <p><strong>Consignee: </strong>$request->consignee_name</p>
             <p><strong>Delivery:</strong></p>
-            <p>$request->ConsigneeCity, &nbsp; $request->ConsigneeCountry, &nbsp;  $request->ConsigneeAddress, &nbsp; $request->ConsigneeIndex</p>
+            <p>$request->delivery_city, &nbsp;   $consignee_country->name, &nbsp;  $request->delivery_address, &nbsp; $request->delivery_index</p>
             <p><strong>Goods:</strong></p>
-            <p>$request->total_qty, &nbsp; $request->total_kgcalc, &nbsp;  $request->total_ldm, &nbsp;  $request->total_volume</p>
+            <p>$request->totalQuantity, &nbsp;   $request->totalWeight, &nbsp;  $request->totalLDM, &nbsp;  $request->totalVolume</p>
             <p><strong>Additional Information:</strong></p>
-            <p>$request->IsTempSensitive, &nbsp; $request->TempValue, &nbsp;  $request->ADRValue, &nbsp;  $request->UNCode, &nbsp;  $request->FragileValue,  &nbsp;  $request->Notes</p>
+            <p>$request->temp_sensitive, &nbsp;  $request->temp_range, &nbsp;  $request->adr, &nbsp;  $request->un_code, &nbsp;  $request->fragile,  &nbsp;  $request->notes</p>
             ";
 
             $lead = new Lead;
@@ -518,8 +410,8 @@ class TicketController extends Controller {
                     'event_item' => 'lead',
                     'event_item_id' => $lead->lead_id.'/'.$leadTitle,
                     'event_item_lang' => 'event_closed_leads',
-                    'event_item_content'  => $request->Shipper,
-                    'event_item_content2' => $request->Consignee,
+                    'event_item_content'  => $request->shipper_name,
+                    'event_item_content2' => $request->consignee_name,
                     'event_parent_type' => 'leads',
                     'event_parent_id' => $lead->lead_id,
                     'event_show_item' => 'yes',
@@ -554,80 +446,43 @@ class TicketController extends Controller {
 
     }
 
+    public function getModelInfo($model,$id){
+
+        return  $model::where('id',$id)->first('name');
+    }
+
     public function updateTicketDetails(Request $request, $id){
           
+        $goods = [];
+        $goods = $request->goods;
 
-        //dd($request->all());
-        $TicketDetails = [];   
+        unset($request['goods']);
+        unset($request['totalQuantity']);
+        unset($request['totalWeight']);
+        unset($request['totalLDM']);
+        unset($request['totalVolume']);
+        unset($request['system_language']);
+        unset($request['user_has_due_reminder']);
+        unset($request['resource_query']);
+        unset($request['system_languages']);
+        unset($request['projects_menu_list']);    
+        unset($request['visibility_left_menu_toggle_button']);
 
-        if(isset($request->goods) && count($request->goods) > 0){
 
-                foreach($request->goods as $good){
-                        $TicketDetails[] = $good;
+        $updateTicket = CustomTicket::where('id',$id)->update($request->all());
+
+        if(isset($goods) && count($goods) > 0 && isset($updateTicket)){
+
+                $deleteOlds = CTicketGood::where('ticket_id',$id)->delete();
+
+                foreach($goods as $good){
+                    $good['ticket_id'] = $id;
+                    $updateGoods = CTicketGood::create($good);
                 }
 
         }
-        
-
-        $cmrparam = array(
-            "cmrparam"=> array(
-                "Id"                        => $id,    
-                'uniqueId'                  => $request->uniqueId ?? '',
-                "ShipmentOrderStatusId"     => $request->ShipmentOrderStatusId,
-                "TransportChannelId"        => $request->TransportChannelId,
-                "LoadTypeId"                => $request->LoadTypeId,
-                "Notes"                     => $request->Notes,
-                "UNCode"                    => $request->UNCode,
-                "ShipmentOrderTypeId"       => $request->ShipmentOrderTypeId,
-                "Quantity"                  => $request->Quantity,
-                "PickupDate"                => $request->PickupDate,
-                "PickupTime"                => $request->PickupTime,
-                "Shipper"                   => $request->Shipper,
-                "ShipperCity"               => $request->ShipperCity,
-                "ShipperIndex"              => $request->ShipperIndex,
-                "ShipperAddress"            => $request->ShipperAddress,
-                "ShipperCountryId"          => $request->ShipperCountryId,
-                "DeliveryDate"              => $request->DeliveryDate,
-                "DeliveryTime"              => $request->DeliveryTime,
-                "ConsigneeCountryId"        => $request->ConsigneeCountryId,
-                "ConsigneeCity"             => $request->ConsigneeCity,
-                "ConsigneeIndex"            => $request->ConsigneeIndex,
-                "ConsigneeAddress"          => $request->ConsigneeAddress,
-                "Consignee"                 => $request->Consignee,
-                "IsDifferentPickup"         => ($request->IsDifferentPickup == 'on') ? true : false,
-                "AltPickupCountryId"        => $request->AltPickupCountryId,
-                "AltPickupCity"             => $request->AltPickupCity,
-                "AltPickupIndex"            => $request->AltPickupIndex,
-                "AltPickupAddress"          => $request->AltPickupAddress,
-                "AltShipper"                => $request->AltShipper,
-                "IsDifferentDelivery"       => ($request->IsDifferentDelivery == 'on') ? true : false,
-                "AltDeliveryCountryId"      => $request->AltDeliveryCountryId,
-                "AltDeliveryCity"           => $request->AltDeliveryCity,
-                "AltDeliveryIndex"          => $request->AltDeliveryIndex,
-                "AltDeliveryAddress"        => $request->AltDeliveryAddress,
-                "AltDelivery"               => $request->AltDelivery,
-                "IsTempSensitive"           => true,
-                "TempValue"                 => $request->TempValue,
-                "ADRValue"                  => $request->ADRValue,
-                "FragileValue"              => $request->FragileValue,
-                "IncotermsId"               => $request->IncotermsId,
-                "ChargeableWeightTotal"     => $request->ChargeableWeightTotal,
-                "orgion"                    => json_decode($request->origin, true),
-                "destination"               => json_decode($request->destination, true),
-                'pickupRemarks'             => $request->pickupRemarks,
-                'deliveryRemarks'           => $request->deliveryRemarks,
-                'goods'                     => $TicketDetails,
-
-        ));
-           
-          $data  = json_encode($cmrparam,true);
-          //dd($data);
-          $response = Http::withBody(
-          $data,'application/json')->put($this->baseUrl.'HelpDesk');
-
           
-        if($response->getStatusCode() == 200){
-            
+        if(isset($updateTicket)){
             return response()->json(array(
                 'notification' => [
                     'type' => 'success',

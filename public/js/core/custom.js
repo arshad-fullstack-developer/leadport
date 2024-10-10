@@ -7,7 +7,7 @@ $(document).ready(function () {
     var j = 0;
 	var type = "number";
 	$(document).on('click', '.addgoods', function (e) {
-		var goods = ['qty','unitid','description','kgcalc','ldm','volumem3','lengthcm','widthcm','heightcm']
+		var goods = ['quantity','unit_type','description','weight','ldm','volume','length','width','height']
 	     $("#goodsTable").append('<tr id="row-'+rowIndex+j+'"></tr>');
 		for(var i=0; i<goods.length; i++){
 			if(goods[i] == 'description'){
@@ -17,13 +17,20 @@ $(document).ready(function () {
 			}
 		  $("tr#row-"+rowIndex+j+"").append('<td><input type="'+type+'" class="form-control" name="goods['+rowIndex+']['+goods[i]+']" id="'+rowIndex+'"></td>');
 		}
-		$("tr#row-"+rowIndex+j+"").append('<td><i class="sl-icon-trash" onclick="removeIndex(this)"></i></td>');
+		$("tr#row-"+rowIndex+j+"").append('<td><i class="sl-icon-trash custom" onclick="removeIndex(this)"></i></td>');
 		rowIndex++;
 		j++;
 	});
 
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+	const currentYear = new Date().getFullYear();
+	const minDate = `${currentYear}-01-01`; // Minimum date format YYYY-MM-DD
+
+	document.getElementById('shipper_date').setAttribute('min', minDate);
+	document.getElementById('consignee_date').setAttribute('min', minDate);
+});
 
 function removeIndex(index){
 	var i = index.parentNode.parentNode.rowIndex;
@@ -131,8 +138,6 @@ function hideElement(value){
 
 		let selectElement = document.getElementById(id);
 		// Get the selected value
-		let selectedValue = selectElement.value;
-		
 		// Get the selected option element
 		let selectedOption = selectElement.options[selectElement.selectedIndex];
 
@@ -165,8 +170,7 @@ function addPickupField(type) {
 	  var name = type+'['+[pickupIndex]+']';
 	  newField.innerHTML = `
 		  <input type="text" class="form-control pickup mt-2" name="`+name+`" placeholder="`+type+`" aria-label="`+type+`">
-			  <i class="sl-icon-trash" onclick="removeField(this)"></i>
-	  `;
+ 				<i class="sl-icon-trash custom" onclick="removeField(this)"></i>`;
 	  container.appendChild(newField);
 	  pickupIndex++;
 }
@@ -179,8 +183,7 @@ function addRemarksField(type) {
 	  var name = type+'['+[deliveryIndex]+']';
 	  newField.innerHTML = `
 		  <input type="text" class="form-control delivery mt-2" name="`+name+`" placeholder="`+type+`" aria-label="`+type+`">
-			  <i class="sl-icon-trash" onclick="removeField(this)"></i>
-	  `;
+                                        <i class="sl-icon-trash custom" onclick="removeField(this)"></i>`;
 	  container.appendChild(newField);
 	  deliveryIndex++;
   }

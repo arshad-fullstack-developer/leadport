@@ -4726,7 +4726,7 @@ Buttons
   .btn-success.disabled.active,
   .btn-success.disabled:active,
   .btn-success.disabled:focus {
-    background: #04b381;
+    background: #23D26B;
     border-color: transparent; }
 
 .btn-info,
@@ -4842,8 +4842,8 @@ Buttons
     border-color: #23D26B;
     color: #ffffff; }
   .btn-outline-success.active, .btn-outline-success:active, .btn-outline-success:focus {
-    background-color: #04b381;
-    border-color: #04b381; }
+    background-color: #23D26B;
+    border-color: #23D26B; }
 
 .btn-outline-info {
   color: #23D26B;
@@ -4882,6 +4882,11 @@ Buttons
     color: #ffffff; }
   .btn-outline-danger.active, .btn-outline-danger:active, .btn-outline-danger:focus {
     background-color: #e6294b; }
+
+    .btn-outline-success.active, .btn-outline-success:active, .btn-outline-success:focus {
+      background-color: #23D26B;
+      border-color: #23D26B;
+    }
 
 .btn-outline-default {
   color: #67757c;
@@ -5038,8 +5043,8 @@ Buttons
 .btn-success.focus,
 .btn-success:focus,
 .show > .btn-success.dropdown-toggle {
-  background-color: #04b381;
-  border: 1px solid #04b381; }
+  background-color: #23D26B;
+  border: 1px solid #23D26B; }
 
 .btn-info.active.focus,
 .btn-info.active:focus,
@@ -9361,7 +9366,7 @@ textarea.error {
   .list-table-action .btn-outline-danger:hover, .list-table-action .btn-outline-danger:active, .list-table-action .btn-outline-danger:visited, .list-table-action .btn-outline-danger:focus {
     color: #e6294b; }
   .list-table-action .btn-outline-success:hover, .list-table-action .btn-outline-success:active, .list-table-action .btn-outline-success:visited, .list-table-action .btn-outline-success:focus {
-    color: #04b381; }
+    color: #23D26B; }
   .list-table-action .btn-outline-info:hover, .list-table-action .btn-outline-info:active, .list-table-action .btn-outline-info:visited, .list-table-action .btn-outline-info:focus {
     color: #1d96c3; }
   .list-table-action .btn-outline-warning:hover, .list-table-action .btn-outline-warning:active, .list-table-action .btn-outline-warning:visited, .list-table-action .btn-outline-warning:focus {
@@ -14795,11 +14800,21 @@ label.label.label-outline-info.p-t-3.p-b-3.p-l-8.p-r-8.custum {
     border-radius: 20px !important;
     padding: 20px;
 }
+
 .deliveryRemarks {
   display: flex;
 }
 .pickupRemarks {
   display: flex;
+}
+
+i.sl-icon-trash.custom {
+  cursor: pointer;
+  color: red;
+  margin-top: 15px;
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: large;
 }
 
 .top-search-bar .top-search-container {
@@ -14870,4 +14885,8 @@ label.label.label-outline-info.p-t-3.p-b-3.p-l-8.p-r-8.custum {
 
 i#emailicon {
   font-size: 25px;
+}
+button.btn.btn-outline-success.btn-circle.btn-sm.tr-btn {
+  margin-top: 1%;
+  margin-left: 1%;
 }

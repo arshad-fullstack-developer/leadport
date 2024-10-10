@@ -21,34 +21,33 @@
         </thead>
         <tbody id="goodsTable">
         <?php $__currentLoopData = $ticket['goods']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $good): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
-
             <?php 
-            $totalQty += $good['qty'];
-            $totalKgcalc += $good['kgcalc'];
+            $totalQty += $good['quantity'];
+            $totalKgcalc += $good['weight'];
             $totalLdm += $good['ldm'];
-            $totalVolumeM3 += $good['volumem3'];
+            $totalVolumeM3 += $good['volume'];
             ?>
             <tr id="<?php echo e($key); ?>">
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][qty]"          value="<?php echo e($good['qty']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][unitid]"       value="<?php echo e($good['unitid']); ?>"></td>
-                <td><input type="text"   class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][description]"  value="<?php echo e($good['description']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][kgcalc]"       value="<?php echo e($good['kgcalc']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][ldm]"          value="<?php echo e($good['ldm']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][volumem3]"     value="<?php echo e($good['volumem3']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][lengthcm]"     value="<?php echo e($good['lengthcm']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][widthcm]"      value="<?php echo e($good['widthcm']); ?>"></td>
-                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][heightcm]"     value="<?php echo e($good['heightcm']); ?>"></td>
-                <td><i class="sl-icon-trash" onclick="removeIndex(this)"></i></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][quantity]"          value="<?php echo e($good['quantity']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][unit_type]"         value="<?php echo e($good['unit_type']); ?>"></td>
+                <td><input type="text"   class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][description]"       value="<?php echo e($good['description']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][weight]"            value="<?php echo e($good['weight']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][ldm]"               value="<?php echo e($good['ldm']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][volume]"            value="<?php echo e($good['volume']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][length]"            value="<?php echo e($good['length']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][width]"             value="<?php echo e($good['width']); ?>"></td>
+                <td><input type="number" class="form-control"  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][height]"            value="<?php echo e($good['height']); ?>"></td>
+                <td><i class="sl-icon-trash custom" onclick="removeIndex(this)"></i></td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
          </tbody>
          <tr>
-		        <td><input type="number" class="form-control" name="total_qty" value="<?php echo e($totalQty); ?>" disabled></td>
+		        <td><input type="number" class="form-control" name="totalQuantity" value="<?php echo e($totalQty); ?>" disabled></td>
 				<td></td>
 				<td></td>
-	            <td><input type="number" class="form-control" name="total_kgcalc" value="<?php echo e($totalKgcalc); ?>" disabled></td>
-				<td><input type="number" class="form-control" name="total_ldm"    value="<?php echo e($totalLdm); ?>" disabled></td>
-				<td><input type="number" class="form-control" name="total_volume" value="<?php echo e($totalVolumeM3); ?>" disabled></td>
+	            <td><input type="number" class="form-control" name="totalWeight" value="<?php echo e($totalKgcalc); ?>" disabled></td>
+				<td><input type="number" class="form-control" name="totalLDM"    value="<?php echo e($totalLdm); ?>" disabled></td>
+				<td><input type="number" class="form-control" name="totalVolume" value="<?php echo e($totalVolumeM3); ?>" disabled></td>
 				<td></td>
 				<td></td>
                 <td></td>

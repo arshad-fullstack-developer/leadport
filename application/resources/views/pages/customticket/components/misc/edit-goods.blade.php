@@ -21,34 +21,33 @@
         </thead>
         <tbody id="goodsTable">
         @foreach($ticket['goods'] as $key => $good) 
-
             @php 
-            $totalQty += $good['qty'];
-            $totalKgcalc += $good['kgcalc'];
+            $totalQty += $good['quantity'];
+            $totalKgcalc += $good['weight'];
             $totalLdm += $good['ldm'];
-            $totalVolumeM3 += $good['volumem3'];
+            $totalVolumeM3 += $good['volume'];
             @endphp
             <tr id="{{$key}}">
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][qty]"          value="{{  $good['qty']}}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][unitid]"       value="{{  $good['unitid'] }}"></td>
-                <td><input type="text"   class="form-control"  id="{{$key}}"   name="goods[{{$key}}][description]"  value="{{  $good['description'] }}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][kgcalc]"       value="{{  $good['kgcalc'] }}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][ldm]"          value="{{  $good['ldm'] }}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][volumem3]"     value="{{  $good['volumem3'] }}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][lengthcm]"     value="{{  $good['lengthcm'] }}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][widthcm]"      value="{{  $good['widthcm'] }}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][heightcm]"     value="{{  $good['heightcm'] }}"></td>
-                <td><i class="sl-icon-trash" onclick="removeIndex(this)"></i></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][quantity]"          value="{{  $good['quantity']}}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][unit_type]"         value="{{  $good['unit_type'] }}"></td>
+                <td><input type="text"   class="form-control"  id="{{$key}}"   name="goods[{{$key}}][description]"       value="{{  $good['description'] }}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][weight]"            value="{{  $good['weight'] }}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][ldm]"               value="{{  $good['ldm'] }}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][volume]"            value="{{  $good['volume'] }}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][length]"            value="{{  $good['length'] }}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][width]"             value="{{  $good['width'] }}"></td>
+                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][height]"            value="{{  $good['height'] }}"></td>
+                <td><i class="sl-icon-trash custom" onclick="removeIndex(this)"></i></td>
             </tr>
             @endforeach
          </tbody>
          <tr>
-		        <td><input type="number" class="form-control" name="total_qty" value="{{ $totalQty }}" disabled></td>
+		        <td><input type="number" class="form-control" name="totalQuantity" value="{{ $totalQty }}" disabled></td>
 				<td></td>
 				<td></td>
-	            <td><input type="number" class="form-control" name="total_kgcalc" value="{{ $totalKgcalc }}" disabled></td>
-				<td><input type="number" class="form-control" name="total_ldm"    value="{{ $totalLdm }}" disabled></td>
-				<td><input type="number" class="form-control" name="total_volume" value="{{ $totalVolumeM3 }}" disabled></td>
+	            <td><input type="number" class="form-control" name="totalWeight" value="{{ $totalKgcalc }}" disabled></td>
+				<td><input type="number" class="form-control" name="totalLDM"    value="{{ $totalLdm }}" disabled></td>
+				<td><input type="number" class="form-control" name="totalVolume" value="{{ $totalVolumeM3 }}" disabled></td>
 				<td></td>
 				<td></td>
                 <td></td>

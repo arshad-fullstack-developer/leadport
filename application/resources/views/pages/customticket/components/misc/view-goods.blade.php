@@ -22,21 +22,21 @@
         @foreach($ticket['goods'] as $key => $good) 
 
             @php 
-            $totalQty += $good['qty'];
-            $totalKgcalc += $good['kgcalc'];
+            $totalQty += $good['quantity'];
+            $totalKgcalc += $good['weight'];
             $totalLdm += $good['ldm'];
-            $totalVolumeM3 += $good['volumem3'];
+            $totalVolumeM3 += $good['volume'];
             @endphp
             <tr id="{{$key}}">
-                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][qty]"          value="{{  $good['qty']}}"></td>
-                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][unitid]"       value="{{  $good['unitid'] }}"></td>
-                <td><input type="text"   class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][description]"  value="{{  $good['description'] }}"></td>
-                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][kgcalc]"       value="{{  $good['kgcalc'] }}"></td>
-                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][ldm]"          value="{{  $good['ldm'] }}"></td>
-                <td><input type="number" class="form-control" readonly id="{{$key}}"   name="goods[{{$key}}][volumem3]"     value="{{  $good['volumem3'] }}"></td>
-                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][lengthcm]"     value="{{  $good['lengthcm'] }}"></td>
-                <td><input type="number" class="form-control" readonly id="{{$key}}"   name="goods[{{$key}}][widthcm]"      value="{{  $good['widthcm'] }}"></td>
-                <td><input type="number" class="form-control" readonly id="{{$key}}"   name="goods[{{$key}}][heightcm]"     value="{{  $good['heightcm'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][quantity]"          value="{{  $good['quantity']}}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][unit_type]"         value="{{  $good['unit_type'] }}"></td>
+                <td><input type="text"   class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][description]"       value="{{  $good['description'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][weight]"            value="{{  $good['weight'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][ldm]"               value="{{  $good['ldm'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][volume]"            value="{{  $good['volume'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][length]"            value="{{  $good['length'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][width]"             value="{{  $good['width'] }}"></td>
+                <td><input type="number" class="form-control" readonly  id="{{$key}}"   name="goods[{{$key}}][height]"            value="{{  $good['height'] }}"></td>
             </tr>
             @endforeach
          </tbody>
