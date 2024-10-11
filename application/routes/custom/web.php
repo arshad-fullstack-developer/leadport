@@ -33,6 +33,7 @@
         Route::get('{id}/edit', "TicketController@edit");
         Route::get('{id}/view', "TicketController@view");
         Route::post('store', "TicketController@store");
+        Route::post('{id}/delete-ticket', "TicketController@destroyTicket");
         Route::post('{id}/update-details', "TicketController@updateTicketDetails");
         Route::post('/generate-link', 'TicketController@generateLink');
         Route::get('form', "TicketController@ticketForm");

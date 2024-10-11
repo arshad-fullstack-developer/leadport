@@ -506,11 +506,14 @@ class TicketController extends Controller {
 
     public function destroyTicket($id)
     {
-        //dd($id);
-        $url = "https://livesoftdocportgateway.azurewebsites.net/api/HelpDesk/$id";
-        $response = Http::delete($url);
 
-        if($response->getStatusCode() == 200){
+        $deleteTicket = CustomTicket::where('id',$id)->delete();
+
+        if($deleteTicket){
+            $deleteTicket = CTicketGood::where('ticket_id',$id)->delete();
+        }
+
+        if($deleteTicket){
             
             return response()->json(array(
                 'notification' => [

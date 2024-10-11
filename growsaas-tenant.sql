@@ -3314,3 +3314,393 @@ CREATE TABLE `ticket_forms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+
+
+
+
+
+CREATE TABLE `ctickets` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uniqueId` varchar(100) DEFAULT NULL,
+  `ticket_status_id` int(11) UNSIGNED DEFAULT NULL,
+  `ticket_transport_channel_id` int(11) DEFAULT NULL,
+  `ticket_type_id` int(11) UNSIGNED DEFAULT NULL,
+  `ticket_order_type_id` int(11) UNSIGNED DEFAULT NULL,
+  `ticket_incoterms_id` int(11) UNSIGNED DEFAULT NULL,
+  `ticket_loadtype_id` int(11) UNSIGNED DEFAULT NULL,
+  `quantity` varchar(255) DEFAULT NULL,
+  `shipping_date` varchar(255) DEFAULT NULL,
+  `shipping_time` varchar(255) DEFAULT NULL,
+  `shipper_name` varchar(255) DEFAULT NULL,
+  `shipping_country_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `shipping_city` varchar(255) DEFAULT NULL,
+  `shipping_index` varchar(255) DEFAULT NULL,
+  `shipping_address` varchar(255) DEFAULT NULL,
+  `pickupRemarks` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `def_shipping` varchar(100) DEFAULT NULL,
+  `def_shipper_name` varchar(255) DEFAULT NULL,
+  `def_shipping_country_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `def_shipping_city` varchar(255) DEFAULT NULL,
+  `def_shipping_index` varchar(255) DEFAULT NULL,
+  `def_shipping_address` varchar(255) DEFAULT NULL,
+  `delivery_date` varchar(255) DEFAULT NULL,
+  `delivery_time` varchar(255) DEFAULT NULL,
+  `consignee_name` varchar(255) DEFAULT NULL,
+  `delivery_country_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `delivery_city` varchar(255) DEFAULT NULL,
+  `delivery_index` varchar(255) DEFAULT NULL,
+  `delivery_address` varchar(255) DEFAULT NULL,
+  `deliveryRemarks` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `def_delivery` varchar(100) DEFAULT NULL,
+  `def_delivery_name` varchar(255) DEFAULT NULL,
+  `def_delivery_country_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `def_delivery_city` varchar(255) DEFAULT NULL,
+  `def_delivery_index` varchar(255) DEFAULT NULL,
+  `def_delivery_address` varchar(255) DEFAULT NULL,
+  `temp_sensitive` varchar(255) DEFAULT NULL,
+  `temp_range` varchar(255) DEFAULT NULL,
+  `adr` varchar(255) DEFAULT NULL,
+  `un_code` varchar(255) DEFAULT NULL,
+  `fragile` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `chargeable_weight_total` varchar(100) DEFAULT NULL,
+  `origin` longtext DEFAULT NULL,
+  `destination` longtext DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ctickets_status`
+--
+
+CREATE TABLE `ctickets_status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ctickets_status`
+--
+
+INSERT INTO `ctickets_status` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'Draft', '2024-10-09 05:27:52', '2024-10-09 05:27:52'),
+(2, 'Ready for loading', '2024-10-09 05:27:52', '2024-10-09 05:27:52'),
+(3, 'In Transit', '2024-10-09 05:27:52', '2024-10-09 05:27:52'),
+(4, 'Completed', '2024-10-09 05:27:52', '2024-10-09 05:27:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tickets_transport_channel`
+--
+
+CREATE TABLE `tickets_transport_channel` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tickets_transport_channel`
+--
+
+INSERT INTO `tickets_transport_channel` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'Road', '2024-10-09 05:42:28', '2024-10-09 05:42:28'),
+(2, 'Sea', '2024-10-09 05:42:28', '2024-10-09 05:42:28'),
+(3, 'Air', '2024-10-09 05:42:28', '2024-10-09 05:42:28'),
+(4, 'Rail', '2024-10-09 05:42:28', '2024-10-09 05:42:28');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_carriage_types`
+--
+
+CREATE TABLE `ticket_carriage_types` (
+  `id` int(11) NOT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ticket_carriage_types`
+--
+
+INSERT INTO `ticket_carriage_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, '20 Standard', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(2, '40 Standard', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(3, '40 High Cube', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(4, '45 High Cube', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(5, '20 Refrigerated', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(6, '40 Refrigerated', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(7, '20 Open Top', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(8, '40 Open Top', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(9, '20 Flatrack', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(10, '40 Flatrack', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(11, '20 Flatrack Collapsible', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(12, '40 Flatrack Collapsible', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(13, '20 High Cube', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(14, '20 Pallet Wide', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(15, '20 High Cube Pallet Wide', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(16, '40 Pallet Wide', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(17, '40 High Cube Pallet Wide', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(18, '45 High Cube Pallet Wide', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(19, '10 Standard', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(20, '20 Bulk', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(21, '20 Tank', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(22, '20 Platform', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(23, '40 Platform', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(24, '48 High Cube', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(25, '53 High Cube', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(26, '2t - 14m3', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(27, '3.5t - 35m3', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(28, '3.75t - 50m3', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(29, 'Ca Carrier (autocart)', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(30, 'Cattle Truck', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(31, 'Demi', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(32, 'HMA Stall', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(33, 'LD-1', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(34, 'LD-11', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(35, 'LD-2', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(36, 'LD-26', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(37, 'LD-29', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(38, 'LD-29 Reefer', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(39, 'LD-3', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(40, 'LD-3 Reefer', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(41, 'LD-39', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(42, 'LD-4', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(43, 'LD-6', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(44, 'LD-7', '2024-10-09 05:33:11', '2024-10-09 05:33:11'),
+(45, 'LD-7 with angled wings', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(46, 'LD-7 with folding wings', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(47, 'LD-8', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(48, 'LD-9', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(49, 'LD-9 Reefer', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(50, 'M-1H', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(51, 'M-1', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(52, 'M-2', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(53, 'M-6', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(54, 'M-6 (118\"H)', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(55, 'M-6 twin car rack', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(56, 'PLA half pallet', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(57, 'PMC/P6P Pallet', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(58, 'PNA half pallet', '2024-10-09 05:33:12', '2024-10-09 05:33:12'),
+(59, 'Type a pen', '2024-10-09 05:33:12', '2024-10-09 05:33:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_goods`
+--
+
+CREATE TABLE `ticket_goods` (
+  `id` int(20) UNSIGNED NOT NULL,
+  `ticket_id` bigint(20) UNSIGNED NOT NULL,
+  `quantity` decimal(10,2) NOT NULL,
+  `unit_type` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `weight` decimal(10,2) NOT NULL,
+  `ldm` decimal(10,2) NOT NULL,
+  `volume` decimal(10,2) NOT NULL,
+  `length` decimal(10,2) NOT NULL,
+  `width` decimal(10,2) NOT NULL,
+  `height` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_incoterms`
+--
+
+CREATE TABLE `ticket_incoterms` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ticket_incoterms`
+--
+
+INSERT INTO `ticket_incoterms` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'EXW', '1', '2024-10-09 05:43:42', '2024-10-09 05:43:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_load_type`
+--
+
+CREATE TABLE `ticket_load_type` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ticket_load_type`
+--
+
+INSERT INTO `ticket_load_type` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Full Container Load - FCL', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(2, 'Full Truck Load - FTL', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(3, 'Less Truck Load - LTL', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(4, 'Full Container Load - FCL', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(5, 'Less Container Load - LTL', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(6, 'Bulk', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(7, 'ULD Container+', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(8, 'Standard Cargo', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10'),
+(9, 'Full Wagon Load - FWL', '1', '2024-10-09 05:35:10', '2024-10-09 05:35:10');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_order_type`
+--
+
+CREATE TABLE `ticket_order_type` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ticket_order_type`
+--
+
+INSERT INTO `ticket_order_type` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Inbound', '1', '2024-10-09 05:37:59', '2024-10-09 05:37:59'),
+(2, 'Outbound', '1', '2024-10-09 05:37:59', '2024-10-09 05:37:59');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `ctickets`
+--
+ALTER TABLE `ctickets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ctickets_ticket_status_id_foreign` (`ticket_status_id`),
+  ADD KEY `ctickets_ticket_type_id_foreign` (`ticket_type_id`),
+  ADD KEY `ctickets_ticket_order_type_id_foreign` (`ticket_order_type_id`),
+  ADD KEY `ctickets_ticket_incoterms_id_foreign` (`ticket_incoterms_id`),
+  ADD KEY `ctickets_ticket_loadtype_id_foreign` (`ticket_loadtype_id`),
+  ADD KEY `ctickets_shipping_country_id_foreign` (`shipping_country_id`),
+  ADD KEY `ctickets_def_shipping_country_id_foreign` (`def_shipping_country_id`),
+  ADD KEY `ctickets_delivery_country_id_foreign` (`delivery_country_id`),
+  ADD KEY `ctickets_def_delivery_country_id_foreign` (`def_delivery_country_id`);
+
+--
+-- Indexes for table `ctickets_status`
+--
+ALTER TABLE `ctickets_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tickets_transport_channel`
+--
+ALTER TABLE `tickets_transport_channel`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_carriage_types`
+--
+ALTER TABLE `ticket_carriage_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_goods`
+--
+ALTER TABLE `ticket_goods`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_incoterms`
+--
+ALTER TABLE `ticket_incoterms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_load_type`
+--
+ALTER TABLE `ticket_load_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_order_type`
+--
+ALTER TABLE `ticket_order_type`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `ctickets`
+--
+ALTER TABLE `ctickets`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ctickets_status`
+--
+ALTER TABLE `ctickets_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `tickets_transport_channel`
+--
+ALTER TABLE `tickets_transport_channel`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `ticket_carriage_types`
+--
+ALTER TABLE `ticket_carriage_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+
+--
+-- AUTO_INCREMENT for table `ticket_goods`
+--
+ALTER TABLE `ticket_goods`
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ticket_incoterms`
+--
+ALTER TABLE `ticket_incoterms`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `ticket_load_type`
+--
+ALTER TABLE `ticket_load_type`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `ticket_order_type`
+--
+ALTER TABLE `ticket_order_type`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+COMMIT;
+
+
+

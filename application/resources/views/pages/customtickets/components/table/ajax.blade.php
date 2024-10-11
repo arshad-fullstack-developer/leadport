@@ -40,7 +40,7 @@
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
                 data-confirm-title="{{ cleanLang(__('lang.delete_item')) }}" data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
-                data-ajax-type="DELETE" data-url="{{ url('/tickets/'.$ticket['id'].'/delete-ticket') }}">
+                data-ajax-type="POST" data-url="{{ url('/ctickets/'.$ticket['id'].'/delete-ticket') }}">
                 <i class="sl-icon-trash"></i>
             </button>
             <!--edit-->

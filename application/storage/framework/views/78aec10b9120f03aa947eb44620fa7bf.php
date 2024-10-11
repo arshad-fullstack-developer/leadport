@@ -44,7 +44,7 @@
             <button type="button" title="<?php echo e(cleanLang(__('lang.delete'))); ?>"
                 class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
                 data-confirm-title="<?php echo e(cleanLang(__('lang.delete_item'))); ?>" data-confirm-text="<?php echo e(cleanLang(__('lang.are_you_sure'))); ?>"
-                data-ajax-type="DELETE" data-url="<?php echo e(url('/tickets/'.$ticket['id'].'/delete-ticket')); ?>">
+                data-ajax-type="POST" data-url="<?php echo e(url('/ctickets/'.$ticket['id'].'/delete-ticket')); ?>">
                 <i class="sl-icon-trash"></i>
             </button>
             <!--edit-->
