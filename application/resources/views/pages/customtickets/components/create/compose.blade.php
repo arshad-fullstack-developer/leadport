@@ -353,12 +353,12 @@
           </div>
           
           <div class="row mt-3">
-          <label for="notes" class="form-label fw-bold">Chargeable Weight Total</label>
-          <br>
-          <input type="number" class="form-control" name="chargeable_weight_total" placeholder="Chargeable Weight Total" aria-label="notes" id="ChargeableWeightTotal">
+            <label for="notes" class="form-label fw-bold">Chargeable Weight Total</label>
+          </div>
+          <div class="row mt-2"> <!-- Optional mt-2 for margin -->
+              <input type="number" class="form-control" name="chargeable_weight_total" placeholder="Chargeable Weight Total" id="ChargeableWeightTotal">
           </div>
                       
-
           <div class="text-lg-right">
               <button type="submit" class="btn btn-rounded-x btn-success m-t-20 ajax-request"
               id="ticket-compose-form-button" data-url="{{ url('ctickets/store') }}" data-type="form"

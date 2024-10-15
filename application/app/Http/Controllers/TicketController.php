@@ -214,12 +214,16 @@ class TicketController extends Controller {
                 $eventtracking->resource_type = 'project';
                 $eventtracking->resource_id = 0;
                 $eventtracking->save();
+
+                $redirectUrl = route('ctickets.index');
+
                 return response()->json(array(
                     'notification' => [
                         'type' => 'success',
                         'value' => __('lang.request_has_been_completed'),
                     ],
                     'skip_dom_reset' => true,
+                    'redirect' => $redirectUrl,
                 ));
             }
             
@@ -483,12 +487,14 @@ class TicketController extends Controller {
         }
           
         if(isset($updateTicket)){
+            $redirectUrl = route('ctickets.index');
             return response()->json(array(
                 'notification' => [
                     'type' => 'success',
                     'value' => __('lang.request_has_been_completed'),
                 ],
                 'skip_dom_reset' => true,
+                'redirect' => $redirectUrl,
             ));
         }else{
             return response()->json(array(

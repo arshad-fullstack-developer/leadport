@@ -36,7 +36,7 @@
                     class="sl-icon-trash"></i></span>
             <?php else: ?>
             <button type="button" title="<?php echo app('translator')->get('lang.delete'); ?>"
-                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
+                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-success"
                 data-confirm-title="<?php echo app('translator')->get('lang.delete_user'); ?>" data-confirm-text="<?php echo app('translator')->get('lang.are_you_sure'); ?>"
                 data-ajax-type="DELETE" data-url="<?php echo e(url('/app-admin/team/'.$user->id)); ?>">
                 <i class="sl-icon-trash"></i>

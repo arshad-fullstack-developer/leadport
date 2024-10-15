@@ -461,7 +461,6 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 		//debug
 		NXAJAX.log("[ajax] eventData() - current NXAJAX.data array content - [payload]:", NXAJAX.data);
 
-
 		//reset loading target
 		if (obj.attr("data-reset-loading-target")) {
 			var target = obj.attr("data-loading-target");
@@ -1833,9 +1832,20 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 
 			NXAJAX.log('[ajax] ajaxRequest() - success - we have a response from the server ' + data);
 
+			var result = JSON.stringify(data);
+			result     = JSON.parse(result);
+
+			// if (result.redirect) {
+			// 	window.location.href = result.redirect; // Redirect the browser
+			// } else {
+			// 	// Handle other success scenarios
+			// 	console.log(response.data.message);
+			// }
+
 			//process the payload
 			NXAJAX.getPayload(data);
 
+			
 			//was there a redirect request
 			NXAJAX.updateRedirect();
 

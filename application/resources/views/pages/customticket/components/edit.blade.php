@@ -377,12 +377,13 @@
           </div>
           
           <div class="row mt-3">
-          <label for="notes" class="form-label fw-bold">Chargeable Weight Total</label>
-          <br>
-          <input type="number" class="form-control" name="chargeable_weight_total" placeholder="Chargeable Weight Total"  value="{{ $ticket['chargeable_weight_total'] }}" aria-label="notes" id="ChargeableWeightTotal">
+            <label for="notes" class="form-label fw-bold">Chargeable Weight Total</label>
           </div>
+          <div class="row mt-2"> <!-- Optional mt-2 for margin -->
+              <input type="number" class="form-control" name="chargeable_weight_total" placeholder="Chargeable Weight Total" value="{{ $ticket['chargeable_weight_total'] }}" aria-label="notes" id="ChargeableWeightTotal">
+          </div>
+
          
-					
                             <!-- <div class="form-group">
                                 <textarea class="tinymce-textarea" name="ticket_message" id="ticket_message"
                                     rows="15"></textarea>

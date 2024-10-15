@@ -31,7 +31,7 @@
         <span class="list-table-action dropdown font-size-inherit">
             <!--delete-->
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
+                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-success"
                 data-confirm-title="@lang('lang.delete_payment')" data-confirm-text="@lang('lang.are_you_sure')"
                 data-ajax-type="DELETE" data-url="{{ url('/app-admin/offline-payments/'.$payment->proof_id) }}">
                 <i class="sl-icon-trash"></i>

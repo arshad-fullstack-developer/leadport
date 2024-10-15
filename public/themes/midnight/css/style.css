@@ -3876,7 +3876,7 @@ Text Colors
 }
 
 .text-danger {
-  color: #ff5c6c !important;
+  color: #23D26B !important;
 }
 
 .text-muted {
@@ -3946,7 +3946,7 @@ html body .bg-success {
   background-color: #24d2b5;
 }
 html body .bg-danger {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
 }
 html body .bg-purple {
   background-color: #7460ee;
@@ -4061,7 +4061,7 @@ Rounds
 }
 
 .round.round-danger {
-  background: #ff5c6c;
+  background: #23D26B;
 }
 
 .round.round-success {
@@ -4133,13 +4133,13 @@ Labels
 }
 
 .label-danger {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
 }
 
 .label-outline-danger {
   background-color: initial;
-  border: solid 1px #ff5c6c;
-  color: #ff5c6c;
+  border: solid 1px #23D26B;
+  color: #23D26B;
   padding: 2px 10px;
 }
 
@@ -4269,7 +4269,7 @@ Labels
 
 .label-light-danger {
   background-color: #f9e7eb;
-  color: #ff5c6c;
+  color: #23D26B;
 }
 
 .label-light-megna {
@@ -4322,7 +4322,7 @@ Labels
 }
 
 .badge-danger {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
 }
 
 .badge-purple {
@@ -4794,38 +4794,38 @@ ribbons page
 }
 
 .ribbon-danger {
-  background: #ff5c6c;
+  background: #23D26B;
 }
 
 .ribbon-bookmark.ribbon-danger:before {
-  border-color: #ff5c6c;
+  border-color: #23D26B;
   border-right-color: transparent;
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-danger:before {
-  border-right-color: #ff5c6c;
+  border-right-color: #23D26B;
   border-left-color: transparent;
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-danger:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-danger:before {
-  border-right-color: #ff5c6c;
+  border-right-color: #23D26B;
   border-bottom-color: transparent;
 }
 
 .ribbon-danger.ribbon-corner:before {
-  border-top-color: #ff5c6c;
-  border-left-color: #ff5c6c;
+  border-top-color: #23D26B;
+  border-left-color: #23D26B;
 }
 
 .ribbon-danger.ribbon-corner.ribbon-right:before {
-  border-right-color: #ff5c6c;
+  border-right-color: #23D26B;
   border-left-color: transparent;
 }
 
 .ribbon-danger.ribbon-corner.ribbon-bottom:before {
   border-top-color: transparent;
-  border-bottom-color: #ff5c6c;
+  border-bottom-color: #23D26B;
 }
 
 .ribbon-default {
@@ -5438,7 +5438,7 @@ Notify
   height: 25px;
   width: 25px;
   z-index: 10;
-  border: 5px solid #ff5c6c;
+  border: 5px solid #23D26B;
   border-radius: 70px;
   -moz-animation: heartbit 1s ease-out;
   -moz-animation-iteration-count: infinite;
@@ -5452,7 +5452,7 @@ Notify
   width: 6px;
   height: 6px;
   border-radius: 30px;
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   position: absolute;
   right: 9px;
   top: -12px;
@@ -5754,7 +5754,7 @@ ul#themecolors li a.working:before {
 }
 
 .red-theme {
-  background: #ff5c6c;
+  background: #23D26B;
 }
 
 .blue-theme {
@@ -5792,8 +5792,8 @@ ul#themecolors li a.working:before {
   /* Old browsers */
   /* FF3.6-15 */
   /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-gradient(linear, left top, right top, from(#ffffff), color-stop(23%, #ffffff), color-stop(23%, #ff5c6c), color-stop(99%, #ff5c6c));
-  background: linear-gradient(to right, #ffffff 0%, #ffffff 23%, #ff5c6c 23%, #ff5c6c 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#ffffff), color-stop(23%, #ffffff), color-stop(23%, #23D26B), color-stop(99%, #23D26B));
+  background: linear-gradient(to right, #ffffff 0%, #ffffff 23%, #23D26B 23%, #23D26B 99%);
 }
 
 .blue-dark-theme {
@@ -5828,8 +5828,8 @@ ul#themecolors li a.working:before {
   /* Old browsers */
   /* FF3.6-15 */
   /* Chrome10-25,Safari5.1-6 */
-  background: -webkit-gradient(linear, left top, right top, from(#ffffff), color-stop(23%, #ffffff), color-stop(23%, #ff5c6c), color-stop(99%, #ff5c6c));
-  background: linear-gradient(to right, #ffffff 0%, #ffffff 23%, #ff5c6c 23%, #ff5c6c 99%);
+  background: -webkit-gradient(linear, left top, right top, from(#ffffff), color-stop(23%, #ffffff), color-stop(23%, #23D26B), color-stop(99%, #23D26B));
+  background: linear-gradient(to right, #ffffff 0%, #ffffff 23%, #23D26B 23%, #23D26B 99%);
 }
 
 /*******************
@@ -6083,7 +6083,7 @@ Notification page Jquery toaster
 }
 
 .jq-icon-error {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   color: #ffffff;
 }
 
@@ -6436,15 +6436,15 @@ Buttons
 
 .btn-danger,
 .btn-danger.disabled {
-  background: #ff5c6c;
-  border: 1px solid #ff5c6c;
+  background: #23D26B;
+  border: 1px solid #23D26B;
   -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 .btn-danger:hover,
 .btn-danger.disabled:hover {
-  background: #ff5c6c;
-  border: 1px solid #ff5c6c;
+  background: #23D26B;
+  border: 1px solid #23D26B;
 }
 .btn-danger.active, .btn-danger:active, .btn-danger:focus,
 .btn-danger.disabled.active,
@@ -6569,15 +6569,15 @@ Buttons
 }
 
 .btn-outline-danger {
-  color: #ff5c6c;
+  color: #23D26B;
   background-color: transparent;
-  border-color: #ff5c6c;
+  border-color: #23D26B;
   -webkit-transition: 0.2s ease-in;
   transition: 0.2s ease-in;
 }
 .btn-outline-danger:hover, .btn-outline-danger:focus, .btn-outline-danger.focus {
-  background: #ff5c6c;
-  border-color: #ff5c6c;
+  background: #23D26B;
+  border-color: #23D26B;
   color: #ffffff;
 }
 .btn-outline-danger.active, .btn-outline-danger:active, .btn-outline-danger:focus {
@@ -8683,7 +8683,7 @@ input[type=checkbox]:not(:disabled).tabbed:focus ~ .lever::after {
 }
 
 .error .form-control {
-  border-color: #ff5c6c;
+  border-color: #23D26B;
 }
 
 .validate .form-control {
@@ -8772,7 +8772,7 @@ Table-Layout
 }
 
 .color-table.danger-table thead th {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   color: #ffffff;
 }
 
@@ -8834,10 +8834,10 @@ Table-Layout
 }
 
 .color-bordered-table.danger-bordered-table {
-  border: 2px solid #ff5c6c;
+  border: 2px solid #23D26B;
 }
 .color-bordered-table.danger-bordered-table thead th {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   color: #ffffff;
 }
 
@@ -8949,7 +8949,7 @@ Table-Layout
   background-color: #f9e7eb;
 }
 .full-color-table.full-danger-table thead th {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   border: 0;
   color: #ffffff;
 }
@@ -8957,7 +8957,7 @@ Table-Layout
   border: 0;
 }
 .full-color-table.full-danger-table tr:hover {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   color: #ffffff;
 }
 
@@ -9516,7 +9516,7 @@ Login register and recover password Page
   background: #24d2b5;
 }
 .mailbox .message-center a .user-img .busy {
-  background: #ff5c6c;
+  background: #23D26B;
 }
 .mailbox .message-center a .user-img .away {
   background: #ff9041;
@@ -9627,7 +9627,7 @@ Login register and recover password Page
   color: #20aee3;
 }
 .comment-footer .action-icons a.danger:hover, .comment-footer .action-icons a.danger.active {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 
 /*******************/
@@ -9794,7 +9794,7 @@ Login register and recover password Page
   background: #24d2b5;
 }
 .message-box .message-widget a .user-img .busy {
-  background: #ff5c6c;
+  background: #23D26B;
 }
 .message-box .message-widget a .user-img .away {
   background: #ff9041;
@@ -9918,7 +9918,7 @@ Login register and recover password Page
 }
 
 .fc-unthemed .fc-today {
-  border: 1px solid #ff5c6c;
+  border: 1px solid #23D26B;
   background: #383f48 !important;
 }
 
@@ -10661,7 +10661,7 @@ widget-chart-page product review
 }
 
 .has-danger .col-form-label, .has-danger .custom-control, .has-danger .form-check-label, .has-danger .form-control-feedback, .has-danger .form-control-label {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 
 .has-danger .form-control-danger {
@@ -10669,7 +10669,7 @@ widget-chart-page product review
 }
 
 .has-danger .form-control {
-  border-color: #ff5c6c;
+  border-color: #23D26B;
 }
 
 .input-group-addon [type=radio]:not(:checked),
@@ -11578,7 +11578,7 @@ a.underlined:hover {
  * TEXT FONT COLORS & MORE
  * --------------------------------------------------------*/
 .text-danger {
-  color: #ff5c6c !important;
+  color: #23D26B !important;
 }
 
 .text-success {
@@ -11626,7 +11626,7 @@ a.underlined:hover {
 }
 
 .text-themecontrast {
-  color: #ff5c6c !important;
+  color: #23D26B !important;
 }
 
 .text-muted {
@@ -11674,7 +11674,7 @@ Background Colors
 }
 
 .bg-danger {
-  background-color: #ff5c6c !important;
+  background-color: #23D26B !important;
 }
 
 .bg-themecolor {
@@ -11690,14 +11690,14 @@ Background Colors
 }
 
 .bg-themecontrast {
-  background-color: #ff5c6c !important;
+  background-color: #23D26B !important;
 }
 
 /* ----------------------------------------------------------
  * FONT COLORS
  * --------------------------------------------------------*/
 .border-danger {
-  border-color: #ff5c6c !important;
+  border-color: #23D26B !important;
 }
 
 .border-success {
@@ -11729,7 +11729,7 @@ Background Colors
 }
 
 .border-themecontrast {
-  border-color: #ff5c6c !important;
+  border-color: #23D26B !important;
 }
 
 .border-purple {
@@ -11793,7 +11793,7 @@ Background Colors
 }
 
 .alert-danger span {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 
 /*******************
@@ -12061,24 +12061,24 @@ a.link:hover, a.link:focus {
 * js validation - form field error colors
 * -------------------------------------------------------*/
 .form-control.error {
-  border-color: #ff5c6c !important;
+  border-color: #23D26B !important;
 }
 
 textarea.error {
-  border-color: #ff5c6c !important;
+  border-color: #23D26B !important;
 }
 
 .select2-container.error .form-control {
-  border-color: #ff5c6c !important;
+  border-color: #23D26B !important;
 }
 
 .form-material .form-control.error {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff5c6c), to(#ff5c6c)), -webkit-gradient(linear, left top, left bottom, from(#ff5c6c), to(#ff5c6c));
-  background-image: linear-gradient(#ff5c6c, #ff5c6c), linear-gradient(#ff5c6c, #ff5c6c);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#23D26B), to(#23D26B)), -webkit-gradient(linear, left top, left bottom, from(#23D26B), to(#23D26B));
+  background-image: linear-gradient(#23D26B, #23D26B), linear-gradient(#23D26B, #23D26B);
 }
 .form-material .form-control.error:focus {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff5c6c), to(#ff5c6c)), -webkit-gradient(linear, left top, left bottom, from(#ff5c6c), to(#ff5c6c));
-  background-image: linear-gradient(#ff5c6c, #ff5c6c), linear-gradient(#ff5c6c, #ff5c6c);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#23D26B), to(#23D26B)), -webkit-gradient(linear, left top, left bottom, from(#23D26B), to(#23D26B));
+  background-image: linear-gradient(#23D26B, #23D26B), linear-gradient(#23D26B, #23D26B);
 }
 
 /*noty message list items*/
@@ -12198,17 +12198,17 @@ textarea.error {
 }
 .list-table-action .btn-action-danger {
   width: initial;
-  border-color: #ff5c6c;
+  border-color: #23D26B;
   font-size: 12px;
   height: initial;
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   padding: 2px 20px;
   vertical-align: middle;
   margin-top: 5px;
 }
 .list-table-action .btn-action-danger:hover, .list-table-action .btn-action-danger:active, .list-table-action .btn-action-danger:visited, .list-table-action .btn-action-danger:focus {
-  background: #ff5c6c;
-  border-color: #ff5c6c;
+  background: #23D26B;
+  border-color: #23D26B;
 }
 .list-table-action .btn-outline-secondary:hover, .list-table-action .btn-outline-secondary:active, .list-table-action .btn-outline-secondary:visited, .list-table-action .btn-outline-secondary:focus {
   color: #adadad;
@@ -13109,13 +13109,13 @@ textarea.error {
 }
 
 .label-outline-danger {
-  color: #ff5c6c;
+  color: #23D26B;
   background-color: #383f48;
   border-color: #383f48;
 }
 
 .label-outline-red {
-  color: #ff5c6c;
+  color: #23D26B;
   background-color: #383f48;
   border-color: #383f48;
 }
@@ -13251,7 +13251,7 @@ textarea {
   min-height: 60px;
 }
 .jconfirm .jconfirm-box.jconfirm-type-red {
-  border-top: solid 6px #ff5c6c;
+  border-top: solid 6px #23D26B;
 }
 .jconfirm .jconfirm-box.jconfirm-type-blues {
   border-top: solid 6px #20aee3;
@@ -13264,7 +13264,7 @@ textarea {
   text-transform: none !important;
 }
 .jconfirm .jconfirm-box .jconfirm-buttons button.btn-outline-danger:hover {
-  border: solid 1px #ff5c6c !important;
+  border: solid 1px #23D26B !important;
 }
 .jconfirm .jconfirm-box .jconfirm-buttons button.btn-outline-secondary:hover {
   border: solid 1px #868e96 !important;
@@ -13382,7 +13382,7 @@ textarea {
   color: #20aee3;
 }
 .ticket .x-message .x-body .action-icons a.danger:hover, .ticket .x-message .x-body .action-icons a.danger.active {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 .ticket .x-message .x-attachements {
   padding-top: 20px;
@@ -13442,7 +13442,7 @@ textarea {
   text-transform: uppercase;
   text-align: center;
   line-height: 45px;
-  color: #ff5c6c;
+  color: #23D26B;
 }
 .preview-image-thumb {
   width: 100%;
@@ -13734,7 +13734,7 @@ textarea {
   color: #ddd;
 }
 #tasks-list-table .x-timer-button.timer-stop-button {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 
 /**-------------------------------------------------------
@@ -13804,7 +13804,7 @@ textarea {
   color: #bcc3d3 !important;
 }
 .js-hover-actions .btn-outline-danger:hover, .js-hover-actions .btn-outline-danger:active, .js-hover-actions .btn-outline-danger:visited, .js-hover-actions .btn-outline-danger:focus {
-  color: #ff5c6c !important;
+  color: #23D26B !important;
   border-color: transparent !important;
   background-color: transparent !important;
 }
@@ -14055,7 +14055,7 @@ textarea {
   cursor: pointer;
 }
 .card-modal .card-right-panel .x-timer-button.timer-stop-button {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 .card-modal .card-right-panel .x-form-section label {
   font-size: 13px;
@@ -15359,8 +15359,8 @@ table .projects_col_progress {
   color: #fff;
 }
 .setup .setup-wrapper .setup-progress .steps .x-step.active-failed {
-  background-color: #ff5c6c;
-  border-color: #ff5c6c;
+  background-color: #23D26B;
+  border-color: #23D26B;
   color: #fff;
 }
 .setup .setup-wrapper .setup-progress .steps .x-line {
@@ -15400,8 +15400,8 @@ table .projects_col_progress {
   color: #20aee3;
 }
 .setup .setup-wrapper .setup-requirements .x-td-checks .x-checks.x-check-failed {
-  border-color: #ff5c6c;
-  color: #ff5c6c;
+  border-color: #23D26B;
+  color: #23D26B;
 }
 
 /*******************
@@ -15538,7 +15538,7 @@ table .projects_col_progress {
  * BLINKING TEXT
  * --------------------------------------------------------*/
 .timer-running {
-  color: #ff5c6c !important;
+  color: #23D26B !important;
 }
 .timer-running .timer-deliminator {
   -webkit-animation: blinkingTimer 1.2s infinite;
@@ -15547,10 +15547,10 @@ table .projects_col_progress {
 
 @-webkit-keyframes blinkingTimer {
   0% {
-    color: #ff5c6c;
+    color: #23D26B;
   }
   49% {
-    color: #ff5c6c;
+    color: #23D26B;
   }
   60% {
     color: transparent;
@@ -15559,16 +15559,16 @@ table .projects_col_progress {
     color: transparent;
   }
   100% {
-    color: #ff5c6c;
+    color: #23D26B;
   }
 }
 
 @keyframes blinkingTimer {
   0% {
-    color: #ff5c6c;
+    color: #23D26B;
   }
   49% {
-    color: #ff5c6c;
+    color: #23D26B;
   }
   60% {
     color: transparent;
@@ -15577,7 +15577,7 @@ table .projects_col_progress {
     color: transparent;
   }
   100% {
-    color: #ff5c6c;
+    color: #23D26B;
   }
 }
 .fade:not(.show) {
@@ -15651,7 +15651,7 @@ table .projects_col_progress {
 
 .dropdown-no-results-found {
   font-size: 12px;
-  background-color: #ff5c6c;
+  background-color: #23D26B;
   color: #fff;
   border-radius: 3px;
   padding: 4px;
@@ -16200,7 +16200,7 @@ chat application Page
 }
 
 .label-icons-danger {
-  color: #ff5c6c;
+  color: #23D26B;
   background-color: transparent;
   border-color: transparent;
 }
@@ -16232,7 +16232,7 @@ chat application Page
 .my-timer-container a .timer-container {
   font-size: 24px !important;
   padding-left: 6px !important;
-  color: #ff5c6c !important;
+  color: #23D26B !important;
   font-weight: 400;
 }
 .my-timer-container .timer-deliminator {
@@ -16287,7 +16287,7 @@ chat application Page
   background-color: #20aee3;
 }
 .reminders-side-panel .rpanel-title.due {
-  background-color: #ff5c6c;
+  background-color: #23D26B;
 }
 .reminders-side-panel .reminders-side-panel-body .bootstrap-datetimepicker-widget .day {
   line-height: 10px;
@@ -16384,7 +16384,7 @@ chat application Page
 }
 
 .reminder-toggle-panel-button.due {
-  background-color: #ff5c6c !important;
+  background-color: #23D26B !important;
   color: #ffffff !important;
 }
 .reminder-toggle-panel-button.active {
@@ -16547,7 +16547,7 @@ chat application Page
 .reminders-existing-show.due .x-time,
 .reminders-existing-show.due .x-date,
 .reminders-existing-show.due .x-splash {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 .reminders-existing-show .x-title {
   font-size: 14px;
@@ -17533,7 +17533,7 @@ chat application Page
   min-height: 38px;
 }
 .task-dependency-list-container .task-dependency-task.cannot_complete {
-  border-left: solid 2px #ff5c6c;
+  border-left: solid 2px #23D26B;
 }
 .task-dependency-list-container .task-dependency-task.cannot_start {
   border-left: solid 2px #ff9041;
@@ -17550,7 +17550,7 @@ chat application Page
   cursor: pointer;
 }
 .task-dependency-list-container .task-dependency-task .task-dependency-delete-button:hover {
-  color: #ff5c6c;
+  color: #23D26B;
 }
 .task-dependency-list-container .task-dependency-task .task-dependency-fulfilled-icon {
   position: absolute;
@@ -17639,7 +17639,7 @@ chat application Page
 .bill-file-attachments .x-file-attachment .x-delete {
   right: 2px;
   top: 3px;
-  color: #ff5c6c;
+  color: #23D26B;
   display: inline-block;
   width: 20px;
   font-weight: 600;
@@ -18485,8 +18485,8 @@ chat application Page
 .calendar .fc-custom_button_add_event-button {
   padding-top: 8px !important;
   color: #fff !important;
-  background: #ff5c6c !important;
-  border: 1px solid #ff5c6c !important;
+  background: #23D26B !important;
+  border: 1px solid #23D26B !important;
   border-radius: 50% !important;
   height: 45px !important;
   font-size: 19px !important;
@@ -18833,12 +18833,12 @@ chat application Page
   border-color: #fff4e4;
 }
 .docs-main-wrapper .label-outline-danger {
-  color: #ff5c6c;
+  color: #23D26B;
   background-color: #fcebed;
   border-color: #fcebed;
 }
 .docs-main-wrapper .label-outline-red {
-  color: #ff5c6c;
+  color: #23D26B;
   background-color: #fcebed;
   border-color: #fcebed;
 }

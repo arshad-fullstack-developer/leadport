@@ -3839,7 +3839,7 @@ When click on sidebar toggler and also for tablet
             padding: 5px 10px;
             display: inline-block; }
             .topbar ul.dropdown-user li .dw-user-box .u-text .btn:hover {
-              background: #e6294b; }
+              background: #23D26B; }
       .topbar ul.dropdown-user li a {
         padding: 9px 15px;
         display: block;
@@ -10218,7 +10218,7 @@ textarea {
     font-size: 18px;
     min-height: 60px; }
 .jconfirm .jconfirm-box.jconfirm-type-red {
-  border-top: solid 6px #ff5c6c; }
+  border-top: solid 6px #23D26B; }
 .jconfirm .jconfirm-box.jconfirm-type-blues {
   border-top: solid 6px #23D26B; }
 .jconfirm .jconfirm-box .jconfirm-buttons button {
@@ -10228,7 +10228,7 @@ textarea {
   border: solid 1px !important;
   text-transform: none !important; }
   .jconfirm .jconfirm-box .jconfirm-buttons button.btn-outline-danger:hover {
-    border: solid 1px #ff5c6c !important; }
+    border: solid 1px #23D26B !important; }
   .jconfirm .jconfirm-box .jconfirm-buttons button.btn-outline-secondary:hover {
     border: solid 1px #868e96 !important; }
 
@@ -14810,7 +14810,7 @@ label.label.label-outline-info.p-t-3.p-b-3.p-l-8.p-r-8.custum {
 
 i.sl-icon-trash.custom {
   cursor: pointer;
-  color: red;
+  color: #23D26B;
   margin-top: 15px;
   margin-left: 10px;
   font-weight: 600;

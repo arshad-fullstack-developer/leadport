@@ -20,7 +20,7 @@
         <span class="list-table-action dropdown font-size-inherit">
             <!--delete-->
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
+                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-success"
                 data-confirm-title="{{ cleanLang(__('lang.delete_product')) }}" data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
                 data-ajax-type="DELETE" data-url="{{ url('/') }}/foos/{{ $foo->foo_id }}">
                 <i class="sl-icon-trash"></i>

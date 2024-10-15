@@ -1,4 +1,10 @@
 
+<style>
+    .disabled {
+        pointer-events: none;
+        opacity: 0.5; /* Optional: to indicate it's disabled */
+    }
+</style>
 <form class="w-100 ticket-compose" method="post" id="ticket-compose" data-user-type="<?php echo e(auth()->user()->type); ?>">
         <div class="form-header d-flex mb-4">
            <?php if(isset($orderStatus)): ?> 
@@ -162,7 +168,7 @@
                         </div>
 
                           <div class="col-12">
-                            <div class="toggle-outer">
+                            <div class="toggle-outer checked disabled">
                               <div class="toggle-inner">
                                   <input type="checkbox" id="toggle" name="def_shipping" value="<?php echo e($ticket['def_shipping']); ?>">
                               </div>
@@ -170,7 +176,7 @@
                           <label id="toggleLabel toggleLabel1" for="toggle">
                               Different pickup
                           </label>
-                          <div id="result">
+                          <div id="result" style="display: block;">
                             <div class="row mt-3" >
                               <div class="col-12">
                                   <label for="alt_shipper" class="form-label fw-bold">Shipper</label>
@@ -283,7 +289,7 @@
                         </div>
                        
                           <div class="col-12">
-                            <div class="toggle-outer2">
+                            <div class="toggle-outer2 checked disabled">
                               <div class="toggle-inner">
                                   <input type="checkbox" id="toggle2" name="def_delivery" value="<?php echo e($ticket['def_delivery']); ?>">
                               </div>
@@ -291,7 +297,7 @@
                           <label id="toggleLabel toggleLabel2" for="toggle">
                               Different Delivery
                           </label>
-                          <div id="result2">
+                          <div id="result2" style="display: block;">
                             <div class="row mt-3" >
                               <div class="col-12">
                                   <label for="alt_delivery" class="form-label fw-bold">Delivery</label>
@@ -367,11 +373,16 @@
           </div>
           
           <div class="row mt-3">
-          <label for="notes" class="form-label fw-bold">Chargeable Weight Total</label>
-          <br>
-          <input type="number" class="form-control" readonly name="chargeable_weight_total" placeholder="Chargeable Weight Total"  value="<?php echo e($ticket['chargeable_weight_total']); ?>" aria-label="notes" id="ChargeableWeightTotal">
+            <label for="notes" class="form-label fw-bold">Chargeable Weight Total</label>
           </div>
-         
+          <div class="row mt-2"> <!-- Optional mt-2 for margin -->
+              <input type="number" class="form-control" readonly name="chargeable_weight_total" placeholder="Chargeable Weight Total" value="<?php echo e($ticket['chargeable_weight_total']); ?>" aria-label="notes" id="ChargeableWeightTotal">
+          </div>
+                          <div class="text-lg-right"> 
+                                   <a href="<?php echo e(url('/ctickets/'.$ticket['id'].'/edit')); ?>" class="btn btn-rounded-x btn-success m-t-20">
+                                      Edit
+                                  </a>
+                          </div>
 
                         </div>
                     </div>

@@ -32,7 +32,7 @@
             <!--submit-->
             <div class="text-right">
                 <button type="submit" id="commonModalSubmitButton"
-                    class="btn btn-rounded-x btn-successwaves-effect text-left ajax-request"
+                    class="btn btn-rounded-x btn-success waves-effect text-left ajax-request"
                     data-url="<?php echo e(url('app-admin/settings/gateways')); ?>" data-form-id="landlord-settings-form"
                     data-loading-target="" data-ajax-type="post" data-type="form"
                     data-on-start-submit-button="disable"><?php echo e(cleanLang(__('lang.save_changes'))); ?></button>
