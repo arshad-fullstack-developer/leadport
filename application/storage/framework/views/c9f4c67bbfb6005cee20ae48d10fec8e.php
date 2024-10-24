@@ -23,7 +23,7 @@
         </div>
         <!--update tax tax type-->
         <div class="form-group text-right">
-            <button type="button" class="btn btn-info btn-sm ajax-request" data-type="form"
+            <button type="button" class="btn btn-success btn-sm ajax-request" data-type="form"
                 data-form-id="invoice-tax-type-content" data-ajax-type="post"
                 data-confirm-title="<?php echo app('translator')->get('lang.change_tax_type'); ?>"
                 data-confirm-text="<?php echo app('translator')->get('lang.this_change_will_refresh_page'); ?>"

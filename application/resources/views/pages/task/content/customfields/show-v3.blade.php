@@ -135,7 +135,7 @@
 <input type="hidden" name="task_visibility" value="{{ $task->task_visibility }}">
 
 <div class="form-data-row-buttons">
-    <button type="button" class="btn waves-effect waves-light btn-xs btn-info ajax-request float-left"
+    <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request float-left"
         data-url="{{ url('tasks/content/'.$task->task_id.'/edit-customfields') }}"
         data-loading-class="loading-before-centre"
         data-loading-target="card-tasks-left-panel">@lang('lang.edit')</button>

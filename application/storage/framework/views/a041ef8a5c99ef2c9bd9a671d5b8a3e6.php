@@ -7,8 +7,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="page-notification">
-                        <img class="m-b-30" src="<?php echo e(url('/')); ?>/public/images/relax.png"
-                            alt="<?php echo app('translator')->get('lang.no_notices_for_account'); ?>" />
+                        <!-- <img class="m-b-30" src="<?php echo e(url('/')); ?>/public/images/relax.png"
+                            alt="<?php echo app('translator')->get('lang.no_notices_for_account'); ?>" /> -->
                         <h2 class="m-b-30 font-weight-200"> <?php echo app('translator')->get('lang.no_notices_for_account'); ?> </h2>
                     </div>
                 </div>

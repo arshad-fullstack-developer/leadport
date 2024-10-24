@@ -75,7 +75,7 @@
         <button type="button" class="btn waves-effect waves-light btn-xs btn-default ajax-request"
         data-url="{{ url('leads/content/'.$lead->lead_id.'/show-organisation') }}"
         data-loading-class="loading-before-centre" data-loading-target="card-leads-left-panel">@lang('lang.cancel')</button>
-        <button type="button" class="btn btn-danger btn-xs ajax-request"
+        <button type="button" class="btn btn-success btn-xs ajax-request"
             data-loading-target="card-leads-left-panel"
             data-loading-class="loading-before-centre"
             data-url="{{ url('/leads/'.$lead->lead_id.'/update-organisation') }}" data-type="form" data-ajax-type="post"

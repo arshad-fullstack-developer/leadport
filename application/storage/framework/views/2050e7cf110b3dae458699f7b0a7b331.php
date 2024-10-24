@@ -50,7 +50,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <?php else: ?>
 <div class="top-nav-no-evenets">
-    <img src="<?php echo e(url('/')); ?>/public/images/relax.png" alt="No events found" />
+    <!-- <img src="<?php echo e(url('/')); ?>/public/images/relax.png" alt="No events found" /> -->
     <div class="x-message"><?php echo e(cleanLang(__('lang.no_notifications_found'))); ?></div>
 </div>
 <?php endif; ?><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/events/topnav.blade.php ENDPATH**/ ?>

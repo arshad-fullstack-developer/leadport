@@ -21,7 +21,7 @@
             <?php echo e(cleanLang(__('lang.delete'))); ?>
 
         </button>
-        <button type="button" class="btn waves-effect waves-light btn-xs btn-info ajax-request"
+        <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
             data-url="<?php echo e(url('leads/content/'.$lead->lead_id.'/edit-mynotes')); ?>"
             data-loading-class="loading-before-centre"
             data-loading-target="card-leads-left-panel"><?php echo app('translator')->get('lang.edit'); ?></button>
@@ -32,7 +32,7 @@
         <img src="<?php echo e(url('/')); ?>/public/images/no-download-avialble.png" alt="404 - Not found" /> 
         <div class="p-t-20"><h4><?php echo e(cleanLang(__('lang.you_do_not_have_notes'))); ?></h4></div>
         <div class="p-t-10">
-            <button class="btn btn-info btn-sm ajax-request"
+            <button class="btn btn-success btn-sm ajax-request"
             data-loading-class="loading-before-centre"
             data-loading-target="card-leads-left-panel"
             data-url="<?php echo e(url('/leads/content/'.$lead->lead_id.'/create-mynotes')); ?>" ><?php echo app('translator')->get('lang.create_notes'); ?></a>

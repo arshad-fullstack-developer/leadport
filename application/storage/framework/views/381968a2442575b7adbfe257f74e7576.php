@@ -66,7 +66,7 @@
     <!--edit button-->
     <?php if(config('visibility.lead_editing_buttons')): ?>
     <div class="form-data-row-buttons">
-        <button type="button" class="btn waves-effect waves-light btn-xs btn-info ajax-request"
+        <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
             data-url="<?php echo e(url('leads/content/'.$lead->lead_id.'/edit-organisation')); ?>"
             data-loading-class="loading-before-centre" data-loading-target="card-leads-left-panel"><?php echo app('translator')->get('lang.edit'); ?></button>
     </div>

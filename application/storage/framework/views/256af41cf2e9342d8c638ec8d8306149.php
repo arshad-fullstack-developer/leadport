@@ -108,33 +108,33 @@
                     <ul aria-expanded="false" class="collapse">
                         <?php if(config('system.settings_type') == 'standalone'): ?>
                         <!--general-->
-                        <li><a href="javascript:void(0);" data-url="/settings/email/general"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/email/general')); ?>"
                                 id="settings-menu-email-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <!--smtp-->
-                        <li><a href="javascript:void(0);" data-url="/settings/email/smtp" id="settings-menu-email-smtp"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/email/smtp')); ?>" id="settings-menu-email-smtp"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.smtp_settings'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('system.settings_type') == 'saas'): ?>
-                        <li><a href="javascript:void(0);" data-url="/settings/account/email"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/account/email')); ?>"
                                 id="settings-menu-email-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.email_settings'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <!--templates-->
-                        <li><a href="javascript:void(0);" data-url="/settings/email/templates"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/email/templates')); ?>"
                                 id="settings-menu-email-templates"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.email_templates'))); ?></a>
                         </li>
                         <!--email queue-->
-                        <li><a href="javascript:void(0);" data-url="/settings/email/queue"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/email/queue')); ?>"
                                 id="settings-menu-email-queue"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.email_queue'))); ?></a>
                         </li>
                         <!--email log-->
-                        <li><a href="javascript:void(0);" data-url="/settings/email/log" id="settings-menu-email-log"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/email/log')); ?>" id="settings-menu-email-log"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.email_log'))); ?></a>
                         </li>
                     </ul>
@@ -149,22 +149,22 @@
                         </span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="javascript:void(0);" data-url="/settings/clients"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/clients')); ?>"
                                 id="settings-menu-clients-general"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li>
                             <a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-client" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=client&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=client&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/customfields/clients"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/customfields/clients')); ?>"
                                 id="settings-menu-clients-forms"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.custom_form_fields'))); ?></a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/webmail/templates?filter_type=clients"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/webmail/templates?filter_type=clients')); ?>"
                                 id="settings-menu-clients-email-templates"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.email_templates'))); ?></a>
                         </li>
@@ -182,7 +182,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/projects/general"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/projects/general')); ?>"
                                 id="settings-menu-projects-general"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
@@ -190,27 +190,27 @@
                         <li>
                             <a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-project" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=project&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=project&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/projects/staff"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/projects/staff')); ?>"
                                 id="settings-menu-projects-staff-permissions"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.team_permissions'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/projects/client"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/projects/client')); ?>"
                                 id="settings-menu-client-permissions"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.client_permissions'))); ?></a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/customfields/projects"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/customfields/projects')); ?>"
                                 id="settings-menu-projects-forms"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.custom_form_fields'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-projects-automation" href="javascript:void(0);"
-                                data-url="/settings/projects/automation"><?php echo app('translator')->get('lang.automation'); ?>
+                                data-url="<?php echo e(url('settings/projects/automation')); ?>"><?php echo app('translator')->get('lang.automation'); ?>
                             </a>
                     </ul>
                 </li>
@@ -225,20 +225,20 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/tasks" id="settings-menu-tasks-settings"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/tasks')); ?>" id="settings-menu-tasks-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/tasks/statuses"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/tasks/statuses')); ?>"
                                 id="settings-menu-tasks-stages"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.statuses'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/tasks/priorities"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/tasks/priorities')); ?>"
                                 id="settings-menu-tasks-priorities"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.priorities'))); ?></a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/customfields/tasks"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/customfields/tasks')); ?>"
                                 id="settings-menu-tasks-forms"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.custom_form_fields'))); ?></a>
                         </li>
@@ -255,32 +255,32 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/leads/general"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/leads/general')); ?>"
                                 id="settings-menu-leads-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-lead" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=lead&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?></a>
+                                data-url="<?php echo e(url('categories?filter_category_type=lead&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/leads/statuses"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/leads/statuses')); ?>"
                                 id="settings-menu-leads-stages"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.lead_stages'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/sources" id="settings-menu-leads-sources"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/sources')); ?>" id="settings-menu-leads-sources"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.lead_sources'))); ?></a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/customfields/leads"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/customfields/leads')); ?>"
                                 id="settings-menu-leads-forms"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.custom_form_fields'))); ?></a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/webforms"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/webforms')); ?>"
                                 id="settings-menu-leads-webforms"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.web_forms'))); ?></a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/webmail/templates?filter_type=leads"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/webmail/templates?filter_type=leads')); ?>"
                                 id="settings-menu-leads-email-templates"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.email_templates'))); ?></a>
                         </li>
@@ -297,12 +297,12 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/milestones/settings"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/milestones/settings')); ?>"
                                 id="settings-menu-milestones-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/milestones/default"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/milestones/default')); ?>"
                                 id="settings-menu-milestones-categories"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.default_milestones'))); ?></a>
                         </li>
@@ -319,13 +319,13 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/invoices"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/invoices')); ?>"
                                 id="settings-menu-billing-invoice"
                                 class="js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
-                                id="settings-menu-categories-invoice" href="app/settings/invoices"
-                                data-url="/categories?filter_category_type=invoice&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                id="settings-menu-categories-invoice" href="<?php echo e(url('app/settings/invoices')); ?>"
+                                data-url="<?php echo e(url('categories?filter_category_type=invoice&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a></li>
                     </ul>
@@ -341,19 +341,19 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/estimates"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/estimates')); ?>"
                                 id="settings-menu-billing-estimate"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-estimate" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=estimate&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=estimate&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-estimates-automation" href="javascript:void(0);"
-                                data-url="/settings/estimates/automation"><?php echo app('translator')->get('lang.automation'); ?>
+                                data-url="<?php echo e(url('settings/estimates/automation')); ?>"><?php echo app('translator')->get('lang.automation'); ?>
                             </a>
                         </li>
                     </ul>
@@ -370,18 +370,18 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/proposals"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/proposals')); ?>"
                                 id="settings-menu-billing-proposal"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-proposal" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=proposal&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=proposal&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a></li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-estimates-automation" href="javascript:void(0);"
-                                data-url="/settings/proposals/automation"><?php echo app('translator')->get('lang.automation'); ?>
+                                data-url="<?php echo e(url('settings/proposals/automation')); ?>"><?php echo app('translator')->get('lang.automation'); ?>
                             </a>
                         </li>
                     </ul>
@@ -398,13 +398,13 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/contracts"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/contracts')); ?>"
                                 id="settings-menu-billing-contract"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-contract" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=contract&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=contract&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a></li>
                     </ul>
@@ -422,7 +422,7 @@
                     <ul aria-expanded="false" class="collapse">
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url hidden"
                                 id="settings-menu-categories-item" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=item&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=item&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a>
                         </li>
@@ -439,13 +439,13 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/expenses"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/expenses')); ?>"
                                 id="settings-menu-billing-expense"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li><a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-expense" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=expense&source=ext"><?php echo e(cleanLang(__('lang.categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=expense&source=ext')); ?>"><?php echo e(cleanLang(__('lang.categories'))); ?>
 
                             </a></li>
                     </ul>
@@ -461,7 +461,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/subscriptions"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/subscriptions')); ?>"
                                 id="settings-menu-billing-subscription"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
@@ -478,7 +478,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/taxrates"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/taxrates')); ?>"
                                 id="settings-menu-billing-subscription"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.tax_rates'))); ?></a>
                         </li>
@@ -495,11 +495,11 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/tags" id="settings-menu-tags-settings"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/tags')); ?>" id="settings-menu-tags-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/tags?source=ext" id="settings-menu-tags-view"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('tags?source=ext')); ?>" id="settings-menu-tags-view"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.view_tags'))); ?></a>
                         </li>
                     </ul>
@@ -515,17 +515,17 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/files/general"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/files/general')); ?>"
                                 id="settings-menu-files-general"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo app('translator')->get('lang.general_settings'); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/files/folders"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/files/folders')); ?>"
                                 id="settings-menu-files-folders"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo app('translator')->get('lang.folders'); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/files/defaultfolders"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/files/defaultfolders')); ?>"
                                 id="settings-menu-files-defaultfolders"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo app('translator')->get('lang.default_folders'); ?></a>
                         </li>
@@ -542,37 +542,37 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <!--paypal-->
-                        <li><a href="javascript:void(0);" data-url="/settings/paypal"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/paypal')); ?>"
                                 id="settings-menu-payment-methods-paypal"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">Paypal</a>
                         </li>
                         <!--stripe-->
-                        <li><a href="javascript:void(0);" data-url="/settings/stripe"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/stripe')); ?>"
                                 id="settings-menu-payment-methods-stripe"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">Stripe</a>
                         </li>
                         <!--razorpay-->
-                        <li><a href="javascript:void(0);" data-url="/settings/razorpay"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/razorpay')); ?>"
                                 id="settings-menu-payment-methods-stripe"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">Razorpay</a>
                         </li>
                         <!--mollie-->
-                        <li><a href="javascript:void(0);" data-url="/settings/mollie"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/mollie')); ?>"
                                 id="settings-menu-payment-methods-mollie"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">Mollie</a>
                         </li>
                         <!--tap-->
-                        <li><a href="javascript:void(0);" data-url="/settings/tap"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/tap')); ?>"
                                 id="settings-menu-payment-methods-tap"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">Tap</a>
                         </li>
                         <!--paystack-->
-                        <li><a href="javascript:void(0);" data-url="/settings/paystack"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/paystack')); ?>"
                                 id="settings-menu-payment-methods-paystack"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">Paystack</a>
                         </li>
                         <!--bank-->
-                        <li><a href="javascript:void(0);" data-url="/settings/bank"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/bank')); ?>"
                                 id="settings-menu-payment-methods-bank"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.bank'))); ?></a>
                         </li>
@@ -590,7 +590,7 @@
                         </span>
                     </a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="javascript:void(0);" data-url="/settings/roles" id="settings-menu-roles-general"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/roles')); ?>" id="settings-menu-roles-general"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                     </ul>
@@ -607,31 +607,31 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/tickets"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/tickets')); ?>"
                                 id="settings-menu-tickets-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li>
                             <a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-tickets-departments" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=ticket&source=ext"><?php echo e(cleanLang(__('lang.departments'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=ticket&source=ext')); ?>"><?php echo e(cleanLang(__('lang.departments'))); ?>
 
                             </a>
 
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/tickets/statuses"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/tickets/statuses')); ?>"
                                 id="settings-menu-tickets-stages"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.statuses'))); ?></a>
                         </li>
                         <li>
                             <a class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                                 id="settings-menu-categories-client" href="javascript:void(0);"
-                                data-url="/categories?filter_category_type=canned&source=ext"><?php echo e(cleanLang(__('lang.canned_categories'))); ?>
+                                data-url="<?php echo e(url('categories?filter_category_type=canned&source=ext')); ?>"><?php echo e(cleanLang(__('lang.canned_categories'))); ?>
 
                             </a>
                         </li>
-                        <li><a href="javascript:void(0);" data-url="/settings/customfields/tickets"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/customfields/tickets')); ?>"
                                 id="settings-menu-tickets-forms"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.custom_form_fields'))); ?></a>
                         </li>
@@ -649,12 +649,12 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/knowledgebase/settings"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/knowledgebase/settings')); ?>"
                                 id="settings-menu-knowledgebase-settings"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.general_settings'))); ?></a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" data-url="/settings/knowledgebase/default"
+                            <a href="javascript:void(0);" data-url="<?php echo e(url('settings/knowledgebase/default')); ?>"
                                 id="settings-menu-knowledgebase-categories"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.categories'))); ?></a>
                         </li>
@@ -673,20 +673,20 @@
                     </a>
                     <!--update-->
                     <ul aria-expanded="false" class="collapse" id="settings-menu-other">
-                        <li><a href="javascript:void(0);" data-url="/settings/updates" id="settings-menu-other-updates"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/updates')); ?>" id="settings-menu-other-updates"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo e(cleanLang(__('lang.updates'))); ?></a>
                         </li>
                     </ul>
                     <!--reCaptcha-->
                     <ul aria-expanded="false" class="collapse" id="settings-menu-other">
-                        <li><a href="javascript:void(0);" data-url="/settings/recaptcha"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/recaptcha')); ?>"
                                 id="settings-menu-other-recaptch"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">reCAPTCHA</a>
                         </li>
                     </ul>
                     <!--tweak-->
                     <ul aria-expanded="false" class="collapse" id="settings-menu-other">
-                        <li><a href="javascript:void(0);" data-url="/settings/tweak" id="settings-menu-other-tweak"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/tweak')); ?>" id="settings-menu-other-tweak"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"><?php echo app('translator')->get('lang.tweak'); ?></a>
                         </li>
                     </ul>
@@ -700,7 +700,7 @@
                         </span>
                     </a>
                     <ul aria-expanded="false" class="collapse" id="settings-menu-other">
-                        <li><a href="javascript:void(0);" data-url="/settings/recaptcha"
+                        <li><a href="javascript:void(0);" data-url="<?php echo e(url('settings/recaptcha')); ?>"
                                 id="settings-menu-other-recaptcha"
                                 class="settings-menu-link js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url">reCAPTCHA</a>
                         </li>

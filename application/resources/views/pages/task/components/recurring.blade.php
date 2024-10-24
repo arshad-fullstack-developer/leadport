@@ -8,7 +8,7 @@
 <div class="x-no-result">
     <div class="alert alert-info m-t-40 m-b-40">@lang('lang.task_is_not_recurring')</div>
     <div class="text-center p-t-10">
-        <button class="btn btn-info btn-sm ajax-request" data-loading-class="loading-before-centre"
+        <button class="btn btn-success btn-sm ajax-request" data-loading-class="loading-before-centre"
             data-loading-target="card-tasks-left-panel"
             data-url="{{ urlResource('/tasks/'.$task->task_id.'/recurring-settings?source=modal&recurring_action=edit') }}">@lang('lang.make_recurring')</a>
     </div>
@@ -65,7 +65,7 @@
 
     <!--edit button-->
     <div class="form-data-row-buttons">
-        <button type="button" class="btn waves-effect waves-light btn-xs btn-info ajax-request"
+        <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
             data-url="{{ urlResource('/tasks/'.$task->task_id.'/recurring-settings?source=modal&recurring_action=edit') }}"
             data-loading-class="loading-before-centre"
             data-loading-target="card-tasks-left-panel">@lang('lang.edit')</button>
@@ -83,7 +83,7 @@
             data-loading-target="card-tasks-left-panel"
             data-url="{{ urlResource('/tasks/'.$task->task_id.'/stop-recurring?source=modal') }}">@lang('lang.stop_recurring')</button>
         <!--save changes-->
-        <button class="btn btn-danger btn-xs ajax-request" data-type="form" data-form-id="task-modal-recurring-form"
+        <button class="btn btn-success btn-xs ajax-request" data-type="form" data-form-id="task-modal-recurring-form"
             data-ajax-type="post" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel"
             data-url="{{ urlResource('/tasks/'.$task->task_id.'/recurring-settings?source=modal') }}">@lang('lang.save_changes')</button>
     </div>
