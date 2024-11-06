@@ -14890,3 +14890,19 @@ button.btn.btn-outline-success.btn-circle.btn-sm.tr-btn {
   margin-top: 1%;
   margin-left: 1%;
 }
+li.select2-search.select2-search--inline {
+  display: none;
+}
+p.text-white.bg-success.img-circle.avatar-xsmall.text-center.pt-1.custom {
+  display: inline-block;
+}
+/* Add a 'disabled' class to style the link */
+a.data-toggle-action-tooltip.btn.btn-outline-success.btn-circle.btn-sm.disabled-link {
+  pointer-events: none; /* Prevents clicking */
+  color: #ccc; /* Optional: change color to indicate the link is disabled */
+  text-decoration: none; /* Optional: remove underline */
+}
+
+a.data-toggle-action-tooltip.btn.btn-outline-success.btn-circle.btn-sm.disabled-link:hover {
+  cursor: not-allowed; /* Optional: change cursor to indicate it's not clickable */
+}

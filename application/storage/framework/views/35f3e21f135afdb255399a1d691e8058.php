@@ -26,6 +26,7 @@
                         </th>
                         <th class="tickets_col_department"><?php echo e(cleanLang(__('lang.load_type'))); ?><span class="sorting-icons"><i class="ti-arrows-vertical"></i></span>
                         </th>
+                        <th class="tickets_col_assigned"><?php echo e(cleanLang(__('lang.assigned'))); ?><span class="sorting-icons"><i class="ti-arrows-vertical"></i></th>
                         <th class="tickets_col_date"><?php echo e(cleanLang(__('lang.pickup_date'))); ?><span class="sorting-icons"><i class="ti-arrows-vertical"></i></span>
                         </th>
                         <th class="tickets_col_date"><?php echo e(cleanLang(__('lang.delivery_date'))); ?><span class="sorting-icons"><i class="ti-arrows-vertical"></i></span>

@@ -244,7 +244,10 @@
    <div class="row mt-3 bg-white p-3">
       <div class="col-sm-4 col-lg-2">
          <label for="temp" class="form-label fw-bold">Temp Sensitive</label>
-         <input type="text" class="form-control" name="temp_sensitive" placeholder="Type sensitive here" aria-label="temp">
+         <select class="form-control" name="temp_sensitive">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+         </select>
       </div>
       <div class="col-sm-4 col-lg-2">
          <label for="range" class="form-label fw-bold">Temp Range</label>
@@ -252,7 +255,10 @@
       </div>
       <div class="col-sm-4 col-lg-2">
          <label for="adr" class="form-label fw-bold">ADR</label>
-         <input type="text" class="form-control" name="adr" placeholder="Type ADR here" aria-label="adr">
+         <select class="form-control" name="adr">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+         </select>
       </div>
       <div class="col-sm-4 col-lg-2">
          <label for="code" class="form-label fw-bold">UN Code</label>
@@ -260,7 +266,10 @@
       </div>
       <div class="col-sm-4 col-lg-2">
          <label for="fragile" class="form-label fw-bold">Fragile</label>
-         <input type="text" class="form-control" name="fragile" placeholder="Type Fragile here" aria-label="fragile">
+         <select class="form-control" name="fragile">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+         </select>
       </div>
       <div class="col-sm-4 col-lg-2">
          <label for="notes" class="form-label fw-bold">Notes</label>

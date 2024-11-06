@@ -5,7 +5,7 @@
 						<thead>
 							<tr>
 								<th>Quantity</th>
-								<th>Unit Type</th>
+								<th width="10%">Unit Type</th>
 								<th>Description</th>
 								<th>Weight (Br)</th>
 								<th>LDM</th>

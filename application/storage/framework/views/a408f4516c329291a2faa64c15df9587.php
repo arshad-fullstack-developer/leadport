@@ -223,7 +223,8 @@
                     </a>
                 </li>
                 <?php endif; ?>
-
+                   
+                
                 <!-- add content -->
                 <?php if(auth()->user()->is_team && auth()->user()->can_add_content): ?>
                 <?php if(config('system.settings_type') == 'standalone' || in_array(config('system.settings_saas_status'),

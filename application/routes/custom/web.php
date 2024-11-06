@@ -29,6 +29,7 @@
     Route::group(['prefix' => 'ctickets'], function () {
 
         Route::get('index', "TicketController@index")->name('ctickets.index');
+        Route::get('list', "TicketController@viewTickets")->name('list');
         Route::get('create', "TicketController@create");
         Route::get('{id}/edit', "TicketController@edit");
         Route::get('{id}/view', "TicketController@view");

@@ -66,7 +66,6 @@
         <!--assigned users-->
         @if(count($task->assigned ?? []) > 0)
         @foreach($task->assigned->take(2) as $user)
-        
         <?php
         $firstNameInitial = strtoupper(substr($user->first_name, 0, 1));
         $lastNameInitial = strtoupper(substr($user->last_name, 0, 1));

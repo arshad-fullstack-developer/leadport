@@ -16,7 +16,7 @@
              always collapse left menu for small devices
             (NB: this code is in the correct place. It must run before menu is added to DOM)
          --------------------------------------------------------------------------------------->
-
+        
         <!--top nav-->
         @include('nav.topnav') @include('nav.leftmenu')
         <!--top nav-->

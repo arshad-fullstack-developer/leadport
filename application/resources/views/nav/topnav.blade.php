@@ -224,7 +224,8 @@
                     </a>
                 </li>
                 @endif
-
+                   
+                
                 <!-- add content -->
                 @if(auth()->user()->is_team && auth()->user()->can_add_content)
                 @if(config('system.settings_type') == 'standalone' || in_array(config('system.settings_saas_status'),

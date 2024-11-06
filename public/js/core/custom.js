@@ -12,7 +12,11 @@ $(document).ready(function () {
 		for(var i=0; i<goods.length; i++){
 			if(goods[i] == 'description'){
 				type = 'text';
-			}else{
+			}
+			else if (goods[i] == 'unit_type') {
+				$("tr#row-" + rowIndex + j + "").append('<td><select class="form-control custom" name="goods[' + rowIndex + '][unit_type]" id="unit_type_' + rowIndex + '"><option value="roll">Roll</option><option value="pieces">Pieces</option><option value="eur">EUR</option><option value="pallet">Pallet</option></select></td>');
+			}
+			else{
 				type = 'number';
 			}
 		  $("tr#row-"+rowIndex+j+"").append('<td><input type="'+type+'" class="form-control" name="goods['+rowIndex+']['+goods[i]+']" id="'+rowIndex+'"></td>');

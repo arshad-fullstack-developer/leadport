@@ -58,6 +58,7 @@
 <!--calendaerfull js [v6.1.13]-->
 <script src="<?php echo e(asset('public/vendor/js/fullcalendar/index.global.min.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
 <!--IMPORTANT NOTES (June 2024) - any new JS libraries added here that are booted/initiated in boot.js should also be added to the landlord footerjs.blade.js, for saas-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAB-zOugcVXjeBpcYUO2apwS7zkI8C5kG0&libraries=places&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDes7CeRfHDiNXKT1xhO2QqUB4bj3ZGD0k&libraries=places&callback=initMap"></script>
+
 
 <?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/layout/footerjs.blade.php ENDPATH**/ ?>

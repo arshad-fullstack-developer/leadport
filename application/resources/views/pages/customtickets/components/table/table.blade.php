@@ -26,6 +26,7 @@
                         </th>
                         <th class="tickets_col_department">{{ cleanLang(__('lang.load_type')) }}<span class="sorting-icons"><i class="ti-arrows-vertical"></i></span>
                         </th>
+                        <th class="tickets_col_assigned">{{ cleanLang(__('lang.assigned')) }}<span class="sorting-icons"><i class="ti-arrows-vertical"></i></th>
                         <th class="tickets_col_date">{{ cleanLang(__('lang.pickup_date')) }}<span class="sorting-icons"><i class="ti-arrows-vertical"></i></span>
                         </th>
                         <th class="tickets_col_date">{{ cleanLang(__('lang.delivery_date')) }}<span class="sorting-icons"><i class="ti-arrows-vertical"></i></span>

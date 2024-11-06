@@ -8,7 +8,7 @@
         <thead>
         <tr>
 		<th>Quantity</th>
-        <th>Units</th>
+        <th width="10%">Unit Type</th>
         <th>Description</th>
         <th>Weight (Br)</th>
 		<th>LDM</th>
@@ -29,7 +29,15 @@
             ?>
             <tr id="<?php echo e($key); ?>">
                 <td><input type="number" class="form-control" readonly  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][quantity]"          value="<?php echo e($good['quantity']); ?>"></td>
-                <td><input type="number" class="form-control" readonly  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][unit_type]"         value="<?php echo e($good['unit_type']); ?>"></td>
+                
+                <td>
+                    <select class="form-control" name="goods[<?php echo e($key); ?>][unit_type]" id="unit_type_<?php echo e($key); ?>" disabled>
+                        <option value="roll" <?php echo e($good['unit_type'] == 'roll' ? 'selected' : ''); ?>>Roll</option>
+                        <option value="pieces" <?php echo e($good['unit_type'] == 'pieces' ? 'selected' : ''); ?>>Pieces</option>
+                        <option value="eur" <?php echo e($good['unit_type'] == 'eur' ? 'selected' : ''); ?>>EUR</option>
+                        <option value="pallet" <?php echo e($good['unit_type'] == 'pallet' ? 'selected' : ''); ?>>Pallet</option>
+                    </select>
+                </td>
                 <td><input type="text"   class="form-control" readonly  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][description]"       value="<?php echo e($good['description']); ?>"></td>
                 <td><input type="number" class="form-control" readonly  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][weight]"            value="<?php echo e($good['weight']); ?>"></td>
                 <td><input type="number" class="form-control" readonly  id="<?php echo e($key); ?>"   name="goods[<?php echo e($key); ?>][ldm]"               value="<?php echo e($good['ldm']); ?>"></td>

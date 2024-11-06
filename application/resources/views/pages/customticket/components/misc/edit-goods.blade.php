@@ -9,7 +9,7 @@
         <thead>
         <tr>
 		<th>Quantity</th>
-        <th>Units</th>
+        <th width="10%">Units Type</th>
         <th>Description</th>
         <th>Weight (Br)</th>
 		<th>LDM</th>
@@ -29,7 +29,16 @@
             @endphp
             <tr id="{{$key}}">
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][quantity]"          value="{{  $good['quantity']}}"></td>
-                <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][unit_type]"         value="{{  $good['unit_type'] }}"></td>
+
+                <td>
+                    <select class="form-control" name="goods[{{ $key }}][unit_type]" id="unit_type_{{ $key }}">
+                        <option value="roll" {{ $good['unit_type'] == 'roll' ? 'selected' : '' }}>Roll</option>
+                        <option value="pieces" {{ $good['unit_type'] == 'pieces' ? 'selected' : '' }}>Pieces</option>
+                        <option value="eur" {{ $good['unit_type'] == 'eur' ? 'selected' : '' }}>EUR</option>
+                        <option value="pallet" {{ $good['unit_type'] == 'pallet' ? 'selected' : '' }}>Pallet</option>
+                    </select>
+                </td>
+
                 <td><input type="text"   class="form-control"  id="{{$key}}"   name="goods[{{$key}}][description]"       value="{{  $good['description'] }}"></td>
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][weight]"            value="{{  $good['weight'] }}"></td>
                 <td><input type="number" class="form-control"  id="{{$key}}"   name="goods[{{$key}}][ldm]"               value="{{  $good['ldm'] }}"></td>

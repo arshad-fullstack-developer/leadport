@@ -19,10 +19,13 @@ use App\Models\EventTracking;
 use App\Models\CustomTicket;
 use App\Models\CTicketGood;
 use App\Models\Lead;
+use App\Models\TicketAssigned;
+use App\Models\User;
 use Validator;
 
 class TicketController extends Controller {
 
+    
     /**
      * Display a listing of tickets
      * @param object CategoryRepository instance of the repository
@@ -30,9 +33,18 @@ class TicketController extends Controller {
      */
     public function index() {
 
-        $result   = CustomTicket::orderby('id','DESC')->get();
+        return redirect()->route('list');
+    }
 
-        $tickets  = $result?? null;
+    public function viewTickets(){
+
+        $results   = CustomTicket::orderby('id','DESC')->get();
+
+        $results->each(function ($ticket) {
+            // Manually add the assigned users for this ticket
+            $ticket->assigned = $ticket->assignedUsers();
+        });
+        $tickets  = $results ?? null;
         $page     = $this->pageSettings('tickets');
         
         return view('pages.customtickets.wrapper',compact('page','tickets'));
@@ -40,7 +52,7 @@ class TicketController extends Controller {
 
 
     public function fetchData($model) {
-
+            
             $response = $model::get();
             return $response;
     }
@@ -75,10 +87,9 @@ class TicketController extends Controller {
             $orderTypes         = $responses['orderTypes']?? null;
             $orderStatus        = $responses['orderStatus']?? null;
             $incoterms          = $responses['incoterms']?? null;
-
-
+            $assigned           = User::where('id','!=',auth()->user()->id)->get();
         //show the view
-        return view('pages.customtickets.components.create.wrapper',compact('page','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+        return view('pages.customtickets.components.create.wrapper',compact('page','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms','assigned'));
     }
 
 
@@ -156,7 +167,8 @@ class TicketController extends Controller {
     public function store(Request $request) {
 
 
-        //dd($request->deliveryRemarks);
+        //dd($request->all());
+        
         $goods = [];
         $goods = $request->goods;
 
@@ -190,7 +202,7 @@ class TicketController extends Controller {
                 'event_creatorid' => auth()->id() ?? 1,
                 'event_item' => 'custom-ticket',
                 'event_item_id' => 0,
-                'event_item_lang' => 'event_closed_ticket',
+                'event_item_lang' => 'event_opend_ticket',
                 'event_item_content'  => $request->shipper_name,
                 'event_item_content2' => $request->consignee_name,
                 'event_parent_type' => 'ticket',
@@ -215,17 +227,11 @@ class TicketController extends Controller {
                 $eventtracking->resource_id = 0;
                 $eventtracking->save();
 
-                $redirectUrl = route('ctickets.index');
-
-                return response()->json(array(
-                    'notification' => [
-                        'type' => 'success',
-                        'value' => __('lang.request_has_been_completed'),
-                    ],
-                    'skip_dom_reset' => true,
-                    'redirect' => $redirectUrl,
-                ));
             }
+
+
+            $jsondata['redirect_url'] = url('ctickets/index');
+            return response()->json($jsondata);
             
         }else{
             return response()->json(array(
@@ -238,6 +244,7 @@ class TicketController extends Controller {
         }
 
     }
+
 
     /**
      * Display the specified ticket
@@ -297,10 +304,11 @@ class TicketController extends Controller {
         $orderTypes        = $orderTypes;
         $orderStatus       = $orderStatus;
         $incoterms         = $incoterms;
+        $assigned          = User::where('id','!=',auth()->user()->id)->get();
 
         //dd($ticket);
     //response
-    return view('pages.customticket.wrapper',compact('page','ticket','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+    return view('pages.customticket.wrapper',compact('page','ticket','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms','assigned'));
     
   }
 
@@ -323,6 +331,7 @@ class TicketController extends Controller {
                 'orderStatus'       => 'App\Models\CTicketStatus',
                 'incoterms'         => 'App\Models\CTicketIncoterms',
              ]; 
+             
             
             
             // Batch processing of requests
@@ -361,10 +370,10 @@ class TicketController extends Controller {
             $orderTypes        = $orderTypes;
             $orderStatus       = $orderStatus;
             $incoterms         = $incoterms;
-    
-            //dd($ticket);
+            $assigned          = User::where('id','!=',auth()->user()->id)->get();
+
         //response
-        return view('pages.customticket.wrapper',compact('page','ticket','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms'));
+        return view('pages.customticket.wrapper',compact('page','ticket','loadType','countries','transportChannels','carriageType','orderTypes','orderStatus','incoterms','assigned'));
     }
 
     
@@ -413,7 +422,7 @@ class TicketController extends Controller {
                     'event_creatorid' => auth()->id() ?? 1,
                     'event_item' => 'lead',
                     'event_item_id' => $lead->lead_id.'/'.$leadTitle,
-                    'event_item_lang' => 'event_closed_leads',
+                    'event_item_lang' => 'event_opend_lead',
                     'event_item_content'  => $request->shipper_name,
                     'event_item_content2' => $request->consignee_name,
                     'event_parent_type' => 'leads',

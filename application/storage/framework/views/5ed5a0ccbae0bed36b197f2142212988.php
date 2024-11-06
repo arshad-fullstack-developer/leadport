@@ -88,6 +88,22 @@
                         </div>
                            
                       </div>
+
+                      <div class="row mt-3" >
+                        <div class="col-sm-12">
+
+                          <label for="inputState" class="form-label fw-bold">Assigned </label>
+                            <select name="assigned" id="assigned"
+                            class="form-control form-control-sm select2-basic select2-multiple select2-tags select2-hidden-accessible"
+                            multiple="multiple" tabindex="-1" aria-hidden="true">
+                            <?php $__currentLoopData = $assigned; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($user->type =='team'): ?>
+                            <option value="<?php echo e($user->id); ?>"><?php echo e($user->first_name); ?> <?php echo e($user->last_name); ?></option>
+                            <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                          </select>
+                        </div>
+                      </div>
                   </div>
                   <div class="col-sm-12 col-lg-6 mt-4 " >
                     <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" frameborder="0" scrolling="off" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100vw&height=500&hl=en&q=nawabshah&t=&z=13&ie=UTF8&iwloc=B&output=embed"></iframe></div>
@@ -327,7 +343,10 @@
             <div class="row mt-3">
                         <div class="col-sm-4 col-lg-2">
                         <label for="temp" class="form-label fw-bold">Temp Sensitive</label>
-                        <input type="text" class="form-control" name="temp_sensitive" placeholder="Type sensitive here" aria-label="temp">
+                        <select class="form-control" name="temp_sensitive">
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                        </select>
                     </div>
                     <div class="col-sm-4 col-lg-2">
                         <label for="range" class="form-label fw-bold">Temp Range</label>
@@ -335,7 +354,10 @@
                     </div>
                     <div class="col-sm-4 col-lg-2">
                     <label for="adr" class="form-label fw-bold">ADR</label>
-                    <input type="text" class="form-control" name="adr" placeholder="Type ADR here" aria-label="adr">
+                    <select class="form-control" name="adr">
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                      </select>
                 </div>
                 <div class="col-sm-4 col-lg-2">
                     <label for="code" class="form-label fw-bold">UN Code</label>
@@ -343,7 +365,10 @@
                 </div>
                 <div class="col-sm-4 col-lg-2">
                 <label for="fragile" class="form-label fw-bold">Fragile</label>
-                <input type="text" class="form-control" name="fragile" placeholder="Type Fragile here" aria-label="fragile">
+                <select class="form-control" name="fragile">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
             </div>
             <div class="col-sm-4 col-lg-2">
                 <label for="notes" class="form-label fw-bold">Notes</label>

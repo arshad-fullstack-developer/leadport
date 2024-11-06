@@ -92,11 +92,32 @@
                         </div>
                            
                       </div>
+
+                      <div class="row mt-3" >
+                        <div class="col-sm-12">
+                    
+                          <label for="inputState" class="form-label fw-bold">Assigned</label>
+                          <select name="assigned" id="assigned"
+                            class="form-control form-control-sm select2-basic select2-multiple select2-tags select2-hidden-accessible"
+                            multiple="multiple" tabindex="-1" aria-hidden="true" disabled>
+                            @foreach($assigned as $user)
+                                @if($user->type == 'team')
+                                    <option value="{{ $user->id }}" 
+                                        @if(is_array($ticket->assigned) && in_array($user->id, $ticket->assigned)) selected @endif>
+                                        {{ $user->first_name }} {{ $user->last_name }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+
+
+                        </div>
+                      </div>
                   </div>
                   <div class="col-sm-12 col-lg-6 mt-4">
                     <div id="map" class="gmap_iframe">
                     </div>
-                    <input type="hidden" id="pickupLocation"   name="orgion"         value="{{  json_encode($ticket['orgion']) }}">
+                    <input type="hidden" id="pickupLocation"   name="origin"         value="{{  json_encode($ticket['origin']) }}">
                     <input type="hidden" id="deliveryLocation" name="destinations"   value="{{  json_encode($ticket['destination']) }}">
                   </div>
             </div>
@@ -345,15 +366,21 @@
             <div class="row mt-3">
                         <div class="col-sm-4 col-lg-2">
                         <label for="temp" class="form-label fw-bold">Temp Sensitive</label>
-                        <input type="text" class="form-control" readonly name="temp_sensitive" placeholder="Type sensitive here" value="{{ $ticket['temp_sensitive'] }}" aria-label="temp">
-                    </div>
+                        <select class="form-control" name="temp_sensitive">
+                        <option value="yes" {{ isset($ticket['temp_sensitive']) && $ticket['temp_sensitive'] == 'yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="no" {{ isset($ticket['temp_sensitive']) && $ticket['temp_sensitive'] == 'no' ? 'selected' : '' }}>No</option>
+                        </select>
+                      </div>
                     <div class="col-sm-4 col-lg-2">
                         <label for="range" class="form-label fw-bold">Temp Range</label>
                         <input type="text" class="form-control" readonly name="temp_range" placeholder="Type Range here" value="{{ $ticket['temp_range'] }}" aria-label="range">
                     </div>
                     <div class="col-sm-4 col-lg-2">
                     <label for="adr" class="form-label fw-bold">ADR</label>
-                    <input type="text" class="form-control" readonly name="adr" placeholder="Type ADR here" value="{{ $ticket['adr'] }}" aria-label="adr">
+                    <select class="form-control" name="adr">
+                        <option value="yes" {{ isset($ticket['adr']) && $ticket['adr'] == 'yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="no" {{ isset($ticket['adr']) && $ticket['adr'] == 'no' ? 'selected' : '' }}>No</option>
+                    </select>
                 </div>
                 <div class="col-sm-4 col-lg-2">
                     <label for="code" class="form-label fw-bold">UN Code</label>
@@ -361,7 +388,10 @@
                 </div>
                 <div class="col-sm-4 col-lg-2">
                 <label for="fragile" class="form-label fw-bold">Fragile</label>
-                <input type="text" class="form-control" readonly name="fragile" placeholder="Type Fragile here" value="{{ $ticket['fragile'] }}" aria-label="fragile">
+                <select class="form-control" name="fragile">
+                        <option value="yes" {{ isset($ticket['fragile']) && $ticket['fragile'] == 'yes' ? 'selected' : '' }}>Yes</option>
+                        <option value="no" {{ isset($ticket['fragile']) && $ticket['fragile'] == 'no' ? 'selected' : '' }}>No</option>
+                    </select>
             </div>
             <div class="col-sm-4 col-lg-2">
                 <label for="notes" class="form-label fw-bold">Notes</label>

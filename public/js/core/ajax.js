@@ -1835,12 +1835,7 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 			var result = JSON.stringify(data);
 			result     = JSON.parse(result);
 
-			// if (result.redirect) {
-			// 	window.location.href = result.redirect; // Redirect the browser
-			// } else {
-			// 	// Handle other success scenarios
-			// 	console.log(response.data.message);
-			// }
+
 
 			//process the payload
 			NXAJAX.getPayload(data);
