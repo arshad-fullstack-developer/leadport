@@ -367,7 +367,7 @@
             <div class="row mt-3">
                         <div class="col-sm-4 col-lg-2">
                         <label for="temp" class="form-label fw-bold">Temp Sensitive</label>
-                        <select class="form-control" name="temp_sensitive">
+                        <select class="form-control" name="temp_sensitive" disabled>
                         <option value="yes" <?php echo e(isset($ticket['temp_sensitive']) && $ticket['temp_sensitive'] == 'yes' ? 'selected' : ''); ?>>Yes</option>
                         <option value="no" <?php echo e(isset($ticket['temp_sensitive']) && $ticket['temp_sensitive'] == 'no' ? 'selected' : ''); ?>>No</option>
                         </select>
@@ -378,7 +378,7 @@
                     </div>
                     <div class="col-sm-4 col-lg-2">
                     <label for="adr" class="form-label fw-bold">ADR</label>
-                    <select class="form-control" name="adr">
+                    <select class="form-control" name="adr" disabled>
                         <option value="yes" <?php echo e(isset($ticket['adr']) && $ticket['adr'] == 'yes' ? 'selected' : ''); ?>>Yes</option>
                         <option value="no" <?php echo e(isset($ticket['adr']) && $ticket['adr'] == 'no' ? 'selected' : ''); ?>>No</option>
                     </select>
@@ -389,7 +389,7 @@
                 </div>
                 <div class="col-sm-4 col-lg-2">
                 <label for="fragile" class="form-label fw-bold">Fragile</label>
-                <select class="form-control" name="fragile">
+                <select class="form-control" name="fragile" disabled>
                         <option value="yes" <?php echo e(isset($ticket['fragile']) && $ticket['fragile'] == 'yes' ? 'selected' : ''); ?>>Yes</option>
                         <option value="no" <?php echo e(isset($ticket['fragile']) && $ticket['fragile'] == 'no' ? 'selected' : ''); ?>>No</option>
                     </select>
@@ -483,10 +483,10 @@
         hiddenInput.value = selectElement.options[selectElement.selectedIndex].text;
     });
 }
-
   window.onload = setHiddenFields;
-
- 
-
 </script>
+
+
+
+
 <?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/customticket/components/view.blade.php ENDPATH**/ ?>

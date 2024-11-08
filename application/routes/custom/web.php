@@ -32,7 +32,8 @@
         Route::get('list', "TicketController@viewTickets")->name('list');
         Route::get('create', "TicketController@create");
         Route::get('{id}/edit', "TicketController@edit");
-        Route::get('{id}/view', "TicketController@view");
+        Route::get('{id}/view', "TicketController@view")->name('view');
+        Route::get('{id}/list', "TicketController@viewDetails")->name('listView');
         Route::post('store', "TicketController@store");
         Route::post('{id}/delete-ticket', "TicketController@destroyTicket");
         Route::post('{id}/update-details', "TicketController@updateTicketDetails");

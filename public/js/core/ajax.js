@@ -1835,7 +1835,18 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 			var result = JSON.stringify(data);
 			result     = JSON.parse(result);
 
-
+			if (result.notification) {
+				// Display the notification using your NX.notification function
+				NX.notification({
+					message: result.notification.value,
+					type: result.notification.type // success or error
+				});
+			}
+	
+			// After showing the notification, redirect the user
+			if (result.redirect_url) {
+				window.location.href = result.redirect_url;  // Perform the redirect
+			}
 
 			//process the payload
 			NXAJAX.getPayload(data);

@@ -36,6 +36,11 @@ class TicketController extends Controller {
         return redirect()->route('list');
     }
 
+    public function viewDetails($id) {
+
+        return redirect()->route('view', ['id' => $id]);
+    }
+
     public function viewTickets(){
 
         $results   = CustomTicket::orderby('id','DESC')->get();
@@ -229,8 +234,14 @@ class TicketController extends Controller {
 
             }
 
+            $jsondata = [
+                'notification' => [
+                    'type' => 'success',
+                    'value' => __('lang.request_has_been_completed'),
+                ],
+                'redirect_url' => url('ctickets/index')  // URL to redirect the user
+            ];
 
-            $jsondata['redirect_url'] = url('ctickets/index');
             return response()->json($jsondata);
             
         }else{
@@ -496,15 +507,18 @@ class TicketController extends Controller {
         }
           
         if(isset($updateTicket)){
-            $redirectUrl = route('ctickets.index');
-            return response()->json(array(
+
+            // Your JSON response
+            $jsondata = [
                 'notification' => [
                     'type' => 'success',
                     'value' => __('lang.request_has_been_completed'),
                 ],
-                'skip_dom_reset' => true,
-                'redirect' => $redirectUrl,
-            ));
+                'redirect_url' => url('ctickets/'.$id.'/list')  // URL to redirect the user
+            ];
+
+            return response()->json($jsondata);
+
         }else{
             return response()->json(array(
                 'notification' => [
