@@ -4729,6 +4729,11 @@ Buttons
     background: #23D26B;
     border-color: transparent; }
 
+  .btn-success.disabled, .btn-success:disabled {
+      color: #fff;
+      background-color: #23D26B;
+      border-color: #23D26B;
+  }
 .btn-info,
 .btn-info.disabled {
   background: #23D26B;

@@ -40,15 +40,15 @@ class CustomTicket extends Model
         $this->attributes['deliveryRemarks'] = json_encode($value);
     }
 
-    public function setOriginAttribute($value)
-    {
-        $this->attributes['origin'] = json_encode($value);
-    }
+    // public function setOriginAttribute($value)
+    // {
+    //     $this->attributes['origin'] = json_encode($value);
+    // }
 
-    public function setDestinationAttribute($value)
-    {
-        $this->attributes['destination'] = json_encode($value);
-    }
+    // public function setDestinationAttribute($value)
+    // {
+    //     $this->attributes['destination'] = json_encode($value);
+    // }
 
     public function setAssignedAttribute($value)
     {
@@ -65,15 +65,15 @@ class CustomTicket extends Model
         return json_decode($value, true);
     }
 
-    public function getOriginAttribute($value)
-    {
-        return json_decode($value, true);
-    }
+    // public function getOriginAttribute($value)
+    // {
+    //     return json_decode($value, true);
+    // }
 
-    public function getDestinationAttribute($value)
-    {
-        return json_decode($value, true);
-    }
+    // public function getDestinationAttribute($value)
+    // {
+    //     return json_decode($value, true);
+    // }
 
     public function getAssignedAttribute($value)
     {

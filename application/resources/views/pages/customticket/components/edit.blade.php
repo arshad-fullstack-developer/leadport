@@ -113,12 +113,12 @@
                   <div class="col-sm-12 col-lg-6 mt-4">
                     <div id="map" class="gmap_iframe">
                     </div>
-                    <input type="hidden" id="pickupLocation"   name="origin"         value="{{  json_encode($ticket['origin']) }}">
-                    <input type="hidden" id="deliveryLocation" name="destination"    value="{{  json_encode($ticket['destination']) }}">
+                    <input type="hidden" id="pickupLocation"   name="origin"      value="{{ $ticket['origin'] }}">
+                    <input type="hidden" id="deliveryLocation" name="destination" value="{{ $ticket['destination'] }}">
                   </div>
             </div>
         <!-- form row two -->
-            <div class="row mt-3 "  >
+            <div class="row mt-3">
 
               <div class=" col-sm-12 col-lg-6">
                   <h5><i class="bi bi-backpack-fill"></i>Shipper</h5>
@@ -163,7 +163,6 @@
                           <div class="col-12 mt-3">
                             <label for="Address" class="form-label fw-bold">Address </label>
                             <input type="text" class="form-control" placeholder="Address" name="shipping_address" value="{{ $ticket['shipping_address'] }}" aria-label="Address" onkeypress="initAutocomplete('pickup_address')" id="pickup_address">
-                            <input type="hidden" name="origin" id="origin">
                           </div>
 
 
@@ -288,7 +287,6 @@
                           <div class="col-12 mt-3">
                             <label for="Address" class="form-label fw-bold">Address</label>
                             <input type="text" class="form-control" placeholder="Address" name="delivery_address" value="{{ $ticket['delivery_address'] }}" aria-label="Address" onkeypress="initAutocomplete('delivery_address')" id="delivery_address">
-                            <input type="hidden" name="destination" id="destination">
                           </div>
 
                           <div id="delivery-container" class="col-12 mt-3 delivery">
@@ -365,7 +363,6 @@
                   
                 </div>
             </div>
-            
           </div>
 
       <!-- form row four -->
@@ -415,8 +412,6 @@
           <div class="row mt-2"> <!-- Optional mt-2 for margin -->
               <input type="number" class="form-control" name="chargeable_weight_total" placeholder="Chargeable Weight Total" value="{{ $ticket['chargeable_weight_total'] }}" aria-label="notes" id="ChargeableWeightTotal">
           </div>
-
-         
                             <!-- <div class="form-group">
                                 <textarea class="tinymce-textarea" name="ticket_message" id="ticket_message"
                                     rows="15"></textarea>
@@ -455,69 +450,3 @@
         </div>
     </div>
 </form>
-
-<script>
-    var pickupdata   = JSON.parse(document.getElementById("pickupLocation").value);
-    var deliverydata = JSON.parse(document.getElementById("deliveryLocation").value);
-    const pickupLocation   = { lat: pickupdata.lat,   lng: pickupdata.lng }; 
-    const deliveryLocation = { lat: deliverydata.lat, lng: deliverydata.lng };
-    console.log(pickupdata.lat)
-    function initMap() {
-            // Create a map centered at the midpoint between pickup and delivery locations
-            const mapCenter = {
-                lat: (pickupLocation.lat + deliveryLocation.lat) / 2,
-                lng: (pickupLocation.lng + deliveryLocation.lng) / 2
-            };
-
-            const map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 5,
-                center: mapCenter
-            });
-
-            // Add a marker for pickup location
-            new google.maps.Marker({
-                position: pickupLocation,
-                map: map,
-                title: 'Pickup Location'
-            });
-
-            // Add a marker for delivery location
-            new google.maps.Marker({
-                position: deliveryLocation,
-                map: map,
-                title: 'Delivery Location'
-            });
-
-            // Optional: Draw a line between pickup and delivery locations
-            const flightPath = new google.maps.Polyline({
-                path: [pickupLocation, deliveryLocation],
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2
-            });
-
-            flightPath.setMap(map);
-    }
-
-  function setHiddenFields() {
-    const updates = [
-        { selectId: 'orderType', hiddenId: 'OrderType' },
-        { selectId: 'incoterms', hiddenId: 'Incoterms' },
-        { selectId: 'loadType', hiddenId: 'LoadType' },
-        { selectId: 'shipperCountry', hiddenId: 'ShipperCountry' },
-        { selectId: 'consigneeCountry', hiddenId: 'ConsigneeCountry' }
-    ];
-
-    updates.forEach(({ selectId, hiddenId }) => {
-        const selectElement = document.getElementById(selectId);
-        const hiddenInput = document.getElementById(hiddenId);
-        hiddenInput.value = selectElement.options[selectElement.selectedIndex].text;
-    });
-}
-
-  window.onload = setHiddenFields;
-
- 
-
-</script>

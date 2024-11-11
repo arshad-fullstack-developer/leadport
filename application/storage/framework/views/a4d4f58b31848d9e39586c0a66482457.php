@@ -111,15 +111,14 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
 
-
                         </div>
                       </div>
                   </div>
                   <div class="col-sm-12 col-lg-6 mt-4">
                     <div id="map" class="gmap_iframe">
                     </div>
-                    <input type="hidden" id="pickupLocation"   name="origin"         value="<?php echo e(json_encode($ticket['origin'])); ?>">
-                    <input type="hidden" id="deliveryLocation" name="destinations"   value="<?php echo e(json_encode($ticket['destination'])); ?>">
+                    <input type="hidden" id="pickupLocation"   name="origin"        value="<?php echo e($ticket['origin']); ?>">
+                    <input type="hidden" id="deliveryLocation" name="destination"   value="<?php echo e($ticket['destination']); ?>">
                   </div>
             </div>
         <!-- form row two -->
@@ -409,11 +408,19 @@
           <div class="row mt-2"> <!-- Optional mt-2 for margin -->
               <input type="number" class="form-control" readonly name="chargeable_weight_total" placeholder="Chargeable Weight Total" value="<?php echo e($ticket['chargeable_weight_total']); ?>" aria-label="notes" id="ChargeableWeightTotal">
           </div>
+          <?php
+            // Extract user IDs from assigned field (array of User objects or arrays with 'id' properties)
+            $assignedUserIds = collect($ticket['assigned'])->toArray(); // Get an array of assigned user IDs
+            $isAssigned = in_array(auth()->user()->id, $assignedUserIds); // Check if the logged-in user is assigned to the ticket
+           ?>
+                      
+                          <?php if($isAssigned): ?>
                           <div class="text-lg-right"> 
                                    <a href="<?php echo e(url('/ctickets/'.$ticket['id'].'/edit')); ?>" class="btn btn-rounded-x btn-success m-t-20">
                                       Edit
                                   </a>
                           </div>
+                          <?php endif; ?>
 
                         </div>
                     </div>
@@ -423,68 +430,6 @@
     </div>
 </form>
 
-<script>
-    var pickupdata   = JSON.parse(document.getElementById("pickupLocation").value);
-    var deliverydata = JSON.parse(document.getElementById("deliveryLocation").value);
-
-    const pickupLocation   = { lat: pickupdata.lat,   lng: pickupdata.lng }; 
-    const deliveryLocation = { lat: deliverydata.lat, lng: deliverydata.lng };
-    
-    function initMap() {
-            // Create a map centered at the midpoint between pickup and delivery locations
-            const mapCenter = {
-                lat: (pickupLocation.lat + deliveryLocation.lat) / 2,
-                lng: (pickupLocation.lng + deliveryLocation.lng) / 2
-            };
-
-            const map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 5,
-                center: mapCenter
-            });
-
-            // Add a marker for pickup location
-            new google.maps.Marker({
-                position: pickupLocation,
-                map: map,
-                title: 'Pickup Location'
-            });
-
-            // Add a marker for delivery location
-            new google.maps.Marker({
-                position: deliveryLocation,
-                map: map,
-                title: 'Delivery Location'
-            });
-
-            // Optional: Draw a line between pickup and delivery locations
-            const flightPath = new google.maps.Polyline({
-                path: [pickupLocation, deliveryLocation],
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2
-            });
-
-            flightPath.setMap(map);
-    }
-
-  function setHiddenFields() {
-    const updates = [
-        { selectId: 'orderType', hiddenId: 'OrderType' },
-        { selectId: 'incoterms', hiddenId: 'Incoterms' },
-        { selectId: 'loadType', hiddenId: 'LoadType' },
-        { selectId: 'shipperCountry', hiddenId: 'ShipperCountry' },
-        { selectId: 'consigneeCountry', hiddenId: 'ConsigneeCountry' }
-    ];
-
-    updates.forEach(({ selectId, hiddenId }) => {
-        const selectElement = document.getElementById(selectId);
-        const hiddenInput = document.getElementById(hiddenId);
-        hiddenInput.value = selectElement.options[selectElement.selectedIndex].text;
-    });
-}
-  window.onload = setHiddenFields;
-</script>
 
 
 

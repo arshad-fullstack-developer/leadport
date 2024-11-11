@@ -28,6 +28,69 @@ $(document).ready(function () {
 
 });
 
+
+function initMap() {
+	// Create a map centered at the midpoint between pickup and delivery locations
+
+	var pickupdata   = JSON.parse(document.getElementById("pickupLocation").value);
+    var deliverydata = JSON.parse(document.getElementById("deliveryLocation").value);
+
+    const pickupLocation   = { lat: pickupdata.lat,   lng: pickupdata.lng }; 
+    const deliveryLocation = { lat: deliverydata.lat, lng: deliverydata.lng };
+
+	const mapCenter = {
+		lat: (pickupLocation.lat + deliveryLocation.lat) / 2,
+		lng: (pickupLocation.lng + deliveryLocation.lng) / 2
+	};
+
+	const map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 5,
+		center: mapCenter
+	});
+
+	// Add a marker for pickup location
+	new google.maps.Marker({
+		position: pickupLocation,
+		map: map,
+		title: 'Pickup Location'
+	});
+
+	// Add a marker for delivery location
+	new google.maps.Marker({
+		position: deliveryLocation,
+		map: map,
+		title: 'Delivery Location'
+	});
+
+	// Optional: Draw a line between pickup and delivery locations
+	const flightPath = new google.maps.Polyline({
+		path: [pickupLocation, deliveryLocation],
+		geodesic: true,
+		strokeColor: '#FF0000',
+		strokeOpacity: 1.0,
+		strokeWeight: 2
+	});
+
+	flightPath.setMap(map);
+}
+
+
+function setHiddenFields() {
+    const updates = [
+        { selectId: 'orderType', hiddenId: 'OrderType' },
+        { selectId: 'incoterms', hiddenId: 'Incoterms' },
+        { selectId: 'loadType', hiddenId: 'LoadType' },
+        { selectId: 'shipperCountry', hiddenId: 'ShipperCountry' },
+        { selectId: 'consigneeCountry', hiddenId: 'ConsigneeCountry' }
+    ];
+
+    updates.forEach(({ selectId, hiddenId }) => {
+        const selectElement = document.getElementById(selectId);
+        const hiddenInput = document.getElementById(hiddenId);
+        hiddenInput.value = selectElement.options[selectElement.selectedIndex].text;
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 	const currentYear = new Date().getFullYear();
 	const minDate = `${currentYear}-01-01`; // Minimum date format YYYY-MM-DD
@@ -55,19 +118,17 @@ function initAutocomplete(id) {
 		if (place.geometry) {
 			
 			if(id == 'pickup_address'){
-
 				var origin = {
 					'lat' : place.geometry.location.lat(),
 					'lng' : place.geometry.location.lng(),
 				}
-				
-				document.getElementById('origin').value = JSON.stringify(origin);;
+				document.getElementById('pickupLocation').value = JSON.stringify(origin);;
 			}else{
 				var destination = {
 					'lat' : place.geometry.location.lat(),
 					'lng' : place.geometry.location.lng(),
 				}
-				document.getElementById('destination').value = JSON.stringify(destination);;
+				document.getElementById('deliveryLocation').value = JSON.stringify(destination);;
 			}
 
         } else {

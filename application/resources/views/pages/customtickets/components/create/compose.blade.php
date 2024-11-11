@@ -108,6 +108,8 @@
                   <div class="col-sm-12 col-lg-6 mt-4 " >
                     <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" frameborder="0" scrolling="off" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100vw&height=500&hl=en&q=nawabshah&t=&z=13&ie=UTF8&iwloc=B&output=embed"></iframe></div>
                     </div>
+                    <input type="hidden" id="pickupLocation" name="origin">
+                    <input type="hidden" id="deliveryLocation" name="destination">
                   </div>
             </div>
         <!-- form row two -->
@@ -156,7 +158,6 @@
                           <div class="col-12 mt-3">
                             <label for="Address" class="form-label fw-bold">Address </label>
                             <input type="text" class="form-control" placeholder="Address" name="shipping_address" aria-label="Address" onkeypress="initAutocomplete('pickup_address')" id="pickup_address">
-                            <input type="hidden" name="origin" id="origin">
                           </div>
 
 
@@ -271,7 +272,6 @@
                           <div class="col-12 mt-3">
                             <label for="Address" class="form-label fw-bold">Address</label>
                             <input type="text" class="form-control" placeholder="Address" name="delivery_address" aria-label="Address" onkeypress="initAutocomplete('delivery_address')" id="delivery_address">
-                            <input type="hidden" name="destination" id="destination">
                           </div>
 
                           <div id="delivery-container" class="col-12 mt-3 delivery">

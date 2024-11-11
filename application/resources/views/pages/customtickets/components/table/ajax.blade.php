@@ -97,7 +97,7 @@
         @endif
 
         <a href="{{ urlResource('/ctickets/'.$ticket['id'].'/view') }}" title="{{ cleanLang(__('lang.view')) }}"
-            class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
+            class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm">
             <i class="ti-new-window"></i>
         </a>
         </span>
