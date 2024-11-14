@@ -16,7 +16,7 @@
              always collapse left menu for small devices
             (NB: this code is in the correct place. It must run before menu is added to DOM)
          --------------------------------------------------------------------------------------->
-        
+
         <!--top nav-->
         @include('nav.topnav') @include('nav.leftmenu')
         <!--top nav-->
@@ -78,7 +78,7 @@
 
 <!--[PRINTING]-->
 @if(config('visibility.page_rendering') == 'print-page')
-<script src="{{ asset('public/js/dynamic/print.js') }}?v={{ config('system.versioning') }}"></script>
+<script src="public/js/dynamic/print.js?v={{ config('system.versioning') }}"></script>
 @endif
 
 </html>

@@ -2,8 +2,14 @@
 <!--each row-->
 <tr id="team_{{ $team->id }}">
     <td class="team_col_first_name">
-        <img src="{{ $team->avatar }}" alt="user" class="img-circle avatar-xsmall"> {{ $team->first_name }}
-        {{ runtimeCheckBlank($team->last_name) }}
+        <img src="{{ $team->avatar }}" alt="user" class="img-circle avatar-xsmall">
+
+        <a href="javascript:void(0);" class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            data-toggle="modal" data-target="#commonModal" data-url="{{ url('contacts/'.$team->id) }}"
+            data-loading-target="commonModalBody" data-modal-title="" data-modal-size="modal-md"
+            data-header-close-icon="hidden" data-header-extra-close-icon="visible" data-footer-visibility="hidden"
+            data-action-ajax-loading-target="commonModalBody">{{ $team->first_name }} {{ runtimeCheckBlank($team->last_name) }}
+        </a>
         <!--administrator-->
         @if($team->primary_admin == 'yes')
         <span class="sl-icon-star text-warning p-l-5" data-toggle="tooltip"

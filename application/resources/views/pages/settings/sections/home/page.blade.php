@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-notification-imaged">
-            <!-- <img src="{{ url('/') }}/public/images/settings.png" alt="Application Settings" /> -->
+            <img src="{{ url('/') }}/public/images/settings.png" alt="Application Settings" />
             <div class="message">
                 <h3>{{ cleanLang(__('lang.setting_welcome_message')) }}</h2>
             </div>
@@ -23,7 +23,7 @@
 
             <div class="m-t-20">
                 <a href="{{ url('/app/settings/updates') }}"
-                    class="btn btn-rounded-x btn-sm btn-success waves-effect text-left">@lang('lang.check_for_updates')</a>
+                    class="btn btn-rounded-x btn-sm btn-danger waves-effect text-left">@lang('lang.check_for_updates')</a>
             </div>
             @endif
         </div>

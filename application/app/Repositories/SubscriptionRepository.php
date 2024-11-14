@@ -12,7 +12,6 @@ namespace App\Repositories;
 use App\Models\Subscription;
 use App\Repositories\StripeRepository;
 use App\Repositories\UserRepository;
-use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Log;
@@ -67,6 +66,13 @@ class SubscriptionRepository {
         $subscriptions->leftJoin('users', 'users.id', '=', 'subscriptions.subscription_creatorid');
         $subscriptions->leftJoin('categories', 'categories.category_id', '=', 'subscriptions.subscription_categoryid');
         $subscriptions->leftJoin('projects', 'projects.project_id', '=', 'subscriptions.subscription_projectid');
+        $subscriptions->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'subscriptions.subscription_id')
+                ->where('pinned.pinnedresource_type', '=', 'subscription');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -251,10 +257,9 @@ class SubscriptionRepository {
             }
         } else {
             //default sorting
-            $subscriptions->orderBy(
-                'subscription_id',
-                'DESC'
-            );
+            $subscriptions->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('subscription_id', 'desc');
         }
 
         //stats: - overdue

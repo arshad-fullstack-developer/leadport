@@ -19,7 +19,7 @@
     <div class="text-right hidden p-t-30" id="webform-builder-buttons-container">
         <input type="hidden" name="webform-builder-payload" id="webform-builder-payload">
         <button type="submit" id="webform-builder-save-button"
-            class="btn btn-rounded-x btn-success waves-effect text-left"
+            class="btn btn-rounded-x btn-danger waves-effect text-left"
             data-url="{{ url('settings/formbuilder/'.$webform->webform_id.'/build') }}"
             data-loading-target="webform-builder-buttons-container" data-ajax-type="POST" data-type="form"
             data-form-id="webform-builder-buttons-container" data-button-loading-annimation="yes"

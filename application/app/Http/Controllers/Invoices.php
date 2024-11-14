@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\PinnedRepository;
 use App\Http\Requests\Invoices\InvoiceClone;
 use App\Http\Requests\Invoices\InvoiceRecurrringSettings;
 use App\Http\Requests\Invoices\InvoiceSave;
@@ -24,6 +25,7 @@ use App\Http\Responses\Invoices\DestroyResponse;
 use App\Http\Responses\Invoices\EditResponse;
 use App\Http\Responses\Invoices\IndexResponse;
 use App\Http\Responses\Invoices\PDFResponse;
+use App\Http\Responses\Invoices\PinningResponse;
 use App\Http\Responses\Invoices\PublishResponse;
 use App\Http\Responses\Invoices\PublishScheduledResponse;
 use App\Http\Responses\Invoices\RecurringSettingsResponse;
@@ -43,6 +45,7 @@ use App\Http\Responses\Pay\TapPaymentResponse;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\CloneInvoiceRepository;
+use App\Repositories\CustomFieldsRepository;
 use App\Repositories\DestroyRepository;
 use App\Repositories\EmailerRepository;
 use App\Repositories\EventRepository;
@@ -67,7 +70,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use App\Repositories\CustomFieldsRepository;
 use Image;
 use Intervention\Image\Exception\NotReadableException;
 use Validator;
@@ -124,7 +126,7 @@ class Invoices extends Controller {
      */
     protected $invoicegenerator;
 
-        /**
+    /**
      * The custom fields repository
      */
     protected $customrepo;
@@ -1521,6 +1523,27 @@ class Invoices extends Controller {
         $fields = $this->customrepo->search();
 
         return $fields;
+    }
+
+    /**
+     * toggle pinned state of fooos
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'invoice');
+
+        //reponse payload
+        $payload = [
+            'invoice_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

@@ -33,7 +33,7 @@ class LeadsImport implements ToModel, WithStartRow, WithHeadingRow, WithValidati
             'lead_email' => $row['email'] ?? '',
             'lead_title' => $row['title'] ?? '',
             'lead_value' => $row['value'] ?? '',
-            'lead_phone' => $row['telephone'] ?? '',
+            'lead_phone' => (string) $row['telephone'] ?? '',
             'lead_source' => $row['source'] ?? '',
             'lead_company_name' => $row['companyname'] ?? '',
             'lead_job_position' => $row['jobposition'] ?? '',

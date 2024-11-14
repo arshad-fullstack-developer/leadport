@@ -366,12 +366,18 @@ function runtimeLandlordCronConfig() {
 
     //save to config
     config([
-        'mail.driver' => $settings->settings_email_server_type,
-        'mail.host' => $settings->settings_email_smtp_host,
-        'mail.port' => $settings->settings_email_smtp_port,
-        'mail.username' => $settings->settings_email_smtp_username,
-        'mail.password' => $settings->settings_email_smtp_password,
-        'mail.encryption' => ($settings->settings_email_smtp_encryption == 'none') ? '' : $settings->settings_email_smtp_encryption,
+        'mail.default' => $settings->settings_email_server_type,
+        'mail.mailers.smtp' => [
+            'transport' => 'smtp',
+            'host' => $settings->settings_email_smtp_host,
+            'port' => $settings->settings_email_smtp_port,
+            'encryption' => ($settings->settings_email_smtp_encryption == 'none') ? '' : $settings->settings_email_smtp_encryption,
+            'username' => $settings->settings_email_smtp_username,
+            'password' => $settings->settings_email_smtp_password,
+            'url' => env('MAIL_URL'),
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN'),
+        ],
         'mail.data' => [
             'company_name' => config('system.settings_company_name'),
             'todays_date' => runtimeDate(date('Y-m-d')),
@@ -389,7 +395,7 @@ function runtimeLandlordCronConfig() {
  */
 function dynamicStyleBackgroundImage($dir = "", $file = "") {
 
-    return "style=\"background-image: url(".env('APP_URL')."/storage/frontend/$dir/$file)\"";
+    return "style=\"background-image: url(storage/frontend/$dir/$file)\"";
 
 }
 

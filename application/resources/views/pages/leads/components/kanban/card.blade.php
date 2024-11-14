@@ -1,8 +1,8 @@
 @foreach($board['leads'] as $lead)
 <!--each card-->
-<div class="kanban-card show-modal-button reset-card-modal-form js-ajax-ux-request" data-toggle="modal"
-    data-target="#cardModal" data-url="{{ urlResource('/leads/'.$lead->lead_id) }}" data-lead-id="{{ $lead->lead_id }}"
-    data-loading-target="main-top-nav-bar" id="card_lead_{{ $lead->lead_id }}">
+<div class="kanban-card show-modal-button reset-card-modal-form js-ajax-ux-request {{ $lead->pinned_status ?? '' }}"
+    data-toggle="modal" data-target="#cardModal" data-url="{{ urlResource('/leads/'.$lead->lead_id) }}"
+    data-lead-id="{{ $lead->lead_id }}" data-loading-target="main-top-nav-bar" id="card_lead_{{ $lead->lead_id }}">
     <!--cover image-->
     <div id="kanban-card-cover-image-{{ $lead->lead_id }}"
         class="kanban-card-cover-image {{ runtimeKanbanCoverImage($lead->lead_cover_image) }}" {!!
@@ -154,9 +154,17 @@
         <div class="x-footer row">
             <div class="col-6 x-icons">
 
+                <!--pin-->
+                <span title="{{ cleanLang(__('lang.pinning')) }}" data-parent="lead_{{ $lead->lead_id }}"
+                    data-url="{{ url('/leads/'.$lead->lead_id.'/pinning') }}"
+                    class="x-icon display-inline-block vm p-t-2 data-toggle-action-tooltip opacity-4 js-toggle-pinning font-14">
+                    <i class="ti-pin2"></i>
+                </span>
+
                 <!--captured via a webform-->
                 @if($lead->lead_input_source == 'webform')
-                <span class="x-icon" data-toggle="tooltip" title="@lang('lang.source_webform')"><i class="sl-icon-cloud-upload"></i></span>
+                <span class="x-icon" data-toggle="tooltip" title="@lang('lang.source_webform')"><i
+                        class="sl-icon-cloud-upload"></i></span>
                 @endif
 
                 <!--created by you-->

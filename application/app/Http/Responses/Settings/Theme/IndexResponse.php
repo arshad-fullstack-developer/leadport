@@ -31,7 +31,7 @@ class IndexResponse implements Responsable {
             $$key = $value;
         }
 
-        $html = view('pages/settings/sections/theme/page', compact('page', 'settings'))->render();
+        $html = view('pages/settings/sections/theme/page', compact('page', 'settings', 'settings2'))->render();
 
         $jsondata['dom_html'][] = array(
             'selector' => "#settings-wrapper",
@@ -56,6 +56,11 @@ class IndexResponse implements Responsable {
                 'value' => 'active',
             ];
         }
+
+        // postrun function
+        $jsondata['postrun_functions'][] = [
+            'value' => 'NXCodeMirrorCSSEditor',
+        ];
 
         //ajax response
         return response()->json($jsondata);

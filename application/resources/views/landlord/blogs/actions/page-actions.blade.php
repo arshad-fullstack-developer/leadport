@@ -12,7 +12,7 @@
         </div>
 
         <!--ADD NEW ITEM-->
-        <a class="btn btn-success btn-add-circle" href="{{ url('app-admin/blogs/create') }}">
+        <a class="btn btn-danger btn-add-circle" href="{{ url('app-admin/blogs/create') }}">
             <i class="ti-plus"></i>
         </a>
     </div>

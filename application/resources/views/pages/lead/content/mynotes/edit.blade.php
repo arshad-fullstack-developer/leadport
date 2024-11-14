@@ -15,7 +15,7 @@
     </div>
 
     <div class="form-group text-right">
-        <button type="button" class="btn btn-success btn-xs ajax-request" data-loading-target="card-leads-left-panel"
+        <button type="button" class="btn btn-danger btn-xs ajax-request" data-loading-target="card-leads-left-panel"
             data-url="{{ url('/leads/content/'.$lead->lead_id.'/edit-mynotes') }}" data-type="form"
             data-loading-class="loading-before-centre" data-ajax-type="post" data-form-id="card-lead-mynotes">
             {{ cleanLang(__('lang.update')) }}

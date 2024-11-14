@@ -23,6 +23,7 @@ use App\Http\Responses\Proposals\DestroyResponse;
 use App\Http\Responses\Proposals\EditAutomationResponse;
 use App\Http\Responses\Proposals\EmailResponse;
 use App\Http\Responses\Proposals\IndexResponse;
+use App\Http\Responses\Proposals\PinningResponse;
 use App\Http\Responses\Proposals\PublishResponse;
 use App\Http\Responses\Proposals\PublishScheduledResponse;
 use App\Http\Responses\Proposals\StoreResponse;
@@ -36,6 +37,7 @@ use App\Repositories\EstimateGeneratorRepository;
 use App\Repositories\EstimateRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\ProposalAutomationRepository;
 use App\Repositories\ProposalRepository;
 use App\Repositories\UserRepository;
@@ -1360,6 +1362,27 @@ class Proposals extends Controller {
 
         //show the form
         return new CreateCloneResponse($payload);
+    }
+
+    /**
+     * toggle pinned state of proposals
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'proposal');
+
+        //reponse payload
+        $payload = [
+            'proposal_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

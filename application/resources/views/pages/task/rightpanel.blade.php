@@ -1,7 +1,7 @@
     <!--[dependency][lock-1] start-->
     @if(config('visibility.task_is_open'))
     <!----------Assigned----------->
-    @if(config('visibility.tasks_card_assigned') && auth()->user()->role_id == 1)
+    @if(config('visibility.tasks_card_assigned'))
     <div class="x-section">
         <div class="x-title">
             <h6>{{ cleanLang(__('lang.assigned_users')) }}</h6>
@@ -12,8 +12,8 @@
         <!--user-->
         @if($task->permission_assign_users)
         <span class="x-assigned-user x-assign-new js-card-settings-button-static card-task-assigned text-info"
-            tabindex="0" data-popover-content="card-task-team" data-title="{{ cleanLang(__('lang.assign_users')) }}"><i
-                class="mdi mdi-plus"></i></span>
+            data-container=".card-modal" tabindex="0" data-popover-content="card-task-team"
+            data-title="{{ cleanLang(__('lang.assign_users')) }}"><i class="mdi mdi-plus"></i></span>
         @endif
     </div>
     @else
@@ -36,16 +36,23 @@
         <!--start date-->
         @if(config('visibility.tasks_standard_features'))
         <div class="x-element" id="task-start-date"><i class="mdi mdi-calendar-plus"></i>
-            <span>{{ cleanLang(__('lang.week')) }}:</span>
+            <span>{{ cleanLang(__('lang.start_date')) }}:</span>
             @if($task->permission_edit_task)
-            <input type="week" name="task_date_start" id="task_date_start" value="{{ $task->week }}">
+            <span class="x-highlight x-editable card-pickadate"
+                data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-start-date/') }}" data-type="form"
+                data-progress-bar='hidden' data-form-id="task-start-date" data-hidden-field="task_date_start"
+                data-container="task-start-date-container" data-ajax-type="post"
+                id="task-start-date-container">{{ runtimeDate($task->task_date_start) }}</span></span>
+            <input type="hidden" name="task_date_start" id="task_date_start">
+            @else
+            <span class="x-highlight">{{ runtimeDate($task->task_date_start) }}</span>
             @endif
         </div>
         @endif
         <!--due date-->
         @if(config('visibility.tasks_standard_features'))
         <div class="x-element" id="task-due-date"><i class="mdi mdi-calendar-clock"></i>
-            <span>Field name:</span>
+            <span>{{ cleanLang(__('lang.due_date')) }}:</span>
             @if($task->permission_edit_task)
             <span class="x-highlight x-editable card-pickadate"
                 data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-due-date/') }}" data-type="form"
@@ -61,9 +68,9 @@
         <!--status-->
         <div class="x-element" id="card-task-status"><i class="mdi mdi-flag"></i>
             <span>{{ cleanLang(__('lang.status')) }}: </span>
-            @if($task->permission_participate)
-            <span class="x-highlight x-editable js-card-settings-button-static" id="card-task-status-text" tabindex="0"
-                data-popover-content="card-task-statuses" data-offset="0 25%"
+            @if($task->permission_edit_task)
+            <span class="x-highlight x-editable js-card-settings-button-static" data-container=".card-modal"
+                id="card-task-status-text" tabindex="0" data-popover-content="card-task-statuses" data-offset="0 25%"
                 data-status-id="{{ $task->taskstatus_id }}"
                 data-title="{{ cleanLang(__('lang.status')) }}">{{ runtimeLang($task->taskstatus_title) }}</strong></span>
             @else
@@ -72,42 +79,35 @@
         </div>
 
         <!--priority-->
-        <div class="x-element" id="card-task-priority"><i class="mdi mdi-verified"></i>
-            <span>{{ cleanLang(__('lang.priority')) }}:
-            </span>
-            @if($task->permission_participate)
-            <span class="x-highlight x-editable js-card-settings-button-static" id="card-task-priority-text"
-                tabindex="0" data-popover-content="card-task-priorities"
-                data-title="{{ cleanLang(__('lang.priority')) }}">{{ runtimeLang($task->task_priority) }}</strong></span>
-            <input type="hidden" name="task_priority" id="task_priority">
+        <div class="x-element" id="card-task-priority"><i class="mdi mdi-flag"></i>
+            <span>{{ cleanLang(__('lang.priority')) }}: </span>
+            @if($task->permission_edit_task)
+            <span class="x-highlight x-editable js-card-settings-button-static" data-container=".card-modal"
+                id="card-task-priority-text" tabindex="0" data-popover-content="card-task-priorities"
+                data-offset="0 25%" data-status-id="{{ $task->taskpriority_id }}"
+                data-title="{{ cleanLang(__('lang.priority')) }}">{{ runtimeLang($task->taskpriority_title) }}</strong></span>
             @else
-            <span class="x-highlight">{{ runtimeLang($task->task_priority) }}</span>
+            <span class="x-highlight">{{ runtimeLang($task->taskpriority_title) }}</span>
             @endif
         </div>
 
         <!--client visibility-->
-        <!-- @if(auth()->user()->type =='team')
+        @if(auth()->user()->type =='team')
         <div class="x-element" id="card-task-client-visibility"><i class="mdi mdi-eye"></i>
             <span>{{ cleanLang(__('lang.client')) }}:</span>
-            <span class="x-highlight x-editable js-card-settings-button-static" id="card-task-client-visibility-text"
-                tabindex="0" data-popover-content="card-task-visibility"
+            @if($task->permission_edit_task)
+            <span class="x-highlight x-editable js-card-settings-button-static" data-container=".card-modal"
+                id="card-task-client-visibility-text" tabindex="0" data-popover-content="card-task-visibility"
                 data-title="{{ cleanLang(__('lang.client_visibility')) }}">{{ runtimeDBlang($task->task_client_visibility, 'task_client_visibility') }}</strong></span>
-               <input type="hidden" name="task_client_visibility" id="task_client_visibility">
-        </div>
-        @endif -->
-         @if(auth()->user()->type =='team')
-        <div class="x-element" id="card-task-client"><i class="mdi mdi-eye"></i>
-            <span>{{ cleanLang(__('lang.client')) }}:</span>
-            <div class="form-group text-right">
-             <input type="text" class="form-control costum" name="task_client_name" id="task_client_name" value="{{$task->client}}">
-            <button type="button" class="btn btn-success btn-sm" id="card-task-update-client-button"
-                data-progress-bar='hidden' data-url="{{ url('/tasks/'.$task->task_id.'/update-client') }}"
-                data-type="form" data-ajax-type="post" data-form-id="popover-body">
-                {{ cleanLang(__('lang.update')) }}
-            </button>
-            </div>
+            <input type="hidden" name="task_client_visibility" id="task_client_visibility">
+            @else
+            <span
+                class="x-highlight">{{ runtimeDBlang($task->task_client_visibility, 'task_client_visibility') }}</span>
+            @endif
+
         </div>
         @endif
+
         <!--reminder-->
         @if(config('visibility.modules.reminders') && $task->project_type == 'project')
         <div class="card-reminders-container" id="card-reminders-container">
@@ -156,9 +156,9 @@
 
         <!--change milestone-->
         @if($task->permission_edit_task && auth()->user()->type =='team')
-        <div class="x-element x-action js-card-settings-button-static" id="card-task-milestone" tabindex="0"
-            data-popover-content="card-task-milestones" data-title="{{ cleanLang(__('lang.milestone')) }}"><i
-                class="mdi mdi-redo-variant"></i>
+        <div class="x-element x-action js-card-settings-button-static" data-container=".card-modal"
+            id="card-task-milestone" tabindex="0" data-popover-content="card-task-milestones"
+            data-title="{{ cleanLang(__('lang.milestone')) }}"><i class="mdi mdi-redo-variant"></i>
             <span class="x-highlight">{{ cleanLang(__('lang.change_milestone')) }}</strong></span>
         </div>
         @php $count_action ++ ; @endphp
@@ -294,6 +294,24 @@
     @endif
 
 
+    <!--task priorities - popover -->
+    @if($task->permission_participate)
+    <div class="hidden" id="card-task-priorities">
+        <ul class="list">
+            @foreach(config('task_priorities') as $priority)
+            <li class="card-tasks-update-priority-link" data-button-text="card-task-priority-text"
+                data-progress-bar='hidden' data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-priority') }}"
+                data-type="form" data-value="{{ $priority->taskpriority_id }}" data-form-id="--set-dynamically--"
+                data-ajax-type="post">
+                {{ runtimeLang($priority->taskpriority_title) }}</li>
+            @endforeach
+        </ul>
+        <input type="hidden" name="task_priority" id="task_priority">
+        <input type="hidden" name="current_task_priority_text" id="current_task_priority_text">
+    </div>
+    @endif
+
+
     <!--task priority - popover-->
     @if($task->permission_participate)
     <div class="hidden" id="card-task-priorities">
@@ -347,7 +365,7 @@
             </select>
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-tasks-update-milestone-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-tasks-update-milestone-button"
                 data-progress-bar='hidden' data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-milestone') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -384,34 +402,21 @@
             <!--client users-->
             <h5>@lang('lang.client_users')</h5>
             @foreach($client_users as $staff)
-            
-              <?php
-                    $firstNameInitial = strtoupper(substr($staff->first_name, 0, 1));
-                    $lastNameInitial = strtoupper(substr($staff->last_name, 0, 1));
-                    $initials = $firstNameInitial . $lastNameInitial;
-                ?>
-                    
             <div class="form-check m-b-15">
                 <label class="custom-control custom-checkbox">
                     <input type="checkbox" name="assigned[{{ $staff->id }}]"
                         class="custom-control-input assigned_user_{{ $staff->id }}">
                     <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">
-                        <!--<img-->
-                        <!--    src="{{ getUsersAvatar($staff->avatar_directory, $staff->avatar_filename) }}"-->
-                        <!--    class="img-circle avatar-xsmall"> -->
-                            
-                             <div class="text-white bg-success img-circle avatar-xsmall text-center p-1">
-                                {{ $initials }}
-                            </div> 
-                        
-                        </span>
+                    <span class="custom-control-description"><img
+                            src="{{ getUsersAvatar($staff->avatar_directory, $staff->avatar_filename) }}"
+                            class="img-circle avatar-xsmall"> {{ $staff->first_name }}
+                        {{ $staff->last_name }}</span>
                 </label>
             </div>
             @endforeach
 
             <div class="form-group text-right">
-                <button type="button" class="btn btn-success btn-sm" id="card-tasks-update-assigned"
+                <button type="button" class="btn btn-danger btn-sm" id="card-tasks-update-assigned"
                     data-progress-bar='hidden' data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-assigned') }}"
                     data-type="form" data-ajax-type="post" data-form-id="popover-body">
                     {{ cleanLang(__('lang.update')) }}
@@ -419,24 +424,3 @@
             </div>
         </div>
     </div>
-
-<script>
-$(document).on('change','#task_date_start',function(){
-    var week = document.getElementById('task_date_start').value;
-    console.log(week)
-          $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{ url('/') }}/tasks/{{$task->task_id}}/update-start-date',
-                type: "POST",
-                data: {week:week},
-                success: function (response) {
-                    console.log(response)
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                   console.log(textStatus, errorThrown);
-                }
-            });
-})
-</script>

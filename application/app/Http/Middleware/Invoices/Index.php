@@ -44,6 +44,9 @@ class Index {
             return $next($request);
         }
 
+                //table config
+                $this->tableConfig();
+
         //various frontend and visibility settings
         $this->fronteEnd();
 
@@ -86,6 +89,58 @@ class Index {
         Log::error("permission denied", ['process' => '[permissions][invoices][index]', 'ref' => config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
         abort(403);
     }
+
+        /*
+         * Set the users tables column visibility preferences
+         *
+         * @tablename - leads
+         *
+         * @IMPORTANT - update the default colums here, whenver new features/columns are added to the resource
+         *
+         *
+         */
+        private function tableConfig() {
+    
+            //get current settings or create for user
+            if (!$table = \App\Models\TableConfig::Where('tableconfig_userid', auth()->id())->Where('tableconfig_table_name', 'invoices')->first()) {
+    
+                //create for this user and set the visible columns (by setting them to `null`)
+                $table = new \App\Models\TableConfig();
+                $table->tableconfig_userid = auth()->id();
+                $table->tableconfig_table_name = 'invoices';
+                $table->tableconfig_column_1 = 'displayed'; //id
+                $table->tableconfig_column_2 = 'hidden'; //parent id
+                $table->tableconfig_column_3 = 'displayed'; //date
+                $table->tableconfig_column_4 = 'hidden'; //due
+                $table->tableconfig_column_5 = 'displayed'; //company
+                $table->tableconfig_column_6 = 'hidden'; //user
+                $table->tableconfig_column_7 = 'hidden'; //created by
+                $table->tableconfig_column_8 = 'hidden'; //project id
+                $table->tableconfig_column_9 = 'displayed'; //project title
+                $table->tableconfig_column_10 = 'hidden'; //tax
+                $table->tableconfig_column_11 = 'hidden'; //discount type % or fixed or ---
+                $table->tableconfig_column_12 = 'displayed'; //discount amount
+                $table->tableconfig_column_13 = 'hidden'; //payment - date
+                $table->tableconfig_column_14 = 'hidden'; //latest payment - amount
+                $table->tableconfig_column_15 = 'hidden'; //latest payment - method
+                $table->tableconfig_column_16 = 'hidden'; //latest payment - transaction id
+                $table->tableconfig_column_17 = 'hidden'; //attachments
+                $table->tableconfig_column_18 = 'hidden'; //publishing 'pending - scheduled - published'
+                $table->tableconfig_column_19 = 'hidden'; //scheduled 'date - ---'
+                $table->tableconfig_column_20 = 'displayed'; //payments
+                $table->tableconfig_column_21 = 'hidden'; //amount
+                $table->tableconfig_column_22 = 'hidden'; //balance
+                $table->tableconfig_column_23 = 'displayed'; //status
+                $table->save();
+            }
+    
+            //get row
+            $table = \App\Models\TableConfig::Where('tableconfig_userid', auth()->id())->Where('tableconfig_table_name', 'invoices')->first();
+    
+            //default show some table columns
+            config(['table' => $table]);
+    
+        }
 
     /*
      * various frontend and visibility settings

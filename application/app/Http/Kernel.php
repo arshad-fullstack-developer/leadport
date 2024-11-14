@@ -307,6 +307,7 @@ class Kernel extends HttpKernel {
         'contactsMiddlewareCreate' => \App\Http\Middleware\Contacts\Create::class,
         'contactsMiddlewareEdit' => \App\Http\Middleware\Contacts\Edit::class,
         'contactsMiddlewareDestroy' => \App\Http\Middleware\Contacts\Destroy::class,
+        'contactsMiddlewareShow' => \App\Http\Middleware\Contacts\Show::class,
 
         //[growcrm] - [tickets]
         'ticketsMiddlewareIndex' => \App\Http\Middleware\Tickets\Index::class,

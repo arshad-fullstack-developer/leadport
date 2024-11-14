@@ -215,6 +215,11 @@ class CategoryRepository {
         $category->category_description = request('category_description');
         $category->category_icon = request('category_icon');
 
+        //[tickets] - default ticket imap email
+        if(request('category_type') == 'ticket'){
+            $category->category_meta_4 = 'default';
+        }
+
         //save and return id
         if ($category->save()) {
             //add slug

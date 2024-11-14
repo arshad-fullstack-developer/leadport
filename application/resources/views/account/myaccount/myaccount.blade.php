@@ -15,7 +15,7 @@
             <!--pay button-->
             @if($subscription->subscription_status == 'awaiting-payment')
             <button type="button"
-                class="btn waves-effect waves-light btn-sm btn-success js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
+                class="btn waves-effect waves-light btn-sm btn-danger js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                 data-url="/settings/account/notices">@lang('lang.pay_now')</button>
             @endif
         </div>
@@ -274,7 +274,7 @@
 
             <!--add item modal-->
             <div class="text-right">
-                <button type="button" class="btn btn-success btn-sm ajax-request"
+                <button type="button" class="btn btn-danger btn-sm ajax-request"
                     data-url="{{ url('/settings/account/close-account') }}"
                     id="cancel_my_subscription_button_confirm">@lang('lang.cancel_account_confirmation')
                 </button>

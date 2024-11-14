@@ -13,7 +13,7 @@
 <div class="x-button">
     <!--stoptimer-->
     <button type="button" id="my-timer-time-topnav-stop-button"
-        class="btn waves-effect waves-light btn-sm btn-success js-timer-button js-ajax-request"
+        class="btn waves-effect waves-light btn-sm btn-danger js-timer-button js-ajax-request"
         data-url="{{ url('tasks/timer/'.request('users_running_timer_task_id').'/stop?source=topnav') }}"
         data-form-id="tasks-list-table"
         data-progress-bar='hidden'>@lang('lang.stop_timer')</button>

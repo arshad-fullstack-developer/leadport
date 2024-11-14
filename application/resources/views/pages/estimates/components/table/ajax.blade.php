@@ -1,6 +1,6 @@
 @foreach($estimates as $estimate)
 <!--each row-->
-<tr id="estimate_{{ $estimate->bill_estimateid }}">
+<tr id="estimate_{{ $estimate->bill_estimateid }}" class="{{ $estimate->pinned_status ?? '' }}">
     @if(config('visibility.estimates_col_checkboxes'))
     <td class="estimates_col_checkbox checkitem" id="estimates_col_checkbox_{{ $estimate->bill_estimateid }}">
         <!--list checkbox-->
@@ -189,6 +189,16 @@
         </span>
         @endif
         <!--more button-->
+
+        <!--pin-->
+        <span class="list-table-action">
+            <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                data-parent="estimate_{{ $estimate->bill_estimateid }}"
+                data-url="{{ url('/estimates/'.$estimate->bill_estimateid.'/pinning') }}"
+                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                <i class="ti-pin2"></i>
+            </a>
+        </span>
 
     </td>
     @endif

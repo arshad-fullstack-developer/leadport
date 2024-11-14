@@ -1,6 +1,6 @@
 @foreach($proposals as $proposal)
 <!--each row-->
-<tr id="proposal_{{ $proposal->doc_id }}">
+<tr id="proposal_{{ $proposal->doc_id }}" class="{{ $proposal->pinned_status ?? '' }}">
     @if(config('visibility.proposals_col_checkboxes'))
     <td class="proposals_col_checkbox checkproposal p-l-0" id="proposals_col_checkbox_{{ $proposal->doc_id }}">
         <!--list checkbox-->
@@ -82,7 +82,7 @@
     @if(config('visibility.proposals_col_action'))
     <td class="proposals_col_action actions_column" id="proposals_col_action_{{ $proposal->doc_id }}">
         <!--action button-->
-        <span class="list-table-action dropdown font-size-inherit">
+        <span class="list-table-action font-size-inherit">
             <!--delete-->
             @if(config('visibility.action_buttons_delete'))
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
@@ -186,6 +186,16 @@
             </span>
             @endif
             <!--more button-->
+
+            <!--pin-->
+            <span class="list-table-action">
+                <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                    data-parent="proposal_{{ $proposal->doc_id }}"
+                    data-url="{{ url('/proposals/'.$proposal->doc_id.'/pinning') }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                    <i class="ti-pin2"></i>
+                </a>
+            </span>
 
         </span>
         <!--action button-->

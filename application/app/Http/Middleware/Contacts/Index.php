@@ -99,6 +99,7 @@ class Index {
                     'visibility.list_page_actions_filter_button' => true,
                     'visibility.list_page_actions_search' => true,
                     'visibility.filter_panel_client' => true,
+                    'visibility.show_contact_profile' => true,
                 ]);
             }
         }

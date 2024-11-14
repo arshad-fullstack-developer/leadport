@@ -4,7 +4,7 @@
     </div>
     <!--current tags-->
     <div id="card-tags-current-tags-container">
-        @if(count($current_tags) >0)
+        @if(count($current_tags ?? []) >0)
         <div class="x-tags">
             @foreach($current_tags as $current)
             <span class="x-each-tag">{{ $current->tag_title }}</span>
@@ -41,7 +41,7 @@
         <div id="card-edit-tags-buttons" class="p-t-10 hidden text-right display-block">
             <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
                 id="card-tags-button-cancel">@lang('lang.close')</button>
-            <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
+            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger ajax-request"
                 data-url="{{ url('tasks/'.$task->task_id.'/update-tags') }}" data-progress-bar="hidden"
                 data-type="form" data-form-id="card-tags-container" data-ajax-type="post"
                 id="card-tags-button-save">@lang('lang.save')</button>

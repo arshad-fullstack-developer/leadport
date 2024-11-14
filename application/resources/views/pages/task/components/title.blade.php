@@ -10,19 +10,17 @@
     <div id="card-title-submit" class="p-t-10 text-right">
         <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
             id="card-title-button-cancel">{{ cleanLang(__('lang.cancel')) }}</button>
-        <button type="button" class="btn waves-effect waves-light btn-xs btn-success"
+        <button type="button" class="btn waves-effect waves-light btn-xs btn-danger"
             data-url="{{ urlResource('/tasks/'.$task->task_id.'/update-title') }}" data-progress-bar='hidden'
             data-type="form" data-form-id="card-title-edit" data-ajax-type="post"
             id="card-title-button-save">{{ cleanLang(__('lang.save')) }}</button>
     </div>
 </div>
 @endif
-@if($task->project_title)
 <div class=""><small><strong>@lang('lang.project'): </strong></small><small id="card-task-milestone-title"><a
             href="{{ url('projects/'.$task->project_id ?? '') }}">{{ $task->project_title ?? '---' }}</a></small></div>
 <div class="m-b-15"><small><strong>@lang('lang.milestone'): </strong></small><small
         id="card-task-milestone-title">{{ runtimeLang($task->milestone_title, 'task_milestone') }}</small></div>
-@endif
 
 <!--this item is archived notice-->
 @if(runtimeArchivingOptions())

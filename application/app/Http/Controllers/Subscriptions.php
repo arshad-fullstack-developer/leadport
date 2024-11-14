@@ -16,6 +16,7 @@ use App\Http\Responses\Subscriptions\CreateResponse;
 use App\Http\Responses\Subscriptions\DestroyResponse;
 use App\Http\Responses\Subscriptions\IndexResponse;
 use App\Http\Responses\Subscriptions\InvoicesResponse;
+use App\Http\Responses\Subscriptions\PinningResponse;
 use App\Http\Responses\Subscriptions\ShowResponse;
 use App\Http\Responses\Subscriptions\StoreResponse;
 use App\Http\Responses\Subscriptions\StripePaymentResponse;
@@ -24,15 +25,13 @@ use App\Repositories\DestroyRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
 use App\Repositories\InvoiceRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\StripePaymentRepository;
 use App\Repositories\StripeRepository;
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
-// use Illuminate\Validation\Rule;
-// use Validator;
 
 class Subscriptions extends Controller {
 
@@ -549,6 +548,27 @@ class Subscriptions extends Controller {
 
         //generate a response
         return new CancelResponse($payload);
+    }
+
+    /**
+     * toggle pinned state of subscriptions
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'subscription');
+
+        //reponse payload
+        $payload = [
+            'subscription_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

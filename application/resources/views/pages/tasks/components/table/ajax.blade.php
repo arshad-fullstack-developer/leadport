@@ -1,6 +1,6 @@
 @foreach($tasks as $task)
 <!--each row-->
-<tr id="task_{{ $task->task_id }}" class="{{ runtimeTaskCompletedStatus($task->task_status) }}">
+<tr id="task_{{ $task->task_id }}" class="{{ runtimeTaskCompletedStatus($task->task_status) }} {{ $task->pinned_status ?? '' }}">
     <td class="tasks_col_title td-edge">
         <!--for polling timers-->
         <input type="hidden" name="tasks[{{ $task->task_id }}]" value="{{ $task->assigned_to_me }}">
@@ -12,17 +12,18 @@
                 class="toggle_task_status filled-in chk-col-light-blue js-ajax-ux-request-default"
                 data-url="{{ urlResource('/tasks/'.$task->task_id.'/toggle-status') }}" data-ajax-type="post"
                 data-type="form" data-form-id="task_{{ $task->task_id }}" data-notifications="disabled"
-                data-container="task_{{ $task->task_id }}" data-progress-bar="hidden" data-task-status="{{ $task->task_status }}"
-                {{ runtimePrechecked($task->task_status) }} {{ runtimeTaskDependencyLock($task->count_dependency_cannot_complete) }}>
+                data-container="task_{{ $task->task_id }}" data-progress-bar="hidden"
+                data-task-status="{{ $task->task_status }}" {{ runtimePrechecked($task->task_status) }}
+                {{ runtimeTaskDependencyLock($task->count_dependency_cannot_complete) }}>
 
             <label for="toggle_task_status_{{ $task->task_id }}">
                 <a class="show-modal-button reset-card-modal-form js-ajax-ux-request" href="javascript:void(0)"
                     data-toggle="modal" data-target="#cardModal" data-url="{{ urlResource('/tasks/'.$task->task_id) }}"
                     data-loading-target="main-top-nav-bar"><span class="x-strike-through"
                         id="table_task_title_{{ $task->task_id }}">
-                        {{ str_limit($task->task_title ?? '---', 40) }}</span>                 
-                  <!--various icons displayed next to title-->
-                  @include('pages.tasks.components.common.icons-1')
+                        {{ str_limit($task->task_title ?? '---', 40) }}</span>
+                    <!--various icons displayed next to title-->
+                    @include('pages.tasks.components.common.icons-1')
                 </a>
             </label>
         </span>
@@ -46,11 +47,6 @@
                 href="{{ url('/projects/'.$task->project_id) }}">{{ str_limit($task->project_title ?? '---', 18) }}</a></span>
     </td>
     @endif
-    
-    <td class="tasks_col_project">
-        <span class="x-strike-through">{{ ($task->transport_type === 'transport') ? 'Transport' : 'Task'  }}</span>
-    </td>
- 
     @if(config('visibility.tasks_col_milestone'))
     <td class="tasks_col_milestone">
         <span class="x-strike-through">{{ str_limit($task->milestone_title ?? '---', 12) }}</span>
@@ -66,18 +62,8 @@
         <!--assigned users-->
         @if(count($task->assigned ?? []) > 0)
         @foreach($task->assigned->take(2) as $user)
-        <?php
-        $firstNameInitial = strtoupper(substr($user->first_name, 0, 1));
-        $lastNameInitial = strtoupper(substr($user->last_name, 0, 1));
-        $initials = $firstNameInitial . $lastNameInitial;
-        ?>
-        
-        <!--<img src="{{ $user->avatar }}" data-toggle="tooltip" title="{{ $user->first_name }}" data-placement="top"-->
-        <!--    alt="{{ $user->first_name }}" class="img-circle avatar-xsmall">-->
-            
-        <div class="text-white bg-success img-circle avatar-xsmall text-center pt-1">
-            {{ $initials }}
-       </div>
+        <img src="{{ $user->avatar }}" data-toggle="tooltip" title="{{ $user->first_name }}" data-placement="top"
+            alt="{{ $user->first_name }}" class="img-circle avatar-xsmall">
         @endforeach
         @else
         <span>---</span>
@@ -101,7 +87,7 @@
     <td class="tasks_col_my_time">
         @if($task->assigned_to_me)
         <span class="x-timer-time timers {{ runtimeTimerRunningStatus($task->timer_current_status) }}"
-            id="task_timer_table_{{ $task->task_id }}">{!! _clean(runtimeSecondsHumanReadable($task->my_time, false))
+            id="task_timer_table_{{ $task->task_id }}">{!! clean(runtimeSecondsHumanReadable($task->my_time, false))
             !!}</span>
         @if($task->task_status != 'completed')
         <!--start a timer-->
@@ -184,7 +170,7 @@
 
             <!--view-->
             <button type="button" title="{{ cleanLang(__('lang.view')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-warning btn-circle btn-sm show-modal-button reset-card-modal-form js-ajax-ux-request"
+                class="data-toggle-action-tooltip btn btn-outline-success btn-circle btn-sm show-modal-button reset-card-modal-form js-ajax-ux-request"
                 data-toggle="modal" data-target="#cardModal" data-url="{{ urlResource('/tasks/'.$task->task_id) }}"
                 data-loading-target="main-top-nav-bar">
                 <i class="ti-new-window"></i>
@@ -273,8 +259,15 @@
             </div>
         </span>
         @endif
-        <!--more button-->
-        <!--action button-->
+
+        <!--pin-->
+        <span class="list-table-action">
+            <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                data-parent="task_{{ $task->task_id }}" data-url="{{ url('/tasks/'.$task->task_id.'/pinning') }}"
+                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                <i class="ti-pin2"></i>
+            </a>
+        </span>
     </td>
 </tr>
 @endforeach

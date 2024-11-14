@@ -304,6 +304,21 @@ class Index {
             $table->tableconfig_column_5 = 'displayed';
             $table->tableconfig_column_6 = 'displayed';
             $table->tableconfig_column_7 = 'displayed';
+            $table->tableconfig_column_8 = 'hidden';
+            $table->tableconfig_column_9 = 'hidden';
+            $table->tableconfig_column_10 = 'hidden';
+            $table->tableconfig_column_11 = 'hidden';
+            $table->tableconfig_column_12 = 'hidden';
+            $table->tableconfig_column_13 = 'hidden';
+            $table->tableconfig_column_14 = 'hidden';
+            $table->tableconfig_column_15 = 'hidden';
+            $table->tableconfig_column_16 = 'hidden';
+            $table->tableconfig_column_17 = 'hidden';
+            $table->tableconfig_column_18 = 'hidden';
+            $table->tableconfig_column_19 = 'hidden';
+            $table->tableconfig_column_20 = 'hidden';
+            $table->tableconfig_column_21 = 'hidden';
+            $table->tableconfig_column_22 = 'hidden';
             $table->save();
         }
 

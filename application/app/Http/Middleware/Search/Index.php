@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Middleware\Search;
+use App\Repositories\LeadRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
-use App\Repositories\LeadRepository;
 use Closure;
 use Log;
 
@@ -135,6 +135,13 @@ class Index {
         //attachments
         if (config('modules.leads') || config('modules.tasks')) {
             config(['search.attachments' => true]);
+        }
+
+        //knoweledgebase
+        if (config('modules.knowledgebase')) {
+            if (auth()->user()->role->role_knowledgebase >= 1) {
+                config(['search.knowledgebase' => true]);
+            }
         }
 
     }

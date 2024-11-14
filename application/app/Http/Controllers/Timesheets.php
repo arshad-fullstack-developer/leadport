@@ -70,6 +70,7 @@ class Timesheets extends Controller {
         $payload = [
             'page' => $this->pageSettings('timesheets'),
             'timesheets' => $timesheets,
+            'stats' => $this->statsWidget(),
         ];
 
         //show the view
@@ -266,6 +267,42 @@ class Timesheets extends Controller {
         //generate a response
         return new DestroyResponse($payload);
     }
+
+    /**
+     * data for the stats widget
+     * @return array
+     */
+    private function statsWidget($data = []) {
+
+        $hours_worked = $this->timerrepo->search('', ['hours_worked' => true]);
+        $hours_invoiced = $this->timerrepo->search('', ['hours_invoiced' => true]);
+        $hours_not_invoiced = $this->timerrepo->search('', ['hours_not_invoiced' => true]);
+
+        //default values
+        $stats = [
+            [
+                'value' => runtimeSecondsHumanReadableShort($hours_worked),
+                'title' => __('lang.hours_worked'),
+                'percentage' => '100%',
+                'color' => 'bg-info',
+            ],
+            [
+                'value' => runtimeSecondsHumanReadableShort($hours_invoiced),
+                'title' => __('lang.billed'),
+                'percentage' => '100%',
+                'color' => 'bg-success',
+            ],
+            [
+                'value' => runtimeSecondsHumanReadableShort($hours_not_invoiced),
+                'title' => __('lang.unbilled'),
+                'percentage' => '100%',
+                'color' => 'bg-warning',
+            ],
+        ];
+        //return
+        return $stats;
+    }
+
     /**
      * basic page setting for this section of the app
      * @param string $section page section (optional)

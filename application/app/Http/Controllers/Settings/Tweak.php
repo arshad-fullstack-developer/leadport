@@ -9,11 +9,11 @@
 
 namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\Tweak\TweakValidation;
 use App\Http\Responses\Settings\Tweak\IndexResponse;
 use App\Http\Responses\Settings\Tweak\UpdateResponse;
 use App\Repositories\SettingsRepository;
 use Illuminate\Http\Request;
-use Validator;
 
 class Tweak extends Controller {
 
@@ -65,34 +65,24 @@ class Tweak extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update() {
-
-        //custom error messages
-        $messages = [];
-
-        //validate
-        $validator = Validator::make(request()->all(), [
-            'foobar' => [
-                'nullable',
-            ],
-        ], $messages);
-
-        //errors
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            $messages = '';
-            foreach ($errors->all() as $message) {
-                $messages .= "<li>$message</li>";
-            }
-
-            abort(409, $messages);
-        }
+    public function update(TweakValidation $request) {
 
         //update
         \App\Models\Settings2::where('settings2_id', 1)
             ->update([
                 'settings2_tweak_reports_truncate_long_text' => (request('settings2_tweak_reports_truncate_long_text') == 'on') ? 'yes' : 'no',
+                'settings2_tweak_imap_tickets_import_limit' => request('settings2_tweak_imap_tickets_import_limit'),
+                'settings2_tweak_imap_connection_timeout' => request('settings2_tweak_imap_connection_timeout'),
             ]);
+
+        //reset imap category processing status
+        if (request('settings2_tweak_imap_reset_stuck_in_processing') == 'on') {
+            \App\Models\Category::where('category_type', 'ticket')
+                ->update([
+                    'category_meta_14' => 'completed',
+                    'category_meta_22' => now(),
+                ]);
+        }
 
         //reponse payload
         $payload = [];
@@ -111,7 +101,7 @@ class Tweak extends Controller {
         $page = [
             'crumbs' => [
                 __('lang.settings'),
-                __('lang.general_settings'),
+                __('lang.tweak_settings'),
             ],
             'crumbs_special_class' => 'main-pages-crumbs',
             'page' => 'settings',

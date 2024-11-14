@@ -52,6 +52,13 @@ class ExpenseRepository {
         $expenses->leftJoin('projects', 'projects.project_id', '=', 'expenses.expense_projectid');
         $expenses->leftJoin('categories', 'categories.category_id', '=', 'expenses.expense_categoryid');
         $expenses->leftJoin('users', 'users.id', '=', 'expenses.expense_creatorid');
+        $expenses->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'expenses.expense_id')
+                ->where('pinned.pinnedresource_type', '=', 'expense');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         // all client fields
         $expenses->selectRaw('*');
@@ -200,10 +207,9 @@ class ExpenseRepository {
             }
         } else {
             //default sorting
-            $expenses->orderBy(
-                config('settings.ordering_expenses.sort_by'),
-                config('settings.ordering_expenses.sort_order')
-            );
+            $expenses->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy(config('settings.ordering_expenses.sort_by'), config('settings.ordering_expenses.sort_order'));
         }
 
         //eager load

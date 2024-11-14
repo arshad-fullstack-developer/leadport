@@ -36,18 +36,10 @@
 </div>
 @endif
 
-
-<!--custom-ticket-->
-@if($event->event_item == 'custom-ticket')
-<div class="x-description"><a href="{{ url('ctickets/index') }}">{!! clean($event->event_item_content)
-!!}</a>
-</div>
-@endif
-
 <!--tickets-->
 @if($event->event_item == 'ticket')
 <div class="x-description"><a href="{{ url('tickets/'.$event->event_item_id) }}">{!! clean($event->event_item_content)
-!!}</a>
+                !!}</a>
 </div>
 @endif
 
@@ -62,14 +54,6 @@
 <!--estimate-->
 @if($event->event_item == 'estimate')
 <div class="x-description"><a href="{{ url('estimates/'.$event->event_item_id) }}">{!! clean($event->event_item_content)
-                !!}</a>
-</div>
-@endif
-
-
-<!--lead-->
-@if($event->event_item == 'lead')
-<div class="x-description"><a href="{{ url('leads') }}">{!! clean($event->event_item_content)
                 !!}</a>
 </div>
 @endif

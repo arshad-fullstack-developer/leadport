@@ -48,6 +48,13 @@ class LeadRepository {
         $leads->leftJoin('categories', 'categories.category_id', '=', 'leads.lead_categoryid');
         $leads->leftJoin('users', 'users.id', '=', 'leads.lead_creatorid');
         $leads->leftJoin('leads_status', 'leads_status.leadstatus_id', '=', 'leads.lead_status');
+        $leads->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'leads.lead_id')
+                ->where('pinned.pinnedresource_type', '=', 'lead');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -230,6 +237,9 @@ class LeadRepository {
                 $query->orWhere('lead_country', '=', request('search_query'));
                 $query->orWhere('lead_source', '=', request('search_query'));
                 $query->orWhere('leadstatus_title', '=', request('search_query'));
+                $query->orWhere('lead_phone', 'LIKE', '%' . request('search_query') . '%');
+                $query->orWhere('lead_value', '=', request('search_query'));
+                $query->orWhere('lead_website', 'LIKE', '%' . request('search_query') . '%');
                 if (is_numeric(request('search_query'))) {
                     $query->orWhere('lead_value', '=', request('search_query'));
                 }
@@ -258,9 +268,13 @@ class LeadRepository {
         } else {
             //default sorting
             if (request('query_type') == 'kanban') {
-                $leads->orderBy('lead_position', 'asc');
+                $leads->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                    ->orderBy('pinned.pinned_id', 'desc')
+                    ->orderBy('lead_position', 'asc');
             } else {
-                $leads->orderBy('lead_id', 'desc');
+                $leads->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                    ->orderBy('pinned.pinned_id', 'desc')
+                    ->orderBy('lead_id', 'desc');
             }
         }
 

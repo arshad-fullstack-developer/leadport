@@ -93,7 +93,7 @@ class IndexResponse implements Responsable {
             }
 
             //render the view and save to json
-            $html = view($template, compact('page', 'timesheets'))->render();
+            $html = view($template, compact('page', 'timesheets', 'stats'))->render();
             $jsondata['dom_html'][] = array(
                 'selector' => $dom_container,
                 'action' => $dom_action,
@@ -150,6 +150,13 @@ class IndexResponse implements Responsable {
                 'value' => $export_url,
             ];
 
+            //reload stats widget
+            $html = view('misc/list-pages-stats-3', compact('stats'))->render();
+            $jsondata['dom_html'][] = array(
+                'selector' => '#list-pages-stats-widget',
+                'action' => 'replace-with',
+                'value' => $html);
+
             //ajax response
             return response()->json($jsondata);
 
@@ -158,7 +165,7 @@ class IndexResponse implements Responsable {
             $page['url'] = loadMoreButtonUrl($timesheets->currentPage() + 1, request('source'));
             $page['loading_target'] = 'timesheets-td-container';
             $page['visibility_show_load_more'] = ($timesheets->currentPage() < $timesheets->lastPage()) ? true : false;
-            return view('pages/timesheets/wrapper', compact('page', 'timesheets'))->render();
+            return view('pages/timesheets/wrapper', compact('page', 'timesheets', 'stats'))->render();
         }
 
     }

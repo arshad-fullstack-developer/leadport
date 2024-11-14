@@ -31,6 +31,17 @@ class IndexResponse implements Responsable {
             $$key = $value;
         }
 
+        //searching
+        if (request()->ajax() && request('action') == 'search') {
+            $html = view('pages/knowledgebase/components/table/table', compact('page', 'knowledgebase', 'categories', 'category'))->render();
+            $jsondata['dom_html'][] = [
+                'selector' => '#knowledgebase-table-wrapper',
+                'action' => 'replace',
+                'value' => $html,
+            ];
+            return response()->json($jsondata);
+        }
+
         return view('pages/knowledgebase/wrapper', compact('page', 'knowledgebase', 'categories', 'category'))->render();
 
     }

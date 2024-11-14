@@ -27,7 +27,7 @@
 <!--edit button-->
 @if(config('visibility.lead_editing_buttons'))
 <div class="form-data-row-buttons">
-    <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
+    <button type="button" class="btn waves-effect waves-light btn-xs btn-info ajax-request"
         data-url="{{ url('leads/content/'.$lead->lead_id.'/edit-customfields') }}"
         data-loading-class="loading-before-centre"
         data-loading-target="card-leads-left-panel">@lang('lang.edit')</button>

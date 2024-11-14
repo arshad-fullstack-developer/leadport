@@ -1,5 +1,5 @@
 @foreach($projects as $project)
-<tr id="project_{{ $project->project_id }}">
+<tr id="project_{{ $project->project_id }}" class="{{ $project->pinned_status ?? '' }}">
     @if(config('visibility.projects_col_checkboxes'))
     <td class="projects_col_checkbox checkitem" id="projects_col_checkbox_{{ $project->project_id }}">
         <!--list checkbox-->
@@ -212,7 +212,7 @@
             @endif
             @if(auth()->user()->role->role_assign_projects == 'yes')
             <button type="button" title="{{ cleanLang(__('lang.assigned_users')) }}"
-                class="btn btn-outline-warning btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form data-toggle-action-tooltip"
+                class="btn btn-outline-info btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form data-toggle-action-tooltip"
                 data-toggle="modal" data-target="#commonModal"
                 data-url="{{ urlResource('/projects/'.$project->project_id.'/assigned') }}"
                 data-loading-target="commonModalBody" data-modal-title="{{ cleanLang(__('lang.assigned_users')) }}"
@@ -223,11 +223,6 @@
             </button>
             @endif
             @endif
-            <!--view-->
-            <a href="{{ _url('/projects/'.$project->project_id) }}" title="{{ cleanLang(__('lang.view')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
-                <i class="ti-new-window"></i>
-            </a>
         </span>
         <!--action button-->
         <!--more button (team)-->
@@ -243,6 +238,16 @@
             </div>
         </span>
         @endif
+
+        <!--pin-->
+        <span class="list-table-action">
+            <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                data-parent="project_{{ $project->project_id }}"
+                data-url="{{ url('/projects/'.$project->project_id.'/pinning') }}"
+                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                <i class="ti-pin2"></i>
+            </a>
+        </span>
     </td>
     @endif
 </tr>

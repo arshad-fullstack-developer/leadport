@@ -6,7 +6,7 @@
         <!--ADD NEW ITEM-->
         @if(auth()->user()->primary_admin == 'yes')
         <button type="button"
-            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
             data-toggle="modal" data-target="#commonModal" data-url="{{ url('/app-admin/team/create') }}"
             data-loading-target="commonModalBody" data-modal-title="@lang('lang.add_user')"
             data-action-url="{{ url('/app-admin/team') }}" data-action-method="POST"

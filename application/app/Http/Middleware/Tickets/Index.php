@@ -116,6 +116,7 @@ class Index {
                     'visibility.list_page_actions_search' => true,
                     'visibility.stats_toggle_button' => true,
                     'visibility.tickets_col_action' => true,
+                    'visibility.show_contact_profile' => true,
                 ]);
             }
             if (auth()->user()->is_client) {
@@ -124,6 +125,7 @@ class Index {
                     'visibility.list_page_actions_search' => true,
                     'visibility.list_page_actions_add_button_link' => true,
                     'visibility.tickets_col_client' => false,
+                    'visibility.show_contact_profile' => false,
                 ]);
             }
         }

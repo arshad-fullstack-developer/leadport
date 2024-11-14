@@ -117,6 +117,12 @@ class Kernel extends ConsoleKernel {
 
         //calendar
         $schedule->call(new \App\Cronjobs\CalendarReminderCron)->everyMinute();
+
+        //[imap][tickets] - fetch new support ticket emails from impa server
+        $schedule->call(new \App\Cronjobs\ImapTicketsFetchCron)->everyMinute();
+
+        //[imap][tickets] - send queued support ticket reply emails
+        $schedule->call(new \App\Cronjobs\ImapTicketRepliesCron)->everyMinute();
     }
 
     /**

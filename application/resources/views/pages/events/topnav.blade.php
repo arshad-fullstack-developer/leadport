@@ -47,7 +47,7 @@
 @endforeach
 @else
 <div class="top-nav-no-evenets">
-    <!-- <img src="{{ url('/') }}/public/images/relax.png" alt="No events found" /> -->
+    <img src="{{ url('/') }}/public/images/relax.png" alt="No events found" />
     <div class="x-message">{{ cleanLang(__('lang.no_notifications_found')) }}</div>
 </div>
 @endif

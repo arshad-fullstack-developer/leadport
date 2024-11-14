@@ -56,8 +56,8 @@
 
         <div class="text-right p-t-30">
             <input type="hidden" name="edit_source" value="page">
-            <button type="button" class="btn btn-rounded-x btn-success waves-effect ticket-editor-toggle">{{ cleanLang(__('lang.cancel')) }}</button>
-            <button type="submit" id="editTicketMessageButton" class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request"
+            <button type="button" class="btn btn-rounded-x btn-danger waves-effect ticket-editor-toggle">{{ cleanLang(__('lang.cancel')) }}</button>
+            <button type="submit" id="editTicketMessageButton" class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request"
                 data-url="{{ url('/tickets') }}/{{ $ticket->ticket_id }}" data-ajax-type="PUT" data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
         </div>
     </form>

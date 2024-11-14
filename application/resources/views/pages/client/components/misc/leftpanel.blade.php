@@ -3,7 +3,8 @@
     <!--has logo-->
     @if(isset($client['client_logo_folder']) && $client['client_logo_folder'] != '')
     <div class="card-body profile_header">
-        <img src="{{ url('/') }}/storage/logos/clients/{{ $client['client_logo_folder'] ?? '0' }}/{{ $client['client_logo_filename'] ?? '' }}">
+        <img
+            src="{{ url('/') }}/storage/logos/clients/{{ $client['client_logo_folder'] ?? '0' }}/{{ $client['client_logo_filename'] ?? '' }}">
     </div>
     @else
     <!--no logo -->
@@ -15,21 +16,32 @@
         @if(auth()->user()->is_team)
         <div>
             <small class="text-muted">{{ cleanLang(__('lang.client_name')) }}</small>
-            <h6>{{ $client->client_company_name }}</h6>
+            <h6 class="m-b-15">{{ $client->client_company_name }}</h6>
             <small class="text-muted">{{ cleanLang(__('lang.telephone')) }}</small>
-            <h6>{{ $client->client_phone }}</h6>
+            <h6 class="m-b-15">{{ $client->client_phone }}</h6>
             <small class="text-muted">{{ cleanLang(__('lang.account_owner')) }}</small>
-            <div class="m-b-10"><img src="{{ getUsersAvatar($owner->avatar_directory, $owner->avatar_filename) }}" alt="user" class="img-circle avatar-xsmall"> {{ $owner->first_name }} {{ $owner->last_name }}</div>
+            <div class="m-b-15"><img src="{{ getUsersAvatar($owner->avatar_directory, $owner->avatar_filename) }}"
+                    alt="user" class="img-circle avatar-xsmall">
+                <a href="javascript:void(0);" class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                    data-toggle="modal" data-target="#commonModal" data-url="{{ url('contacts/'.$owner->id) }}"
+                    data-loading-target="commonModalBody" data-modal-title="" data-modal-size="modal-md"
+                    data-header-close-icon="hidden" data-header-extra-close-icon="visible"
+                    data-footer-visibility="hidden"
+                    data-action-ajax-loading-target="commonModalBody">{{ $owner->first_name }} {{ $owner->last_name }}
+                </a>
+            </div>
             <small class="text-muted">{{ cleanLang(__('lang.category')) }}</small>
-            <div class="p-b-10">
+            <div class="p-b-15">
                 <span class="badge badge-pill badge-primary p-t-4 p-l-12 p-r-12">{{ $client->category_name }}</span>
             </div>
             <small class="text-muted">{{ cleanLang(__('lang.account_status')) }}</small>
-            <div class="p-b-10">
+            <div class="p-b-15">
                 @if($client->client_status == 'active')
-                <span class="badge badge-pill badge-success p-t-4 p-l-12 p-r-12">{{ cleanLang(__('lang.active')) }}</span>
+                <span
+                    class="badge badge-pill badge-success p-t-4 p-l-12 p-r-12">{{ cleanLang(__('lang.active')) }}</span>
                 @else
-                <span class="badge badge-pill badge-danger p-t-4 p-l-12 p-r-12">{{ cleanLang(__('lang.suspended')) }}</span>
+                <span
+                    class="badge badge-pill badge-danger p-t-4 p-l-12 p-r-12">{{ cleanLang(__('lang.suspended')) }}</span>
                 @endif
             </div>
 
@@ -43,19 +55,21 @@
         @endif
     </div>
     <div>
-        <hr> </div>
+        <hr>
+    </div>
     <div class="card-body p-t-0 p-b-0">
         <div>
             <table class="table no-border m-b-0">
                 <tbody>
                     <!--invoices-->
                     <tr>
-                        <td class="p-l-0 p-t-5"id="fx-client-left-panel-invoices">{{ cleanLang(__('lang.invoices')) }}</td>
+                        <td class="p-l-0 p-t-5" id="fx-client-left-panel-invoices">{{ cleanLang(__('lang.invoices')) }}
+                        </td>
                         <td class="font-medium p-r-0 p-t-5">
                             {{ runtimeMoneyFormat($client->sum_invoices_all) }}
                             <div class="progress">
-                                <div class="progress-bar bg-info  w-100 h-px-3" role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                    aria-valuemax="100"></div>
+                                <div class="progress-bar bg-info  w-100 h-px-3" role="progressbar" aria-valuenow="25"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </td>
                     </tr>
@@ -64,8 +78,8 @@
                         <td class="p-l-0 p-t-5">{{ cleanLang(__('lang.payments')) }}</td>
                         <td class="font-medium p-r-0 p-t-5">{{ runtimeMoneyFormat($client->sum_all_payments) }}
                             <div class="progress">
-                                <div class="progress-bar bg-success w-100 h-px-3" role="progressbar"aria-valuenow="25" aria-valuemin="0"
-                                    aria-valuemax="100"></div>
+                                <div class="progress-bar bg-success w-100 h-px-3" role="progressbar" aria-valuenow="25"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </td>
                     </tr>
@@ -74,8 +88,8 @@
                         <td class="p-l-0 p-t-5">{{ cleanLang(__('lang.completed_projects')) }}</td>
                         <td class="font-medium p-r-0 p-t-5">{{ $client->count_projects_completed }}
                             <div class="progress">
-                                <div class="progress-bar bg-warning  w-100 h-px-3" role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                    aria-valuemax="100"></div>
+                                <div class="progress-bar bg-warning  w-100 h-px-3" role="progressbar" aria-valuenow="25"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </td>
                     </tr>
@@ -84,8 +98,8 @@
                         <td class="p-l-0 p-t-5">{{ cleanLang(__('lang.open_projects')) }}</td>
                         <td class="font-medium p-r-0 p-t-5">{{ $client->count_projects_pending }}
                             <div class="progress">
-                                <div class="progress-bar bg-danger w-100 h-px-3" role="progressbar"aria-valuenow="25" aria-valuemin="0"
-                                    aria-valuemax="100"></div>
+                                <div class="progress-bar bg-danger w-100 h-px-3" role="progressbar" aria-valuenow="25"
+                                    aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </td>
                     </tr>
@@ -94,8 +108,9 @@
         </div>
     </div>
     <div>
-        <hr> </div>
-        <!--client address-->
+        <hr>
+    </div>
+    <!--client address-->
     <div class="card-body p-t-0 p-b-0">
         <small class="text-muted">{{ cleanLang(__('lang.address')) }}</small>
         @if($client->client_billing_street !== '')
@@ -127,7 +142,8 @@
             <div class="panel-label p-b-3">{{ $field->customfields_title }}
             </div>
             <div class="x-content">
-                {{ strip_tags(customFieldValue($field->customfields_name, $client, $field->customfields_datatype)) }}</div>
+                {{ strip_tags(customFieldValue($field->customfields_name, $client, $field->customfields_datatype)) }}
+            </div>
         </div>
         @endif
         @endforeach
@@ -135,16 +151,18 @@
         @if(config('app.application_demo_mode'))
         <!--DEMO INFO-->
         <div class="alert alert-info">
-            <h5 class="text-info"><i class="sl-icon-info"></i> Demo Info</h5> 
-            These are custom fields. You can change them or <a href="{{ url('app/settings/customfields/projects') }}">create your own.</a>
+            <h5 class="text-info"><i class="sl-icon-info"></i> Demo Info</h5>
+            These are custom fields. You can change them or <a
+                href="{{ url('app/settings/customfields/projects') }}">create your own.</a>
         </div>
         @endif
-        
+
     </div>
     @endif
 
 
     <div class="d-none last-line">
-        <hr> </div>
+        <hr>
+    </div>
 </div>
 <!-- Column -->

@@ -42,6 +42,13 @@ class ItemRepository {
 
         //joins
         $items->leftJoin('categories', 'categories.category_id', '=', 'items.item_categoryid');
+        $items->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'items.item_id')
+                ->where('pinned.pinnedresource_type', '=', 'item');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //default where
         $items->whereRaw("1 = 1");
@@ -95,7 +102,9 @@ class ItemRepository {
             }
         } else {
             //default sorting
-            $items->orderBy('item_id', 'desc');
+            $items->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('item_id', 'desc');
         }
 
         //eager load

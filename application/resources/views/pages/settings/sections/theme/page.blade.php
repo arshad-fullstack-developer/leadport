@@ -48,6 +48,17 @@
         </div>
     </div>
 
+    <!--css_style-->
+    <div class="form-group form-group-checkbox row m-b-30">
+        <label class="col-12 col-form-label">{{ cleanLang(__('lang.css_style')) }} <span
+                class="align-middle text-info font-16" data-toggle="tooltip" title="@lang('lang.custom_css_crm')"
+                data-placement="top"><i class="ti-info-alt"></i></span></label>
+        <div class="col-12 p-t-5">
+            <textarea id="css-editor-textarea" class="hidden" name="settings2_theme_css"
+                data-crm-theme="{{ auth()->user()->pref_theme }}">{{  $settings2->settings2_theme_css ?? '' }}</textarea>
+        </div>
+    </div>
+
     @if(config('system.settings_type') == 'standalone')
     <!--[standalone] - settings documentation help-->
     <div>
@@ -61,7 +72,7 @@
     <!--buttons-->
     <div class="text-right">
         <button type="submit" id="commonModalSubmitButton"
-            class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request" data-url="/settings/theme"
+            class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request" data-url="/settings/theme"
             data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
     </div>

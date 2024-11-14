@@ -13,13 +13,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Items\ItemStoreUpdate;
 use App\Http\Requests\Items\StoreUpdateTask;
 use App\Http\Responses\Common\ChangeCategoryResponse;
+use App\Http\Responses\Items\CategoryItemsResponse;
 use App\Http\Responses\Items\ChangeCategoryUpdateResponse;
 use App\Http\Responses\Items\CreateResponse;
 use App\Http\Responses\Items\DestroyResponse;
 use App\Http\Responses\Items\EditResponse;
 use App\Http\Responses\Items\IndexResponse;
+use App\Http\Responses\Items\PinningResponse;
 use App\Http\Responses\Items\StoreResponse;
-use App\Http\Responses\Items\CategoryItemsResponse;
 use App\Http\Responses\Items\Tasks\TasksCreateResponse;
 use App\Http\Responses\Items\Tasks\TasksDeleteResponse;
 use App\Http\Responses\Items\Tasks\TasksEditResponse;
@@ -29,6 +30,7 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ItemRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\ProductTaskRepository;
 use App\Repositories\UnitRepository;
 use App\Repositories\UserRepository;
@@ -708,6 +710,28 @@ class Items extends Controller {
         //return the reposnse
         return new TasksDeleteResponse($payload);
     }
+
+    /**
+     * toggle pinned state of items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'item');
+
+        //reponse payload
+        $payload = [
+            'item_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
+    }
+
     /**
      * basic page setting for this section of the app
      * @param string $section page section (optional)

@@ -102,6 +102,10 @@ class TicketReply extends Mailable {
             'ticket_url' => url('/tickets/' . $this->obj->ticket_id),
         ];
 
+        //add reply tag for imap parsing
+        $body = $template->parse('body', $payload);
+        $body = '<div class="nextloop-start-of-crm-reply"><\/div>' . $body;
+
         //save in the database queue
         $queue = new \App\Models\EmailQueue();
         $queue->emailqueue_to = $this->user->email;

@@ -1,5 +1,5 @@
 <!--each row-->
-<tr id="ticket_{{ $ticket->ticket_id }}">
+<tr id="ticket_{{ $ticket->ticket_id }}" class="{{ $ticket->pinned_status ?? '' }}">
     @if(config('visibility.tickets_col_checkboxes'))
     <td class="tickets_col_checkbox checkitem" id="tickets_col_checkbox_{{ $ticket->ticket_id }}">
         <!--list checkbox-->
@@ -17,6 +17,20 @@
     @endif
     <td class="tickets_col_subject">
         <a href="/tickets/{{ $ticket->ticket_id }}">{{ str_limit($ticket->ticket_subject ?? '---', 35) }}</a>
+    </td>
+    <td class="tickets_col_user">
+        @if(config('visibility.show_contact_profile'))
+        <a href="javascript:void(0);" class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            data-toggle="modal" data-target="#commonModal" data-url="{{ url('contacts/'.$ticket->id) }}"
+            data-loading-target="commonModalBody" data-modal-title="" data-modal-size="modal-md"
+            data-header-close-icon="hidden" data-header-extra-close-icon="visible" data-footer-visibility="hidden"
+            data-action-ajax-loading-target="commonModalBody">{{ $ticket->first_name ?? '---' }}
+            {{ $ticket->last_name ?? ''}}
+        </a>
+        @else
+        <span>{{ $ticket->first_name ?? '---' }} {{ $ticket->last_name ?? ''}}</span>
+        @endif
+
     </td>
     @if(config('visibility.tickets_col_client'))
     <td class="tickets_col_client">
@@ -53,7 +67,7 @@
     @if(config('visibility.tickets_col_action'))
     <td class="tickets_col_action actions_column">
         <!--action button-->
-        <span class="list-table-action dropdown font-size-inherit">
+        <span class="list-table-action font-size-inherit">
             <!--delete-->
             @if(config('visibility.action_buttons_delete'))
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
@@ -80,6 +94,15 @@
                 class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm">
                 <i class="ti-new-window"></i>
             </a>
+            <!--pin-->
+            <span class="list-table-action">
+                <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                    data-parent="ticket_{{ $ticket->ticket_id }}"
+                    data-url="{{ url('/tickets/'.$ticket->ticket_id.'/pinning') }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                    <i class="ti-pin2"></i>
+                </a>
+            </span>
         </span>
         <!--action button-->
     </td>

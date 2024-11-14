@@ -3658,16 +3658,16 @@ font-size
 /**-------------------------------------------------------
 * text case
 * -------------------------------------------------------*/
-.text-ucf,
-.text-ucw {
+.text-ucf, .ucf .text-ucw,
+.ucw {
   text-transform: capitalize;
 }
 
-.text-uc {
+.text-uc, .uc {
   text-transform: uppercase;
 }
 
-.text-lc {
+.text-lc, .lc {
   text-transform: lowercase;
 }
 
@@ -18687,6 +18687,44 @@ chat application Page
 .event-type-task:hover {
   background-color: var(--calendar-type-task-background);
   color: #ffffff;
+}
+
+/* ----------------------------------------------------------
+* pinning content
+* --------------------------------------------------------*/
+.disabled-content {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+tr.pinned {
+  background-color: #f1f7f9;
+}
+tr.pinned:hover {
+  background-color: #ecf3f6 !important;
+}
+tr.pinned td {
+  border-color: #d8dde0 !important;
+}
+
+.pinned .grid-card {
+  background-color: #f1f7f9;
+}
+
+.kanban-card.pinned {
+  background-color: #fffef6;
+}
+.kanban-card.pinned .kanban-card-cover-image {
+  background-color: #fffef6;
+}
+
+.pinned .js-toggle-pinning {
+  color: #ff9041;
+  opacity: 1;
+}
+.pinned .js-toggle-pinning:hover {
+  color: #e9ab2e;
 }
 
 /* ----------------------------------------------------------------

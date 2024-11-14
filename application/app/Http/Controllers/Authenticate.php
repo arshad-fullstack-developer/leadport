@@ -129,6 +129,16 @@ class Authenticate extends Controller {
             }
         }
 
+        //get the user
+        if (!$user = \App\Models\User::Where('email', request('email'))->first()) {
+            abort(409, __('lang.invalid_login_details'));
+        }
+
+        //only client or team type contacts
+        if (!in_array($user->type, ['team', 'client'])) {
+            abort(409, __('lang.invalid_login_details'));
+        }
+
         //get credentials
         $credentials = request()->only('email', 'password');
         $remember = (request('remember_me') == 'on') ? true : false;
@@ -167,57 +177,6 @@ class Authenticate extends Controller {
 
         //show the form
         return new AuthenticateResponse($payload);
-    }
-
-    /**
-     * [SAAS}
-     * allow direct login to a customers account from the SaaS dashboard
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function directLoginAccess() {
-
-        //check if we have a key
-        if (!request()->filled('id_key')) {
-            Log::error("requried access key is missing", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            abort(409, __('lang.error_check_logs_for_details'));
-        }
-
-        //get the settings
-        if (!$settings = \App\Models\Settings::Where('settings_id', 1)->first()) {
-            Log::error("logging in as customer failed - unable to fetch the settings table", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            abort(409, __('lang.error_check_logs_for_details'));
-        }
-
-        //only SaaS version
-        if ($settings->settings_type != 'saas') {
-            Log::error("this feature is only available on the SaaS version", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            abort(409, __('lang.error_check_logs_for_details'));
-        }
-
-        //does the key match
-        if ($settings->settings_saas_onetimelogin_key == '' || $settings->settings_saas_onetimelogin_key != request('id_key')) {
-            Log::error("the login access key (" . request('id_key') . ") has expired", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            abort(409, __('lang.key_has_expired'));
-        }
-
-        //get the main admin user
-        if (!$user = \App\Models\User::Where('id', 1)->first()) {
-            Log::error("logging in as customer failed - primary admin user with id (1) could not be found", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            abort(409, __('lang.error_check_logs_for_details'));
-        }
-
-        //login the user
-        Auth::login($user, true);
-
-        //reset the key data in the settinsg database
-        $settings->settings_saas_onetimelogin_key = null;
-        $settings->settings_saas_onetimelogin_destination = null;
-        $settings->save();
-
-        //redirect to home page
-        return redirect('home');
-
     }
 
     /**
@@ -370,6 +329,57 @@ class Authenticate extends Controller {
         //redirect to home
         $jsondata['redirect_url'] = url('home');
         return response()->json($jsondata);
+    }
+
+    /**
+     * [SAAS}
+     * allow direct login to a customers account from the SaaS dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function directLoginAccess() {
+
+        //check if we have a key
+        if (!request()->filled('id_key')) {
+            Log::error("requried access key is missing", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+            abort(409, __('lang.error_check_logs_for_details'));
+        }
+
+        //get the settings
+        if (!$settings = \App\Models\Settings::Where('settings_id', 1)->first()) {
+            Log::error("logging in as customer failed - unable to fetch the settings table", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+            abort(409, __('lang.error_check_logs_for_details'));
+        }
+
+        //only SaaS version
+        if ($settings->settings_type != 'saas') {
+            Log::error("this feature is only available on the SaaS version", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+            abort(409, __('lang.error_check_logs_for_details'));
+        }
+
+        //does the key match
+        if ($settings->settings_saas_onetimelogin_key == '' || $settings->settings_saas_onetimelogin_key != request('id_key')) {
+            Log::error("the login access key (" . request('id_key') . ") has expired", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+            abort(409, __('lang.key_has_expired'));
+        }
+
+        //get the main admin user
+        if (!$user = \App\Models\User::Where('id', 1)->first()) {
+            Log::error("logging in as customer failed - primary admin user with id (1) could not be found", ['process' => '[authenticate-login-as-customer]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+            abort(409, __('lang.error_check_logs_for_details'));
+        }
+
+        //login the user
+        Auth::login($user, true);
+
+        //reset the key data in the settinsg database
+        $settings->settings_saas_onetimelogin_key = null;
+        $settings->settings_saas_onetimelogin_destination = null;
+        $settings->save();
+
+        //redirect to home page
+        return redirect('home');
+
     }
 
     /**

@@ -12,6 +12,7 @@
 
 namespace App\Cronjobs;
 use App\Mail\SendQueued;
+use App\Mail\SendIMAPQueued;
 use Illuminate\Support\Facades\Mail;
 
 class EmailCron {
@@ -55,7 +56,10 @@ class EmailCron {
 
                 //send the email (only to a valid email address)
                 if ($email->emailqueue_to != '') {
+
+                    //send email
                     Mail::to($email->emailqueue_to)->send(new SendQueued($email));
+
                     //log email
                     $log = new \App\Models\EmailLog();
                     $log->emaillog_email = $email->emailqueue_to;

@@ -14,7 +14,7 @@
 
         <!--ADD NEW ITEM-->
         <button type="button"
-            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
             data-toggle="modal" data-target="#commonModal" data-url="{{ url('/app-admin/foos/create') }}"
             data-loading-target="commonModalBody" data-modal-title="@lang('lang.create_foo')"
             data-action-url="{{ url('/app-admin/foos') }}" data-action-method="POST" data-modal-size="modal-xl"

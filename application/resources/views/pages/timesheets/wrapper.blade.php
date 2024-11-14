@@ -17,6 +17,14 @@
     </div>
     <!--page heading-->
 
+    <!--stats panel-->
+    @if(auth()->user()->is_team)
+    <div class="stats-wrapper" id="invoices-stats-wrapper">
+        @include('misc.list-pages-stats-3')
+    </div>
+    @endif
+    <!--stats panel-->
+
     <!-- page content -->
     <div class="row">
         <div class="col-12">

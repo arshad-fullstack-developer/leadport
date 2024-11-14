@@ -56,7 +56,7 @@
 
         <!--form buttons-->
         <div class="text-right p-t-30">
-            <button type="submit" id="submitButton" class="btn btn-success waves-effect text-left ajax-request"
+            <button type="submit" id="submitButton" class="btn btn-danger waves-effect text-left ajax-request"
                 data-url="{{ url('app-admin/blogs') }}" data-type="form" data-form-id="landlord-settings-form" data-ajax-type="POST"
                 data-loading-target="main-body">@lang('lang.save_changes')</button>
         </div>

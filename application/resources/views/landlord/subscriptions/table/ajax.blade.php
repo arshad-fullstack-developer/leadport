@@ -73,7 +73,7 @@
 
             <!--delete-->
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
-                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-success"
+                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
                 data-confirm-title="{{ cleanLang(__('lang.delete_subscription')) }}"
                 data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="DELETE"
                 data-url="{{ url('/app-admin') }}/subscriptions/{{ $subscription->subscription_id }}">

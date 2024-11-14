@@ -35,7 +35,7 @@
             <!--submit-->
             <div class="text-right">
                 <button type="submit" id="commonModalSubmitButton"
-                    class="btn btn-rounded-x btn-success btn-sm waves-effect text-left ajax-request"
+                    class="btn btn-rounded-x btn-danger btn-sm waves-effect text-left ajax-request"
                     data-url="{{ url('/app-admin/frontend/customcode') }}" data-form-id="landlord-settings-form"
                     data-loading-target="" data-ajax-type="post" data-type="form"
                     data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>

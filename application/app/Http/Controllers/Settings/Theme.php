@@ -13,9 +13,9 @@ use App\Http\Responses\Settings\Theme\IndexResponse;
 use App\Http\Responses\Settings\Theme\UpdateResponse;
 use App\Repositories\SettingsRepository;
 use App\Rules\NoTags;
+use DB;
 use Illuminate\Http\Request;
 use Validator;
-use DB;
 
 class Theme extends Controller {
 
@@ -50,11 +50,13 @@ class Theme extends Controller {
         $page = $this->pageSettings();
 
         $settings = \App\Models\Settings::find(1);
+        $settings2 = \App\Models\Settings2::find(1);
 
         //reponse payload
         $payload = [
             'page' => $page,
             'settings' => $settings,
+            'settings2' => $settings2,
         ];
 
         //show the view
@@ -95,6 +97,13 @@ class Theme extends Controller {
         if (!$this->settingsrepo->updateTheme()) {
             abort(409);
         }
+
+        //update custom css - strip out the <style> tag
+        $style_css = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', request('settings2_theme_css'));
+        \App\Models\Settings2::where('settings2_id', 1)
+            ->update([
+                'settings2_theme_css' => $style_css,
+            ]);
 
         //are we updating all users
         if (request('reset_users_theme') == 'on') {

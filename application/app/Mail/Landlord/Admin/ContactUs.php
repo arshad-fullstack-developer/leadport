@@ -27,11 +27,6 @@ class ContactUs extends Mailable {
     public $obj;
 
     /**
-     * Model instance
-     */
-    public $user;
-
-    /**
      * System config
      */
     public $config;
@@ -41,10 +36,9 @@ class ContactUs extends Mailable {
      *
      * @return void
      */
-    public function __construct($user = [], $data = [], $obj = []) {
+    public function __construct($data = [], $obj = []) {
 
         $this->data = $data;
-        $this->user = $user;
         $this->obj = $obj;
 
     }
@@ -71,7 +65,7 @@ class ContactUs extends Mailable {
 
         //set template variables
         $payload += [
-            'name' => $this->user->first_name,
+            'name' => '',
             'contact_name' => $this->data['contact_name'],
             'contact_email' => $this->data['contact_email'],
             'message' => $this->data['message'],
@@ -80,7 +74,7 @@ class ContactUs extends Mailable {
         //save in the database queue
         $queue = new \App\Models\Landlord\EmailQueue();
         $queue->setConnection('landlord');
-        $queue->emailqueue_to = $this->user->email;
+        $queue->emailqueue_to = $this->data['to_email'];
         $queue->emailqueue_subject = $template->parse('subject', $payload);
         $queue->emailqueue_message = $template->parse('body', $payload);
         $queue->save();

@@ -32,6 +32,25 @@ function str_alphnumeric($length = 10) {
 }
 
 /**
+ * generate random alphebet string
+ * [example] SfgrtJDheyt
+ * @return string
+ */
+function str_alpha($length = 10) {
+
+    $string = '';
+
+    // You can define your own characters here.
+    $characters = "ABCDEFHJKLMNPRTVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    for ($p = 0; $p < $length; $p++) {
+        $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+    }
+
+    return $string;
+}
+
+/**
  * generate random secure password
  * @return string
  */
@@ -925,6 +944,30 @@ function runtimeSecondsHumanReadable($seconds = 0, $show_seconds = true) {
         return sprintf("%02d" . $second . "%02d", $H, $i);
     }
 }
+
+/**
+ * Convert seconds to human-readable time format HH:MM
+ *
+ * @param int $seconds The total number of seconds.
+ * @return string Human-readable time in HH:MM format.
+ */
+function runtimeSecondsHumanReadableShort($seconds = 0) {
+    $delimiter = '<span class="timer-deliminator">:</span>';
+
+    // Validate the input
+    if (!is_numeric($seconds)) {
+        // Return '00:00' if the input is not a number
+        return '00' . $delimiter . '00';
+    }
+
+    // Calculate hours and minutes
+    $hours = floor($seconds / 3600);
+    $minutes = floor(($seconds % 3600) / 60);
+
+    // Format and return the result
+    return sprintf("%02d%s%02d", $hours, $delimiter, $minutes);
+}
+
 
 /**
  * convert seconds to whole hours
@@ -1826,7 +1869,12 @@ function path_root($str = '') {
  * @return string
  */
 function path_storage($str = '') {
-    return BASE_DIR . '/storage';
+    if ($str != '') {
+        $str = ltrim($str, '/');
+        return BASE_DIR . '/storage/' . $str;
+    } else {
+        return BASE_DIR . '/storage';
+    }
 }
 
 /**
@@ -3357,7 +3405,6 @@ function taskStatusName($value = '') {
     return runtimeLang($value);
 }
 
-
 /**
  * lead status name
  * @param mixed $value the lead status (old version of the new version based on an custom status id)
@@ -3382,7 +3429,6 @@ function leadStatusName($value = '') {
     //old name
     return runtimeLang($value);
 }
-
 
 /**
  * ticket status name
@@ -3420,7 +3466,6 @@ function runtimeDisabledCalenderAllDayCheckbox($resource_type = '') {
     }
 }
 
-
 /**
  * shows a tool tip if the event is a project or task and it can only be set as an all day
  * @param string $resource_type type of calendar resource
@@ -3429,5 +3474,36 @@ function runtimeDisabledCalenderAllDayCheckbox($resource_type = '') {
 function runtimeDisabledCalenderAllDayTooltip($resource_type = '') {
     if ($resource_type == '' || $resource_type == 'calendarevent') {
         return 'hidden';
+    }
+}
+
+/**
+ * various element visibity for tickets imap settings
+ * @param string $value determining value
+ */
+function ticketsImapSettingsVisibility($value = '') {
+
+    //imap is disabled
+    if ($value != 'enabled') {
+        return 'hidden';
+    }
+    return;
+}
+
+/*
+ * bootstrap label class, based on user type
+ * @return string bootstrap label class
+ */
+function runtimeUserTypeLabel($type = '') {
+    switch ($type) {
+    case 'team':
+        return 'label-outline-info';
+        break;
+    case 'client':
+        return 'label-outline-success';
+        break;
+    default:
+        return 'label-outline-default';
+        break;
     }
 }

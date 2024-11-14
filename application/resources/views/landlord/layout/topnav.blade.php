@@ -8,7 +8,7 @@
             @if(request('dashboard_section') == 'settings')
             <!--exist-->
             <div class="sidenav-menu-item exit-panel m-b-17">
-                <a class="waves-effect waves-dark text-info" href="{{ url('app-admin/home') }}" id="settings-exit-button"
+                <a class="waves-effect waves-dark text-info" href="/app-admin/home" id="settings-exit-button"
                     aria-expanded="false" target="_self">
                     <i class="sl-icon-logout text-info"></i>
                     <span id="settings-exit-text">{{ cleanLang(__('lang.exit_settings')) }}</span>
@@ -17,7 +17,7 @@
             @else
             <!--logo-->
             <div class="sidenav-menu-item logo m-t-0">
-                <a class="navbar-brand" href="{{ url('app-admin/home') }}">
+                <a class="navbar-brand" href="/app-admin/home">
                     <img src="{{ runtimeLogoSmall() }}" alt="homepage" class="logo-small" />
                     <img src="{{ runtimeLogoLarge() }}" alt="homepage" class="logo-large" />
                 </a>
@@ -96,7 +96,7 @@
                                             {{ auth()->user()->last_name }}</h4>
                                         <p class="text-muted" id="topnav_dropdown_email">{{ auth()->user()->email }}</p>
                                         <a href="javascript:void(0)"
-                                            class="btn btn-rounded btn-success btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                                            class="btn btn-rounded btn-danger btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
                                             data-toggle="modal" data-target="#commonModal"
                                             data-url="{{ url('/app-admin/users/avatar') }}" data-loading-target="commonModalBody"
                                             data-modal-size="modal-sm"
@@ -124,7 +124,7 @@
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a href="{{ url('app-admin/logout') }}">
+                                <a href="/app-admin/logout">
                                     <i class="fa fa-power-off p-r-4"></i> {{ cleanLang(__('lang.logout')) }}</a>
                             </li>
                         </ul>

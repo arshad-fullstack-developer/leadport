@@ -1,6 +1,6 @@
 @foreach($subscriptions as $subscription)
 <!--each row-->
-<tr id="subscription_{{ $subscription->subscription_id }}">
+<tr id="subscription_{{ $subscription->subscription_id }}" class="{{ $subscription->pinned_status ?? '' }}">
     <td class="subscriptions_col_id">
         <a href="/subscriptions/{{ $subscription->subscription_id }}">{{ runtimeSubscriptionIdFormat($subscription->subscription_id) }}
         </a></td>
@@ -44,14 +44,15 @@
             @if(auth()->user()->is_client)
             <!--pay now-->
             @if($subscription->subscription_status == 'pending')
-            <button class="btn btn-rounded btn-success btn-sm btn-action-danger waves-effect actions-modal-button js-ajax-ux-request "
+            <button
+                class="btn btn-rounded btn-danger btn-sm btn-action-danger waves-effect actions-modal-button js-ajax-ux-request "
                 data-toggle="modal" data-target="#actionsModal" data-loading-target="actionsModalBody"
                 data-modal-title="@lang('lang.subscription_payment')"
                 data-url="{{ url('/subscriptions/'.$subscription->subscription_id.'/pay?source=list') }}">@lang('lang.pay')</button>
             @endif
             <!--add new card-->
             @if($subscription->subscription_status == 'failed')
-            <button class="btn btn-rounded btn-success action-btn btn-sm waves-effect text-left"
+            <button class="btn btn-rounded btn-danger action-btn btn-sm waves-effect text-left"
                 data-url="">@lang('lang.pay')</button>
             @endif
             <!--just view-->
@@ -86,13 +87,22 @@
                         data-url="{{ url('/subscriptions/'.$subscription->subscription_id.'/cancel') }}">
                         {{ cleanLang(__('lang.cancel_subscription')) }}</a>
                     @endif
-                    <a class="dropdown-item"
-                        href="/subscriptions/{{ $subscription->subscription_id }}">
+                    <a class="dropdown-item" href="/subscriptions/{{ $subscription->subscription_id }}">
                         @lang('lang.view_subscription')</a>
                 </div>
             </span>
             @endif
             <!--more button-->
+
+            <!--pin-->
+            <span class="list-table-action">
+                <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                    data-parent="subscription_{{ $subscription->subscription_id }}"
+                    data-url="{{ url('/subscriptions/'.$subscription->subscription_id.'/pinning') }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                    <i class="ti-pin2"></i>
+                </a>
+            </span>
 
         </span>
         <!--action button-->

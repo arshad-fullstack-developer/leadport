@@ -93,9 +93,14 @@ class Knowledgebase extends Controller {
         if ($category = \App\Models\KbCategories::Where('kbcategory_slug', request()->segment(3))->first()) {
             $active_category = $category->kbcategory_title;
             $active_category_slug = $category->kbcategory_slug;
-            request()->merge([
-                'filter_category_id' => $category->kbcategory_id,
-            ]);
+            if (request('action') == 'search' ) {
+                //do nothing - so we can search all categories
+            }else{
+                //limit to category in url slug
+                request()->merge([
+                    'filter_category_id' => $category->kbcategory_id,
+                ]);
+            }
         }
 
         //get articles
@@ -230,7 +235,7 @@ class Knowledgebase extends Controller {
         $payload = [
             'knowledgebase' => $knowledgebase,
             'count' => $knowledgebase->count(),
-            'article' => $article
+            'article' => $article,
         ];
 
         //process reponse
@@ -448,7 +453,7 @@ class Knowledgebase extends Controller {
             'no_results_message' => __('lang.no_results_found'),
             'mainmenu_kb' => 'active',
             'sidepanel_id' => 'sidepanel-filter-kb',
-            'dynamic_search_url' => url('kb/search?action=search&knowledgebaseresource_id=' . request('category_slug')),
+            'dynamic_search_url' => url('kb/search/' . request('category_slug') . '?action=search'),
             'add_button_classes' => 'add-edit-foo-button',
             'load_more_button_route' => 'kb',
             'source' => 'list',

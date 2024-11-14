@@ -99,7 +99,7 @@
 
                 <!--buttons-->
                 <div class="buttons-block">
-                    <button type="button" class="btn btn-rounded-x btn-success js-ajax-ux-request apply-filter-button"
+                    <button type="button" class="btn btn-rounded-x btn-danger js-ajax-ux-request apply-filter-button"
                         data-url="{{ urlResource('/calendar?calendar_action=user-preferences') }}" data-type="form"
                         data-ajax-type="GET">{{ cleanLang(__('lang.apply_changes')) }}</button>
                 </div>

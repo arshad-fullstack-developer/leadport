@@ -363,7 +363,7 @@
                 <label
                     class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.country')) }}</label>
                 <div class="col-sm-12 col-lg-9">
-                    <select class="select2-basic form-control" id="lead_country" name="lead_country">
+                    <select class="select2-basic-with-search form-control" id="lead_country" name="lead_country">
                         <option></option>
                         @include('misc.country-list')
                     </select>

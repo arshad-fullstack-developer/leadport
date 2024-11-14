@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="billing-adjustment-popover-remove">
+            <button type="button" class="btn btn-danger btn-sm" id="billing-adjustment-popover-remove">
                 {{ cleanLang(__('lang.remove_adjustment')) }}
             </button>
             <button type="button" class="btn btn-info btn-sm" id="billing-adjustment-popover-update">

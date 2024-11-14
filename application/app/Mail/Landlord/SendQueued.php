@@ -38,6 +38,8 @@ class SendQueued extends Mailable {
      * @return $this
      */
     public function build() {
+        Log::error("system", ['config' => config('system')]);
+        Log::error("mail", ['config' => config('mail')]);
 
         //validate
         if (!$this->data instanceof \App\Models\Landlord\EmailQueue) {

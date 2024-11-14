@@ -25,7 +25,7 @@
             <tr>
                 <td colspan="20">
                     <div class="text-right">
-                        <button type="button" class="btn btn-success btn-sm waves-effect text-left confirm-action-danger"
+                        <button type="button" class="btn btn-danger btn-sm waves-effect text-left confirm-action-danger"
                             data-confirm-title="@lang('lang.delete_all_emails')"
                             data-confirm-text="@lang('lang.are_you_sure')" data-ajax-type="DELETE"
                             data-url="{{ url('app-admin/settings/emaillog/purge') }}">@lang('lang.delete_all_emails')</button>

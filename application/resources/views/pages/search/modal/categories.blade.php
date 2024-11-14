@@ -111,5 +111,15 @@
     </span>
     @endif
 
+    <!--knowledgebase-->
+    @if(config('search.knowledgebase'))
+    <span
+        class="x-each-category  {{ runtimeSearchCurrentMenu('knowledgebase', $current_category) }}  search-category-button ajax-request"
+        data-url="{{ url('search?search_type=knowledgebase') }}" data-type="form" data-form-id="global-search-form"
+        data-ajax-type="post" data-loading-target="global-search-form">
+        @lang('lang.knowledgebase') ({{ $knowledgebase['count'] ?? 0 }})
+    </span>
+    @endif
+
 </div>
 @endif

@@ -11,9 +11,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\Webform\SaveResponse;
 use App\Repositories\AttachmentRepository;
-use App\Repositories\WebformRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
+use App\Repositories\WebformRepository;
+use Validator;
 
 class Webform extends Controller {
 
@@ -64,6 +65,10 @@ class Webform extends Controller {
         config(['visibility.webform' => 'show']);
         config(['visibility.webform_view' => request()->segment(2)]);
 
+        //form css
+        $webform_style_css = '<style>' . $webform->webform_style_css . '</style>';
+        config(['css.webform' => $webform_style_css]);
+
         //show the view
         return view('pages/webform/form', compact('fields', 'webform'));
     }
@@ -97,6 +102,18 @@ class Webform extends Controller {
             return new SaveResponse(['type' => 'error-required-fields', 'error_message' => $error_message]);
         }
 
+        //validate reCaptcha after all other validations - to avoid tokens expring
+        if ($webform->webform_recaptcha == 'enabled' && config('system.settings2_captcha_status') == 'enabled') {
+            $validator = Validator::make(request()->all(), [
+                'g-recaptcha-response' => 'recaptcha',
+            ]);
+
+            //errors
+            if ($validator->fails()) {
+                abort(409, __('lang.recaptcha_validation_error'));
+            }
+        }
+
         //get the last row (order by position - desc)
         if ($last = \App\Models\Lead::orderBy('lead_position', 'desc')->first()) {
             $position = $last->lead_position + config('settings.db_position_increment');
@@ -108,9 +125,12 @@ class Webform extends Controller {
         //create content for admin email (from submitted form fields)
         $form_content = '<table class="table-gray" cellpadding="5"><tbody>';
         foreach ($fields as $field) {
-            $form_content .= '<tr style="height: 39px;">
+            //skip array items
+            if (!is_array(request($field['name']))) {
+                $form_content .= '<tr style="height: 39px;">
                     <td class="td-1" style="height: 39px; width: 194.504px;"><strong>' . $field['label'] . '</strong></td>
                     <td class="td-2" style="height: 39px; width: 489.496px;">' . request($field['name']) . '</td></tr>';
+            }
         }
         $form_content .= '</tbody></table>';
 
@@ -134,6 +154,7 @@ class Webform extends Controller {
         $lead->lead_input_source = 'webform';
         $lead->lead_input_ip_address = request()->ip();
         $lead->lead_uniqueid = str_unique();
+        $lead->lead_status = (is_numeric($webform->webform_lead_status)) ? $webform->webform_lead_status : 1;
         $lead->save();
 
         //save every other possible field

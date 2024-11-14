@@ -51,6 +51,13 @@ class TaskRepository {
         $tasks->leftJoin('clients', 'clients.client_id', '=', 'projects.project_clientid');
         $tasks->leftJoin('tasks_status', 'tasks_status.taskstatus_id', '=', 'tasks.task_status');
         $tasks->leftJoin('tasks_priority', 'tasks_priority.taskpriority_id', '=', 'tasks.task_priority');
+        $tasks->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'tasks.task_id')
+                ->where('pinned.pinnedresource_type', '=', 'task');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -350,9 +357,13 @@ class TaskRepository {
         } else {
             //default sorting
             if (request('query_type') == 'kanban') {
-                $tasks->orderBy('task_position', 'asc');
+                $tasks->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                    ->orderBy('pinned.pinned_id', 'desc')
+                    ->orderBy('task_position', 'asc');
             } else {
-                $tasks->orderBy('task_id', 'desc');
+                $tasks->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                    ->orderBy('pinned.pinned_id', 'desc')
+                    ->orderBy('task_id', 'desc');
             }
         }
 

@@ -30,6 +30,7 @@ use App\Http\Responses\Estimates\EditAutomationResponse;
 use App\Http\Responses\Estimates\EditResponse;
 use App\Http\Responses\Estimates\IndexResponse;
 use App\Http\Responses\Estimates\PDFResponse;
+use App\Http\Responses\Estimates\PinningResponse;
 use App\Http\Responses\Estimates\PublishResponse;
 use App\Http\Responses\Estimates\PublishRevisedResponse;
 use App\Http\Responses\Estimates\PublishScheduledResponse;
@@ -55,6 +56,7 @@ use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\LineitemRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\PublishEstimateRepository;
 use App\Repositories\TagRepository;
@@ -1658,6 +1660,27 @@ class Estimates extends Controller {
         }
 
         return $fields;
+    }
+
+    /**
+     * toggle pinned state of estimates
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'estimate');
+
+        //reponse payload
+        $payload = [
+            'estimate_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

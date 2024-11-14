@@ -346,7 +346,7 @@
                 <!--buttons-->
                 <div class="buttons-block">
 
-                    <button type="button" class="btn btn-rounded-x btn-success js-ajax-ux-request apply-filter-button" id="export-invoices-button"
+                    <button type="button" class="btn btn-rounded-x btn-danger js-ajax-ux-request apply-filter-button" id="export-invoices-button"
                         data-url="{{ urlResource('/export/invoices?') }}" data-type="form" data-ajax-type="POST"
                         data-button-loading-annimation="yes">@lang('lang.export')</button>
                 </div>

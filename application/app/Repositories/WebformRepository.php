@@ -83,6 +83,9 @@ class WebformRepository {
         $webform->webform_creatorid = auth()->id();
         $webform->webform_uniqueid = str_unique();
         $webform->webform_submit_button_text = __('lang.submit');
+        $webform->webform_thankyou_message = __('lang.thank_you_form_submitted');
+        $webform->webform_lead_title = request('webform_title');
+        $webform->webform_lead_status = 1;
 
         //save and return id
         if ($webform->save()) {

@@ -1,6 +1,6 @@
 @foreach($payments as $payment)
 <!--each row-->
-<tr id="payment_{{ $payment->payment_id }}">
+<tr id="payment_{{ $payment->payment_id }}" class="{{ $payment->pinned_status ?? '' }}">
     @if(config('visibility.payments_col_checkboxes'))
     <td class="payments_col_checkbox checkitem" id="payments_col_checkbox_{{ $payment->payment_id }}">
         <!--list checkbox-->
@@ -50,7 +50,7 @@
     @if(config('visibility.payments_col_action'))
     <td class="payments_col_action actions_column" id="payments_col_action_{{ $payment->payment_id }}">
         <!--action button-->
-        <span class="list-table-action dropdown font-size-inherit">
+        <span class="list-table-action font-size-inherit">
             <!--edit-->
             @if(config('visibility.action_buttons_edit'))
             <button type="button" title="{{ cleanLang(__('lang.edit')) }}"
@@ -80,6 +80,14 @@
                 data-target="#plainModal" data-loading-target="plainModalBody" data-modal-title="">
                 <i class="ti-new-window"></i>
             </a>
+            <!--pin-->
+            <span class="list-table-action">
+                <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                    data-parent="payment_{{ $payment->payment_id }}" data-url="{{ url('/payments/'.$payment->payment_id.'/pinning') }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                    <i class="ti-pin2"></i>
+                </a>
+            </span>
         </span>
         <!--action button-->
     </td>

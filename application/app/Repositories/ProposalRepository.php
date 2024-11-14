@@ -62,6 +62,13 @@ class ProposalRepository {
         $proposals->leftJoin('leads', 'leads.lead_id', '=', 'proposals.doc_lead_id');
         $proposals->leftJoin('estimates', 'estimates.bill_proposalid', '=', 'proposals.doc_id');
         $proposals->leftJoin('categories', 'categories.category_id', '=', 'proposals.doc_categoryid');
+        $proposals->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'proposals.doc_id')
+                ->where('pinned.pinnedresource_type', '=', 'proposal');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -286,7 +293,9 @@ class ProposalRepository {
             }
         } else {
             //default sorting
-            $proposals->orderBy('doc_id', 'desc');
+            $proposals->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('doc_id', 'desc');
         }
 
         //stats - count all
@@ -369,7 +378,7 @@ class ProposalRepository {
         Log::info("publishing proposal (id: $id) has started", ['process' => '[publish-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'proposal_id' => $id]);
 
         //validation
-        if(!is_numeric($id)){
+        if (!is_numeric($id)) {
             Log::error("publishing proposal has failed - proposal id is invalid", ['process' => '[publish-proposal]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__, 'proposal_id' => $id]);
             return false;
         }

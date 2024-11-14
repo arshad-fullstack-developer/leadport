@@ -13,7 +13,7 @@
                 <div class="input-group hidden">
                     <input type="text" class="form-control" name="search_query" placeholder="{{ cleanLang(__('lang.search')) }}">
                     <span class="input-group-btn">
-                        <button class="btn btn-success" type="submit">{{ cleanLang(__('lang.search')) }}</button>
+                        <button class="btn btn-danger" type="submit">{{ cleanLang(__('lang.search')) }}</button>
                     </span>
                 </div>
             </div>

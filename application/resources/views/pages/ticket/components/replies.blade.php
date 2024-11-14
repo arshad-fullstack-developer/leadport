@@ -6,7 +6,23 @@
                     src="{{ getUsersAvatar($reply->avatar_directory, $reply->avatar_filename)  }}" width="50"></span>
         </div>
         <div class="comment-text w-100">
-            <h5 class="m-b-0">{{ $reply->first_name ?? runtimeUnkownUser() }}</h5>
+            <h5 class="m-b-0">
+                
+                @if(config('visibility.show_contact_profile'))
+                <a href="javascript:void(0);"
+                    class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                    data-toggle="modal" data-target="#commonModal"
+                    data-url="{{ url('contacts/'.$reply->id) }}" data-loading-target="commonModalBody"
+                    data-modal-title="" data-modal-size="modal-md" data-header-close-icon="hidden"
+                    data-header-extra-close-icon="visible" data-footer-visibility="hidden"
+                    data-action-ajax-loading-target="commonModalBody">{{ $reply->first_name ?? runtimeUnkownUser() }}
+                    {{ $reply->last_name ?? ''}}
+                </a>
+                @else
+                {{ $reply->first_name ?? runtimeUnkownUser() }} {{ $reply->last_name ?? ''}}
+                @endif
+            
+            </h5>
 
             <div class="text-muted m-b-5"><small class="text-muted">
                     {{ runtimeDate($reply->ticketreply_created) }} -

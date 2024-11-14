@@ -2501,7 +2501,7 @@ function NXAddEditProject() {
             //nothing
         }
         */
-       
+
         //also reset via ajax (to make sure also clear tinym
         nxAjaxUxRequest($("#project_template_selector"));
 
@@ -5093,10 +5093,36 @@ NX.dynamicSearch = function (self, e) {
 function NXProposalEditAutomation() {
     $("#commonModalForm").validate().destroy();
     $("#commonModalForm").validate({
-        rules: {
-        },
+        rules: {},
         submitHandler: function (form) {
             nxAjaxUxRequest($("#commonModalSubmitButton"));
         }
+    });
+}
+
+
+/** ----------------------------------------------------------
+ *  enabled the codemirror css editor
+ * -----------------------------------------------------------*/
+function NXCodeMirrorCSSEditor() {
+    $(document).ready(function () {
+        var cmr_theme = $("#css-editor-textarea").attr('data-crm-theme');
+        var editor_theme = (cmr_theme == 'midnight') ? 'darcula' : 'default';
+        const editor = CodeMirror.fromTextArea(document.getElementById('css-editor-textarea'), {
+            mode: 'css',
+            lineNumbers: true,
+            theme: editor_theme,
+            lineWrapping: false,
+            indentWithTabs: true,
+            indentUnit: 2,
+            tabSize: 2,
+            extraKeys: { "Tab": "indentMore" }
+        });
+        $("#css-editor-textarea").removeClass('hidden');
+
+        // Monitor changes in the CodeMirror editor and update the textarea
+        editor.on('change', function () {
+            $('#css-editor-textarea').val(editor.getValue());
+        });
     });
 }

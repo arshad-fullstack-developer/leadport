@@ -38,7 +38,7 @@
         <div id="card-edit-tags-buttons" class="p-t-10 hidden text-right display-block">
             <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
                 id="card-tags-button-cancel">@lang('lang.close')</button>
-            <button type="button" class="btn waves-effect waves-light btn-xs btn-success ajax-request"
+            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger ajax-request"
                 data-url="{{ url('leads/'.$lead->lead_id.'/update-tags') }}" data-progress-bar="hidden"
                 data-type="form" data-form-id="card-tags-container" data-ajax-type="post"
                 id="card-tags-button-save">@lang('lang.save')</button>

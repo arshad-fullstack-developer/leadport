@@ -1,45 +1,20 @@
+
 <div class="row">
     <div class="col-lg-12">
 
-      <!--title-->
-      <div class="form-group row">
+        @if(config('visibility.task_modal_project_option'))
+        <!--project-->
+        <div class="form-group row">
             <label
-                class="col-sm-12 col-lg-3 text-left control-label col-form-label required">{{ cleanLang(__('lang.task_type')) }}*</label>
+                class="col-sm-12 col-lg-3 text-left control-label col-form-label required">{{ cleanLang(__('lang.project')) }}*</label>
             <div class="col-sm-12 col-lg-9">
-                <input type="text" class="form-control form-control-sm" id="task_type" name="task_type"
-                    placeholder="Call"> 
-                    <input type="hidden" name="transport_type" id="transport_type">
-                    <ul class="nav nav-tabs mt-2" role="tablist">
-                        <li class="nav-item"> <a class="nav-link active ajax-request" id="call" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="sl-icon-call-in"></i></a></li>
-                        <li class="nav-item"> <a class="nav-link ajax-request" id="meeting" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="sl-icon-people"></i></a></li>
-                        <li class="nav-item"> <a class="nav-link ajax-request" id="task" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="ti-timer"></i></a></li>
-                        <li class="nav-item"> <a class="nav-link ajax-request" id="deadline" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="sl-icon-flag"></i></a></li>
-                        <li class="nav-item"> <a class="nav-link ajax-request" id="email" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="sl-icon-envelope"></i></a></li>
-                        <li class="nav-item"> <a class="nav-link ajax-request" id="lunch" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="ti-receipt"></i></a></li>
-                       <li class="nav-item"> <a class="nav-link ajax-request" id="transport" data-toggle="tab" href="javascript:void(0);"
-                        role="tab" data-loading-class="loading-before-centre" data-loading-target="card-tasks-left-panel">
-                        <i class="sl-icon-layers"></i></a></li>
-                </ul> 
-                <span><input type="text" class="form-control pickadate task-extra" id="from_date"  name="from_date" placeholder="from"></span>
-                <span><input type="time" class="task-extra"  name="from_time"></span>
-                --
-                <span><input type="time" class="task-extra"  name="to_time"></span>
-                <span><input type="text" class="form-control pickadate task-extra" id="to_date" name="to_date" placeholder="to"></span>
+                <select name="task_projectid" id="task_projectid"
+                    class="projects_assigned_toggle projects_assigned_client_toggle form-control form-control-sm js-select2-basic-search-modal select2-hidden-accessible"
+                    data-assigned-dropdown="assigned" data-client-assigned-dropdown="assigned-client"
+                    data-ajax--url="{{ url('/') }}/feed/projects?ref=general"></select>
             </div>
-
         </div>
+        @endif
 
         <!--title-->
         <div class="form-group row">
@@ -50,6 +25,8 @@
                     placeholder="">
             </div>
         </div>
+
+
 
         @if(config('visibility.task_modal_milestone_option'))
         <div class="form-group row">
@@ -90,16 +67,17 @@
         @endif
 
 
+
+
         <!--task priority-->
         <div class="form-group row">
             <label
                 class="col-sm-12 col-lg-3 text-left control-label col-form-label required">{{ cleanLang(__('lang.priority')) }}*</label>
             <div class="col-sm-12 col-lg-9">
                 <select class="select2-basic form-control form-control-sm" id="task_priority" name="task_priority">
-                    <option value="normal">{{ cleanLang(__('lang.normal')) }}</option>
-                    <option value="high">{{ cleanLang(__('lang.high')) }}</option>
-                    <option value="urgent">{{ cleanLang(__('lang.urgent')) }}</option>
-                    <option value="low">{{ cleanLang(__('lang.low')) }}</option>
+                    @foreach($priorities as $priority)
+                    <option value="{{ $priority->taskpriority_id }}">{{ $priority->taskpriority_title }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
@@ -125,20 +103,7 @@
                 @else
                 <select name="assigned" id="assigned"
                     class="form-control form-control-sm select2-basic select2-multiple select2-tags select2-hidden-accessible"
-                    multiple="multiple" tabindex="-1" aria-hidden="true">
-                       @if(auth()->user()->role_id  == 15)
-                       @foreach(config('project.users') as $user)
-                        <option value="{{ $user->id }}"
-                            {{ runtimePreselectedInArray($user->id ?? '', $assigned ?? []) }}>{{
-                            $user->full_name }}</option>
-                        @endforeach
-                       @else
-                       @foreach(config('system.team_members') as $user)
-                        <option value="{{ $user->id }}"
-                            {{ runtimePreselectedInArray($user->id ?? '', $assigned ?? []) }}>{{
-                            $user->full_name }}</option>
-                        @endforeach
-                       @endif
+                    multiple="multiple" tabindex="-1" aria-hidden="true" disabled>
                 </select>
                 @endif
             </div>
@@ -153,7 +118,7 @@
 
 
         <!--assigned [client users]-->
-        @if(auth()->user()->role->role_assign_tasks == 'yes' && config('visibility.tasks_standard_features') && auth()->user()->role_id != 15)
+        @if(auth()->user()->role->role_assign_tasks == 'yes' && config('visibility.tasks_standard_features'))
         <div class="form-group row">
             <label class="col-sm-12 col-lg-3 text-left control-label col-form-label">@lang('lang.assign_client')
                 <a class="align-middle font-16 toggle-collapse" href="#assigning_client_info" role="button"><i
@@ -178,37 +143,6 @@
         <div class="collapse" id="assigning_client_info">
             <div class="alert alert-info">
                 @lang('lang.assign_client_info')
-            </div>
-        </div>
-        @endif
-
-        <!--spacer-->
-        <div class="spacer row">
-            <div class="col-sm-12 col-lg-8">
-                <span class="title">{{ cleanLang(__('lang.select_project')) }}</span class="title">
-            </div>
-            <div class="col-sm-12 col-lg-4">
-                <div class="switch  text-right">
-                    <label>
-                        <input type="checkbox" name="show_project_field" id="show_project_field"
-                            class="js-switch-toggle-hidden-content" data-target="show_project">
-                        <span class="lever switch-col-light-blue"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <!--spacer-->  
-        
-        @if(config('visibility.task_modal_project_option'))
-        <!--project-->
-        <div class="form-group row">
-            <label
-                class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.project')) }}*</label>
-            <div class="col-sm-12 col-lg-9 hidden" id="show_project">
-                <select name="task_projectid" id="task_projectid"
-                    class="projects_assigned_toggle projects_assigned_client_toggle form-control form-control-sm js-select2-basic-search-modal select2-hidden-accessible"
-                    data-assigned-dropdown="assigned" data-client-assigned-dropdown="assigned-client"
-                    data-ajax--url="{{ url('/') }}/feed/projects?ref=general"></select>
             </div>
         </div>
         @endif
@@ -252,20 +186,20 @@
 
         <!--CUSTOMER FIELDS [collapsed]-->
         @if(config('system.settings_customfields_display_tasks') == 'toggled')
-        <!--<div class="spacer row">-->
-        <!--    <div class="col-sm-12 col-lg-8">-->
-        <!--        <span class="title">{{ cleanLang(__('lang.more_information')) }}</span class="title">-->
-        <!--    </div>-->
-        <!--    <div class="col-sm-12 col-lg-4">-->
-        <!--        <div class="switch  text-right">-->
-        <!--            <label>-->
-        <!--                <input type="checkbox" name="add_client_option_other" id="add_client_option_other"-->
-        <!--                    class="js-switch-toggle-hidden-content" data-target="leads_custom_fields_collaped">-->
-        <!--                <span class="lever switch-col-light-blue"></span>-->
-        <!--            </label>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <!--</div>-->
+        <div class="spacer row">
+            <div class="col-sm-12 col-lg-8">
+                <span class="title">{{ cleanLang(__('lang.more_information')) }}</span class="title">
+            </div>
+            <div class="col-sm-12 col-lg-4">
+                <div class="switch  text-right">
+                    <label>
+                        <input type="checkbox" name="add_client_option_other" id="add_client_option_other"
+                            class="js-switch-toggle-hidden-content" data-target="leads_custom_fields_collaped">
+                        <span class="lever switch-col-light-blue"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
         <div id="leads_custom_fields_collaped" class="hidden">
             @if(config('app.application_demo_mode'))
             <!--DEMO INFO-->
@@ -410,22 +344,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    $(document).ready(function(){
-        
-        var currentDate = new Date();
-        var formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear()}`;
-        $('input[name="from_date"]').val(formattedDate);
-        $('input[name="to_date"]').val(formattedDate);
-        $('#from_date').val(formattedDate);
-        $('#to_date').val(formattedDate);
-    });    
-    $(document).on('click','.nav-item',function(){
-        var tab = $(this).find('a').attr('id')
-        $("#transport_type").val(tab);
-        tab = tab.toUpperCase();
-        $("#task_type").attr('placeholder',tab);
-        
-    })
-</script>

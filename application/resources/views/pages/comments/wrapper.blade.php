@@ -28,7 +28,7 @@
                     <i class="ti-close"></i>
                 </a>
                 <!--submit button-->
-                <button type="button" class="btn btn-success btn-icon-circle js-ajax-ux-request x-submit-button"
+                <button type="button" class="btn btn-danger btn-icon-circle js-ajax-ux-request x-submit-button"
                     data-url="{{ urlResource('/comments') }}" data-type="form" data-ajax-type="post"
                     data-form-id="form-{{ $unique_comment_id }}" data-loading-target="comments-container">
                     <i class="sl-icon-paper-plane"></i>

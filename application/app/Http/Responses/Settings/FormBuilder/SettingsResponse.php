@@ -31,7 +31,7 @@ class SettingsResponse implements Responsable {
             $$key = $value;
         }
 
-        $html = view('pages/settings/sections/formbuilder/settings/page', compact('page', 'webform'))->render();
+        $html = view('pages/settings/sections/formbuilder/settings/page', compact('page', 'webform', 'statuses'))->render();
 
         $jsondata['dom_html'][] = array(
             'selector' => "#settings-wrapper",
@@ -42,6 +42,25 @@ class SettingsResponse implements Responsable {
         $jsondata['postrun_functions'][] = [
             'value' => 'NXFormBuilderSettings',
         ];
+
+        //left menu activate
+        if (request('url_type') == 'dynamic') {
+            $jsondata['dom_attributes'][] = [
+                'selector' => '#settings-menu-leads',
+                'attr' => 'aria-expanded',
+                'value' => false,
+            ];
+            $jsondata['dom_action'][] = [
+                'selector' => '#settings-menu-leads',
+                'action' => 'trigger',
+                'value' => 'click',
+            ];
+            $jsondata['dom_classes'][] = [
+                'selector' => '#settings-menu-leads-webforms',
+                'action' => 'add',
+                'value' => 'active',
+            ];
+        }
 
         //ajax response
         return response()->json($jsondata);

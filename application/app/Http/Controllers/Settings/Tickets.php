@@ -3,12 +3,24 @@
 /** --------------------------------------------------------------------------------
  * This controller manages all the business logic for ticket settings
  *
+ * [category table mapping] - For IMAP email settings
+ *
+ *  -category_meta_4 : email
+ *  -category_meta_5 : host
+ *  -category_meta_6 : port
+ *  -category_meta_7 : encryption
+ *  -category_meta_8 : username
+ *  -category_meta_9 : password
+ *  -category_meta_10 : post_import_action
+ *
  * @package    Grow CRM
  * @author     NextLoop
  *----------------------------------------------------------------------------------*/
 
 namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\Tickets\CategoryIMAPIntegration;
+use App\Http\Responses\Settings\Tickets\CategoryIMAPSettingsResponse;
 use App\Http\Responses\Settings\Tickets\CreateStatusResponse;
 use App\Http\Responses\Settings\Tickets\DestroyStatusResponse;
 use App\Http\Responses\Settings\Tickets\EditStatusResponse;
@@ -18,10 +30,12 @@ use App\Http\Responses\Settings\Tickets\MoveUpdateResponse;
 use App\Http\Responses\Settings\Tickets\SettingsResponse;
 use App\Http\Responses\Settings\Tickets\StatusesResponse;
 use App\Http\Responses\Settings\Tickets\StoreStatusResponse;
+use App\Http\Responses\Settings\Tickets\TestConnectionResponse;
 use App\Http\Responses\Settings\Tickets\UpdateResponse;
 use App\Http\Responses\Settings\Tickets\UpdateSettingsResponse;
 use App\Http\Responses\Settings\Tickets\UpdateStatusResponse;
 use App\Repositories\SettingsRepository;
+use App\Repositories\TicketsImapRepository;
 use App\Repositories\TicketStatusRepository;
 use DB;
 use Illuminate\Http\Request;
@@ -466,6 +480,155 @@ class Tickets extends Controller {
 
         //process reponse
         return new DestroyStatusResponse($payload);
+    }
+
+    /**
+     * show the form to edit a resource
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categoryIMAPSettings($id) {
+
+        //get the categor
+        if (!$category = \App\Models\Category::Where('category_id', $id)->Where('category_type', 'ticket')->first()) {
+            abort(404);
+        }
+
+        $settings = \App\Models\Settings2::find(1);
+
+        //reponse payload
+        $payload = [
+            'response' => 'show',
+            'category' => $category,
+            'settings' => $settings,
+        ];
+
+        //response
+        return new CategoryIMAPSettingsResponse($payload);
+    }
+
+    /**
+     * show the form to edit a resource
+     *
+     *    -------------------------------------------
+     *    imap_status              - category_meta_4
+     *    email                    - category_meta_5
+     *    username                 - category_meta_6
+     *    password                 - category_meta_7
+     *    host                     - category_meta_8
+     *    port                     - category_meta_9
+     *    encryption               - category_meta_10
+     *    post_action              - category_meta_11
+     *    mailbox_id               - category_meta_12
+     *    last_fetched_mail_id     - category_meta_13
+     *    fecthing_status          - category_meta_14
+     *    last_fetched_timestamp   - category_meta_22
+     *    last_fetched_date        - category_meta_2
+     *    last_fetched_count       - category_meta_23
+     *    email_total_count        - category_meta_24
+     *    -------------------------------------------
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCategoryIMAPSettings(CategoryIMAPIntegration $request, $id) {
+
+        //get the categor
+        if (!$category = \App\Models\Category::Where('category_id', $id)->Where('category_type', 'ticket')->first()) {
+            abort(404);
+        }
+
+        if (!request()->filled('category_email_integration')) {
+            abort(409, __('lang.email_integration_status') . ' - ' . __('lang.is_required'));
+        }
+
+        //update imap settings
+        if (request('category_email_integration') == 'disabled') {
+            $category->category_meta_4 = 'disabled';
+            $category->category_meta_5 = '';
+            $category->category_meta_6 = '';
+            $category->category_meta_7 = '';
+            $category->category_meta_8 = '';
+            $category->category_meta_9 = '';
+            $category->category_meta_10 = '';
+            $category->category_meta_11 = '';
+            $category->save();
+        }
+
+        //update imap settings
+        if (request('category_email_integration') == 'enabled') {
+
+            //validate duplicate email address
+            if (\App\Models\Category::Where('category_meta_5', request('category_meta_5'))->Where('category_id', '!=', $category->category_id)->exists()) {
+                abort(409, __('lang.email_already_linked_to_department'));
+            }
+
+            //save
+            $category->category_meta_4 = 'enabled';
+            $category->category_meta_5 = request('category_meta_5');
+            $category->category_meta_6 = request('category_meta_5');
+            $category->category_meta_7 = request('category_meta_7');
+            $category->category_meta_8 = request('category_meta_8');
+            $category->category_meta_9 = request('category_meta_9');
+            $category->category_meta_10 = request('category_meta_10');
+            $category->category_meta_11 = request('category_meta_11');
+            $category->save();
+        }
+
+        //reponse payload
+        $payload = [
+            'response' => 'update',
+        ];
+
+        //response
+        return new CategoryIMAPSettingsResponse($payload);
+    }
+
+    /**
+     * test an iamp connection
+     *
+     * Category Table Column Mapping
+     * These are additional columns in the category table that are used for tickets
+     *    -------------------------------------------
+     *    imap_status              - category_meta_4
+     *    email                    - category_meta_5
+     *    username                 - category_meta_6
+     *    password                 - category_meta_7
+     *    host                     - category_meta_8
+     *    port                     - category_meta_9
+     *    encryption               - category_meta_10
+     *    post_action              - category_meta_11
+     *    mailbox_id               - category_meta_12
+     *    last_fetched_mail_id     - category_meta_13
+     *    fecthing_status          - category_meta_14
+     *    last_fetched_timestamp   - category_meta_22
+     *    last_fetched_date        - category_meta_2
+     *    last_fetched_count       - category_meta_23
+     *    email_total_count        - category_meta_24
+     *    -------------------------------------------
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function testImapConnection(CategoryIMAPIntegration $request, TicketsImapRepository $imaprepo) {
+
+        //connection data
+        $data = [
+            'host' => request('category_meta_8'),
+            'port' => request('category_meta_9'),
+            'username' => request('category_meta_6'),
+            'password' => request('category_meta_7'),
+            'encryption' => request('category_meta_10'),
+        ];
+
+        //test connection
+        $result = $imaprepo->testConnection($data);
+
+        //reponse payload
+        $payload = [
+            'result' => $result,
+        ];
+
+        //response
+        return new TestConnectionResponse($payload);
     }
 
     /**

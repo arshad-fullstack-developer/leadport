@@ -5,7 +5,7 @@
         <!--ADD NEW ITEM-->
         @if(auth()->user()->is_admin)
         <button type="button"
-            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
             data-toggle="modal" data-target="#commonModal" data-url="{{ url('/app-admin/team/create') }}"
             data-loading-target="commonModalBody" data-modal-title="@lang('lang.team')"
             data-action-url="{{ url('/app-admin/team') }}"

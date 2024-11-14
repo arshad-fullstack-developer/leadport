@@ -51,7 +51,7 @@
         <div id="client-description-submit" class="p-t-20 hidden text-right">
             <button type="button" class="btn waves-effect waves-light btn-xs btn-default"
                 id="client-description-button-cancel">{{ cleanLang(__('lang.cancel')) }}</button>
-            <button type="button" class="btn waves-effect waves-light btn-xs btn-success" data-type="form"
+            <button type="button" class="btn waves-effect waves-light btn-xs btn-danger" data-type="form"
                 data-form-id="client-details-container" data-ajax-type="post"
                 data-url="{{ url('clients/'.$client->client_id .'/client-details') }}"
                 id="client-description-button-save">{{ cleanLang(__('lang.save')) }}</button>

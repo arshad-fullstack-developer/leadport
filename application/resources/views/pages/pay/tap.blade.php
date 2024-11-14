@@ -1,7 +1,7 @@
 <div class="payment-gateways" id="gateway-tap">
     <!--TAP BUTTONS-->
     <div class="x-button">
-        <button class="btn btn-success disable-on-click-loading"
+        <button class="btn btn-danger disable-on-click-loading"
             data-payload-publishable-key="{{ config('system.settings2_tap_publishable_key') }}"
             data-payload-language="{{ config('system.settings2_tap_language') }}"
             data-payload-first-name="{{ $tap['first_name'] }}"

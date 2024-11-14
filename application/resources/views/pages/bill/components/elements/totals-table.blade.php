@@ -13,7 +13,7 @@
             @if(config('visibility.bill_mode') == 'editing' && (auth()->check() && auth()->user()->role->role_estimates >= 3))
             <div class="x-add-file-button">
                 <button type="button" id="bill-file-attachments-upload-button"
-                    class="btn waves-effect waves-light btn-rounded btn-xs btn-success">@lang('lang.add_file_attachments')</button>
+                    class="btn waves-effect waves-light btn-rounded btn-xs btn-danger">@lang('lang.add_file_attachments')</button>
             </div>
             @endif
         </div>

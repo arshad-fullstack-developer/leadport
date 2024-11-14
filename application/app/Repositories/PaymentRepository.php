@@ -50,6 +50,13 @@ class PaymentRepository {
         $payments->leftJoin('clients', 'clients.client_id', '=', 'payments.payment_clientid');
         $payments->leftJoin('invoices', 'invoices.bill_invoiceid', '=', 'payments.payment_invoiceid');
         $payments->leftJoin('projects', 'projects.project_id', '=', 'payments.payment_projectid');
+        $payments->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'payments.payment_id')
+                ->where('pinned.pinnedresource_type', '=', 'payment');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //default where
         $payments->whereRaw("1 = 1");
@@ -184,10 +191,9 @@ class PaymentRepository {
             }
         } else {
             //default sorting
-            $payments->orderBy(
-                config('settings.ordering_payments.sort_by'),
-                config('settings.ordering_payments.sort_order')
-            );
+            $payments->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy(config('settings.ordering_payments.sort_by'), config('settings.ordering_payments.sort_order'));
         }
 
         //eager load

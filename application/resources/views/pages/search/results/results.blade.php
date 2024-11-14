@@ -60,6 +60,11 @@
     @include('pages.search.results.proposals')
     @endif
 
+    <!--knowledgebase-->
+    @if($knowledgebase['state'] && $knowledgebase['count'] > 0)
+    @include('pages.search.results.knowledgebase')
+    @endif
+
     <!--end-->
     @endif
 

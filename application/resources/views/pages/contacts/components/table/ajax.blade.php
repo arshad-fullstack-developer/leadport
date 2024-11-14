@@ -20,8 +20,19 @@
             <span class="online-status bg-success" data-toggle="tooltip"
                 title="{{ cleanLang(__('lang.user_is_online')) }}"></span>
             @endif
-        </span> <span>{{ $contact->first_name }}</span>
-        {{ $contact->last_name }}
+        </span>
+        <!--add item modal-->
+        @if(config('visibility.show_contact_profile'))
+        <a href="javascript:void(0);" class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+            data-toggle="modal" data-target="#commonModal" data-url="{{ url('contacts/'.$contact->id) }}"
+            data-loading-target="commonModalBody"
+            data-modal-title="" data-modal-size="modal-md"
+            data-header-close-icon="hidden" data-header-extra-close-icon="visible" data-footer-visibility="hidden"
+            data-action-ajax-loading-target="commonModalBody">{{ $contact->first_name }} {{ $contact->last_name }}
+        </a>
+        @else
+        <span>{{ $contact->first_name }} {{ $contact->last_name }}</span>
+        @endif
         <!--account owner-->
         @if($contact->account_owner == 'yes')
         <span class="sl-icon-star text-warning p-l-5" data-toggle="tooltip"

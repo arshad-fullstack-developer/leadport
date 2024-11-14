@@ -10,6 +10,9 @@
 @endif
 <!--filter-->
 
+<!--custom table view-->
+@include('pages.invoices.components.misc.table-config')
+
 <!--export-->
 @if(config('visibility.list_page_actions_exporting'))
 @include('pages.export.invoices.export')

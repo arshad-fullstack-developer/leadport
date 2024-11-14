@@ -13,9 +13,12 @@ use App\Http\Responses\Settings\FormBuilder\BuildFormResponse;
 use App\Http\Responses\Settings\FormBuilder\EmbedResponse;
 use App\Http\Responses\Settings\FormBuilder\SaveFormResponse;
 use App\Http\Responses\Settings\FormBuilder\SettingsResponse;
+use App\Http\Responses\Settings\FormBuilder\StyleResponse;
+use App\Repositories\CategoryRepository;
 use App\Repositories\WebformRepository;
 use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Validation\Rule;
 
 class Formbuilder extends Controller {
 
@@ -419,7 +422,7 @@ class Formbuilder extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function formSettings($id) {
+    public function formSettings(CategoryRepository $categoryrepo, $id) {
 
         //crumbs, page data & stats
         $page = $this->pageSettings('settings');
@@ -430,10 +433,14 @@ class Formbuilder extends Controller {
             abort(404);
         }
 
+        //all available lead statuses
+        $statuses = \App\Models\LeadStatus::all();
+
         //reponse payload
         $payload = [
             'page' => $page,
             'webform' => $webform,
+            'statuses' => $statuses,
         ];
 
         //show the view
@@ -453,6 +460,8 @@ class Formbuilder extends Controller {
             'webform_thankyou_message.required' => __('lang.thank_you_message') . ' - ' . __('lang.is_required'),
             'webform_submit_button_text.required' => __('lang.submit_button_text') . ' - ' . __('lang.is_required'),
             'webform_lead_title.required' => __('lang.lead_title') . ' - ' . __('lang.is_required'),
+            'webform_lead_status.required' => __('lang.lead_stage') . ' - ' . __('lang.is_required'),
+            'webform_lead_status.exists' => __('lang.lead_stage') . ' - ' . __('lang.could_not_be_found'),
         ];
 
         //crumbs, page data & stats
@@ -478,6 +487,10 @@ class Formbuilder extends Controller {
             'webform_lead_title' => [
                 'required',
             ],
+            'webform_lead_status' => [
+                'required',
+                Rule::exists('leads_status', 'leadstatus_id'),
+            ],
         ], $messages);
 
         //validation errors
@@ -496,12 +509,66 @@ class Formbuilder extends Controller {
         $webform->webform_notify_admin = request('webform_notify_admin');
         $webform->webform_submit_button_text = request('webform_submit_button_text');
         $webform->webform_lead_title = request('webform_lead_title');
+        $webform->webform_lead_status = request('webform_lead_status');
+        $webform->webform_recaptcha = request('webform_recaptcha');
         $webform->save();
 
         //response
         return response()->json(array('notification' => ['type' => 'success', 'value' => __('lang.request_has_been_completed')]));
 
     }
+
+        /**
+     * Display general form
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function formStyle($id) {
+
+        //crumbs, page data & stats
+        $page = $this->pageSettings('style');
+
+        //get the form
+        $webforms = $this->webformrepo->search($id);
+        if (!$webform = $webforms->first()) {
+            abort(404);
+        }
+
+        //reponse payload
+        $payload = [
+            'page' => $page,
+            'webform' => $webform,
+        ];
+
+        //show the view
+        return new StyleResponse($payload);
+    }
+
+        /**
+     * Save form settig=ngs
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function saveStyle($id) {
+
+        //get the form
+        $webforms = $this->webformrepo->search($id);
+        if (!$webform = $webforms->first()) {
+            abort(404);
+        }
+
+        //strip out <style> tags
+        $webform_style_css = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', '', request('webform_style_css'));
+
+        //save changes
+        $webform->webform_style_css = request('webform_style_css');
+        $webform->save();
+
+        //response
+        return response()->json(array('notification' => ['type' => 'success', 'value' => __('lang.request_has_been_completed')]));
+
+    }
+
 
     /**
      * Display general form
@@ -573,6 +640,13 @@ class Formbuilder extends Controller {
         if ($section == 'embed') {
             $page += [
                 'menutab_embed' => 'active',
+            ];
+            return $page;
+        }
+
+        if ($section == 'style') {
+            $page += [
+                'menutab_style' => 'active',
             ];
             return $page;
         }

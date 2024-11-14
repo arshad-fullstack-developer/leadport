@@ -13,10 +13,10 @@
     <base href="{{ url('/') }}" target="_self">
 
     <!--JQUERY & OTHER HEADER JS-->
-    <script src="{{ asset('public/vendor/js/vendor.header.js?v=') }}  {{ config('system.versioning') }}"></script>
+    <script src="public/vendor/js/vendor.header.js?v={{ config('system.versioning') }}"></script>
 
     <!--BOOTSTRAP-->
-    <link href="{{ asset('public/vendor/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="public/vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,20 +35,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!--VENDORS CSS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/css/vendor.css?v=') }}  {{ config('system.versioning') }}">
+    <link rel="stylesheet" href="/public/vendor/css/vendor.css?v={{ config('system.versioning') }}">
     <link rel="stylesheet"
-        href="{{ asset('public/vendor/js/bootstrap-timepicker/bootstrap-timepicker.css?v=') }} {{ config('system.versioning') }}">
+        href="/public/vendor/js/bootstrap-timepicker/bootstrap-timepicker.css?v={{ config('system.versioning') }}">
 
     <!--ICONS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/fonts/growcrm-icons/styles.css?v=') }} {{ config('system.versioning') }}">
+    <link rel="stylesheet" href="public/vendor/fonts/growcrm-icons/styles.css?v={{ config('system.versioning') }}">
 
     <!--DYNAMIC CSS VARS-->
     <style>
         :root {
-            --calendar-type-event-background: {{ config('system.settings2_calendar_events_colour') }};
-            --calendar-type-project-background: {{ config('system.settings2_calendar_projects_colour') }};
-            --calendar-type-task-background: {{ config('system.settings2_calendar_tasks_colour') }};
-            --calendar-fc-daygrid-dot-event-background: {{ config('system.settings2_calendar_events_colour') }};
+            --calendar-type-event-background: {
+                    {
+                    config('system.settings2_calendar_events_colour')
+                }
+            }
+
+            ;
+
+            --calendar-type-project-background: {
+                    {
+                    config('system.settings2_calendar_projects_colour')
+                }
+            }
+
+            ;
+
+            --calendar-type-task-background: {
+                    {
+                    config('system.settings2_calendar_tasks_colour')
+                }
+            }
+
+            ;
+
+            --calendar-fc-daygrid-dot-event-background: {
+                    {
+                    config('system.settings2_calendar_events_colour')
+                }
+            }
+
+            ;
             --calendar-fc-daygrid-dot-event-contrast: color-mix(in srgb, var(--calendar-fc-daygrid-dot-event-background) 70%, black);
         }
     </style>
@@ -56,23 +83,23 @@
     <!--THEME STYLE-->
     <!--use the default theme for all external pages (e.g. proposals, cotracts etc) -->
     @if(config('visibility.external_view_use_default_theme'))
-    <link href="{{ asset('public/themes/default/css/style.css?v=') }} {{ config('system.settings_system_javascript_versioning') }}"
+    <link href="public/themes/default/css/style.css?v={{ config('system.settings_system_javascript_versioning') }}"
         rel="stylesheet">
     @else
     @if(auth()->check())
     <link
-        href="leadport/public/themes/{{ auth()->user()->pref_theme }}/css/style.css?v={{ config('system.settings_system_javascript_versioning') }}"
+        href="public/themes/{{ auth()->user()->pref_theme }}/css/style.css?v={{ config('system.settings_system_javascript_versioning') }}"
         rel="stylesheet">
     @else
-    <link href="{{ asset('public/themes/default/css/style.css?v=') }}" rel="stylesheet">
+    <link href="{{ config('theme.selected_theme_css') }} " rel="stylesheet">
     @endif
     @endif
 
     <!--USERS CUSTON CSS FILE-->
-    <link href="{{ asset('public/css/custom.css?v=') }} {{ config('system.versioning') }}" rel="stylesheet">
+    <link href="public/css/custom.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!--PRINTING CSS-->
-    <link href="{{ asset('public/css/print.css?v=') }} {{ config('system.versioning') }}" rel="stylesheet">
+    <link href="public/css/print.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!-- Favicon icon -->
     <link rel="apple-touch-icon" sizes="57x57" href="public/images/favicon/apple-icon-57x57.png">
@@ -184,7 +211,7 @@
     </script>
 
     <!--boot js-->
-    <script src="{{ asset('public/js/core/head.js?v=') }} {{ config('system.versioning') }}"></script>
+    <script src="public/js/core/head.js?v={{ config('system.versioning') }}"></script>
 
     <!--stripe payments js-->
     @if(@config('visibility.stripe_js'))
@@ -205,6 +232,13 @@
     @if(@config('system.settings2_captcha_status') == 'enabled')
     {!! htmlScriptTagJsApi([]) !!}
     @endif
+
+    <!--code mirror (css editor)-->
+    <link rel="stylesheet" href="/public/js/codemirror/codemirror.min.css?v={{ config('system.versioning') }}">
+    <link rel="stylesheet" href="/public/js/codemirror/darcula.min.css?v={{ config('system.versioning') }}">
+
+    <!--dynamic css - crm css-->
+    {!! config('css.application') !!}
 
     <!--DYANMIC TRUSTED CONTENT - No sanitizing required] for this trusted content (Admin Custom HTML & JS header code)-->
     {!! config('system.settings_theme_head') !!}

@@ -1,6 +1,6 @@
 @foreach($clients as $client)
 <!--each row-->
-<tr id="client_{{ $client->client_id }}">
+<tr id="client_{{ $client->client_id }}" class="{{ $client->pinned_status ?? '' }}">
 
     <!--tableconfig_column_1 [client_id]-->
     <td class="clients_col_id {{ config('table.tableconfig_column_1') }} tableconfig_column_1"
@@ -19,7 +19,14 @@
         id="clients_col_account_owner_{{ $client->client_id }}">
         <img src="{{ getUsersAvatar($client->avatar_directory, $client->avatar_filename) }}" alt="user"
             class="img-circle avatar-xsmall">
-        <span>{{ $client->first_name ?? '---' }}</span>
+        <span>
+            <a href="javascript:void(0);" class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                data-toggle="modal" data-target="#commonModal" data-url="{{ url('contacts/'.$client->id) }}"
+                data-loading-target="commonModalBody" data-modal-title="" data-modal-size="modal-md"
+                data-header-close-icon="hidden" data-header-extra-close-icon="visible" data-footer-visibility="hidden"
+                data-action-ajax-loading-target="commonModalBody">{{ $client->first_name }} {{ $client->last_name }}
+            </a>
+        </span>
     </td>
 
 
@@ -200,14 +207,14 @@
     </td>
 
     <!--tableconfig_column_25 [status]-->
-    <th class="col_status {{ config('table.tableconfig_column_25') }} tableconfig_column_25">
+    <td class="col_status {{ config('table.tableconfig_column_25') }} tableconfig_column_25">
         <span class="label {{ runtimeClientStatusLabel($client->client_status) }}">{{
             runtimeLang($client->client_status) }}</span>
-        </td>
+    </td>
 
 
-        <!--actions-->
-        @if(config('visibility.action_column'))
+    <!--actions-->
+    @if(config('visibility.action_column'))
     <td class="clients_col_action actions_column" id="clients_col_action_{{ $client->client_id }}">
         <!--action button-->
         <span class="list-table-action dropdown font-size-inherit">
@@ -236,7 +243,7 @@
 
             <!--send email-->
             <button type="button" title="@lang('lang.send_email')"
-                class="data-toggle-action-tooltip btn btn-outline-warning btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                class="data-toggle-action-tooltip btn btn-outline-info btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
                 data-toggle="modal" data-target="#commonModal"
                 data-url="{{ url('/appwebmail/compose?view=modal&webmail_template_type=clients&resource_type=client&resource_id='.$client->client_id) }}"
                 data-loading-target="commonModalBody" data-modal-title="@lang('lang.send_email')"
@@ -244,10 +251,6 @@
                 data-action-ajax-loading-target="clients-td-container">
                 <i class="ti-email display-inline-block m-t-3"></i>
             </button>
-
-            <a href="/clients/{{ $client->client_id ?? '' }}" class="btn btn-outline-info btn-circle btn-sm">
-                <i class="ti-new-window"></i>
-            </a>
         </span>
         <!--action button-->
         <!--more button (hidden)-->
@@ -262,6 +265,16 @@
             </div>
         </span>
         <!--more button-->
+
+        <!--pin-->
+        <span class="list-table-action">
+            <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                data-parent="client_{{ $client->client_id }}"
+                data-url="{{ url('/clients/'.$client->client_id.'/pinning') }}"
+                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                <i class="ti-pin2"></i>
+            </a>
+        </span>
     </td>
     @endif
 

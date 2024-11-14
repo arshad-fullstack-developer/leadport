@@ -84,7 +84,7 @@
                         @if(config('visibility.action_buttons_edit'))
                         <div class="x-list b-none">
                             <button type="button"
-                                class="btn btn-rounded-x btn-success edit-add-modal-button js-ajax-ux-request"
+                                class="btn btn-rounded-x btn-danger edit-add-modal-button js-ajax-ux-request"
                                 data-toggle="modal"
                                 data-url="/tickets/{{ $ticket->ticket_id }}/edit?edit_type=all&edit_source=leftpanel"
                                 data-action-url="/tickets/{{ $ticket->ticket_id }}" data-target="#commonModal"

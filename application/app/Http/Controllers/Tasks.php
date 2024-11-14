@@ -39,7 +39,6 @@ use App\Http\Responses\Tasks\UpdateResponse;
 use App\Http\Responses\Tasks\UpdateStatusLockedResponse;
 use App\Http\Responses\Tasks\UpdateStatusResponse;
 use App\Http\Responses\Tasks\UpdateTagsResponse;
-use App\Mail\TaskStatusChanged;
 use App\Models\Checklist;
 use App\Models\Comment;
 use App\Models\Task;
@@ -76,6 +75,9 @@ use Illuminate\Support\Str;
 use Image;
 use Intervention\Image\Exception\NotReadableException;
 use Validator;
+use App\Http\Responses\Tasks\PinningResponse;
+use App\Repositories\PinnedRepository;
+
 
 class Tasks extends Controller {
 
@@ -166,6 +168,7 @@ class Tasks extends Controller {
             'stopRecurring',
             'storeDependency',
             'deleteDependency',
+            'togglePinning',
         ]);
 
         $this->middleware('tasksMiddlewareCreate')->only([
@@ -3481,6 +3484,31 @@ class Tasks extends Controller {
         return response()->json(array(
             'status' => true,
         ));
+
+    }
+
+    /**
+     * toggle pinned state of tasks
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'task');
+
+        //get the task
+        $task = \App\Models\Task::Where('task_id', $id)->first();
+
+        //reponse payload
+        $payload = [
+            'task_id' => $id,
+            'task' => $task,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
 
     }
 

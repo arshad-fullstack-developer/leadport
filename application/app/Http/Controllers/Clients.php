@@ -24,6 +24,7 @@ use App\Http\Responses\Clients\StoreResponse;
 use App\Http\Responses\Clients\UpdateDetailsResponse;
 use App\Http\Responses\Clients\UpdateOwnerResponse;
 use App\Http\Responses\Clients\UpdateResponse;
+use App\Http\Responses\Clients\PinningResponse;
 use App\Repositories\AttachmentRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\ClientRepository;
@@ -33,6 +34,8 @@ use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\PinnedRepository;
+
 use Validator;
 
 class Clients extends Controller {
@@ -92,6 +95,7 @@ class Clients extends Controller {
             'updateDescription',
             'emailCompose',
             'emailSend',
+            'togglePinning'
         ]);
 
         //dependencies
@@ -713,6 +717,28 @@ class Clients extends Controller {
 
         //response
         return new UpdateOwnerResponse($payload);
+    }
+
+    
+    /**
+     * toggle pinned state of clients
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'client');
+
+        //reponse payload
+        $payload = [
+            'client_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

@@ -28,7 +28,7 @@ class EmailTemplate extends Model {
      * @data array the data we want to inject/replace
      * @return object
      * */
-    public function parse($section = 'body', $data) {
+    public function parse($section = 'body', $data = []) {
 
         //validate
         if (!is_array($data) || !in_array($section, ['body', 'subject'])) {

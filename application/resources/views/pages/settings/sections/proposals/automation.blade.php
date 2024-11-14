@@ -176,7 +176,7 @@
 
     <!--buttons-->
     <div class="text-right">
-        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-success waves-effect text-left ajax-request"
+        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-danger waves-effect text-left ajax-request"
             data-url="/settings/proposals/automation" data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
     </div>

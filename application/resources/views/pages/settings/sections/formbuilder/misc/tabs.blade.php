@@ -10,6 +10,12 @@
                 class="hidden-sm-up ajax-request" href="javascript:void(0);"><i class="ti-user"></i></span> <span
                 class="hidden-xs-down">@lang('lang.form_settings')</span></a>
     </li>
+    <!--css_style-->
+    <li class="nav-item"> <a class="nav-link cursor-pointer {{ $page['menutab_style'] ?? '' }}"
+            href="{{ url('/app/settings/formbuilder/'.$webform->webform_id.'/style') }}" role="tab"><span
+                class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                class="hidden-xs-down">@lang('lang.css_style')</span></a>
+    </li>
     <!--embed code-->
     <li class="nav-item"> <a class="nav-link cursor-pointer {{ $page['menutab_embed'] ?? '' }}"
             href="{{ url('/app/settings/formbuilder/'.$webform->webform_id.'/integrate') }}" role="tab"><span

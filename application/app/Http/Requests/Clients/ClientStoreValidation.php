@@ -11,6 +11,7 @@ namespace App\Http\Requests\Clients;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ClientStoreValidation extends FormRequest {
 
@@ -57,7 +58,10 @@ class ClientStoreValidation extends FormRequest {
                 'email' => [
                     'required',
                     'email',
-                    'unique:users,email',
+                    //ignore 'contact' type users
+                    Rule::unique('users', 'email')->where(function ($query) {
+                        return $query->whereIn('type', ['client', 'team']);
+                    }),
                 ],
             ];
         }
@@ -95,5 +99,5 @@ class ClientStoreValidation extends FormRequest {
 
         abort(409, $messages);
     }
-    
+
 }

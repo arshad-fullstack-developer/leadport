@@ -190,7 +190,7 @@
                 @lang('lang.delete')
             </a>
             @else
-            <button type="button" class="btn btn-success btn-sm confirm-action-danger"
+            <button type="button" class="btn btn-danger btn-sm confirm-action-danger"
                 data-confirm-title="@lang('lang.delete')" data-confirm-text="@lang('lang.are_you_sure')"
                 data-ajax-type="DELETE" data-url="{{ url('app-admin/packages/'.$package->package_id) }}">
                 @lang('lang.delete')

@@ -41,6 +41,7 @@ Route::group(['prefix' => 'clients'], function () {
     Route::put("/{client}/billing-details", "Clients@updatebillingDetails")->where('client', '[0-9]+');
     Route::get("/{client}/change-account-owner", "Clients@changeAccountOwner");
     Route::post("/{client}/change-account-owner", "Clients@changeAccountOwnerUpdate");
+    Route::get("/{client}/pinning", "Clients@togglePinning")->where('client', '[0-9]+');
     //dynamic load
     Route::any("/{client}/{section}", "Clients@showDynamic")
         ->where(['client' => '[0-9]+', 'section' => 'details|contacts|projects|files|client-files|tickets|invoices|expenses|payments|timesheets|estimates|notes']);
@@ -113,6 +114,7 @@ Route::group(['prefix' => 'invoices'], function () {
     Route::post("/{invoice}/attach-files", "Invoices@attachFiles")->where('estimate', '[0-9]+');
     Route::get("/delete-attachment", "Invoices@deleteFile");
     Route::post("/{invoice}/change-tax-type", "Invoices@updateTaxType")->where('invoice', '[0-9]+');
+    Route::get("/{invoice}/pinning", "Invoices@togglePinning")->where('invoice', '[0-9]+');
 
     //view from email link
     Route::get("/redirect/{invoice}", "Invoices@redirectURL")->where('invoice', '[0-9]+');
@@ -128,7 +130,9 @@ Route::group(['prefix' => 'subscriptions'], function () {
     Route::get("/getprices", "Subscriptions@getProductPrices");
     Route::get("/{subscription}/invoices", "Subscriptions@subscriptionInvoices")->where('subscription', '[0-9]+');
     Route::get("/{subscription}/pay", "Subscriptions@setupStripePayment")->where('subscription', '[0-9]+');
-    Route::get("/{subscription}/cancel", "Subscriptions@cancelSubscription")->where('subscription', '[0-9]+')->middleware(['demoModeCheck']);;
+    Route::get("/{subscription}/cancel", "Subscriptions@cancelSubscription")->where('subscription', '[0-9]+')->middleware(['demoModeCheck']);
+    Route::get("/{subscription}/pinning", "Subscriptions@togglePinning")->where('subscription', '[0-9]+');
+
 });
 Route::resource('subscriptions', 'Subscriptions');
 
@@ -164,6 +168,7 @@ Route::group(['prefix' => 'estimates'], function () {
     Route::get("/delete-attachment", "Estimates@deleteFile");
     Route::post("/{estimate}/change-tax-type", "Estimates@updateTaxType")->where('estimate', '[0-9]+');
     Route::get("/view/{estimate}", "Estimates@showPublic");
+    Route::get("/{estimate}/pinning", "Estimates@togglePinning")->where('estimate', '[0-9]+');
 
 });
 Route::resource('estimates', 'Estimates');
@@ -178,6 +183,8 @@ Route::group(['prefix' => 'payments'], function () {
     Route::any("/thankyou", "Payments@thankYou");
     Route::post("/thankyou/razorpay", "Payments@thankYouRazorpay");
     Route::get("/thankyou/tap", "Payments@thankYouTap");
+    Route::get("/{payment}/pinning", "Payments@togglePinning")->where('payment', '[0-9]+');
+
 });
 Route::resource('payments', 'Payments');
 
@@ -194,6 +201,7 @@ Route::group(['prefix' => 'items'], function () {
     Route::post("/tasks", "Items@storeTask");
     Route::get("/tasks/{task}/edit", "Items@editTask")->where('task', '[0-9]+');
     Route::put("/tasks/{task}", "Items@updateTask")->where('task', '[0-9]+');
+    Route::get("/{item}/pinning", "Items@togglePinning")->where('item', '[0-9]+');
 
 });
 Route::resource('items', 'Items');
@@ -222,6 +230,7 @@ Route::group(['prefix' => 'expenses'], function () {
     Route::get("/{expense}/add-to-invoice", "Expenses@addToInvoice")->where('expense', '[0-9]+');
     Route::post("/{expense}/add-to-invoice", "Expenses@addToInvoice")->where('expense', '[0-9]+');
     Route::any("/v/{expense}", "Expenses@index")->where('expense', '[0-9]+');
+    Route::get("/{expense}/pinning", "Expenses@togglePinning")->where('expense', '[0-9]+');
 
 });
 Route::resource('expenses', 'Expenses');
@@ -256,6 +265,7 @@ Route::group(['prefix' => 'projects'], function () {
     Route::post("/change-assigned", "Projects@BulkchangeAssignedUpdate");
     Route::get("/bulk-change-status", "Projects@BulkChangeStatus");
     Route::post("/bulk-change-status", "Projects@BulkChangeStatusUpdate");
+    Route::get("/{project}/pinning", "Projects@togglePinning")->where('project', '[0-9]+');
 
     //dynamic load
     Route::any("/{project}/{section}", "Projects@showDynamic")
@@ -306,6 +316,7 @@ Route::group(['prefix' => 'tasks'], function () {
     Route::delete("/{task}/delete-dependency", "Tasks@deleteDependency")->where('task', '[0-9]+');
     Route::get("/{task}/add-cover-image", "Tasks@addCoverImage")->where('task', '[0-9]+');
     Route::get("/{task}/remove-cover-image", "Tasks@removeCoverImage")->where('task', '[0-9]+');
+    Route::get("/{task}/pinning", "Tasks@togglePinning")->where('task', '[0-9]+');
 
     //card tabs
     Route::get("/content/{task}/show-main", "Tasks@show")->where('lead', '[0-9]+');
@@ -370,6 +381,8 @@ Route::group(['prefix' => 'leads'], function () {
     Route::post("/bulk-change-status", "Leads@BulkChangeStatusUpdate");
     Route::get("/{lead}/add-cover-image", "Leads@addCoverImage")->where('lead', '[0-9]+');
     Route::get("/{lead}/remove-cover-image", "Leads@removeCoverImage")->where('lead', '[0-9]+');
+    Route::get("/{lead}/pinning", "Leads@togglePinning")->where('lead', '[0-9]+');
+
 
     //card tabs
     Route::get("/content/{lead}/show-main", "Leads@show")->where('lead', '[0-9]+');
@@ -408,6 +421,8 @@ Route::group(['prefix' => 'tickets'], function () {
     Route::any("/restore", "Tickets@restore");
     Route::get("/change-status", "Tickets@changeStatus");
     Route::post("/change-status", "Tickets@changeStatusUpdate");
+    Route::get("/{ticket}/pinning", "Tickets@togglePinning")->where('ticket', '[0-9]+');
+
 
 });
 Route::resource('tickets', 'Tickets');
@@ -431,6 +446,8 @@ Route::group(['prefix' => 'timesheets'], function () {
     Route::any("/", "Timesheets@index");
     Route::any("/search", "Timesheets@index");
     Route::post("/delete", "Timesheets@destroy")->middleware(['demoModeCheck']);
+    Route::get("/{timesheet}/pinning", "Timesheets@togglePinning")->where('timesheet', '[0-9]+');
+
 });
 Route::resource('timesheets', 'Timesheets');
 
@@ -502,6 +519,7 @@ Route::group(['prefix' => 'proposals'], function () {
     Route::post("/{proposal}/clone", "Proposals@storeClone")->where('project', '[0-9]+');
     Route::get("/{proposal}/edit-automation", "Proposals@editAutomation")->where('estimate', '[0-9]+');
     Route::post("/{proposal}/edit-automation", "Proposals@updateAutomation")->where('estimate', '[0-9]+');
+    Route::get("/{proposal}/pinning", "Proposals@togglePinning")->where('proposal', '[0-9]+');
 });
 
 //CONTRACTS
@@ -528,6 +546,7 @@ Route::group(['prefix' => 'contracts'], function () {
     Route::get("/{contract}/detach-project", "Contracts@dettachProject")->where('invoice', '[0-9]+');
     Route::get("/{contract}/clone", "Contracts@createClone")->where('project', '[0-9]+');
     Route::post("/{contract}/clone", "Contracts@storeClone")->where('project', '[0-9]+');
+    Route::get("/{contract}/pinning", "Contracts@togglePinning")->where('contract', '[0-9]+');
 });
 
 //CONTRACT TEMPLATES
@@ -616,6 +635,8 @@ Route::group(['prefix' => 'kb'], function () {
     //pretty url domain.com/kb/12/some-category-title
     Route::any("/articles/{slug}", "Knowledgebase@index");
     Route::any("/article/{slug}", "Knowledgebase@show");
+    Route::any("/search/{slug}", "Knowledgebase@index");
+
 });
 Route::resource('kb', 'Knowledgebase');
 
@@ -857,6 +878,8 @@ Route::group(['prefix' => 'settings/formbuilder'], function () {
     Route::get("/{id}/settings", "Settings\Formbuilder@formSettings");
     Route::post("/{id}/settings", "Settings\Formbuilder@saveSettings");
     Route::get("/{id}/integrate", "Settings\Formbuilder@embedCode");
+    Route::get("/{id}/style", "Settings\Formbuilder@formStyle");
+    Route::post("/{id}/style", "Settings\Formbuilder@saveStyle");
 });
 
 //SETTINGS - TASKS
@@ -962,6 +985,9 @@ Route::group(['prefix' => 'settings/tickets'], function () {
     Route::post("/update-stage-positions", "Settings\Tickets@updateStagePositions");
     Route::get("/statuses/{id}/settings", "Settings\Tickets@statusSettings");
     Route::put("/statuses/{id}/settings", "Settings\Tickets@statusSettingsUpdate");
+    Route::post("/emailintegration/test", "Settings\Tickets@testImapConnection");
+    Route::get("/emailintegration/category/{id}", "Settings\Tickets@categoryIMAPSettings");
+    Route::put("/emailintegration/category/{id}", "Settings\Tickets@updateCategoryIMAPSettings");
 });
 
 //SETTINGS - LOGO

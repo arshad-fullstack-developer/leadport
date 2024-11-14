@@ -19,6 +19,8 @@ use App\Models\Proposal;
 use App\Models\Task;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Knowledgebase;
+
 use Illuminate\Http\Request;
 
 class SearchRepository {
@@ -36,6 +38,7 @@ class SearchRepository {
     protected $file;
     protected $attachment;
     protected $ticket;
+    protected $knowledgebase;
 
     /**
      * Inject dependecies
@@ -50,6 +53,7 @@ class SearchRepository {
         File $file,
         Attachment $attachment,
         Task $task,
+        Knowledgebase $knowledgebase,
         Lead $lead) {
 
         $this->client = $client;
@@ -62,6 +66,8 @@ class SearchRepository {
         $this->attachment = $attachment;
         $this->task = $task;
         $this->lead = $lead;
+        $this->knowledgebase = $knowledgebase;
+
     }
 
     /**
@@ -547,6 +553,39 @@ class SearchRepository {
 
         // Get the results and return them.
         return $proposals->paginate(config('system.settings_system_pagination_limits'));
+    }
+
+    /**
+     * Search model
+     * @param int $id optional for getting a single, specified record
+     * @return object tickets collection
+     */
+    public function knowledgebase($type = '') {
+
+        $knowledgebase = $this->knowledgebase->newQuery();
+
+        // all ticket fields
+        $knowledgebase->selectRaw('*');
+
+        //default where
+        $knowledgebase->whereRaw("1 = 1");
+
+        //search: various ticket columns and relationships (where first, then wherehas)
+        $knowledgebase->where(function ($query) {
+            $query->orWhere('knowledgebase_title', 'LIKE', '%' . request('search_query') . '%');
+            $query->orWhere('knowledgebase_text', 'LIKE', '%' . request('search_query') . '%');
+        });
+
+        //sorting
+        $knowledgebase->orderBy('knowledgebase_title', 'asc');
+
+        //cloun
+        if ($type == 'count') {
+            return $knowledgebase->count();
+        }
+
+        // Get the results and return them.
+        return $knowledgebase->paginate(config('system.settings_system_pagination_limits'));
     }
 
 }

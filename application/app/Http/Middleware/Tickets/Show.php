@@ -73,6 +73,10 @@ class Show {
         //permissions -viewing
         if (auth()->user()->is_team) {
 
+            config([
+                'visibility.show_contact_profile' => true,
+            ]);
+
             if ($ticket->ticket_active_state == 'archived') {
                 config([
                     'visibility.show_archived_warning' => true,
@@ -93,6 +97,7 @@ class Show {
             config([
                 //visibility
                 'visibility.ticket_replying' => true,
+                'visibility.show_contact_profile' => false,
             ]);
         }
 

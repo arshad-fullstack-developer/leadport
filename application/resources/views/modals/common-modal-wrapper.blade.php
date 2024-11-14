@@ -21,7 +21,7 @@
                 <div class="modal-footer" id="commonModalFooter">
                     <button type="button" id="commonModalCloseButton" class="btn btn-rounded-x btn-secondary waves-effect text-left" data-dismiss="modal">{{ cleanLang(__('lang.close')) }}</button>
                     <button type="submit" id="commonModalSubmitButton"
-                        class="btn btn-rounded-x btn-success waves-effect text-left commonModalSubmitButton" data-url="" data-loading-target=""
+                        class="btn btn-rounded-x btn-danger waves-effect text-left commonModalSubmitButton" data-url="" data-loading-target=""
                         data-ajax-type="POST" data-on-start-submit-button="disable">{{ cleanLang(__('lang.submit')) }}</button>
                 </div>
             </div>

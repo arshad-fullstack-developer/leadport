@@ -53,6 +53,14 @@ class ClientRepository {
 
         $clients = $this->clients->newQuery();
 
+        $clients->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'clients.client_id')
+                ->where('pinned.pinnedresource_type', '=', 'client');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
+
         // all client fields
         $clients->selectRaw('*');
 
@@ -363,8 +371,12 @@ class ClientRepository {
                 }
             }
         } else {
-            //default sorting
-            $clients->orderBy('client_company_name', 'asc');
+            $clients->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('client_company_name', 'asc');
+            $clients->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('client_company_name', 'asc');
         }
 
         //eager load
@@ -447,19 +459,37 @@ class ClientRepository {
          * ----------------------------------------------*/
         $this->tagrepo->add('client', $client->client_id);
 
-        /** ----------------------------------------------
-         * create the default user
-         * ----------------------------------------------*/
-        request()->merge([
-            'account_owner' => 'yes',
-            'role_id' => 2,
-            'type' => 'client',
-            'clientid' => $client->client_id,
-        ]);
-        $password = str_random(7);
-        if (!$user = $this->userrepo->create(bcrypt($password), 'user')) {
-            Log::error("default client user could not be added - database error", ['process' => '[ClientRepository]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
-            abort(409);
+        /** ------------------------------------------------------------------------------------
+         * create the default user - or check if there is a [contact] already with this email
+         * -----------------------------------------------------------------------------------*/
+        if ($user = \App\Models\User::Where('email', request('email'))->Where('type', 'contact')->first()) {
+
+            //password
+            $password = str_random(7);
+
+            //update contact into client primary user
+            $user->type = 'client';
+            $user->role_id = 2;
+            $user->account_owner = 'yes';
+            $user->clientid = $client->client_id;
+            $user->creatorid = Auth()->user()->id;
+            $user->unique_id = str_unique();
+            $user->timezone = config('system.settings_system_timezone');
+            $user->password = bcrypt($password);
+            $user->save();
+
+        } else {
+            request()->merge([
+                'account_owner' => 'yes',
+                'role_id' => 2,
+                'type' => 'client',
+                'clientid' => $client->client_id,
+            ]);
+            $password = str_random(7);
+            if (!$user = $this->userrepo->create(bcrypt($password), 'user')) {
+                Log::error("default client user could not be added - database error", ['process' => '[ClientRepository]', config('app.debug_ref'), 'function' => __function__, 'file' => basename(__FILE__), 'line' => __line__, 'path' => __file__]);
+                abort(409);
+            }
         }
 
         /** ----------------------------------------------

@@ -6,7 +6,7 @@
         <!--ADD NEW ITEM-->
         @if(config('visibility.list_page_actions_add_button'))
         <button type="button"
-            class="btn btn-success btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
+            class="btn btn-danger btn-add-circle edit-add-modal-button js-ajax-ux-request reset-target-modal-form {{ $page['add_button_classes'] ?? '' }}"
             data-toggle="modal" data-target="#commonModal" data-url="{{ $page['add_modal_create_url'] ?? '' }}"
             data-loading-target="commonModalBody" data-modal-title="{{ $page['add_modal_title'] ?? '' }}"
             data-action-url="{{ $page['add_modal_action_url'] ?? '' }}"
@@ -21,7 +21,7 @@
 
         <!--add new button (link)-->
         @if( config('visibility.list_page_actions_add_button_link'))
-        <a id="fx-page-actions-add-button" type="button" class="btn btn-success btn-add-circle edit-add-modal-button"
+        <a id="fx-page-actions-add-button" type="button" class="btn btn-danger btn-add-circle edit-add-modal-button"
             href="{{ $page['add_button_link_url'] ?? '' }}">
             <i class="ti-plus"></i>
         </a>

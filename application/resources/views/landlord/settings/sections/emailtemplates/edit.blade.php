@@ -72,7 +72,7 @@
                 <!--form buttons-->
                 <div class="text-right p-t-30" id="email-templates-buttons-container">
                     <button type="submit" id="submitButton"
-                        class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request"
+                        class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request"
                         data-url="{{ url('app-admin/settings/emailtemplates/'.$template->emailtemplate_id) }}" data-type="form"
                         data-loading-target="email-templates-buttons-container" data-form-id="email-templates-editing"
                         data-ajax-type="POST"

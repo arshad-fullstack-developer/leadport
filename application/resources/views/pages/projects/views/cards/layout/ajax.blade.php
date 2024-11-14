@@ -1,18 +1,21 @@
 @foreach($projects as $project)
-<div class="col-sm-12 col-md-4 col-lg-3 click-url" id="project_{{ $project->project_id }}" data-url="{{ url('/projects/'.$project->project_id) }}">
+<div class="col-sm-12 col-md-4 col-lg-3 click-url {{ $project->pinned_status ?? '' }}" id="project_{{ $project->project_id }}"
+    data-url="{{ url('/projects/'.$project->project_id) }}">
 
     <div class="grid-card m-b-35">
 
         <!--COVER IMAGE-->
         @if(config('visibility.card_cover_image'))
-        <div class="grid-card-img-container" {!! clean(getCoverImage($project->project_cover_directory ?? '', $project->project_cover_filename ?? '')) !!}>
+        <div class="grid-card-img-container" {!! clean(getCoverImage($project->project_cover_directory ?? '',
+            $project->project_cover_filename ?? '')) !!}>
         </div>
         @endif
 
         <div class="grid-card-content project-card">
 
             <!--TITLE-->
-            <div class="x-title wordwrap" title="{{ $project->project_title }}">{{ str_limit($project->project_title ??'---', 28) }}
+            <div class="x-title wordwrap" title="{{ $project->project_title }}">
+                {{ str_limit($project->project_title ??'---', 28) }}
                 <!--ACTION BUTTONS (team)-->
                 @if(config('visibility.action_buttons_edit'))
                 <span class="x-action-button" id="card-action-button-123" data-toggle="dropdown" aria-haspopup="true"
@@ -80,24 +83,36 @@
                     <span><strong>@lang('lang.id'):</strong> {{ $project->project_id }}</span>
                 </div>
 
-                <div class="p-t-3">
-                    <!--assigned users-->
-                    @if(count($project->assigned ?? []) > 0)
-                    @foreach($project->assigned->take(7) as $user)
-                    <img src="{{ $user->avatar }}" data-toggle="tooltip" title="{{ $user->first_name }}"
-                        data-placement="top" alt="{{ $user->first_name }}"
-                        class="img-circle avatar-xsmall w-px-25 h-px-25">
-                    @endforeach
-                    @endif
-                    <!--assigned users-->
-                    <!--more users-->
-                    @if(count($project->assigned ?? []) > 1)
-                    @php $more_users_title = __('lang.assigned_users'); $users = $project->assigned; @endphp
-                    @include('misc.more-users')
-                    @endif
-                    <!--more users-->
-
-
+                <div class="p-t-3 clearfix">
+                    <div class="pull-left">
+                        <!--assigned users-->
+                        @if(count($project->assigned ?? []) > 0)
+                        @foreach($project->assigned->take(7) as $user)
+                        <img src="{{ $user->avatar }}" data-toggle="tooltip" title="{{ $user->first_name }}"
+                            data-placement="top" alt="{{ $user->first_name }}"
+                            class="img-circle avatar-xsmall w-px-25 h-px-25">
+                        @endforeach
+                        @endif
+                        <!--assigned users-->
+                        <!--more users-->
+                        @if(count($project->assigned ?? []) > 1)
+                        @php $more_users_title = __('lang.assigned_users'); $users = $project->assigned; @endphp
+                        @include('misc.more-users')
+                        @endif
+                        <!--more users-->
+                    </div>
+                    <div class="pull-right">
+                        <!--pin-->
+                        <span class="list-table-action">
+                            <a href="javascript:void(0);"
+                                title="{{ cleanLang(__('lang.pinning')) }}"
+                                data-parent="project_{{ $project->project_id }}"
+                                data-url="{{ url('/projects/'.$project->project_id.'/pinning') }}"
+                                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                                <i class="ti-pin2"></i>
+                            </a>
+                        </span>
+                    </div>
                 </div>
 
             </div>

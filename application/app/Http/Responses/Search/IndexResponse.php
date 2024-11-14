@@ -77,6 +77,7 @@ class IndexResponse implements Responsable {
             'files',
             'attachments',
             'tickets',
+            'knowledgebase',
             'proposals',
             'page',
             'search_type',

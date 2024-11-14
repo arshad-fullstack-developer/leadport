@@ -34,7 +34,7 @@
 
 <!--[PRINTING]-->
 @if(config('visibility.page_rendering') == 'print-page')
-<script src="{{ asset('public/js/dynamic/print.js') }}?v={{ config('system.versioning') }}"></script>
+<script src="public/js/dynamic/print.js?v={{ config('system.versioning') }}"></script>
 @endif
 
 </html>

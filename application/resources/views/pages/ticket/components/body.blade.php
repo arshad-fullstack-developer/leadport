@@ -15,7 +15,21 @@
                             width="40" class="img-circle" />
                     </div>
                     <div class="p-l-10">
-                        <h5 class="m-b-0">{{ $ticket->first_name ?? runtimeUnkownUser() }}</h5>
+                        <h5 class="m-b-0">
+                            @if(config('visibility.show_contact_profile'))
+                            <a href="javascript:void(0);"
+                                class="edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                                data-toggle="modal" data-target="#commonModal"
+                                data-url="{{ url('contacts/'.$ticket->id) }}" data-loading-target="commonModalBody"
+                                data-modal-title="" data-modal-size="modal-md" data-header-close-icon="hidden"
+                                data-header-extra-close-icon="visible" data-footer-visibility="hidden"
+                                data-action-ajax-loading-target="commonModalBody">{{ $ticket->first_name ?? runtimeUnkownUser() }}
+                                {{ $ticket->last_name ?? ''}}
+                            </a>
+                            @else
+                            {{ $ticket->first_name ?? runtimeUnkownUser() }} {{ $ticket->last_name ?? ''}}
+                            @endif
+                        </h5>
                         <small class="text-muted">{{ runtimeDateAgo($ticket->ticket_created ) }}</small>
                     </div>
                 </div>
@@ -82,12 +96,12 @@
             @include('pages.ticket.components.modals.reply')
             <!--form buttons-->
             <div class="text-right p-t-30">
-                <button type="button" class="btn btn-success waves-effect text-left" id="ticket_reply_button_close"
+                <button type="button" class="btn btn-danger waves-effect text-left" id="ticket_reply_button_close"
                     data-dismiss="modal">@lang('lang.cancel')</button>
                 <button type="submit" id="ticket_reply_button_submit"
                     class="btn btn-info waves-effect text-left js-ajax-ux-request"
-                    data-url="{{ url('tickets/'.$ticket->ticket_id.'/postreply?view=inline') }}" data-type="form" data-form-id="ticket_reply_inline_form"
-                    data-ajax-type="post" data-loading-target="main-body"
+                    data-url="{{ url('tickets/'.$ticket->ticket_id.'/postreply?view=inline') }}" data-type="form"
+                    data-form-id="ticket_reply_inline_form" data-ajax-type="post" data-loading-target="main-body"
                     data-on-start-submit-button="disable">@lang('lang.submit')</button>
             </div>
         </div>

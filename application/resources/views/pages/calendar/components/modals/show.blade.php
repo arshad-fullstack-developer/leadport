@@ -269,7 +269,7 @@
             id="calendar-cancel-edit-event-button">@lang('lang.cancel_editing')</button>
 
         <!--save-->
-        <button type="submit" class="btn btn-rounded-x btn-success waves-effect text-left ajax-request"
+        <button type="submit" class="btn btn-rounded-x btn-danger waves-effect text-left ajax-request"
             data-url="{{ url('/calendar/'.$event['id']) }}" data-loading-target="commonModalBody" data-ajax-type="PUT"
             data-on-start-submit-button="disable"
             data-form-id="calendar-edit-container">@lang('lang.save_changes')</button>

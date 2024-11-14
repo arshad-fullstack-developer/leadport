@@ -1635,8 +1635,6 @@ $(document).ready(function () {
             var column_class = $(this).attr('name');
             var $table_column = $("." + column_class);
 
-            console.log(column_class);
-
             //toggle table column
             if ($(this).is(':checked')) {
                 $table_column.removeClass('hidden');
@@ -1878,18 +1876,48 @@ $(document).ready(function () {
 
 
     /*----------------------------------------------------------------
-     *  proposal automation [create invoice]
+     *  tickets IMAP settings
      * -----------------------------------------------------------*/
-    $(document).on('change', '#settings2_proposals_automation_create_invoice, #proposal_automation_create_invoice', function () {
-        if ($(this).is(':checked')) {
-            $("#settings_automation_create_invoice_options").show();
-            $("#proposal_automation_create_invoice_options").show();
+    $(document).on('select2:select', '#settings2_tickets_imap_status', function (e) {
+        var selection = e.params.data.id;
+        if (selection == 'enabled') {
+            $("#settings_imap_options_container").show();
+            $("#imap_test_connection_button").show();
         } else {
-            $("#settings_automation_create_invoice_options").hide();
-            $("#proposal_automation_create_invoice_options").hide();
+            $("#settings_imap_options_container").hide();
+            $("#imap_test_connection_button").hide();
         }
     });
 
 
+    /*----------------------------------------------------------------
+     *  tickets IMAP category settings
+     * -----------------------------------------------------------*/
+    $(document).on('select2:select', '#category_email_integration', function (e) {
+        var selection = e.params.data.id;
+        if (selection == 'enabled') {
+            $("#category_imap_settings_container").show();
+        } else {
+            $("#category_imap_settings_container").hide();
+        }
+    });
+
+    /** --------------------------------------------------------------------------------------------------
+     *  pinning items
+     * -------------------------------------------------------------------------------------------------*/
+    $(document).on("click", ".js-toggle-pinning", function (e) {
+
+        e.preventDefault();
+
+        var parent_id = $(this).attr('data-parent');
+        var $parent = $("#" + parent_id);
+
+        //disable the items
+        $parent.addClass('disabled-content');
+
+        //request
+        nxAjaxUxRequest($(this));
+        e.stopPropagation();
+    });
 
 });

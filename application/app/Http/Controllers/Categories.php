@@ -45,8 +45,11 @@ class Categories extends Controller {
         //admin
         $this->middleware('adminCheck');
 
-        //general
-        $this->middleware('auth');
+        $this->middleware('categoriesMiddlewareGeneral')->only([
+            'index',
+            'update',
+            'store',
+        ]);
 
         $this->categoryrepo = $categoryrepo;
 

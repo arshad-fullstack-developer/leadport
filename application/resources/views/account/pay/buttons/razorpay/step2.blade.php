@@ -44,6 +44,6 @@
 <!--form buttons-->
 <div class="text-right">
     <a type="submit" href="javascript:void(0);" id="razorpay-checkout-button-try-again"
-        class="text-center btn-block btn btn-success waves-effect text-left">
+        class="text-center btn-block btn btn-danger waves-effect text-left">
         @lang('lang.pay_now')</a>
 </div>

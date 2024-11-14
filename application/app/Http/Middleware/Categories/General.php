@@ -9,7 +9,6 @@
 
 namespace App\Http\Middleware\Categories;
 use Closure;
-use Log;
 
 class General {
 
@@ -38,6 +37,21 @@ class General {
 
         //page level javascript
         config(['js.section' => 'categories']);
+
+        //default show some table columns
+        config([
+            'visibility.categories_col_created_by' => true,
+            'visibility.categories_col_date' => true,
+        ]);
+
+        //imap ticket piping
+        if (request('filter_category_type') == 'ticket' || request('category_type') == 'ticket') {
+            config([
+                'visibility.categories_col_created_by' => false,
+                'visibility.categories_col_date' => false,
+                'visibility.categories_col_email_piping' => true,
+            ]);
+        }
 
     }
 

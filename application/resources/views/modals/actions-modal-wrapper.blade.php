@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal-footer" id="actionsModalFooter">
                     <button type="button" class="btn btn-rounded-x btn-secondary waves-effect text-left" data-dismiss="modal">{{ cleanLang(__('lang.close')) }}</button>
-                    <button type="submit" id="actionsModalButton" class="btn btn-rounded-x btn-success waves-effect text-left js-ajax-ux-request" 
+                    <button type="submit" id="actionsModalButton" class="btn btn-rounded-x btn-danger waves-effect text-left js-ajax-ux-request" 
                             data-url=""
                             data-loading-target="actionsModalBody"
                             data-ajax-type=""

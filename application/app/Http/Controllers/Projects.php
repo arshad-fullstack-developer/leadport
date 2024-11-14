@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Projects\ProjectUpdateAutomation;
 use App\Http\Requests\Projects\ProjectValidation;
 use App\Http\Responses\Common\ChangeCategoryResponse;
+use App\Http\Responses\Projects\PinningResponse;
 use App\Http\Responses\Projects\ActivateResponse;
 use App\Http\Responses\Projects\ArchiveResponse;
 use App\Http\Responses\Projects\BulkChangeStatusResponse;
@@ -55,6 +56,7 @@ use App\Repositories\FileFolderRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\MilestoneCategoryRepository;
 use App\Repositories\MilestoneRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\ProjectAssignedRepository;
 use App\Repositories\ProjectAutomationRepository;
 use App\Repositories\ProjectManagerRepository;
@@ -173,6 +175,7 @@ class Projects extends Controller {
             'showDynamic',
             'updateDescription',
             'details',
+            'togglePinning',
         ]);
 
         $this->middleware('projectsMiddlewareEdit')->only([
@@ -847,7 +850,7 @@ class Projects extends Controller {
         return $fields;
     }
 
-        /**
+    /**
      * get all custom fields for clients
      *   - if they are being used in the 'edit' modal form, also get the current data
      *     from the cliet record. Store this temporarily in '$field->customfields_name'
@@ -2150,6 +2153,27 @@ class Projects extends Controller {
 
         //show the form
         return new ChangeAssignedUpdateResponse($payload);
+    }
+
+    /**
+     * toggle pinned state of projects
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'project');
+
+        //reponse payload
+        $payload = [
+            'project_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

@@ -98,20 +98,20 @@ class Contact extends Controller {
             abort(409, $messages);
         }
 
-        /** ----------------------------------------------
-         * send email to user
-         * ----------------------------------------------*/
+        /** --------------------------------------------------------------------------------------
+         * send form to the email address that is specified in the contact us form's settings
+         * -------------------------------------------------------------------------------------*/
+        $section = \App\Models\Landlord\Frontend::On('landlord')->Where('frontend_name', 'page-contact')->first();
+        $to_email = $section->frontend_data_3;
+
         $data = [
+            'to_email' => $to_email,
             'contact_name' => request('contact_name'),
             'contact_email' => request('contact_email'),
             'message' => request('contact_message'),
         ];
-        if ($admins = \App\Models\User::On('landlord')->Where('type', 'admin')->get()) {
-            foreach ($admins as $user) {
-                $mail = new \App\Mail\Landlord\Admin\ContactUs($user, $data, []);
-                $mail->build();
-            }
-        }
+        $mail = new \App\Mail\Landlord\Admin\ContactUs($data, []);
+        $mail->build();
 
         $jsondata['dom_visibility'][] = [
             'selector' => '#contact-us-form',

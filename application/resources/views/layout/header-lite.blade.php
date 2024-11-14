@@ -15,10 +15,10 @@
     <base href="{{ url('/') }}" target="_self">
 
     <!--JQUERY & OTHER LITE JS-->
-    <script src="{{ asset('public/vendor/js/vendor-lite.header.js') }} ?v={{ config('system.versioning') }}"></script>
+    <script src="public/vendor/js/vendor-lite.header.js?v={{ config('system.versioning') }}"></script>
 
     <!--BOOTSTRAP-->
-    <link href="{{ asset('public/vendor/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="public/vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
     <!--GOOGLE FONTS-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet"
@@ -26,16 +26,16 @@
 
 
     <!--VENDORS CSS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/css/vendor-lite.css') }}?v={{ config('system.versioning') }}">
+    <link rel="stylesheet" href="public/vendor/css/vendor-lite.css?v={{ config('system.versioning') }}">
 
     <!--THEME STYLE (always use the default theme)-->
-    <link href="{{ asset('public/themes/default/css/style.css') }} ?v={{ config('system.versioning') }}" rel="stylesheet">
+    <link href="public/themes/default/css/style.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!--USERS CUSTON CSS FILE-->
-    <link href="{{ asset('public/css/custom.css') }}?v={{ config('system.versioning') }}" rel="stylesheet">
+    <link href="public/css/custom.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/images/favicon/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/images/favicon/favicon-16x16.png">
     <meta name="theme-color" content="#ffffff">
 
     <!--SET DYNAMIC VARIABLE IN JAVASCRIPT-->
@@ -123,5 +123,14 @@
         NX.array_3 = [];
         NX.array_4 = [];
     </script>
+
+    <!--DYANMIC TRUSTED CONTENT - No sanitizing required] for this trusted content (Google reCAPTCHA)-->
+    @if(@config('system.settings2_captcha_status') == 'enabled')
+    {!! htmlScriptTagJsApi([]) !!}
+    @endif
+
+    <!--dynamic css - lead web forms-->
+    {!! config('css.webform') !!}
+
 
 </head>

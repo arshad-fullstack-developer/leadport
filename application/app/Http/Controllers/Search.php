@@ -61,6 +61,7 @@ class Search extends Controller {
         $tickets = $this->tickets();
         $contracts = $this->contracts();
         $proposals = $this->proposals();
+        $knowledgebase = $this->knowledgebase();
 
         //current collection
         switch (request('search_type')) {
@@ -114,6 +115,11 @@ class Search extends Controller {
             $template = $proposals['template'];
             $this->count = $proposals['count'];
             break;
+        case 'knowledgebase':
+            $results = $knowledgebase['results'];
+            $template = $knowledgebase['template'];
+            $this->count = $knowledgebase['count'];
+            break;
         default:
             $results = [];
             $template = '';
@@ -142,6 +148,7 @@ class Search extends Controller {
             'attachments' => $attachments,
             'tickets' => $tickets,
             'proposals' => $proposals,
+            'knowledgebase' => $knowledgebase,
 
             //at the end
             'count' => $this->count,
@@ -239,8 +246,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-        /**
+    /**
      * search contracts
      *
      * @return \Illuminate\Http\Response
@@ -283,9 +289,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-    
-        /**
+    /**
      * search proposals
      *
      * @return \Illuminate\Http\Response
@@ -328,9 +332,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-    
-        /**
+    /**
      * search tickets
      *
      * @return \Illuminate\Http\Response
@@ -373,9 +375,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-    
-        /**
+    /**
      * search tasks
      *
      * @return \Illuminate\Http\Response
@@ -418,9 +418,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-    
-        /**
+    /**
      * search leads
      *
      * @return \Illuminate\Http\Response
@@ -463,9 +461,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-    
-        /**
+    /**
      * search files
      *
      * @return \Illuminate\Http\Response
@@ -508,9 +504,7 @@ class Search extends Controller {
         return $data;
     }
 
-
-    
-        /**
+    /**
      * search attachments
      *
      * @return \Illuminate\Http\Response
@@ -553,9 +547,50 @@ class Search extends Controller {
         return $data;
     }
 
+    /**
+     * search proposals
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function knowledgebase() {
 
-    
-        /**
+        //basic defaults
+        $data = [
+            'state' => false,
+            'search_type' => 'category',
+            'count' => 0,
+            'results' => [],
+            'template' => 'pages/search/results/knowledgebase',
+        ];
+
+        //false state
+        if (!config('search.knowledgebase')) {
+            return $data;
+        }
+
+        if (!in_array(request('search_type'), ['all', 'knowledgebase'])) {
+            //count anyway
+            $data['count'] = $this->searchrepo->knowledgebase('count');
+            //return data
+            return $data;
+        }
+
+        //set the current search
+        $this->current_category = request('search_type');
+
+        //get knowledgebase
+        $data['results'] = $this->searchrepo->knowledgebase();
+        $data['count'] = $this->searchrepo->knowledgebase('count');
+        $data['search_type'] = (request('search_type') == 'knowledgebase') ? 'category' : 'all';
+        $data['state'] = true;
+
+        //update results count
+        $this->count += $data['count'];
+
+        return $data;
+    }
+
+    /**
      * search contacts
      *
      * @return \Illuminate\Http\Response

@@ -47,6 +47,13 @@ class ProjectRepository {
         $projects->leftJoin('clients', 'clients.client_id', '=', 'projects.project_clientid');
         $projects->leftJoin('categories', 'categories.category_id', '=', 'projects.project_categoryid');
         $projects->leftJoin('users', 'users.id', '=', 'projects.project_creatorid');
+        $projects->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'projects.project_id')
+                ->where('pinned.pinnedresource_type', '=', 'project');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -410,11 +417,10 @@ class ProjectRepository {
                 break;
             }
         } else {
-            //default sorting
-            $projects->orderBy(
-                config('settings.ordering_projects.sort_by'),
-                config('settings.ordering_projects.sort_order')
-            );
+            //order ny pinned items first and then the rest by the default sorting
+            $projects->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy(config('settings.ordering_projects.sort_by'), config('settings.ordering_projects.sort_order'));
         }
 
         //eager load

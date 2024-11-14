@@ -121,6 +121,10 @@ function middlewareBootSettings() {
      */
     config(['settings.custom_fields_display_limit' => config('settings.custom_fields_display_limit') ?? 5]);
 
+    //custom css froms database
+    $settings2_theme_css = '<style>' . $settings->settings2_theme_css . '</style>';
+    config(['css.application' => $settings2_theme_css]);
+
 }
 
 /**

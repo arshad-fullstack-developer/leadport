@@ -14,6 +14,7 @@ use App\Http\Responses\Contacts\CreateResponse;
 use App\Http\Responses\Contacts\DestroyResponse;
 use App\Http\Responses\Contacts\EditResponse;
 use App\Http\Responses\Contacts\IndexResponse;
+use App\Http\Responses\Contacts\ShowResponse;
 use App\Http\Responses\Contacts\StoreResponse;
 use App\Http\Responses\Contacts\UpdateResponse;
 use App\Repositories\CategoryRepository;
@@ -53,6 +54,10 @@ class Contacts extends Controller {
             'index',
             'update',
             'store',
+        ]);
+
+        $this->middleware('contactsMiddlewareShow')->only([
+            'show',
         ]);
 
         $this->middleware('contactsMiddlewareCreate')->only([
@@ -99,6 +104,26 @@ class Contacts extends Controller {
     }
 
     /**
+     * show a contact
+     *
+     * @return bool
+     */
+    public function show($id) {
+
+        //the user
+        $contact = \App\Models\User::Where('id', $id)->first();
+
+        //reponse payload
+        $payload = [
+            'page' => $this->pageSettings('contacts'),
+            'contact' => $contact,
+        ];
+
+        //show views
+        return new ShowResponse($payload);
+    }
+
+    /**
      * Show the form for creating a new contact.
      * @return \Illuminate\Http\Response
      */
@@ -134,7 +159,10 @@ class Contacts extends Controller {
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email'),
+                //ignore 'contact' type users
+                Rule::unique('users', 'email')->where(function ($query) {
+                    return $query->whereIn('type', ['client', 'team']);
+                }),
             ],
             'clientid' => [
                 'required',
@@ -162,9 +190,32 @@ class Contacts extends Controller {
         //password
         $password = str_random(9);
 
-        //save contact
-        if (!$userid = $this->userrepo->create(bcrypt($password))) {
-            abort(409);
+        /** ------------------------------------------------------------------------------------
+         * create a client user - or check if there is a [contact] already with this email
+         * -----------------------------------------------------------------------------------*/
+        if ($user = \App\Models\User::Where('email', request('email'))->Where('type', 'contact')->first()) {
+
+
+            //update contact into client primary user
+            $user->type = 'client';
+            $user->role_id = 2;
+            $user->account_owner = 'no';
+            $user->first_name = request('first_name');
+            $user->last_name = request('last_name');
+            $user->clientid = request('clientid');
+            $user->creatorid = auth()->user()->id;
+            $user->unique_id = str_unique();
+            $user->timezone = config('system.settings_system_timezone');
+            $user->password = bcrypt($password);
+            $user->save();
+
+            //get user is
+            $userid = $user->id;
+
+        } else {
+            if (!$userid = $this->userrepo->create(bcrypt($password))) {
+                abort(409);
+            }
         }
 
         //get the contact

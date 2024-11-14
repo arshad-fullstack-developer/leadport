@@ -19,6 +19,7 @@ use App\Http\Responses\Tickets\DestroyResponse;
 use App\Http\Responses\Tickets\EditReplyResponse;
 use App\Http\Responses\Tickets\EditResponse;
 use App\Http\Responses\Tickets\IndexResponse;
+use App\Http\Responses\Tickets\PinningResponse;
 use App\Http\Responses\Tickets\ReplyResponse;
 use App\Http\Responses\Tickets\ShowResponse;
 use App\Http\Responses\Tickets\StoreReplyResponse;
@@ -32,6 +33,7 @@ use App\Repositories\DestroyRepository;
 use App\Repositories\EmailerRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\TicketReplyRepository;
 use App\Repositories\TicketRepository;
 use App\Repositories\UserRepository;
@@ -646,7 +648,7 @@ class Tickets extends Controller {
         ];
         //record event
         if ($event_id = $this->eventrepo->create($data)) {
-            //get team users
+            //get ticket users
             if (auth()->user()->type == 'client') {
                 $users = $this->userrepo->getTeamMembers('ids');
             }
@@ -659,18 +661,29 @@ class Tickets extends Controller {
         }
 
         /** ----------------------------------------------
-         * send email [comment
+         * send email - original ticket source: web
          * ----------------------------------------------*/
-        if (isset($emailusers) && is_array($emailusers)) {
-            //the comment
-            $data = $reply->toArray();
-            //send to users
-            if ($users = \App\Models\User::WhereIn('id', $emailusers)->get()) {
-                foreach ($users as $user) {
-                    $mail = new \App\Mail\TicketReply($user, $data, $ticket);
-                    $mail->build();
+        if ($ticket->ticket_source == 'web' || $ticket->category_meta_4 == 'disabled') {
+            if (isset($emailusers) && is_array($emailusers)) {
+                //the comment
+                $data = $reply->toArray();
+                //send to users
+                if ($users = \App\Models\User::WhereIn('id', $emailusers)->get()) {
+                    foreach ($users as $user) {
+                        $mail = new \App\Mail\TicketReply($user, $data, $ticket);
+                        $mail->build();
+                    }
                 }
             }
+        }
+
+        /** ----------------------------------------------------------------------------
+         * [imap] - send email - to original sender email address (of the main ticket)
+         * ----------------------------------------------------------------------------*/
+        if ($ticket->ticket_source == 'email' && $ticket->category_meta_4 == 'enabled' && $ticket->ticket_imap_sender_email_address != '') {
+            $data = $reply->toArray();
+            $mail = new \App\Mail\TicketImapReply($data, $ticket);
+            $mail->build();
         }
 
         //reponse payload
@@ -872,7 +885,13 @@ class Tickets extends Controller {
      */
     public function deleteReply($id) {
 
+        //get the reply
         $reply = \App\Models\TicketReply::Where('ticketreply_id', $id)->first();
+
+        //delete any queued emails
+        \App\Models\EmailQueue::Where('emailqueue_resourcetype', 'ticket-reply')->Where('emailqueue_resourceid', $id)->delete();
+
+        //delete the reply
         $reply->delete();
 
         //payload
@@ -1018,6 +1037,27 @@ class Tickets extends Controller {
 
         //show the form
         return new ArchiveRestoreResponse($payload);
+    }
+
+    /**
+     * toggle pinned state of tickets
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'ticket');
+
+        //reponse payload
+        $payload = [
+            'ticket_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

@@ -70,6 +70,8 @@ use Illuminate\Support\Str;
 use Image;
 use Intervention\Image\Exception\NotReadableException;
 use Validator;
+use App\Http\Responses\Leads\PinningResponse;
+use App\Repositories\PinnedRepository;
 
 class Leads extends Controller {
 
@@ -2707,8 +2709,8 @@ class Leads extends Controller {
             abort(409, __('lang.client_already_exists'));
         }
 
-        //check for duplicate user
-        if (\App\Models\User::Where('email', request('email'))->exists()) {
+        //check for duplicate user - ignore [contact] type users
+        if (\App\Models\User::Where('email', request('email'))->WhereIn('type', ['client', 'team'])->first()) {
             abort(409, __('lang.user_already_exists'));
         }
 
@@ -3757,6 +3759,31 @@ class Leads extends Controller {
         return response()->json(array(
             'status' => true,
         ));
+
+    }
+
+        /**
+     * toggle pinned state of leads
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'lead');
+
+        //get the lead
+        $lead = \App\Models\Lead::Where('lead_id', $id)->first();
+
+        //reponse payload
+        $payload = [
+            'lead_id' => $id,
+            'lead' => $lead,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
 
     }
 

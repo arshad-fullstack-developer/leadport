@@ -1,6 +1,6 @@
 @foreach($contracts as $contract)
 <!--each row-->
-<tr id="contract_{{ $contract->doc_id }}">
+<tr id="contract_{{ $contract->doc_id }}" class="{{ $contract->pinned_status ?? '' }}">
     @if(config('visibility.contracts_col_checkboxes'))
     <td class="contracts_col_checkbox checkcontract p-l-0" id="contracts_col_checkbox_{{ $contract->doc_id }}">
         <!--list checkbox-->
@@ -86,7 +86,7 @@
     @if(config('visibility.contracts_col_action'))
     <td class="contracts_col_action actions_column" id="contracts_col_action_{{ $contract->doc_id }}">
         <!--action button-->
-        <span class="list-table-action dropdown font-size-inherit">
+        <span class="list-table-action font-size-inherit">
             <!--delete-->
             @if(config('visibility.action_buttons_delete'))
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
@@ -147,7 +147,15 @@
                 </div>
             </span>
             @endif
-            <!--more button-->
+
+            <!--pin-->
+            <span class="list-table-action">
+                <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                    data-parent="contract_{{ $contract->doc_id }}" data-url="{{ url('/contracts/'.$contract->doc_id.'/pinning') }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                    <i class="ti-pin2"></i>
+                </a>
+            </span>
 
         </span>
         <!--action button-->

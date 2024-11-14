@@ -21,7 +21,7 @@
 
 <!--form buttons-->
 <div class="text-right p-t-30">
-    <button type="submit" id="submitButton" class="btn btn-success waves-effect text-left ajax-request" 
+    <button type="submit" id="submitButton" class="btn btn-danger waves-effect text-left ajax-request" 
         data-url="{{ url('settings/webforms/'.$webform->webform_id.'/assigned') }}"
         data-loading-target="actionsModalBody" 
         data-ajax-type="POST" 

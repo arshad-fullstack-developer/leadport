@@ -3646,16 +3646,16 @@ font-size
 /**-------------------------------------------------------
 * text case
 * -------------------------------------------------------*/
-.text-ucf,
-.text-ucw {
+.text-ucf, .ucf .text-ucw,
+.ucw {
   text-transform: capitalize;
 }
 
-.text-uc {
+.text-uc, .uc {
   text-transform: uppercase;
 }
 
-.text-lc {
+.text-lc, .lc {
   text-transform: lowercase;
 }
 
@@ -6374,7 +6374,7 @@ Buttons
 .btn-success.disabled.active,
 .btn-success.disabled:active,
 .btn-success.disabled:focus {
-  background: #23D26B;
+  background: #04b381;
   border-color: transparent;
 }
 
@@ -6517,8 +6517,8 @@ Buttons
   color: #ffffff;
 }
 .btn-outline-success.active, .btn-outline-success:active, .btn-outline-success:focus {
-  background-color: #23D26B;
-  border-color: #23D26B;
+  background-color: #04b381;
+  border-color: #04b381;
 }
 
 .btn-outline-info {
@@ -6757,8 +6757,8 @@ Buttons
 .btn-success.focus,
 .btn-success:focus,
 .show > .btn-success.dropdown-toggle {
-  background-color: #23D26B;
-  border: 1px solid #23D26B;
+  background-color: #04b381;
+  border: 1px solid #04b381;
 }
 
 .btn-info.active.focus,
@@ -12207,7 +12207,7 @@ textarea.error {
   color: #e6294b;
 }
 .list-table-action .btn-outline-success:hover, .list-table-action .btn-outline-success:active, .list-table-action .btn-outline-success:visited, .list-table-action .btn-outline-success:focus {
-  color: #23D26B;
+  color: #04b381;
 }
 .list-table-action .btn-outline-info:hover, .list-table-action .btn-outline-info:active, .list-table-action .btn-outline-info:visited, .list-table-action .btn-outline-info:focus {
   color: #1d96c3;
@@ -18675,6 +18675,44 @@ chat application Page
 .event-type-task:hover {
   background-color: var(--calendar-type-task-background);
   color: #ffffff;
+}
+
+/* ----------------------------------------------------------
+* pinning content
+* --------------------------------------------------------*/
+.disabled-content {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+tr.pinned {
+  background-color: #f1f7f9;
+}
+tr.pinned:hover {
+  background-color: #ecf3f6 !important;
+}
+tr.pinned td {
+  border-color: #d8dde0 !important;
+}
+
+.pinned .grid-card {
+  background-color: #f1f7f9;
+}
+
+.kanban-card.pinned {
+  background-color: #fffef6;
+}
+.kanban-card.pinned .kanban-card-cover-image {
+  background-color: #fffef6;
+}
+
+.pinned .js-toggle-pinning {
+  color: #ff9041;
+  opacity: 1;
+}
+.pinned .js-toggle-pinning:hover {
+  color: #e9ab2e;
 }
 
 /* ----------------------------------------------------------------

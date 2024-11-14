@@ -1,6 +1,6 @@
 @foreach($expenses as $expense)
 <!--each row-->
-<tr id="expense_{{ $expense->expense_id }}">
+<tr id="expense_{{ $expense->expense_id }}" class="{{ $expense->pinned_status ?? '' }}">
     @if(config('visibility.expenses_col_checkboxes'))
     <td class="expenses_col_checkbox checkitem" id="expenses_col_checkbox_{{ $expense->expense_id }}">
         <!--list checkbox-->
@@ -9,8 +9,9 @@
                 name="ids[{{ $expense->expense_id }}]"
                 class="listcheckbox listcheckbox-expenses filled-in chk-col-light-blue expenses-checkbox"
                 data-actions-container-class="expenses-checkbox-actions-container"
-                data-expense-id="{{ $expense->expense_id }}" data-unit="{{ cleanLang(__('lang.item')) }}" data-quantity="1"
-                data-description="{{ $expense->expense_description }}" data-rate="{{ $expense->expense_amount }}">
+                data-expense-id="{{ $expense->expense_id }}" data-unit="{{ cleanLang(__('lang.item')) }}"
+                data-quantity="1" data-description="{{ $expense->expense_description }}"
+                data-rate="{{ $expense->expense_amount }}">
             <label for="listcheckbox-expenses-{{ $expense->expense_id }}"></label>
         </span>
     </td>
@@ -69,12 +70,14 @@
         </span>
         @else
         <span class="table-icons">
-            <i class="mdi mdi-credit-card-plus text-success" data-toggle="tooltip" title="{{ cleanLang(__('lang.billable')) }} - {{ cleanLang(__('lang.not_invoiced')) }}"></i>
+            <i class="mdi mdi-credit-card-plus text-success" data-toggle="tooltip"
+                title="{{ cleanLang(__('lang.billable')) }} - {{ cleanLang(__('lang.not_invoiced')) }}"></i>
         </span>
         @endif
         @else
         <span class="table-icons">
-            <i class="mdi mdi-credit-card-off text-disabled" data-toggle="tooltip" title="{{ cleanLang(__('lang.not_billable')) }}"></i>
+            <i class="mdi mdi-credit-card-off text-disabled" data-toggle="tooltip"
+                title="{{ cleanLang(__('lang.not_billable')) }}"></i>
         </span>
         @endif
     </td>
@@ -82,13 +85,14 @@
     @if(config('visibility.expenses_col_action'))
     <td class="expenses_col_action actions_column" id="expenses_col_action_{{ $expense->expense_id }}">
         <!--action button-->
-        <span class="list-table-action dropdown font-size-inherit">
+        <span class="list-table-action font-size-inherit">
             <!--delete-->
             @if(config('visibility.action_buttons_delete'))
             <button type="button" title="{{ cleanLang(__('lang.delete')) }}"
                 class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
-                data-confirm-title="{{ cleanLang(__('lang.delete_item')) }}" data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}"
-                data-ajax-type="DELETE" data-url="{{ url('/') }}/expenses/{{ $expense->expense_id }}">
+                data-confirm-title="{{ cleanLang(__('lang.delete_item')) }}"
+                data-confirm-text="{{ cleanLang(__('lang.are_you_sure')) }}" data-ajax-type="DELETE"
+                data-url="{{ url('/') }}/expenses/{{ $expense->expense_id }}">
                 <i class="sl-icon-trash"></i>
             </button>
             @endif
@@ -108,7 +112,8 @@
             <button type="button" title="{{ cleanLang(__('lang.view')) }}"
                 class="data-toggle-tooltip show-modal-button btn btn-outline-info btn-circle btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
                 data-toggle="modal" data-target="#plainModal" data-loading-target="plainModalBody"
-                data-modal-title="{{ cleanLang(__('lang.expense_records')) }}" data-url="{{ url('/expenses/'.$expense->expense_id) }}">
+                data-modal-title="{{ cleanLang(__('lang.expense_records')) }}"
+                data-url="{{ url('/expenses/'.$expense->expense_id) }}">
                 <i class="ti-new-window"></i>
             </button>
 
@@ -116,7 +121,8 @@
             @if(config('visibility.action_buttons_edit') == 'show')
             <span class="list-table-action dropdown font-size-inherit">
                 <button type="button" id="listTableAction" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" title="{{ cleanLang(__('lang.more')) }}" class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm">
+                    aria-expanded="false" title="{{ cleanLang(__('lang.more')) }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm">
                     <i class="ti-more"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="listTableAction">
@@ -141,7 +147,16 @@
                 </div>
             </span>
             @endif
-            <!--more button-->
+
+            <!--pin-->
+            <span class="list-table-action">
+                <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                    data-parent="expense_{{ $expense->expense_id }}"
+                    data-url="{{ url('/expenses/'.$expense->expense_id.'/pinning') }}"
+                    class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                    <i class="ti-pin2"></i>
+                </a>
+            </span>
         </span>
         <!--action button-->
 

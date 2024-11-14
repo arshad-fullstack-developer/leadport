@@ -14,6 +14,7 @@ use App\Http\Requests\Payments\PaymentStoreUpdate;
 use App\Http\Responses\Payments\CreateResponse;
 use App\Http\Responses\Payments\DestroyResponse;
 use App\Http\Responses\Payments\IndexResponse;
+use App\Http\Responses\Payments\PinningResponse;
 use App\Http\Responses\Payments\ShowResponse;
 use App\Http\Responses\Payments\StoreExternalResponse;
 use App\Http\Responses\Payments\StoreResponse;
@@ -21,6 +22,7 @@ use App\Http\Responses\Payments\ThankYouResponse;
 use App\Http\Responses\Payments\UpdateResponse;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\PaymentRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\RazorpayPaymentRepository;
 use App\Repositories\TapPaymentRepository;
@@ -61,6 +63,7 @@ class Payments extends Controller {
                 'index',
                 'update',
                 'store',
+                'togglePinning',
             ]);
 
         $this->middleware('paymentsMiddlewareShow')->only([
@@ -432,12 +435,12 @@ class Payments extends Controller {
         }
 
         //recorc webhook
-        $webhook= new \App\Models\Webhook();
-        $webhook->webhooks_gateway_name= 'tap';
-        $webhook->webhooks_type= 'tap-gateway-payment';
-        $webhook->webhooks_payment_transactionid= request('tap_id');
-        $webhook->webhooks_matching_attribute= request('session_id');
-        $webhook->webhooks_status= 'new';
+        $webhook = new \App\Models\Webhook();
+        $webhook->webhooks_gateway_name = 'tap';
+        $webhook->webhooks_type = 'tap-gateway-payment';
+        $webhook->webhooks_payment_transactionid = request('tap_id');
+        $webhook->webhooks_matching_attribute = request('session_id');
+        $webhook->webhooks_status = 'new';
         $webhook->save();
 
         //reponse payload
@@ -447,6 +450,27 @@ class Payments extends Controller {
 
         //process reponse
         return new ThankYouResponse($payload);
+    }
+
+    /**
+     * toggle pinned state of payments
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'payment');
+
+        //reponse payload
+        $payload = [
+            'payment_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
     }
 
     /**

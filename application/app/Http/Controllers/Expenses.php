@@ -20,6 +20,7 @@ use App\Http\Responses\Expenses\CreateResponse;
 use App\Http\Responses\Expenses\DestroyResponse;
 use App\Http\Responses\Expenses\EditResponse;
 use App\Http\Responses\Expenses\IndexResponse;
+use App\Http\Responses\Expenses\PinningResponse;
 use App\Http\Responses\Expenses\ShowResponse;
 use App\Http\Responses\Expenses\StoreResponse;
 use App\Http\Responses\Expenses\UpdateResponse;
@@ -28,6 +29,7 @@ use App\Repositories\AttachmentRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\DestroyRepository;
 use App\Repositories\ExpenseRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
@@ -637,6 +639,28 @@ class Expenses extends Controller {
         //show the form
         return new CreateInvoiceResponse($payload);
     }
+
+    /**
+     * toggle pinned state of expenses
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'expense');
+
+        //reponse payload
+        $payload = [
+            'expense_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
+    }
+
     /**
      * basic page setting for this section of the app
      * @param string $section page section (optional)

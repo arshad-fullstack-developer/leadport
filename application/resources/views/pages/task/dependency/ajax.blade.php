@@ -24,7 +24,7 @@
 @endforeach
 
 <!--info panel-->
-@if(count($dependecies_all) > 0)
+@if(count($dependecies_all ?? []) > 0)
 <div class="p-l-1">
     <span class="bg-danger task-dependency-tooltip" data-toggle="tooltip" data-placement="top"
         title="@lang('lang.dependency_prevents_task_from_completing')">

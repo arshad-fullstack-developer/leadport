@@ -52,6 +52,13 @@ class TicketRepository {
         $tickets->leftJoin('categories', 'categories.category_id', '=', 'tickets.ticket_categoryid');
         $tickets->leftJoin('projects', 'projects.project_id', '=', 'tickets.ticket_projectid');
         $tickets->leftJoin('tickets_status', 'tickets_status.ticketstatus_id', '=', 'tickets.ticket_status');
+        $tickets->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'tickets.ticket_id')
+                ->where('pinned.pinnedresource_type', '=', 'ticket');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -197,7 +204,9 @@ class TicketRepository {
             }
         } else {
             //default sorting
-            $tickets->orderBy('ticket_id', 'desc');
+            $tickets->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('ticket_id', 'desc');
         }
 
         //eager load

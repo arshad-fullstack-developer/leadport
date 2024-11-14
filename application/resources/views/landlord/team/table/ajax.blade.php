@@ -33,7 +33,7 @@
                     class="sl-icon-trash"></i></span>
             @else
             <button type="button" title="@lang('lang.delete')"
-                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-success"
+                class="data-toggle-action-tooltip btn btn-outline-danger btn-circle btn-sm confirm-action-danger"
                 data-confirm-title="@lang('lang.delete_user')" data-confirm-text="@lang('lang.are_you_sure')"
                 data-ajax-type="DELETE" data-url="{{ url('/app-admin/team/'.$user->id) }}">
                 <i class="sl-icon-trash"></i>

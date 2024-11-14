@@ -88,7 +88,7 @@
     <div class="form-group row">
         <label class="col-sm-12 col-lg-3 text-left control-label col-form-label">{{ cleanLang(__('lang.country')) }}</label>
         <div class="col-sm-12 col-lg-9">
-            <select class="select2-basic form-control form-control-sm" id="convert_lead_country" name="country">
+            <select class="select2-basic-with-search form-control form-control-sm" id="convert_lead_country" name="country">
                 <option></option>
                 @include('misc.country-list')
             </select>

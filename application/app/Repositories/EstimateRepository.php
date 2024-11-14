@@ -58,6 +58,13 @@ class EstimateRepository {
         $estimates->leftJoin('users', 'users.id', '=', 'estimates.bill_creatorid');
         $estimates->leftJoin('categories', 'categories.category_id', '=', 'estimates.bill_categoryid');
         $estimates->leftJoin('projects', 'projects.project_id', '=', 'estimates.bill_projectid');
+        $estimates->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'estimates.bill_estimateid')
+                ->where('pinned.pinnedresource_type', '=', 'estimate');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -241,10 +248,9 @@ class EstimateRepository {
             }
         } else {
             //default sorting
-            $estimates->orderBy(
-                config('settings.ordering_estimates.sort_by'),
-                config('settings.ordering_estimates.sort_order')
-            );
+            $estimates->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy(config('settings.ordering_estimates.sort_by'), config('settings.ordering_estimates.sort_order'));
         }
 
         //eager load

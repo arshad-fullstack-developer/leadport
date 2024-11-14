@@ -20,6 +20,7 @@ use App\Http\Responses\Contracts\CreateResponse;
 use App\Http\Responses\Contracts\DestroyResponse;
 use App\Http\Responses\Contracts\EmailResponse;
 use App\Http\Responses\Contracts\IndexResponse;
+use App\Http\Responses\Contracts\PinningResponse;
 use App\Http\Responses\Contracts\PublishResponse;
 use App\Http\Responses\Contracts\PublishScheduledResponse;
 use App\Http\Responses\Contracts\SignatureResponse;
@@ -36,6 +37,7 @@ use App\Repositories\EstimateGeneratorRepository;
 use App\Repositories\EstimateRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\EventTrackingRepository;
+use App\Repositories\PinnedRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -1199,6 +1201,28 @@ class Contracts extends Controller {
         //show the form
         return new CreateCloneResponse($payload);
     }
+
+    /**
+     * toggle pinned state of contracts
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function togglePinning(PinnedRepository $pinrepo, $id) {
+
+        //toggle pin
+        $status = $pinrepo->togglePinned($id, 'contract');
+
+        //reponse payload
+        $payload = [
+            'contract_id' => $id,
+            'status' => $status,
+        ];
+
+        //generate a response
+        return new PinningResponse($payload);
+
+    }
+
     /**
      * basic page setting for this section of the app
      * @param string $section page section (optional)

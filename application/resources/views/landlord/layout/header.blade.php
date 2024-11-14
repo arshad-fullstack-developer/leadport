@@ -10,10 +10,10 @@
     <base href="{{ url('/') }}" target="_self">
 
     <!--JQUERY & OTHER HEADER JS-->
-    <script src="{{ asset('public/vendor/js/vendor.header.js?v=') }} {{ config('system.versioning') }}"></script>
+    <script src="public/vendor/js/vendor.header.js?v={{ config('system.versioning') }}"></script>
 
     <!--BOOTSTRAP-->
-    <link href="{{ asset('public/vendor/css/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="public/vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -28,30 +28,30 @@
 
 
     <!--VENDORS CSS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/css/vendor.css?v=') }} {{ config('system.versioning') }}">
+    <link rel="stylesheet" href="public/vendor/css/vendor.css?v={{ config('system.versioning') }}">
 
     <!--ICONS-->
-    <link rel="stylesheet" href="{{ asset('public/vendor/fonts/growcrm-icons/styles.css?v=') }} {{ config('system.versioning') }}">
+    <link rel="stylesheet" href="public/vendor/fonts/growcrm-icons/styles.css?v={{ config('system.versioning') }}">
 
     <!--THEME STYLE-->
-    <link href="{{ asset('public/themes/default/css/style.css?v=') }}"
+    <link href="{{ config('theme.backend.selected_theme_css') ?? 'public/themes/default/css/style.css?v=' }}"
         rel="stylesheet">
 
     <!--SAAS STYLE-->
-    <link href="{{ asset('public/themes/default/css/saas.css?v=') }}"
+    <link href="{{ config('theme.backend.selected_theme_saas_css') ?? 'public/themes/default/css/saas.css?v=' }}"
         rel="stylesheet">
 
-    <link href="{{ asset('public/css/custom.css?v=') }}  {{ config('system.versioning') }}" rel="stylesheet">
+    <link href="public/css/custom.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!--USERS CUSTON CSS FILE-->
-    <link href="{{ asset('public/themes/landlord/css/landlord.css?v=') }} {{ config('system.versioning') }}" rel="stylesheet">
+    <link href="public/themes/landlord/css/landlord.css?v={{ config('system.versioning') }}" rel="stylesheet">
 
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16"
         href="storage/logos/app/{{ config('system.settings_favicon_landlord_filename') }}">
 
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ asset('public/images/favicon/ms-icon-144x144.png') }}">
+    <meta name="msapplication-TileImage" content="public/images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
 
@@ -136,7 +136,7 @@
     </script>
 
     <!--boot js-->
-    <script src="{{ asset('public/js/core/head.js?v=') }} {{ config('system.versioning') }}"></script>
+    <script src="public/js/core/head.js?v={{ config('system.versioning') }}"></script>
 
     <!--stripe payments js-->
     @if(@config('visibility.stripe_js'))

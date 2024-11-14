@@ -92,7 +92,7 @@
 
     <!--buttons-->
     <div class="text-right">
-        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-success waves-effect text-left"
+        <button type="submit" id="commonModalSubmitButton" class="btn btn-rounded-x btn-danger waves-effect text-left"
             data-url="/settings/invoices" data-loading-target="" data-ajax-type="PUT" data-type="form"
             data-on-start-submit-button="disable">{{ cleanLang(__('lang.save_changes')) }}</button>
     </div>

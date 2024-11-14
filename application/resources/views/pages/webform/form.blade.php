@@ -31,6 +31,13 @@
                 {!! $fields !!}
             </div>
 
+            <!--DYANMIC TRUSTED CONTENT - No sanitizing required] for this trusted content (Google reCAPTCHA)-->
+            @if($webform->webform_recaptcha == 'enabled' && @config('system.settings2_captcha_status') == 'enabled')
+            <div class="m-b-20">
+                {!! htmlFormSnippet([]) !!}
+            </div>
+            @endif
+
             <!--form errors-->
             <div class="webform-errors-wrapper hidden" id="webform-errors-wrapper">
                 <div class="alert alert-danger">

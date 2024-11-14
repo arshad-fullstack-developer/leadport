@@ -210,7 +210,7 @@
                     class="col-sm-12 col-lg-3 col-form-label text-left">{{ cleanLang(__('lang.country')) }}</label>
                 <div class="col-sm-12 col-lg-9">
                     @php $selected_country = $client->client_billing_country ?? ''; @endphp
-                    <select class="select2-basic form-control form-control-sm" id="client_billing_country"
+                    <select class="select2-basic-with-search form-control form-control-sm" id="client_billing_country"
                         name="client_billing_country">
                         <option></option>
                         @include('misc.country-list')
@@ -307,7 +307,7 @@
                     class="col-sm-12 col-lg-3 col-form-label text-left">{{ cleanLang(__('lang.country')) }}</label>
                 <div class="col-sm-12 col-lg-9">
                     @php $selected_country = $client->client_shipping_country ?? ''; @endphp
-                    <select class="select2-basic form-control form-control-sm" id="client_shipping_country"
+                    <select class="select2-basic-with-search form-control form-control-sm" id="client_shipping_country"
                         name="client_shipping_country">
                         <option></option>
                         @include('misc.country-list')

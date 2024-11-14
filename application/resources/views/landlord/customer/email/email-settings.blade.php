@@ -78,7 +78,7 @@
     </div>
 
     <div class="text-center p-t-10" id="email_settings_button">
-        <button id="submitButton" class="btn btn-success waves-effect text-left ajax-request"
+        <button id="submitButton" class="btn btn-danger waves-effect text-left ajax-request"
             data-url="{{ url('app-admin/customers/'.$customer->tenant_id.'/updated-email-forwarding?source=page') }}"
             data-button-loading-annimation="yes"
             data-ajax-type="GET"

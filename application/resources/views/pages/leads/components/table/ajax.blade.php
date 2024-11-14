@@ -1,6 +1,6 @@
 @foreach($leads as $lead)
 <!--each row-->
-<tr id="lead_{{ $lead->lead_id }}">
+<tr id="lead_{{ $lead->lead_id }}" class=" {{ $lead->pinned_status ?? '' }}">
     @if(config('visibility.leads_col_checkboxes'))
     <td class="leads_col_checkbox checkitem" id="leads_col_checkbox_{{ $lead->lead_id }}">
         <!--list checkbox-->
@@ -305,6 +305,15 @@
         </span>
         @endif
         <!--more button-->
+
+        <!--pin-->
+        <span class="list-table-action">
+            <a href="javascript:void(0);" title="{{ cleanLang(__('lang.pinning')) }}"
+                data-parent="lead_{{ $lead->lead_id }}" data-url="{{ url('/leads/'.$lead->lead_id.'/pinning') }}"
+                class="data-toggle-action-tooltip btn btn-outline-default-light btn-circle btn-sm opacity-4 js-toggle-pinning">
+                <i class="ti-pin2"></i>
+            </a>
+        </span>
     </td>
 </tr>
 @endforeach

@@ -262,7 +262,7 @@
             </div>
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-name-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-name-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-name') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -279,7 +279,7 @@
             </div>
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-value-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-value-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-value') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -300,7 +300,7 @@
             <input type="hidden" id="current_lead_status_text" name="current_lead_status_text" value="">
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-status-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-status-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-status') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -322,7 +322,7 @@
             <input type="hidden" id="current_lead_category_text" name="current_lead_category_text" value="">
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-category-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-category-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-category') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -341,7 +341,7 @@
             </div>
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-phone-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-phone-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-phone') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -358,7 +358,7 @@
             </div>
         </div>
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-email-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-email-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-email') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -389,7 +389,7 @@
         </div>
         @if($lead->permission_edit_lead)
         <div class="form-group text-right">
-            <button type="button" class="btn btn-success btn-sm" id="card-leads-update-source-button"
+            <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-source-button"
                 data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-source') }}"
                 data-type="form" data-ajax-type="post" data-form-id="popover-body">
                 {{ cleanLang(__('lang.update')) }}
@@ -415,7 +415,7 @@
             </div>
             @endforeach
             <div class="form-group text-right">
-                <button type="button" class="btn btn-success btn-sm" id="card-leads-update-assigned"
+                <button type="button" class="btn btn-danger btn-sm" id="card-leads-update-assigned"
                     data-progress-bar='hidden' data-url="{{ url('/leads/'.$lead->lead_id.'/update-assigned') }}"
                     data-type="form" data-ajax-type="post" data-form-id="popover-body">
                     {{ cleanLang(__('lang.update')) }}

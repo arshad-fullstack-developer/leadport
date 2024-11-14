@@ -461,6 +461,7 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 		//debug
 		NXAJAX.log("[ajax] eventData() - current NXAJAX.data array content - [payload]:", NXAJAX.data);
 
+
 		//reset loading target
 		if (obj.attr("data-reset-loading-target")) {
 			var target = obj.attr("data-loading-target");
@@ -1480,17 +1481,17 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 					if (value.element != undefined && value.newparent != undefined && value.method != undefined) {
 
 						//prepend to
-						if (value.method == 'prepend-to') {
+						if (value.method == 'prepend-to' || value.method == 'prepend') {
 							$(value.element).prependTo(value.newparent);
 						}
 
 						//append to
-						if (value.method == 'append-to') {
-							$(value.element).prependTo(value.newparent);
+						if (value.method == 'append-to' || value.method == 'append') {
+							$(value.element).appendTo(value.newparent);
 						}
 
 						//replace
-						if (value.method == 'replace') {
+						if (value.method == 'replace' || value.method == 'replace') {
 							$(value.newparent).html('');
 							$(value.element).prependTo(value.newparent);
 						}
@@ -1832,26 +1833,9 @@ function nxAjaxUxRequest(obj, virtualPostArray = {}) {
 
 			NXAJAX.log('[ajax] ajaxRequest() - success - we have a response from the server ' + data);
 
-			var result = JSON.stringify(data);
-			result     = JSON.parse(result);
-
-			if (result.notification) {
-				// Display the notification using your NX.notification function
-				NX.notification({
-					message: result.notification.value,
-					type: result.notification.type // success or error
-				});
-			}
-	
-			// After showing the notification, redirect the user
-			if (result.redirect_url) {
-				window.location.href = result.redirect_url;  // Perform the redirect
-			}
-
 			//process the payload
 			NXAJAX.getPayload(data);
 
-			
 			//was there a redirect request
 			NXAJAX.updateRedirect();
 

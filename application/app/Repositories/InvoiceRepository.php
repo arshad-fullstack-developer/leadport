@@ -47,6 +47,13 @@ class InvoiceRepository {
         $invoices->leftJoin('projects', 'projects.project_id', '=', 'invoices.bill_projectid');
         $invoices->leftJoin('categories', 'categories.category_id', '=', 'invoices.bill_categoryid');
         $invoices->leftJoin('users', 'users.id', '=', 'invoices.bill_creatorid');
+        $invoices->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'invoices.bill_invoiceid')
+                ->where('pinned.pinnedresource_type', '=', 'invoice');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -77,6 +84,54 @@ class InvoiceRepository {
         //invoice balance
         $invoices->selectRaw('(SELECT COALESCE(bill_final_amount - sum_payments, 0.00))
                                       AS invoice_balance');
+
+        //client primary contact - name
+        $invoices->selectRaw("(SELECT CONCAT(first_name, ' ', last_name)
+                                      FROM users
+                                      WHERE users.clientid = invoices.bill_clientid
+                                      AND account_owner = 'yes')
+                                      AS contact_name");
+        //client primary contact - id
+        $invoices->selectRaw("(SELECT id
+                                      FROM users
+                                      WHERE users.clientid = invoices.bill_clientid
+                                      AND account_owner = 'yes')
+                                      AS contact_id");
+
+        //last payment amount
+        $invoices->selectRaw('COALESCE((SELECT payment_amount
+                                               FROM payments
+                                               WHERE payment_invoiceid = invoices.bill_invoiceid
+                                               ORDER BY payment_id DESC
+                                               LIMIT 1), 0.00) AS last_payment_amount');
+
+        //last payment date
+        $invoices->selectRaw('COALESCE((SELECT payment_date
+                                               FROM payments
+                                               WHERE payment_invoiceid = invoices.bill_invoiceid
+                                               ORDER BY payment_id DESC
+                                               LIMIT 1), NULL) AS last_payment_date');
+
+        //last payment method
+        $invoices->selectRaw('COALESCE((SELECT payment_gateway
+                                               FROM payments
+                                               WHERE payment_invoiceid = invoices.bill_invoiceid
+                                               ORDER BY payment_id DESC
+                                               LIMIT 1), NULL) AS last_payment_method');
+
+        //last payment transaction id
+        $invoices->selectRaw('COALESCE((SELECT payment_transaction_id
+                                               FROM payments
+                                               WHERE payment_invoiceid = invoices.bill_invoiceid
+                                               ORDER BY payment_id DESC
+                                               LIMIT 1), NULL) AS last_payment_transaction_id');
+
+        //count attachments
+        $invoices->selectRaw("(SELECT COUNT(*)
+                                      FROM files
+                                      WHERE fileresource_type = 'invoice'
+                                      AND fileresource_id = invoices.bill_invoiceid)
+                                      AS count_attachments");
 
         //default where
         $invoices->whereRaw("1 = 1");
@@ -274,13 +329,36 @@ class InvoiceRepository {
             case 'category':
                 $invoices->orderBy('category_name', request('sortorder'));
                 break;
+            case 'client_contact':
+                $invoices->orderBy('contact_name', request('sortorder'));
+                break;
+            case 'created_by':
+                $invoices->orderBy('first_name', request('sortorder'));
+                break;
+            case 'project_title':
+                $invoices->orderBy('project_title', request('sortorder'));
+                break;
+            case 'last_payment_date':
+                $invoices->orderBy('last_payment_date', request('sortorder'));
+                break;
+            case 'last_payment_amount':
+                $invoices->orderBy('last_payment_amount', request('sortorder'));
+                break;
+            case 'last_payment_method':
+                $invoices->orderBy('last_payment_method', request('sortorder'));
+                break;
+            case 'last_payment_transaction_id':
+                $invoices->orderBy('last_payment_transaction_id', request('sortorder'));
+                break;
+            case 'attachments':
+                $invoices->orderBy('count_attachments', request('sortorder'));
+                break;
             }
         } else {
             //default sorting
-            $invoices->orderBy(
-                config('settings.ordering_invoices.sort_by'),
-                config('settings.ordering_invoices.sort_order')
-            );
+            $invoices->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy(config('settings.ordering_invoices.sort_by'), config('settings.ordering_invoices.sort_order'));
         }
 
         //eager load

@@ -66,11 +66,6 @@ class TimerRepository {
             $timers->where('timer_status', request('filter_timer_status'));
         }
 
-        //filter - creator
-        if (request()->filled('filter_timer_creatorid')) {
-            $timers->where('timer_creatorid', request('filter_timer_creatorid'));
-        }
-
         //filter - client
         if (request()->filled('filter_timer_clientid')) {
             $timers->where('timer_clientid', request('filter_timer_clientid'));
@@ -138,7 +133,7 @@ class TimerRepository {
                 $query->Where('first_name', 'LIKE', '%' . request('search_query') . '%');
                 $query->orWhere('timer_created', '=', date('Y-m-d', strtotime(request('search_query'))));
                 $query->orWhere('project_title', 'LIKE', '%' . request('search_query') . '%');
-                $query->orWhere('lead_title', 'LIKE', '%' . request('search_query') . '%');
+                //$query->orWhere('lead_title', 'LIKE', '%' . request('search_query') . '%');
                 $query->orWhere('task_title', 'LIKE', '%' . request('search_query') . '%');
             });
         }
@@ -167,7 +162,7 @@ class TimerRepository {
                 $timers->orderBy('timer_time', request('sortorder'));
                 break;
             case 'related':
-                $timers->orderBy('lead_title', request('sortorder'));
+                //$timers->orderBy('lead_title', request('sortorder'));
                 $timers->orderBy('project_title', request('sortorder'));
                 break;
             }
@@ -179,6 +174,17 @@ class TimerRepository {
         //we are not paginating (e.g. when doing exports)
         if (isset($data['no_pagination']) && $data['no_pagination'] === true) {
             return $timers->get();
+        }
+
+        //stats
+        if (isset($data['hours_worked'])) {
+            return $timers->get()->sum('time');
+        }
+        if (isset($data['hours_invoiced'])) {
+            return $timers->Where('timer_billing_status', 'invoiced')->get()->sum('time');
+        }
+        if (isset($data['hours_not_invoiced'])) {
+            return $timers->Where('timer_billing_status', 'not_invoiced')->get()->sum('time');
         }
 
         // Get the results and return them.

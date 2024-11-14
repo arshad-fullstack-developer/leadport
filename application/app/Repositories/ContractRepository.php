@@ -59,6 +59,13 @@ class ContractRepository {
         $contracts->leftJoin('leads', 'leads.lead_id', '=', 'contracts.doc_lead_id');
         $contracts->leftJoin('estimates', 'estimates.bill_contractid', '=', 'contracts.doc_id');
         $contracts->leftJoin('categories', 'categories.category_id', '=', 'contracts.doc_categoryid');
+        $contracts->leftJoin('pinned', function ($join) {
+            $join->on('pinned.pinnedresource_id', '=', 'contracts.doc_id')
+                ->where('pinned.pinnedresource_type', '=', 'contract');
+            if (auth()->check()) {
+                $join->where('pinned.pinned_userid', auth()->id());
+            }
+        });
 
         //join: users reminders - do not do this for cronjobs
         if (auth()->check()) {
@@ -286,7 +293,9 @@ class ContractRepository {
             }
         } else {
             //default sorting
-            $contracts->orderBy('doc_id', 'desc');
+            $contracts->orderByRaw('CASE WHEN pinned.pinned_id IS NOT NULL THEN 0 ELSE 1 END')
+                ->orderBy('pinned.pinned_id', 'desc')
+                ->orderBy('doc_id', 'desc');
         }
 
         //stats - count all

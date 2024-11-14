@@ -342,7 +342,7 @@ function NXLandlordUpdateAvatar() {
 function NXLandlordUploadImage() {
 
     $("#fileupload_image").dropzone({
-        url: "/leadport/app-admin/upload-image",
+        url: "/app-admin/upload-image",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
@@ -394,7 +394,7 @@ if ($("#fileupload_image").length) {
 function NXLandlordUploadImage2() {
 
     $("#fileupload_image_2").dropzone({
-        url: "/leadport/app-admin/upload-image",
+        url: "/app-admin/upload-image",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
