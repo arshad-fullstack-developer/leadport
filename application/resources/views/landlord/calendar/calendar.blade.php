@@ -44,7 +44,7 @@
                                     <input type="datetime-local" class="form-control" name="end_date" id="eventEnd" required>
                                 </div>
                                 <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" id="deleteButton" style="display:none;">Delete Event</button>
+                                <button type="button" class="btn btn-success" id="deleteButton" style="display:none;">Delete Event</button>
                                 <button type="submit" class="btn btn-success" id="submitButton">Create Event</button>
                                 </div>
                             </form>

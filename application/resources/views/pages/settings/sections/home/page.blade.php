@@ -23,7 +23,7 @@
 
             <div class="m-t-20">
                 <a href="{{ url('/app/settings/updates') }}"
-                    class="btn btn-rounded-x btn-sm btn-danger waves-effect text-left">@lang('lang.check_for_updates')</a>
+                    class="btn btn-rounded-x btn-sm btn-success waves-effect text-left">@lang('lang.check_for_updates')</a>
             </div>
             @endif
         </div>

@@ -25,7 +25,13 @@ use Validator;
 
 class TicketController extends Controller {
 
-    
+    public function __construct() {
+        //core controller instantation
+        parent::__construct();
+        //authenticated
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of tickets
      * @param object CategoryRepository instance of the repository
@@ -43,7 +49,7 @@ class TicketController extends Controller {
 
     public function viewTickets(){
 
-        $results   = CustomTicket::orderby('id','DESC')->get();
+        $results   = CustomTicket::orderby('id','DESC')->paginate();
 
         $results->each(function ($ticket) {
             // Manually add the assigned users for this ticket
@@ -51,7 +57,6 @@ class TicketController extends Controller {
         });
         $tickets  = $results ?? null;
         $page     = $this->pageSettings('tickets');
-        
         return view('pages.customtickets.wrapper',compact('page','tickets'));
     }
 
@@ -536,10 +541,11 @@ class TicketController extends Controller {
     public function destroyTicket($id)
     {
 
+       
         $deleteTicket = CustomTicket::where('id',$id)->delete();
-
+        
         if($deleteTicket){
-            $deleteTicket = CTicketGood::where('ticket_id',$id)->delete();
+            $deleteGoods = CTicketGood::where('ticket_id',$id)->delete();
         }
 
         if($deleteTicket){

@@ -61,6 +61,7 @@
             @include('notifications.no-results-found')
             <!--nothing found-->
             @endif
+            {!! $tickets->links() !!}
         </div>
     </div>
 </div>

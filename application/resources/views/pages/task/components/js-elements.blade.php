@@ -7,7 +7,7 @@
             href="JavaScript:void(0);">
             {{ cleanLang(__('lang.close')) }}
         </button>
-        <button type="button" class="btn btn-danger  btn-xs js-ajax-ux-request x-submit-button disable-on-click"
+        <button type="button" class="btn btn-success  btn-xs js-ajax-ux-request x-submit-button disable-on-click"
             id="checklist-submit-button" data-url="" data-type="form" data-ajax-type="post"
             data-form-id="element-checklist-text" data-loading-target="element-checklist-text">
             {{ cleanLang(__('lang.add')) }}

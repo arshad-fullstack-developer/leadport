@@ -98,7 +98,7 @@
                             id="updated-current-version">x</span></h5>
                 </div>
                 <div class="m-t-20">
-                    <a class="btn waves-effect waves-light btn-rounded-x btn-danger" href="javascript:void(0)"
+                    <a class="btn waves-effect waves-light btn-rounded-x btn-success" href="javascript:void(0)"
                         id="updated-download-link">{{ cleanLang(__('lang.download_updates')) }}</a>
                 </div>
 

@@ -3,7 +3,7 @@
     id="list-page-actions-container">
     <div id="list-page-actions">
         <!--ADD NEW ITEM-->
-        <a type="button" class="btn btn-danger btn-add-circle" href="{{ url('/app-admin/frontend/pages/create') }}">
+        <a type="button" class="btn btn-success btn-add-circle" href="{{ url('/app-admin/frontend/pages/create') }}">
             <i class="ti-plus"></i>
         </a>
     </div>

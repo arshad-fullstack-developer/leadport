@@ -90,7 +90,7 @@
                             <div class="x-heading">@lang('lang.active_timer')</div>
                             <div class="x-task">@lang('lang.task_not_found')</div>
                             <div class="x-button"><button type="button"
-                                    class="btn waves-effect waves-light btn-sm btn-danger js-timer-button js-ajax-request timer-stop-button"
+                                    class="btn waves-effect waves-light btn-sm btn-success js-timer-button js-ajax-request timer-stop-button"
                                     data-url="{{ url('tasks/timer/stop?source=topnav') }}"
                                     data-form-id="tasks-list-table"
                                     data-progress-bar='hidden'>@lang('lang.stop_timer')</button>

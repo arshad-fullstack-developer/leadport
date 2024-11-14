@@ -1,7 +1,7 @@
 <div id="gateway-stripe">
     <!--BUTTONS-->
     <div class="x-button">
-        <button class="btn btn-danger disable-on-click-loading" id="invoice-razorpay-payment-button"
+        <button class="btn btn-success disable-on-click-loading" id="invoice-razorpay-payment-button"
             data-amount="{{ $payload['amount'] }}" data-key-id="{{ $payload['key'] }}"
             data-currency="{{ $payload['currency'] }}" data-company-name="{{ $payload['company_name'] }}"
             data-description="{{ $payload['description'] }}" data-image="{{ $payload['image'] }}"

@@ -176,14 +176,14 @@
 
                         <!--[invoice] - make payment-->
                         @if($bill->bill_type == 'invoice' && $bill->invoice_balance > 0)
-                        <button class="btn btn-danger" id="invoice-make-payment-button">
+                        <button class="btn btn-success" id="invoice-make-payment-button">
                             {{ cleanLang(__('lang.make_a_payment')) }} </button>
                         @endif
 
                         <!--accept or decline-->
                         @if(in_array($bill->bill_status, ['new', 'revised']))
                         <!--decline-->
-                        <button class="buttons-accept-decline btn btn-danger confirm-action-danger"
+                        <button class="buttons-accept-decline btn btn-success confirm-action-danger"
                             data-confirm-title="{{ cleanLang(__('lang.decline_estimate')) }}"
                             data-confirm-text="{{ cleanLang(__('lang.decline_estimate_confirm')) }}"
                             data-ajax-type="GET" data-url="{{ url('/') }}/estimates/{{ $bill->bill_uniqueid }}/decline">

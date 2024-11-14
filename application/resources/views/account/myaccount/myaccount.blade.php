@@ -15,7 +15,7 @@
             <!--pay button-->
             @if($subscription->subscription_status == 'awaiting-payment')
             <button type="button"
-                class="btn waves-effect waves-light btn-sm btn-danger js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
+                class="btn waves-effect waves-light btn-sm btn-success js-ajax-ux-request js-submenu-ajax js-dynamic-settings-url"
                 data-url="/settings/account/notices">@lang('lang.pay_now')</button>
             @endif
         </div>

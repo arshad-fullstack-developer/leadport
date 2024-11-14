@@ -23,7 +23,7 @@
                 <input type="hidden" name="notify_url" value="{{ $paypal['ipn_url'] }}">
                 <input type="hidden" name="return" value="{{ $paypal['thank_you_url'] }}">
                 <input type="hidden" name="cancel_return" value="{{ $paypal['cancel_url'] }}">
-                <button class="btn btn-danger" id="gateway-button-paypal" type="submit"> {{ cleanLang(__('lang.pay_now')) }} -
+                <button class="btn btn-success" id="gateway-button-paypal" type="submit"> {{ cleanLang(__('lang.pay_now')) }} -
                     {{ config('system.settings_paypal_display_name') }}</button>
             </form>
 

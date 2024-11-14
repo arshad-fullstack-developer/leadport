@@ -61,6 +61,8 @@
             <?php echo $__env->make('notifications.no-results-found', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <!--nothing found-->
             <?php endif; ?>
+            <?php echo $tickets->links(); ?>
+
         </div>
     </div>
 </div><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/customtickets/components/table/table.blade.php ENDPATH**/ ?>

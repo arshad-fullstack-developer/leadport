@@ -23,7 +23,7 @@
             
 
         <button type="submit" id="folders-add-button-submit"
-            class="btn btn-danger btn-xs waves-effect text-left ajax-request"
+            class="btn btn-success btn-xs waves-effect text-left ajax-request"
             data-url="{{ urlResource('/files/folders/create') }}" 
             data-type="form" 
             data-form-id="folders-add-view"

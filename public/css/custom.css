@@ -14911,3 +14911,6 @@ a.data-toggle-action-tooltip.btn.btn-outline-success.btn-circle.btn-sm.disabled-
 a.data-toggle-action-tooltip.btn.btn-outline-success.btn-circle.btn-sm.disabled-link:hover {
   cursor: not-allowed; /* Optional: change cursor to indicate it's not clickable */
 }
+ul.pagination {
+  float: right;
+}
