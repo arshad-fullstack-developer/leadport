@@ -49,7 +49,7 @@ class TicketController extends Controller {
 
     public function viewTickets(){
 
-        $results   = CustomTicket::orderby('id','DESC')->paginate();
+        $results   = CustomTicket::orderby('id','DESC')->paginate(10);
 
         $results->each(function ($ticket) {
             // Manually add the assigned users for this ticket
