@@ -89,7 +89,7 @@
                             <div class="x-heading"><?php echo app('translator')->get('lang.active_timer'); ?></div>
                             <div class="x-task"><?php echo app('translator')->get('lang.task_not_found'); ?></div>
                             <div class="x-button"><button type="button"
-                                    class="btn waves-effect waves-light btn-sm btn-danger js-timer-button js-ajax-request timer-stop-button"
+                                    class="btn waves-effect waves-light btn-sm btn-success js-timer-button js-ajax-request timer-stop-button"
                                     data-url="<?php echo e(url('tasks/timer/stop?source=topnav')); ?>"
                                     data-form-id="tasks-list-table"
                                     data-progress-bar='hidden'><?php echo app('translator')->get('lang.stop_timer'); ?></button>
