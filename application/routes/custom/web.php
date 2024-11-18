@@ -5,6 +5,7 @@
  * Place your custom routes or overides in this file. This file is not updated with Grow CRM updates
  * ---------------------------------------------------------------------------------------------------------------*/
 
+ 
     //For Admin Panel
     Route::group(['prefix' => 'app-admin'], function () {
 
@@ -27,7 +28,6 @@
 
 
     Route::group(['prefix' => 'ctickets'], function () {
-
         Route::get('index', "TicketController@index")->name('ctickets.index');
         Route::get('list', "TicketController@viewTickets")->name('list');
         Route::get('create', "TicketController@create");
@@ -40,7 +40,6 @@
         Route::post('/generate-link', 'TicketController@generateLink');
         Route::get('form', "TicketController@ticketForm");
         Route::post('{id}/convartToLead', 'TicketController@convartToLead');
-
     });
 
 
