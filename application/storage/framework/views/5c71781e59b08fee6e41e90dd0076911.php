@@ -13,7 +13,7 @@
     <base href="<?php echo e(url('/')); ?>" target="_self">
 
     <!--JQUERY & OTHER HEADER JS-->
-    <script src="<?php echo e(asset('public/vendor/js/vendor.header.js?v=')); ?>  <?php echo e(config('system.versioning')); ?>"></script>
+    <script src="<?php echo e(asset('public/vendor/js/vendor.header.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
 
     <!--BOOTSTRAP-->
     <link href="<?php echo e(asset('public/vendor/css/bootstrap/bootstrap.min.css')); ?>" rel="stylesheet">
@@ -35,7 +35,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!--VENDORS CSS-->
-    <link rel="stylesheet" href="<?php echo e(asset('public/vendor/css/vendor.css?v=')); ?>  <?php echo e(config('system.versioning')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('public/vendor/css/vendor.css?v=')); ?> <?php echo e(config('system.versioning')); ?>">
     <link rel="stylesheet"
         href="<?php echo e(asset('public/vendor/js/bootstrap-timepicker/bootstrap-timepicker.css?v=')); ?> <?php echo e(config('system.versioning')); ?>">
 
@@ -45,10 +45,37 @@
     <!--DYNAMIC CSS VARS-->
     <style>
         :root {
-            --calendar-type-event-background: <?php echo e(config('system.settings2_calendar_events_colour')); ?>;
-            --calendar-type-project-background: <?php echo e(config('system.settings2_calendar_projects_colour')); ?>;
-            --calendar-type-task-background: <?php echo e(config('system.settings2_calendar_tasks_colour')); ?>;
-            --calendar-fc-daygrid-dot-event-background: <?php echo e(config('system.settings2_calendar_events_colour')); ?>;
+            --calendar-type-event-background: {
+                    {
+                    config('system.settings2_calendar_events_colour')
+                }
+            }
+
+            ;
+
+            --calendar-type-project-background: {
+                    {
+                    config('system.settings2_calendar_projects_colour')
+                }
+            }
+
+            ;
+
+            --calendar-type-task-background: {
+                    {
+                    config('system.settings2_calendar_tasks_colour')
+                }
+            }
+
+            ;
+
+            --calendar-fc-daygrid-dot-event-background: {
+                    {
+                    config('system.settings2_calendar_events_colour')
+                }
+            }
+
+            ;
             --calendar-fc-daygrid-dot-event-contrast: color-mix(in srgb, var(--calendar-fc-daygrid-dot-event-background) 70%, black);
         }
     </style>
@@ -206,6 +233,14 @@
     <?php echo htmlScriptTagJsApi([]); ?>
 
     <?php endif; ?>
+
+    <!--code mirror (css editor)-->
+    <link rel="stylesheet" href="<?php echo e(asset('public/js/codemirror/codemirror.min.css?v=')); ?> <?php echo e(config('system.versioning')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('public/js/codemirror/darcula.min.css?v=')); ?> <?php echo e(config('system.versioning')); ?>">
+
+    <!--dynamic css - crm css-->
+    <?php echo config('css.application'); ?>
+
 
     <!--DYANMIC TRUSTED CONTENT - No sanitizing required] for this trusted content (Admin Custom HTML & JS header code)-->
     <?php echo config('system.settings_theme_head'); ?>

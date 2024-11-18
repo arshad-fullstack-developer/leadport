@@ -8,7 +8,7 @@
             <?php if(request('dashboard_section') == 'settings'): ?>
             <!--exist-->
             <div class="sidenav-menu-item exit-panel m-b-17">
-                <a class="waves-effect waves-dark text-info" href="<?php echo e(url('home')); ?>" id="settings-exit-button"
+                <a class="waves-effect waves-dark text-info" href="/home" id="settings-exit-button"
                     aria-expanded="false" target="_self">
                     <i class="sl-icon-logout text-info"></i>
                     <span id="settings-exit-text" class="font-14"><?php echo e(str_limit(__('lang.exit_settings'), 20)); ?></span>
@@ -17,7 +17,7 @@
             <?php else: ?>
             <!--logo-->
             <div class="sidenav-menu-item logo m-t-0">
-                <a class="navbar-brand" href="<?php echo e(url('home')); ?>">
+                <a class="navbar-brand" href="/home">
                     <img src="<?php echo e(runtimeLogoSmall()); ?>" alt="homepage" class="logo-small" />
                     <img src="<?php echo e(runtimeLogoLarge()); ?>" alt="homepage" class="logo-large" />
                 </a>
@@ -89,7 +89,7 @@
                             <div class="x-heading"><?php echo app('translator')->get('lang.active_timer'); ?></div>
                             <div class="x-task"><?php echo app('translator')->get('lang.task_not_found'); ?></div>
                             <div class="x-button"><button type="button"
-                                    class="btn waves-effect waves-light btn-sm btn-success js-timer-button js-ajax-request timer-stop-button"
+                                    class="btn waves-effect waves-light btn-sm btn-danger js-timer-button js-ajax-request timer-stop-button"
                                     data-url="<?php echo e(url('tasks/timer/stop?source=topnav')); ?>"
                                     data-form-id="tasks-list-table"
                                     data-progress-bar='hidden'><?php echo app('translator')->get('lang.stop_timer'); ?></button>
@@ -217,14 +217,13 @@
                 <!-- settings -->
                 <?php if(auth()->user()->is_admin): ?>
                 <li class="nav-item">
-                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="<?php echo e(url('settings')); ?>" id="32"
+                    <a class="nav-link waves-effect waves-dark font-22 p-t-10 p-r-10" href="/settings" id="32"
                         aria-expanded="false">
                         <i class="sl-icon-settings"></i>
                     </a>
                 </li>
                 <?php endif; ?>
-                   
-                
+
                 <!-- add content -->
                 <?php if(auth()->user()->is_team && auth()->user()->can_add_content): ?>
                 <?php if(config('system.settings_type') == 'standalone' || in_array(config('system.settings_saas_status'),
@@ -232,7 +231,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="javascript:void(0)"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="mdi mdi-plus-circle-multiple-outline text-success font-28"></i>
+                        <i class="mdi mdi-plus-circle-multiple-outline text-danger font-28"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
 
@@ -459,7 +458,7 @@
                                             <?php echo e(auth()->user()->last_name); ?></h4>
                                         <p class="text-muted" id="topnav_dropdown_email"><?php echo e(auth()->user()->email); ?></p>
                                         <a href="javascript:void(0)"
-                                            class="btn btn-rounded btn-success btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
+                                            class="btn btn-rounded btn-danger btn-sm edit-add-modal-button js-ajax-ux-request reset-target-modal-form"
                                             data-toggle="modal" data-target="#commonModal"
                                             data-url="<?php echo e(url('/user/avatar')); ?>" data-loading-target="commonModalBody"
                                             data-modal-size="modal-sm"
@@ -582,7 +581,7 @@
 
                             <li role="separator" class="divider"></li>
                             <li>
-                                <a href="<?php echo e(url('logout')); ?>">
+                                <a href="/logout">
                                     <i class="fa fa-power-off p-r-4"></i> <?php echo e(cleanLang(__('lang.logout'))); ?></a>
                             </li>
                         </ul>

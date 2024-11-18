@@ -15,7 +15,7 @@
                 <li data-modular-id="main_menu_team_home"
                     class="sidenav-menu-item <?php echo e($page['mainmenu_home'] ?? ''); ?> menu-tooltip menu-with-tooltip"
                     title="<?php echo e(cleanLang(__('lang.home'))); ?>">
-                    <a class="waves-effect waves-dark" href="<?php echo e(url('home')); ?>" aria-expanded="false" target="_self">
+                    <a class="waves-effect waves-dark" href="/home" aria-expanded="false" target="_self">
                         <i class="ti-home"></i>
                         <span class="hide-menu"><?php echo e(cleanLang(__('lang.dashboard'))); ?>
 
@@ -40,13 +40,13 @@
                     <ul aria-expanded="false" class="collapse">
                         <?php if(config('visibility.modules.clients')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_customers'] ?? ''); ?>" id="submenu_clients">
-                            <a href="<?php echo e(url('clients')); ?>"
+                            <a href="/clients"
                                 class="<?php echo e($page['submenu_customers'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.clients'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.users')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_contacts'] ?? ''); ?>" id="submenu_contacts">
-                            <a href="<?php echo e(url('users')); ?>"
+                            <a href="/users"
                                 class="<?php echo e($page['submenu_contacts'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.client_users'))); ?></a>
                         </li>
                         <?php endif; ?>
@@ -95,7 +95,7 @@
                 <li data-modular-id="main_menu_team_tasks"
                     class="sidenav-menu-item <?php echo e($page['mainmenu_tasks'] ?? ''); ?> menu-tooltip menu-with-tooltip"
                     title="<?php echo e(cleanLang(__('lang.tasks'))); ?>">
-                    <a class="waves-effect waves-dark" href="<?php echo e(url('tasks')); ?>" aria-expanded="false" target="_self">
+                    <a class="waves-effect waves-dark" href="/tasks" aria-expanded="false" target="_self">
                         <i class="ti-menu-alt"></i>
                         <span class="hide-menu"><?php echo e(cleanLang(__('lang.tasks'))); ?>
 
@@ -110,7 +110,7 @@
                 <li data-modular-id="main_menu_team_leads"
                     class="sidenav-menu-item <?php echo e($page['mainmenu_leads'] ?? ''); ?> menu-tooltip menu-with-tooltip"
                     title="<?php echo e(cleanLang(__('lang.leads'))); ?>">
-                    <a class="waves-effect waves-dark" href="<?php echo e(url('leads')); ?>" aria-expanded="false" target="_self">
+                    <a class="waves-effect waves-dark" href="/leads" aria-expanded="false" target="_self">
                         <i class="sl-icon-call-in"></i>
                         <span class="hide-menu"><?php echo e(cleanLang(__('lang.leads'))); ?>
 
@@ -136,38 +136,38 @@
                     <ul aria-expanded="false" class="collapse">
                         <?php if(config('visibility.modules.invoices')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_invoices'] ?? ''); ?>" id="submenu_invoices">
-                            <a href="<?php echo e(url('invoices')); ?>"
+                            <a href="/invoices"
                                 class=" <?php echo e($page['submenu_invoices'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.invoices'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.payments')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_payments'] ?? ''); ?>" id="submenu_payments">
-                            <a href="<?php echo e(url('payments')); ?>"
+                            <a href="/payments"
                                 class=" <?php echo e($page['submenu_payments'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.payments'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.estimates')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_estimates'] ?? ''); ?>" id="submenu_estimates">
-                            <a href="<?php echo e(url('estimates')); ?>"
+                            <a href="/estimates"
                                 class=" <?php echo e($page['submenu_estimates'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.estimates'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.subscriptions')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_subscriptions'] ?? ''); ?>"
                             id="submenu_subscriptions">
-                            <a href="<?php echo e(url('subscriptions')); ?>"
+                            <a href="/subscriptions"
                                 class=" <?php echo e($page['submenu_subscriptions'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.subscriptions'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.products')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_products'] ?? ''); ?>" id="submenu_products">
-                            <a href="<?php echo e(asset('products')); ?>"
+                            <a href="/products"
                                 class=" <?php echo e($page['submenu_products'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.products'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.expenses')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_expenses'] ?? ''); ?>" id="submenu_expenses">
-                            <a href="<?php echo e(url('expenses')); ?>"
+                            <a href="/expenses"
                                 class=" <?php echo e($page['submenu_expenses'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.expenses'))); ?></a>
                         </li>
                         <?php endif; ?>
@@ -209,7 +209,7 @@
                 <li data-modular-id="main_menu_team_proposals"
                     class="sidenav-menu-item <?php echo e($page['mainmenu_proposals'] ?? ''); ?> menu-tooltip menu-with-tooltip"
                     title="<?php echo e(cleanLang(__('lang.proposals'))); ?>">
-                    <a class="waves-effect waves-dark p-r-20" href="<?php echo e(url('proposals')); ?>" aria-expanded="false" target="_self">
+                    <a class="waves-effect waves-dark p-r-20" href="/proposals" aria-expanded="false" target="_self">
                         <i class="ti-bookmark-alt"></i>
                         <span class="hide-menu"><?php echo e(cleanLang(__('lang.proposals'))); ?>
 
@@ -217,8 +217,6 @@
                     </a>
                 </li>
                 <?php endif; ?>
-
-                
 
 
                 <!--contracts [multiple]-->
@@ -253,7 +251,7 @@
                 <li data-modular-id="main_menu_team_contracts"
                     class="sidenav-menu-item <?php echo e($page['mainmenu_contracts'] ?? ''); ?> menu-tooltip menu-with-tooltip"
                     title="<?php echo e(cleanLang(__('lang.contracts'))); ?>">
-                    <a class="waves-effect waves-dark p-r-20" href="<?php echo e(url('contracts')); ?>" aria-expanded="false" target="_self">
+                    <a class="waves-effect waves-dark p-r-20" href="/contracts" aria-expanded="false" target="_self">
                         <i class="ti-write"></i>
                         <span class="hide-menu"><?php echo e(cleanLang(__('lang.contracts'))); ?>
 
@@ -262,8 +260,6 @@
                 </li>
                 <?php endif; ?>
 
-                <!--calendar-->
-                <?php echo $__env->make('nav.custom-menu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
                 <!--[MODULES] - dynamic menu-->
                 <?php echo config('module_menus.main_menu_team'); ?>
@@ -315,10 +311,12 @@
                     </a>
                     <ul aria-expanded="false" class="collapse">
                         <!--tickets-->
+                        <?php if(config('visibility.modules.tickets')): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_tickets'] ?? ''); ?>" id="submenu_tickets">
                             <a href="<?php echo e(_url('/tickets')); ?>"
                                 class="<?php echo e($page['submenu_tickets'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.tickets'))); ?></a>
                         </li>
+                        <?php endif; ?>
                         <!--canned-->
                         <?php if(auth()->user()->is_team): ?>
                         <li class="sidenav-submenu <?php echo e($page['submenu_canned'] ?? ''); ?>" id="submenu_canned">
@@ -357,14 +355,14 @@
                     <ul aria-expanded="false" class="position-top collapse">
                         <?php if(config('visibility.modules.team')): ?>
                         <li class="sidenav-submenu mainmenu_team <?php echo e($page['submenu_team'] ?? ''); ?>" id="submenu_team">
-                            <a href="<?php echo e(url('team')); ?>"
+                            <a href="/team"
                                 class="<?php echo e($page['submenu_team'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.team_members'))); ?></a>
                         </li>
                         <?php endif; ?>
                         <?php if(config('visibility.modules.timesheets')): ?>
                         <li class="sidenav-submenu mainmenu_timesheets <?php echo e($page['submenu_timesheets'] ?? ''); ?>"
                             id="submenu_timesheets">
-                            <a href="<?php echo e(url('timesheets')); ?>"
+                            <a href="/timesheets"
                                 class="<?php echo e($page['submenu_timesheets'] ?? ''); ?>"><?php echo e(cleanLang(__('lang.time_sheets'))); ?></a>
                         </li>
                         <?php endif; ?>
@@ -377,7 +375,7 @@
                 <li data-modular-id="main_menu_reports"
                     class="sidenav-menu-item <?php echo e($page['mainmenu_reports'] ?? ''); ?> menu-tooltip menu-with-tooltip"
                     title="<?php echo e(cleanLang(__('lang.reports'))); ?>">
-                    <a class="waves-effect waves-dark p-r-20" href="<?php echo e(url('reports')); ?>" aria-expanded="false" target="_self">
+                    <a class="waves-effect waves-dark p-r-20" href="/reports" aria-expanded="false" target="_self">
                         <i class="sl-icon-chart"></i>
                         <span class="hide-menu"><?php echo app('translator')->get('lang.reports'); ?>
                         </span>

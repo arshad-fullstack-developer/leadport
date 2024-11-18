@@ -35,7 +35,7 @@
 
 <!--[PRINTING]-->
 <?php if(config('visibility.page_rendering') == 'print-page'): ?>
-<script src="<?php echo e(asset('public/js/dynamic/print.js')); ?>?v=<?php echo e(config('system.versioning')); ?>"></script>
+<script src="<?php echo e(asset('public/js/dynamic/print.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
 <?php endif; ?>
 
 </html><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/layout/wrapperplain.blade.php ENDPATH**/ ?>

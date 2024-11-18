@@ -16,7 +16,7 @@
              always collapse left menu for small devices
             (NB: this code is in the correct place. It must run before menu is added to DOM)
          --------------------------------------------------------------------------------------->
-        
+
         <!--top nav-->
         <?php echo $__env->make('nav.topnav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?> <?php echo $__env->make('nav.leftmenu', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <!--top nav-->
@@ -79,7 +79,7 @@
 
 <!--[PRINTING]-->
 <?php if(config('visibility.page_rendering') == 'print-page'): ?>
-<script src="<?php echo e(asset('public/js/dynamic/print.js')); ?>?v=<?php echo e(config('system.versioning')); ?>"></script>
+<script src="<?php echo e(asset('public/js/dynamic/print.js?v=')); ?> <?php echo e(config('system.versioning')); ?>"></script>
 <?php endif; ?>
 
 </html><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/layout/wrapper.blade.php ENDPATH**/ ?>

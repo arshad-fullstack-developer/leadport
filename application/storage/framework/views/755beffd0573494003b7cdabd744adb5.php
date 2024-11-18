@@ -1,2 +1,0 @@
-<?php echo $__env->make('pages.reports.projects.client.filter', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-<?php echo $__env->make('pages.reports.projects.client.table', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH E:\xampp\htdocs\leadport\application\resources\views/pages/reports/projects/client/wrapper.blade.php ENDPATH**/ ?>
