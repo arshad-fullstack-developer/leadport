@@ -23,3 +23,106 @@
 #7 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
 #8 {main}
 "} 
+[2024-12-01 15:31:13] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:231)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(138): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->get(NULL)
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(700): Illuminate\\Log\\LogManager->driver()
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(378): Illuminate\\Log\\LogManager->error('Class \"Webklex\\\\...', Array)
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(341): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 E:\\xampp\\htdocs\\leadport\\application\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(563): App\\Exceptions\\Handler->report(Object(Error))
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(147): Illuminate\\Foundation\\Http\\Kernel->reportException(Object(Error))
+#8 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#9 {main}
+"} 
+[2024-12-01 15:31:13] laravel.ERROR: Class "Webklex\PHPIMAP\IMAP" not found {"exception":"[object] (Error(code: 0): Class \"Webklex\\PHPIMAP\\IMAP\" not found at E:\\xampp\\htdocs\\leadport\\application\\config\\imap.php:146)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): require()
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(77): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFile(Object(Illuminate\\Config\\Repository), 'imap', 'E:\\\\xampp\\\\htdocs...', Array)
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(38): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(316): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(187): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(171): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#8 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#9 {main}
+"} 
+[2024-12-03 06:53:52] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:231)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(138): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->get(NULL)
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(700): Illuminate\\Log\\LogManager->driver()
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(378): Illuminate\\Log\\LogManager->error('Class \"Webklex\\\\...', Array)
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(341): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 E:\\xampp\\htdocs\\leadport\\application\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(563): App\\Exceptions\\Handler->report(Object(Error))
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(147): Illuminate\\Foundation\\Http\\Kernel->reportException(Object(Error))
+#8 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#9 {main}
+"} 
+[2024-12-03 06:53:52] laravel.ERROR: Class "Webklex\PHPIMAP\IMAP" not found {"exception":"[object] (Error(code: 0): Class \"Webklex\\PHPIMAP\\IMAP\" not found at E:\\xampp\\htdocs\\leadport\\application\\config\\imap.php:146)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): require()
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(77): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFile(Object(Illuminate\\Config\\Repository), 'imap', 'E:\\\\xampp\\\\htdocs...', Array)
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(38): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(316): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(187): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(171): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#8 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#9 {main}
+"} 
+[2024-12-03 06:54:52] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:231)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(138): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->get(NULL)
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(700): Illuminate\\Log\\LogManager->driver()
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(378): Illuminate\\Log\\LogManager->error('Class \"Webklex\\\\...', Array)
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(341): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 E:\\xampp\\htdocs\\leadport\\application\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(563): App\\Exceptions\\Handler->report(Object(Error))
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(147): Illuminate\\Foundation\\Http\\Kernel->reportException(Object(Error))
+#8 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#9 {main}
+"} 
+[2024-12-03 06:54:52] laravel.ERROR: Class "Webklex\PHPIMAP\IMAP" not found {"exception":"[object] (Error(code: 0): Class \"Webklex\\PHPIMAP\\IMAP\" not found at E:\\xampp\\htdocs\\leadport\\application\\config\\imap.php:146)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): require()
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(77): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFile(Object(Illuminate\\Config\\Repository), 'imap', 'E:\\\\xampp\\\\htdocs...', Array)
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(38): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(316): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(187): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(171): Illuminate\\Foundation\\Http\\Kernel->bootstrap()
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#8 E:\\xampp\\htdocs\\leadport\\index.php(91): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#9 {main}
+"} 
+[2024-12-03 06:55:37] laravel.EMERGENCY: Unable to create configured logger. Using emergency logger. {"exception":"[object] (InvalidArgumentException(code: 0): Log [] is not defined. at E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php:231)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(138): Illuminate\\Log\\LogManager->resolve(NULL, NULL)
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(125): Illuminate\\Log\\LogManager->get(NULL)
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Log\\LogManager.php(700): Illuminate\\Log\\LogManager->driver()
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(378): Illuminate\\Log\\LogManager->error('Class \"Webklex\\\\...', Array)
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Exceptions\\Handler.php(341): Illuminate\\Foundation\\Exceptions\\Handler->reportThrowable(Object(Error))
+#5 E:\\xampp\\htdocs\\leadport\\application\\app\\Exceptions\\Handler.php(37): Illuminate\\Foundation\\Exceptions\\Handler->report(Object(Error))
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(620): App\\Exceptions\\Handler->report(Object(Error))
+#7 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->reportException(Object(Error))
+#8 E:\\xampp\\htdocs\\leadport\\application\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 {main}
+"} 
+[2024-12-03 06:55:37] laravel.ERROR: Class "Webklex\PHPIMAP\IMAP" not found {"exception":"[object] (Error(code: 0): Class \"Webklex\\PHPIMAP\\IMAP\" not found at E:\\xampp\\htdocs\\leadport\\application\\config\\imap.php:146)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): require()
+#1 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(96): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(77): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFile(Object(Illuminate\\Config\\Repository), 'imap', 'E:\\\\xampp\\\\htdocs...', Array)
+#3 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\LoadConfiguration.php(38): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->loadConfigurationFiles(Object(Illuminate\\Foundation\\Application), Object(Illuminate\\Config\\Repository))
+#4 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(316): Illuminate\\Foundation\\Bootstrap\\LoadConfiguration->bootstrap(Object(Illuminate\\Foundation\\Application))
+#5 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(473): Illuminate\\Foundation\\Application->bootstrapWith(Array)
+#6 E:\\xampp\\htdocs\\leadport\\application\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(195): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#7 E:\\xampp\\htdocs\\leadport\\application\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 {main}
+"} 

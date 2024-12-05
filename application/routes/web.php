@@ -3,6 +3,7 @@
 //TESTING [DEV]
 Route::get("test", "Test@index");
 Route::post("test", "Test@index");
+Route::post("just", "Test@just");
 
 //HOME PAGE
 Route::any('/', function () {
@@ -81,7 +82,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 //INVOICES
-Route::group(['prefix' => 'invoices'], function () {
+    Route::group(['prefix' => 'invoices'], function () {
     Route::any("/search", "Invoices@index");
     Route::post("/delete", "Invoices@destroy")->middleware(['demoModeCheck']);
     Route::get("/change-category", "Invoices@changeCategory");
