@@ -3,7 +3,7 @@
 //TESTING [DEV]
 Route::get("test", "Test@index");
 Route::post("test", "Test@index");
-Route::post("just", "Test@just");
+Route::post("just", "Test@somechanging");
 
 //HOME PAGE
 Route::any('/', function () {
