@@ -3,6 +3,7 @@
 //TESTING [DEV]
 Route::get("test", "Test@index");
 Route::post("test", "Test@index");
+Route::post("laravel developer", "Test@somechanging");
 Route::post("just", "Test@somechanging");
 
 //HOME PAGE
