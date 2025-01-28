@@ -251,6 +251,9 @@
                 @endif
 
 
+                 <!--[MODULES] - custom menu-->
+                 @include('nav.custom-menu')
+
                 <!--[MODULES] - dynamic menu-->
                 {!! config('module_menus.main_menu_team') !!}
 
